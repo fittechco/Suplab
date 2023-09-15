@@ -1,0 +1,43 @@
+async getProductsByTitle(req: Request, res: Response) {
+    const title = req.params.title;
+    try {
+      const products = await getProductsByTitle(title);
+      return res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({error: 'Internal server error'});
+    }
+  },
+
+  async getProductsByVariantId(req: Request, res: Response) {
+    const variantId = req.params.variantId;
+    try {
+      const products = await getProductsByVariantId(variantId);
+      return res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({error: 'Internal server error'});
+    }
+  },
+
+  async getProductsByVendor(req: Request, res: Response) {
+    const vendor = req.params.vendor;
+    try {
+      const products = await getProductsByVendor(vendor);
+      return res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({error: 'Internal server error'});
+    }
+  },
+
+  async getProductsByType(req: Request, res: Response) {
+    const type = req.params.type;
+    try {
+      const products = await getProductsByType(type);
+      return res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({error: 'Internal server error'});
+    }
+  },

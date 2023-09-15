@@ -1,0 +1,85 @@
+const getProductsByVendor = async (
+  vendor: string,
+): Promise<App.Shopify.Storefront.Product[]> => {
+  const query = `#graphql
+    query {
+      products(first: 10, query: "vendor:${vendor}") {
+        edges {
+          node {
+            id
+            title
+            description
+            images(first: 1) {
+              edges {
+                node {
+                  originalSrc
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const variables = {vendor};
+  const {data} = await storeFrontApi({query, variables});
+  return data.products.edges.map((edge: any) => edge.node);
+};
+
+
+
+const getProductsByTitle = async (
+  title: string,
+): Promise<App.Shopify.Storefront.Product[]> => {
+  const query = `#graphql
+    query {
+      products(first: 10, query: "title:${title}") {
+        edges {
+          node {
+            id
+            title
+            description
+            images(first: 1) {
+              edges {
+                node {
+                  originalSrc
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const variables = {title};
+  const {data} = await storeFrontApi({query, variables});
+  return data.products.edges.map((edge: any) => edge.node);
+};
+
+
+
+const getProductsByVariantId = async (
+  variantId: string,
+): Promise<App.Shopify.Storefront.Product> => {
+  const query = `#graphql
+        query {
+        productVariant(id: $variantId) {
+            product {
+            id
+            title
+            description
+            images(first: 1) {
+                edges {
+                node {
+                    originalSrc
+                }
+                }
+            }
+            }
+        }
+        }
+    `;
+  const variables = {variantId};
+  const {data} = await storeFrontApi({query, variables});
+  return data.productVariant.product;
+};

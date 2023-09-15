@@ -1,5 +1,5 @@
-import {useNonce} from '@shopify/hydrogen';
-import {defer, type LoaderArgs} from '@shopify/remix-oxygen';
+import { useNonce } from '@shopify/hydrogen';
+import { defer, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -13,13 +13,16 @@ import {
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
 } from '@remix-run/react';
-import type {CustomerAccessToken} from '@shopify/hydrogen/storefront-api-types';
-import type {HydrogenSession} from '../server';
+import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
+import type { HydrogenSession } from '../server/server';
 import favicon from '../public/favicon.svg';
 import resetStyles from './styles/reset.css';
 import appStyles from './styles/app.css';
-import {Layout} from '~/components/Layout';
 import tailwindCss from './styles/tailwind.css';
+import Layout from './layout/Layout';
+import type { App } from './api/type';
+import { create } from 'zustand';
+import { useEffect } from 'react';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -42,9 +45,9 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
 export function links() {
   return [
-    {rel: 'stylesheet', href: tailwindCss},
-    {rel: 'stylesheet', href: resetStyles},
-    {rel: 'stylesheet', href: appStyles},
+    { rel: 'stylesheet', href: tailwindCss },
+    { rel: 'stylesheet', href: resetStyles },
+    { rel: 'stylesheet', href: appStyles },
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -53,17 +56,17 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    { rel: 'icon', type: 'image/svg+xml', href: favicon },
   ];
 }
 
-export async function loader({context}: LoaderArgs) {
-  const {storefront, session, cart} = context;
+export async function loader({ context }: LoaderArgs) {
+  const { storefront, session, cart } = context;
   const customerAccessToken = await session.get('customerAccessToken');
   const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;
 
   // validate the customer access token is valid
-  const {isLoggedIn, headers} = await validateCustomerAccessToken(
+  const { isLoggedIn, headers } = await validateCustomerAccessToken(
     customerAccessToken,
     session,
   );
@@ -72,36 +75,59 @@ export async function loader({context}: LoaderArgs) {
   const cartPromise = cart.get();
 
   // defer the footer query (below the fold)
-  const footerPromise = storefront.query(FOOTER_QUERY, {
+  const footerPromise = storefront.query<{
+    menu: App.Shopify.Layout["footer"];
+  }>(FOOTER_QUERY, {
     cache: storefront.CacheLong(),
     variables: {
       footerMenuHandle: 'footer', // Adjust to your footer menu handle
     },
   });
 
-  // await the header query (above the fold)
-  const headerPromise = storefront.query(HEADER_QUERY, {
+  const layout = storefront.query<{
+    shop: App.Shopify.Layout["shop"];
+  }>(LAYOUT_QUERY, {
     cache: storefront.CacheLong(),
-    variables: {
-      headerMenuHandle: 'main-menu', // Adjust to your header menu handle
-    },
+  });
+
+  // await the header query (above the fold)
+  const headerPromise = storefront.query<{
+    menu: App.Shopify.Layout["header"];
+  }>(HEADER_QUERY, {
+    cache: storefront.CacheLong(),
   });
 
   return defer(
     {
       cart: cartPromise,
-      footer: footerPromise,
+      shop: await layout,
+      footer: await footerPromise,
       header: await headerPromise,
       isLoggedIn,
       publicStoreDomain,
     },
-    {headers},
+    { headers },
   );
 }
+
+export const UseShopStore = create<App.Shopify.Layout>((set: any) => ({
+  shop: null as any,
+  footer: null as any,
+  header: null as any,
+}
+))
 
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
+  console.log(JSON.stringify(data, null, 2));
+  useEffect(() => {
+    UseShopStore.setState({
+      shop: data.shop.shop,
+      footer: data.footer.menu,
+      header: data.header.menu,
+    })
+  }, [data.shop]);
 
   return (
     <html lang="en">
@@ -112,7 +138,13 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Layout {...data}>
+        <Layout
+          layout={{
+            shop: data.shop.shop,
+            header: data.header.menu,
+            footer: data.footer.menu,
+          }}
+        >
           <Outlet />
         </Layout>
         <ScrollRestoration nonce={nonce} />
@@ -185,7 +217,7 @@ async function validateCustomerAccessToken(
   let isLoggedIn = false;
   const headers = new Headers();
   if (!customerAccessToken?.accessToken || !customerAccessToken?.expiresAt) {
-    return {isLoggedIn, headers};
+    return { isLoggedIn, headers };
   }
   const expiresAt = new Date(customerAccessToken.expiresAt);
   const dateNow = new Date();
@@ -197,7 +229,7 @@ async function validateCustomerAccessToken(
     isLoggedIn = true;
   }
 
-  return {isLoggedIn, headers};
+  return { isLoggedIn, headers };
 }
 
 const MENU_FRAGMENT = `#graphql
@@ -227,35 +259,25 @@ const MENU_FRAGMENT = `#graphql
 ` as const;
 
 const HEADER_QUERY = `#graphql
-  fragment Shop on Shop {
-    id
-    name
-    description
-    primaryDomain {
+ query Layout {
+  menu(handle: "main-menu") {
+    items{
+      title
       url
-    }
-    brand {
-      logo {
-        image {
+      items {
+        id
+        title
+        url
+        items {
+          id
+          title
           url
         }
       }
     }
   }
-  query Header(
-    $country: CountryCode
-    $headerMenuHandle: String!
-    $language: LanguageCode
-  ) @inContext(language: $language, country: $country) {
-    shop {
-      ...Shop
-    }
-    menu(handle: $headerMenuHandle) {
-      ...Menu
-    }
-  }
-  ${MENU_FRAGMENT}
-` as const;
+}
+` as const
 
 const FOOTER_QUERY = `#graphql
   query Footer(
@@ -269,3 +291,25 @@ const FOOTER_QUERY = `#graphql
   }
   ${MENU_FRAGMENT}
 ` as const;
+
+
+
+const LAYOUT_QUERY = `#graphql
+  query layout {
+    shop {
+      id
+      name
+      description
+      primaryDomain {
+        url
+      }
+      brand {
+        logo {
+          image {
+            url
+          }
+        }
+      }
+    }
+  }
+` as const
