@@ -90,7 +90,7 @@ function Header(props: Props) {
                borderRadius: "0px 0px 12px 12px",
                background: "rgba(250, 249, 246, 0.80)",
                backdropFilter: "blur(2.5px)",
-               height: 'fit-content',
+               height: 72,
             }}
             className=" flex items-center max-md:justify-between  py-2 px-4">
             <div
