@@ -150,7 +150,7 @@ export namespace App {
               type: 'shop_the_goal';
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                  key: 'goal_title | button_text';
+                  key: 'goal_title' | 'button_text';
                 }>
                 | Shopify.MetaobectsDef.FileReference<{
                   key: 'goal_image';
