@@ -23,7 +23,7 @@ export type Shop = {
 };
 
 export async function loader({ context }: LoaderArgs) {
-  const storefront: { metaobject: App.HomePageTemplate.Template } =
+  const storefront =
     await context.storefront.query(SHOPQUERY);
   const { metaobject } = storefront;
   return json({

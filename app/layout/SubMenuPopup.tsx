@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import { useRef, useEffect } from "react";
-import { Colors } from "~/ft-lib/shared";
+import { Colors } from "../ft-lib/shared";
 import { App } from "../api/type";
 
 export default function SubMenuPopup(props: { items: App.Shopify.NavMenu["items"], isTop: boolean, showSub: boolean }) {

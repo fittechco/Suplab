@@ -1,11 +1,11 @@
 import { Link } from '@remix-run/react';
 import React, { useEffect, useRef, useState } from 'react'
-import FTicons from '~/ft-lib/Icon';
-import { Colors } from '~/ft-lib/shared';
 import { App } from '../api/type';
 import { createPortal } from 'react-dom';
 import MobileNav from './MobileNav';
 import SubMenuPopup from './SubMenuPopup';
+import FTicons from 'app/ft-lib/Icon';
+import { Colors } from 'app/ft-lib/shared';
 
 type Props = {
    layout: App.Shopify.Layout

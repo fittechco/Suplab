@@ -1,4 +1,4 @@
-import ProductController from "../../server/controllers/productController";
+// import ProductController from "../../server/controllers/ProductController";
 
 
 async function storeFrontApiTest() {
@@ -6,9 +6,9 @@ async function storeFrontApiTest() {
     //     id: 'gid://shopify/Product/8598241116473'
     // })
 
-    const PS = await ProductController.getAllProducts()
+    // const PS = await ProductController.getAllProducts()
 
-    console.log(JSON.stringify(PS, null, 2), "PS");
+    // console.log(JSON.stringify(PS, null, 2), "PS");
     console.log("Hello World");
 
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import arrayToObject from '~/ft-lib/ArrayToObject';
-import { Colors } from '~/ft-lib/shared';
+import arrayToObject from '../../ft-lib/ArrayToObject';
+import { Colors } from '../../ft-lib/shared';
 import { App } from '../../api/type';
 
 interface HeroSectionProps {

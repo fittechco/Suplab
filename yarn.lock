@@ -1663,12 +1663,12 @@
     lit "^2.2.3"
     three "^0.139.2"
 
-"@gqlts/cli@^3.2.19-beta.149":
-  version "3.2.19-beta.149"
-  resolved "https://registry.yarnpkg.com/@gqlts/cli/-/cli-3.2.19-beta.149.tgz#70dd9284c28a4b9bb3664bba3d13944203fe2109"
-  integrity sha512-WuvL0LZwuj61AVS9rXPZ/3ZC3fPK/cTBaNW6IgG2T6dN198fASr5MSgkwhVs5nw4ChQp5kEsPU0u7ZsjpzsJRA==
+"@gqlts/cli@^3.2.19-beta.151":
+  version "3.2.19-beta.151"
+  resolved "https://registry.yarnpkg.com/@gqlts/cli/-/cli-3.2.19-beta.151.tgz#dda444ce4567204c6609a3a8a62e6a04c94b13f0"
+  integrity sha512-IqSeNY2EsAlL5gPCpcjzD/++a5Y6YLmXqtU3Eupq/ociDqTRRCJKNQFkE/XkfgSRlHTB5mBbv+DSZtyx+HSicQ==
   dependencies:
-    "@gqlts/runtime" "^3.2.19-beta.149"
+    "@gqlts/runtime" "^3.2.19-beta.151"
     "@graphql-tools/graphql-file-loader" "8.0.0"
     "@graphql-tools/load" "8.0.0"
     browserify "17.0.0"
@@ -1686,10 +1686,10 @@
     terser "5.19.4"
     yargs "17.7.2"
 
-"@gqlts/runtime@^3.2.19-beta.149":
-  version "3.2.19-beta.149"
-  resolved "https://registry.yarnpkg.com/@gqlts/runtime/-/runtime-3.2.19-beta.149.tgz#2a4e64b96de5b434aec903f7787d1620f4d15783"
-  integrity sha512-7gjMRUKytoJojvboypNme76HPblEl/OXqJGx+WD/zi0bgclr0YthQfbzg/Ejjzw6X7LBBSYmYfX3ST1MwtOAGw==
+"@gqlts/runtime@^3.2.19-beta.151":
+  version "3.2.19-beta.151"
+  resolved "https://registry.yarnpkg.com/@gqlts/runtime/-/runtime-3.2.19-beta.151.tgz#e1bcd5dcf9b9e6606bc4e5800288003e75f932f7"
+  integrity sha512-Q+mO1jqL0O08wpevI4fWnsu08UZqMjV38En0tNzgI8hkoKjK7Ju5Y7efbpxY+a72lM91gm9Q3GvwJvHeuVbhTw==
   dependencies:
     axios "1.5.0"
     form-data "4.0.0"

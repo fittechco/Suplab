@@ -1,9 +1,9 @@
 import { Link } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
-import FTicons from "~/ft-lib/Icon";
-import { Colors } from "~/ft-lib/shared";
+import FTicons from "../ft-lib/Icon";
+import { Colors } from "../ft-lib/shared";
 import { App } from "../api/type";
-import { UseShopStore } from "~/root";
+import { UseShopStore } from "../root";
 
 type MobileNavItemProps = {
     menu: App.Shopify.Layout["header"]["items"][0];

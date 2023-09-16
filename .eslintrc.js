@@ -12,7 +12,8 @@ module.exports = {
     '@typescript-eslint/naming-convention': 'off',
     'hydrogen/prefer-image-component': 'off',
     'no-useless-escape': 'off',
-    '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
+    '@typescript-eslint/no-non-null-asserted-optional-chain': "error",
     'no-case-declarations': 'off',
+    "no-non-null-assertion": "error"
   },
 };

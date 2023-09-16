@@ -1,13 +1,13 @@
-import {Await, NavLink, useMatches} from '@remix-run/react';
-import {Suspense} from 'react';
-import type {LayoutProps} from './Layout';
+import { Await, NavLink, useMatches } from '@remix-run/react';
+import { Suspense } from 'react';
+// import type {LayoutProps} from '..//Layout';
 
-type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
+type HeaderProps = Pick<any, 'header' | 'cart' | 'isLoggedIn'>;
 
 type Viewport = 'desktop' | 'mobile';
 
-export function Header({header, isLoggedIn, cart}: HeaderProps) {
-  const {shop, menu} = header;
+export function Header({ header, isLoggedIn, cart }: HeaderProps) {
+  const { shop, menu } = header;
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
@@ -50,13 +50,13 @@ export function HeaderMenu({
           Home
         </NavLink>
       )}
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+      {(menu || FALLBACK_HEADER_MENU).items.map((item: any) => {
         if (!item.url) return null;
 
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain)
+            item.url.includes(publicStoreDomain)
             ? new URL(item.url).pathname
             : item.url;
         return (
@@ -105,11 +105,11 @@ function SearchToggle() {
   return <a href="#search-aside">Search</a>;
 }
 
-function CartBadge({count}: {count: number}) {
+function CartBadge({ count }: { count: number }) {
   return <a href="#cart-aside">Cart {count}</a>;
 }
 
-function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
+function CartToggle({ cart }: Pick<HeaderProps, 'cart'>) {
   return (
     <Suspense fallback={<CartBadge count={0} />}>
       <Await resolve={cart}>

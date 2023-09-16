@@ -1,6 +1,6 @@
 import { Link } from '@remix-run/react'
 import React from 'react'
-import { Colors } from '~/ft-lib/shared'
+import { Colors } from '../ft-lib/shared'
 import { App } from '../api/type'
 
 type Props = {
