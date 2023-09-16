@@ -3,7 +3,7 @@ import { LoaderArgs, json } from '@shopify/remix-oxygen';
 import { App } from '../../api/type';
 import { useLoaderData } from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
-import benefitImage1  from '../../../public/florian-kurrasch-HyivyCRdz14-unsplash.png';
+import benefitImage1 from '../../../public/florian-kurrasch-HyivyCRdz14-unsplash.png';
 
 interface BenefitsSectionProps {
   section: App.HomePageTemplate.BenefitsSection;
@@ -16,10 +16,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
     <div
       key={section.type}
       style={{
-        // height: '100vh',
-        width: "1356px",
-        height: "530px",
-        flexShrink: "0",
+        height: "100%",
       }}
       className="benefitSection max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8"
     >
@@ -27,61 +24,68 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
 
       <div className="benefitSection__benefits">
         {fields.benefits.references.nodes.map((benefit, index) => {
+          const isEven = index % 2 === 0;
+          const flexDirection = isEven ? "row" : "row-reverse";
+          const refs = arrayToObject({ array: benefit.fields });
           return (
-            <div className="benefitSection__benefit" key={index} style={{ 
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "flex-start",
-              marginTop: "40px",
-              gap: "39px"
-            }}>
+            <div
+              className="benefitSection__benefit"
+              key={index}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                marginTop: "40px",
+                gap: "39px",
+                flexDirection: flexDirection,
+              }}
+            >
               {/* Image div */}
-              <div className="benefit-image" style={{
-                width: "661px",
-                height: "450px",
-                flexShrink: "0"
-              }}>
+              <div
+                className="benefit-image"
+                style={{
+                  width: "661px",
+                  height: "450px",
+                  flexShrink: "0",
+                }}
+              >
                 {benefit.fields.map((field, fieldIndex) => {
                   console.log(field, "field");
-                  // if (field.key === 'image' && field.reference?.image?.url) {
-                  //   console.log(field.reference.image.url, "field.reference.image.url");
-                  //   return (
-                  //     <img
-                  //       src={field.reference.image.url}
-                  //       alt="benefit image"
-                  //       key={fieldIndex}
-                  //     />
-                  //   );
-                  // } else {
-                  //   console.log('no image');
-                  // }
-                  // return null;
                   if (field.key === 'image') {
-                    return (
-                      <img src={benefitImage1} alt="img" />
-                    );
+                    return <img src={benefitImage1} alt="img" />;
                   }
                 })}
               </div>
-              
+
               {/* Title and Description div */}
-              <div className="benefit-text" style={{
-                display: "flex",
-                width: "654px",
-                padding: "20px",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                gap: "20px",
-              }}>
+              <div
+                style={{
+                  display: "flex",
+                  width: "654px",
+                  padding: "20px",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  gap: "20px",
+                }}
+              >
                 {benefit.fields.map((field, fieldIndex) => {
                   console.log(field, "field");
-                  if (field.key === 'title' || field.key === 'description') {
+                  if (field.key === 'title') {
                     return (
-                      <p className="ft-text-main" key={fieldIndex}>
+                      <p className="benefit_title_text" key={fieldIndex}>
                         {field.value}
                       </p>
                     );
                   }
+
+                  if (field.key === 'description') {
+                    return (
+                      <p className="benefit_description_text" key={fieldIndex}>
+                        {field.value}
+                      </p>
+                    );
+                  }
+
                   return null;
                 })}
               </div>

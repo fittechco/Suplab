@@ -12,11 +12,31 @@ body {
 
 .ft-text-main {
   font-family: 'Roboto Condensed', sans-serif;
+  font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  letter-spacing: 0.32px;
+  letter-spacing: 0.68px;
   text-transform: uppercase;
+}
+
+.benefit_title_text {
+  font-family: 'Roboto Condensed', sans-serif;
+  /* font-size: 44px; */
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+}
+
+.benefit_description_text {
+  color: #4A4A49;
+  font-family: 'Roboto', sans-serif;
+  /* font-size: 28px; */
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 h1,

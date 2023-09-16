@@ -16,18 +16,18 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
       key={section.type}
       style={{
         height: '100vh',
-        display: 'inline-flex',
-        padding: '0px 13px 0.71px 0px',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        gap: '40px',
-        backgroundColor: '#F2F2F2',
+        // display: 'inline-flex',
+        // padding: '0px 13px 0.71px 0px',
+        // flexDirection: 'column',
+        // justifyContent: 'center',
+        // alignItems: 'flex-start',
+        // gap: '40px',
+        // backgroundColor: '#F2F2F2',
       }}
       className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8"
     >
       <p>{fields.title.value}</p>
-      <div
+      {/* <div
         className="testimonialsSection__testimonials"
         style={{
           display: 'flex',
@@ -112,7 +112,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
