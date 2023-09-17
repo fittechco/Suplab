@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { LoaderArgs, json } from '@shopify/remix-oxygen';
-import { App } from '../../api/type';
-import { useLoaderData } from '@remix-run/react';
+import React, {useEffect, useState} from 'react';
+import {LoaderArgs, json} from '@shopify/remix-oxygen';
+import {App} from '../../api/type';
+import {useLoaderData} from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import benefitImage1 from '../../../public/florian-kurrasch-HyivyCRdz14-unsplash.png';
 
@@ -9,85 +9,110 @@ interface BenefitsSectionProps {
   section: App.HomePageTemplate.BenefitsSection;
 }
 
-const Benefits = ({ section }: BenefitsSectionProps) => {
+const Benefits = ({section}: BenefitsSectionProps) => {
   console.log(section);
-  const fields = arrayToObject({ array: section.fields });
+  const fields = arrayToObject({array: section.fields});
+
   return (
     <div
       key={section.type}
       style={{
-        height: "100%",
+        height: '100%',
+        marginTop: '4%',
       }}
-      className="benefitSection max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8"
+      className="benefitSection w-full !container mx-auto"
     >
       <p className="ft-text-main">{fields.title.value}</p>
 
       <div className="benefitSection__benefits">
         {fields.benefits.references.nodes.map((benefit, index) => {
           const isEven = index % 2 === 0;
-          const flexDirection = isEven ? "row" : "row-reverse";
-          const refs = arrayToObject({ array: benefit.fields });
+          const flexDirection = isEven ? 'row' : 'row-reverse';
+          const benefitFields = arrayToObject({array: benefit.fields});
+          const imageUrl =
+            benefitFields.image?.reference?.image?.url || benefitImage1; // Use the actual image URL or a default if not available
           return (
+            // <div
+            //   className="benefitSection__benefit w-full"
+            //   key={index}
+            //   style={{
+            //     display: "flex",
+            //     justifyContent: "center",
+            //     alignItems: "flex-start",
+            //     marginTop: "40px",
+            //     gap: "39px",
+            //     flexDirection: flexDirection,
+            //   }}
+            // >
+            //   <div
+            //     className="benefit-image rounded-3xl flex justify-center items-center md:w-1/2 w-3/4"
+            //     style={{
+            //       background: "#4F4F4F",
+            //       boxShadow: "0px 7px 14px 0px rgba(0, 0, 0, 0.16)",
+            //       backdropFilter: "blur(2.5px)",
+            //       objectFit: "contain",
+            //     }}
+            //   >
+            //     <img src={imageUrl} alt="img" className='w-full h-full' style={{
+            //       borderRadius: "24px",
+            //     }}/>
+            //   </div>
+
+            //   <div
+            //     style={{
+            //       padding: "20px",
+            //       gap: "20px",
+            //     }}
+            //     className='flex flex-col justify-center md:w-1/2 w-3/4'
+            //   >
+            //     <p className="benefit_title_text md:text-4xl text-2xl">{benefitFields.title?.value}</p>
+            //     <p className="benefit_description_text">{benefitFields.description?.value}</p>
+            //   </div>
+            // </div>
             <div
-              className="benefitSection__benefit"
+              className="benefitSection__benefit w-full"
               key={index}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-start",
-                marginTop: "40px",
-                gap: "39px",
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                marginTop: '40px',
+                gap: '39px',
                 flexDirection: flexDirection,
               }}
             >
-              {/* Image div */}
               <div
-                className="benefit-image"
+                className="benefit-image rounded-3xl flex justify-center items-center md:w-1/2 w-3/4"
                 style={{
-                  width: "661px",
-                  height: "450px",
-                  flexShrink: "0",
+                  background: '#4F4F4F',
+                  boxShadow: '0px 7px 14px 0px rgba(0, 0, 0, 0.16)',
+                  backdropFilter: 'blur(2.5px)',
+                  objectFit: 'contain',
                 }}
               >
-                {benefit.fields.map((field, fieldIndex) => {
-                  console.log(field, "field");
-                  if (field.key === 'image') {
-                    return <img src={benefitImage1} alt="img" />;
-                  }
-                })}
+                <img
+                  src={imageUrl}
+                  alt="img"
+                  className="w-full h-full"
+                  style={{
+                    borderRadius: '24px',
+                  }}
+                />
               </div>
 
-              {/* Title and Description div */}
               <div
                 style={{
-                  display: "flex",
-                  width: "654px",
-                  padding: "20px",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  gap: "20px",
+                  padding: '20px',
+                  gap: '20px',
                 }}
+                className="flex flex-col justify-center md:w-1/2 w-3/4"
               >
-                {benefit.fields.map((field, fieldIndex) => {
-                  console.log(field, "field");
-                  if (field.key === 'title') {
-                    return (
-                      <p className="benefit_title_text" key={fieldIndex}>
-                        {field.value}
-                      </p>
-                    );
-                  }
-
-                  if (field.key === 'description') {
-                    return (
-                      <p className="benefit_description_text" key={fieldIndex}>
-                        {field.value}
-                      </p>
-                    );
-                  }
-
-                  return null;
-                })}
+                <p className="benefit_title_text md:text-4xl text-2xl">
+                  {benefitFields.title?.value}
+                </p>
+                <p className="benefit_description_text">
+                  {benefitFields.description?.value}
+                </p>
               </div>
             </div>
           );
