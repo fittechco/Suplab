@@ -68,6 +68,7 @@ body {
 }
 
 .benefit_description_text {
+  align-self: stretch;
   color: #4A4A49;
   font-family: 'Roboto', sans-serif;
   /* font-size: 28px; */
