@@ -45,7 +45,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           {fields.headline.value != null && (
             <div
               style={{
-                color: Colors.main,
+                color: Colors.textSecondary,
                 width: "90%",
                 fontSize: "34px"
               }}
@@ -57,7 +57,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           {fields.sub_headline.value != null && (
             <div
               style={{
-                color: Colors.main,
+                color: Colors.textSecondary,
                 width: "80%"
               }}
               className="subHeader text-base md:text-lg"
@@ -69,7 +69,7 @@ const Hero = ({ section }: HeroSectionProps) => {
             <div
               style={{
                 backgroundColor: Colors.primary,
-                color: Colors.main,
+                color: Colors.textSecondary,
               }}
               onClick={() => { window.location.href = '/shop' }}
               className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
