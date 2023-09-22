@@ -30,6 +30,7 @@ export function HeaderMenu({
   const publicStoreDomain = root?.data?.publicStoreDomain;
   const className = `header-menu-${viewport}`;
 
+
   function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
     if (viewport === 'mobile') {
       event.preventDefault();

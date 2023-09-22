@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { App } from '../api/type'
-import Header from './Header'
+import Header from './Header/Header'
 import Footer from './Footer'
 type Props = {
     children: React.ReactNode

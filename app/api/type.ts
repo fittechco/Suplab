@@ -171,6 +171,9 @@ export namespace App {
       type: 'offers_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+          key: 'button_text';
+        }>
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
           key: 'title';
         }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
@@ -359,6 +362,7 @@ export namespace App {
       > = {
         key: V['key'];
         type: 'file_reference';
+        value: string;
         reference: V['reference'];
       };
     }

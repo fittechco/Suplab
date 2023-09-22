@@ -17,6 +17,8 @@ const Hero = ({ section }: HeroSectionProps) => {
     ? fields.mobile_image.reference.image.url
     : fields.desktop_image.reference.image.url;
 
+
+
   return (
     <div
       key={section.type}

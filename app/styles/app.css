@@ -1,4 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-weight: 400, 500, 600;
+  src: url('./fonts/RobotoCondensed-Regular.ttf')
+}
+
+@font-face {
+  font-family: 'Roboto Condensed Bold';
+  font-weight: 700, 800, 900;
+  src: url('./fonts/RobotoCondensed-Bold.ttf')
+}
+
+@font-face {
+  font-family: 'Roboto Condensed Light';
+  font-weight: 100, 200, 300;
+  src: url('./fonts/RobotoCondensed-Light.ttf')
+}
+
+.testHeight {
+  height: 100px !important;
+}
 
 body {
   margin: 0;
@@ -10,9 +30,26 @@ body {
   color: #2C2C2B;
 }
 
+.mobile-nav-item {
+  transition: all 0.7s ease,
+}
+
+.show-mobile-nav-item {
+  transform: translateX(0);
+  opacity: 1
+}
+
+.hide-mobile-nav-item {
+  transform: translateX(-40%);
+  opacity: 0
+}
+
+.card-shadow {
+  box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.16);
+}
+
 .ft-text-main {
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 20px;
+  font-family: 'Roboto Condensed Bold', sans-serif;
   font-style: normal;
   font-weight: 700;
   line-height: normal;

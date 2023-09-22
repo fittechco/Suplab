@@ -6,7 +6,6 @@ export class Colors {
     static secondaryLight = '#696968';
     static secondaryDark = '#2C2C2B';
     static third = '#CFAC6A';
-    static main = '#fff';
     static text = this.secondary;
     static offWhite = '#FAF9F6';
     static offBlack = '#202020';

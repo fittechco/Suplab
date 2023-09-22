@@ -1,109 +1,28 @@
-import { Link } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import FTicons from "../ft-lib/Icon";
 import { Colors } from "../ft-lib/shared";
-import { App } from "../api/type";
 import { UseShopStore } from "../root";
-
-type MobileNavItemProps = {
-    menu: App.Shopify.Layout["header"]["items"][0];
-    style?: React.CSSProperties;
-}
-function MobileNavItem(props: MobileNavItemProps) {
-    const [showSub, setShowSub] = useState(false);
-    const itemColor = showSub ? Colors.offBlack : Colors.secondary;
-    const handleItemClick = () => {
-        setShowSub(!showSub);
-    };
-
-    return (
-        <div
-            style={{
-                textDecoration: 'none',
-                color: Colors.text,
-                width: '100%',
-                height: 'fit-content',
-                transition: 'all 0.5s ease',
-                borderBottom: `1.6px solid ${itemColor}`,
-                ...props.style,
-            }}
-            className={`navMenu font-mainFont  ${showSub ? 'space-y-3' : 'space-y-0'} py-2 `}
-        >
-            <div
-                onClick={handleItemClick}
-                className="flex justify-between items-center"
-            >
-                <Link
-                    style={{
-                        textDecoration: 'none',
-                        color: itemColor,
-                        fontWeight: 'bold',
-                        transition: 'all 0.3s ease',
-                        textTransform: 'uppercase',
-                    }}
-                    className="navMenu__title text-base ft-text-main"
-                    to={props.menu.url}
-                >
-                    {props.menu.title}
-                </Link>
-                {/* {props.menu.items?.length > 0 && ( */}
-                {true && (
-                    <FTicons
-                        style={{
-                            transform: showSub ? 'rotate(180deg)' : 'rotate(0deg)',
-                            transition: 'transform 0.3s ease',
-                            transformOrigin: 'center center',
-                            width: '1.1rem',
-                            height: '1.1rem',
-                            opacity: showSub ? 1 : 0.8,
-                        }}
-                        className="navMenu__icon"
-                        fill={Colors.secondary}
-                        name="chev-down"
-                    />
-                )}
-            </div>
-            {props.menu.items?.length > 0 && (
-                <div
-                    style={{
-                        textDecoration: 'none',
-                        color: Colors.text,
-                        width: '100%',
-                        transition: 'all 0.3s ease',
-                        opacity: showSub ? 1 : 0,
-                        height: showSub ? 'auto' : '0',
-                        overflow: 'hidden',
-                    }}
-                    className="navMenu__items space-y-2 ml-2"
-                >
-                    {props.menu.items?.map((item, index) => (
-                        <MobileNavItem style={{
-                            transform: showSub ? 'translateY(0)' : 'translateY(-60%)',
-                            opacity: showSub ? 1 : 0,
-                            transitionDelay: `${index * 0.1}s`,
-                        }} key={index} menu={item} />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-
+import StorefrontApi from "app/api/storefront";
+import { ON_METAOBJECT } from "app/routes/_index";
+import MobileNavItem from "./Header/MobileNavItem";
+import Offers from "app/components/FtOffers";
+import { Link } from "@remix-run/react";
 
 type Props = {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
 }
+
+
 export default function MobileNav(props: Props) {
     const header = UseShopStore((state) => state.header);
     const [animate, setAnimate] = useState(false);
-
+    const footer = UseShopStore((state) => state.footer);
     useEffect(() => {
         if (props.isOpen === true) {
             setAnimate(true);
         }
     }, [props.isOpen]);
-    console.log(header, "layout");
 
 
     return (
@@ -124,8 +43,8 @@ export default function MobileNav(props: Props) {
                     width: "100%",
                     overflowY: "scroll",
                 }}
-                className='mobileNav__container flex flex-col gap-5 justify-start items-start p-3'>
-                <div className="navHeader w-full flex justify-end">
+                className='mobileNav__container  flex flex-col gap-5  justify-start items-start'>
+                <div className="navHeader w-full flex justify-end px-5">
                     <div
                         onClick={() => {
                             setAnimate(false);
@@ -133,27 +52,113 @@ export default function MobileNav(props: Props) {
                                 props.setIsOpen(false);
                             }, 500);
                         }}
-                        className='navHeader__close'>
+                        style={{
+
+                        }}
+                        className={`navHeader__close my-2 mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}>
                         <FTicons
                             fill={"none"}
                             style={{
                                 stroke: Colors.secondary,
-                                width: "28px",
-                                height: "28px",
+                                width: 16,
+                                height: 16,
                             }} name='close' />
                     </div>
                 </div>
-                <div className='navMenus space-y-6 w-full '>
+                <div className='navMenus space-y-6 w-full px-5'>
                     {header?.items?.map((menu, index) => {
-                        console.log(menu, "menu");
                         return (
                             <MobileNavItem
+                                style={{
+                                    transitionDelay: `${index * 0.2}s`,
+                                }}
                                 key={index}
                                 menu={menu} />
                         )
                     })}
                 </div>
+                <div style={{
+                }} className={`offers-container overflow-hidden flex-shrink-0`}>
+                    <div style={{
+                        transitionDelay: `${header.items.length * 0.2}s`,
+                    }} className={`offers-wrapper mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}>
+                        <Offers />
+                    </div>
+                </div>
+                <div style={{
+                }} className="footer-menus / flex flex-col gap-3 / px-5 text-base w-full">
+                    {footer.items.map((menu, index) => {
+                        return (
+                            <Link
+                                key={index + menu.title}
+                                style={{
+                                    fontWeight: "400",
+                                    transitionDelay: `${(header.items.length + 1) * 0.2 + index * 0.2}s`,
+                                }}
+                                className={`font-mainFont mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}
+                                to={menu.url}>
+                                {menu.title}
+                            </Link>
+                        )
+                    })}
+                </div>
+                <div
+
+                    className="social-media-container w-full">
+                    <div
+                        style={{
+                            borderTop: `1px solid ${Colors.secondary}`,
+                            transitionDelay: `${(header.items.length + 1) * 0.2 + footer.items.length * 0.2}s`,
+                            width: "100%",
+                            paddingBlock: "1rem",
+                        }}
+                        className={`social-media-wrapper flex justify-center items-center gap-5 mobile-nav-item
+                         ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}>
+                        <FTicons
+                            style={{
+                                width: "24px",
+                                height: "24px",
+                            }}
+                            name="instagram" />
+                        <FTicons
+                            style={{
+                                width: "24px",
+                                height: "24px",
+                            }}
+                            name="tiktok" />
+                    </div>
+                </div>
             </div>
-        </div >
+        </div>
     )
 }
+
+
+export const OFFERS_QUERY = `#graphql
+query Offers {
+    metaobject(handle: {handle:"offers", type:"offers_section"}) {
+        ...Metaobject
+    }
+  }
+  ${ON_METAOBJECT}
+` as const
+
+const LAYOUT_QUERY = `#graphql
+  query layout {
+    shop {
+      id
+      name
+      description
+      primaryDomain {
+        url
+      }
+      brand {
+        logo {
+          image {
+            url
+          }
+        }
+      }
+    }
+  }
+` as const

@@ -18,11 +18,16 @@ import type {
   LanguageCode,
   CountryCode,
 } from '@shopify/hydrogen/storefront-api-types';
+import StorefrontApi from 'app/api/storefront';
 
 /**
  * Export a fetch handler in module format.
  */
+
+
+
 export default {
+
   async fetch(
     request: Request,
     env: Env,
@@ -35,7 +40,6 @@ export default {
       if (!env?.SESSION_SECRET) {
         throw new Error('SESSION_SECRET environment variable is not set');
       }
-
       const waitUntil = (p: Promise<any>) => executionContext.waitUntil(p);
       const [cache, session] = await Promise.all([
         caches.open('hydrogen'),
@@ -45,7 +49,7 @@ export default {
       /**
        * Create Hydrogen's Storefront client.
        */
-      const {storefront} = createStorefrontClient({
+      const { storefront } = createStorefrontClient({
         cache,
         waitUntil,
         i18n: getLocaleFromRequest(request),
@@ -67,6 +71,9 @@ export default {
         cartQueryFragment: CART_QUERY_FRAGMENT,
       });
 
+      // console.log(storefront, "Shopify storefrong");
+      // await StorefrontApi.SetStorefront(storefront);
+
       /**
        * Create a Remix request handler and pass
        * Hydrogen's Storefront client to the loader context.
@@ -74,7 +81,7 @@ export default {
       const handleRequest = createRequestHandler({
         build: remixBuild,
         mode: process.env.NODE_ENV,
-        getLoadContext: () => ({session, storefront, cart, env, waitUntil}),
+        getLoadContext: () => ({ session, storefront, cart, env, waitUntil }),
       });
 
       const response = await handleRequest(request);
@@ -85,14 +92,14 @@ export default {
          * If the redirect doesn't exist, then `storefrontRedirect`
          * will pass through the 404 response.
          */
-        return storefrontRedirect({request, response, storefront});
+        return storefrontRedirect({ request, response, storefront });
       }
 
       return response;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return new Response('An unexpected error occurred', {status: 500});
+      return new Response('An unexpected error occurred', { status: 500 });
     }
   },
 };
@@ -106,7 +113,7 @@ export class HydrogenSession {
   constructor(
     private sessionStorage: SessionStorage,
     private session: Session,
-  ) {}
+  ) { }
 
   static async init(request: Request, secrets: string[]) {
     const storage = createCookieSessionStorage({
@@ -262,6 +269,8 @@ export type I18nLocale = {
   pathPrefix: string;
 };
 
+
+
 function getLocaleFromRequest(request: Request): I18nLocale {
   const url = new URL(request.url);
   const firstPathPart = url.pathname.split('/')[1]?.toUpperCase() ?? '';
@@ -278,5 +287,5 @@ function getLocaleFromRequest(request: Request): I18nLocale {
     ];
   }
 
-  return {language, country, pathPrefix};
+  return { language, country, pathPrefix };
 }

@@ -6,15 +6,10 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from './Hero';
 import { App } from '../../api/type';
-import ProductList from '../../components/ProductList';
-import Collections from '../../components/Collections';
 import Benefits from './Benefits';
-import FeaturedCollections from './FeaturedCollections';
 import Testimonials from './Testimonials';
 import ShopTheGoal from './ShopTheGoal';
-import InstagramSection from './Offers';
 import Contact from './Contact';
-import FAQ from './FAQ';
 import Promotion from './Promotion';
 import Offers from './Offers';
 
@@ -23,8 +18,7 @@ export type Shop = {
 };
 
 export async function loader({ context }: LoaderArgs) {
-  const storefront =
-    await context.storefront.query(SHOPQUERY);
+  const storefront = await context.storefront.query(SHOPQUERY);
   const { metaobject } = storefront;
   return json({
     metaobject,
@@ -41,7 +35,6 @@ function HomePage() {
     metaobject.fields.forEach((field) => {
       if (field.key === 'sections') {
         setSections(field.references.nodes);
-        console.log(field.references.nodes);
       }
     });
   }, [metaobject.fields]);
@@ -85,7 +78,71 @@ function HomePage() {
 
 export default HomePage;
 
-const SHOPQUERY = `#graphql
+
+export const ON_METAOBJECT = `#graphql
+fragment Metaobject on Metaobject {
+  type
+  fields {
+    key
+    value
+    type
+    references(first: 20) {
+      nodes {
+        ... on Metaobject {
+          type
+          fields {
+            key
+            value
+            type
+            reference{
+              ... on MediaImage {
+                image {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    reference {
+      ... on MediaImage {
+        image {
+          url
+        }
+      }
+      ... on Collection {
+        handle
+        title
+        products(first: 20) {
+          nodes {
+            title
+            handle
+            description
+            priceRange{
+              minVariantPrice{
+                amount
+                currencyCode
+              }
+              }
+            images(first: 20) {
+              nodes {
+                url
+              }
+            }
+            featuredImage {
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`
+
+
+const SHOPQUERY = `#graphqls
 query shopName{
   metaobject(handle: {handle: "homepage", type: "page"}) {
     fields {
@@ -95,56 +152,7 @@ query shopName{
       references(first: 20) {
         nodes {
           ... on Metaobject {
-            type
-            fields {
-              key
-              value
-              type
-              references(first: 20) {
-                nodes {
-                  ... on Metaobject {
-                    type
-                    fields {
-                      key
-                      value
-                      type
-                    }
-                  }
-                }
-              }
-              reference {
-                ... on MediaImage {
-                  image {
-                    url
-                  }
-                }
-                ... on Collection {
-                  handle
-                  title
-                  products(first: 20) {
-                    nodes {
-                      title
-                      handle
-                      description
-                      priceRange{
-                        minVariantPrice{
-                          amount
-                          currencyCode
-                        }
-                        }
-                      images(first: 20) {
-                        nodes {
-                          url
-                        }
-                      }
-                      featuredImage {
-                        url
-                      }
-                    }
-                  }
-                }
-              }
-            }
+           ...Metaobject
           }
           __typename
         }
@@ -152,4 +160,5 @@ query shopName{
     }
   }
 }
+${ON_METAOBJECT}
 `;

@@ -1,5 +1,5 @@
 import { useNonce } from '@shopify/hydrogen';
-import { defer, type LoaderArgs } from '@shopify/remix-oxygen';
+import { defer, json, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -23,6 +23,8 @@ import Layout from './layout/Layout';
 import type { App } from './api/type';
 import { create } from 'zustand';
 import { useEffect } from 'react';
+import StorefrontApi from './api/storefront';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -52,6 +54,15 @@ export function links() {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
     },
+    // getting font from google fonts
+    {
+      rel: 'preconnect',
+      href: '"https://fonts.googleapis.com',
+    },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap',
+    },
     {
       rel: 'preconnect',
       href: 'https://shop.app',
@@ -74,6 +85,7 @@ export async function loader({ context }: LoaderArgs) {
   // defer the cart query by not awaiting it
   const cartPromise = cart.get();
 
+
   // defer the footer query (below the fold)
   const footerPromise = storefront.query<{
     menu: App.Shopify.Layout["footer"];
@@ -83,6 +95,7 @@ export async function loader({ context }: LoaderArgs) {
       footerMenuHandle: 'footer', // Adjust to your footer menu handle
     },
   });
+
 
   const layout = storefront.query<{
     shop: App.Shopify.Layout["shop"];
@@ -94,7 +107,7 @@ export async function loader({ context }: LoaderArgs) {
   const headerPromise = storefront.query<{
     menu: App.Shopify.Layout["header"];
   }>(HEADER_QUERY, {
-    cache: storefront.CacheLong(),
+    // cache: storefront.CacheLong(),
   });
 
   return defer(
@@ -117,10 +130,11 @@ export const UseShopStore = create<App.Shopify.Layout>((set: any) => ({
 }
 ))
 
+const queryClient = new QueryClient()
+
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
-  console.log(JSON.stringify(data, null, 2));
   useEffect(() => {
     UseShopStore.setState({
       shop: data.shop.shop,
@@ -128,6 +142,7 @@ export default function App() {
       header: data.header.menu,
     })
   }, [data.shop]);
+
 
   return (
     <html lang="en">
@@ -137,21 +152,23 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        <Layout
-          layout={{
-            shop: data.shop.shop,
-            header: data.header.menu,
-            footer: data.footer.menu,
-          }}
-        >
-          <Outlet />
-        </Layout>
-        <ScrollRestoration nonce={nonce} />
-        <Scripts nonce={nonce} />
-        <LiveReload nonce={nonce} />
-      </body>
-    </html>
+      <QueryClientProvider client={queryClient}>
+        <body>
+          <Layout
+            layout={{
+              shop: data.shop.shop,
+              header: data.header.menu,
+              footer: data.footer.menu,
+            }}
+          >
+            <Outlet />
+          </Layout>
+          <ScrollRestoration nonce={nonce} />
+          <Scripts nonce={nonce} />
+          <LiveReload nonce={nonce} />
+        </body>
+      </QueryClientProvider>
+    </html >
   );
 }
 
@@ -239,7 +256,7 @@ const MENU_FRAGMENT = `#graphql
     tags
     title
     type
-    url
+    url 
   }
   fragment ChildMenuItem on MenuItem {
     ...MenuItem
@@ -261,6 +278,7 @@ const MENU_FRAGMENT = `#graphql
 const HEADER_QUERY = `#graphql
  query Layout {
   menu(handle: "main-menu") {
+    title
     items{
       title
       url
