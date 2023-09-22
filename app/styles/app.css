@@ -59,7 +59,7 @@ body {
 
 .benefit_title_text {
   font-family: 'Roboto Condensed', sans-serif;
-  /* font-size: 44px; */
+  font-size: 36px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -71,10 +71,17 @@ body {
   align-self: stretch;
   color: #4A4A49;
   font-family: 'Roboto', sans-serif;
-  /* font-size: 28px; */
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+
+.benefit_content {
+  border-radius: 0px;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 h1,
@@ -236,6 +243,32 @@ a {
   .glassy-card p {
     margin: 10px;
   }
+
+  .benefit_content {
+    border-radius: 12px;
+    background: var(--background-linear, linear-gradient(90deg, rgba(54, 54, 49, 0.60) 0%, rgba(74, 74, 73, 0.50) 48.39%, rgba(74, 74, 73, 0.40) 96.26%));
+    box-shadow: 0px 4.61905px 6.92857px 0px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(1.290789008140564px);
+  }
+
+  .benefit_title_text {
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.32px;
+    text-transform: uppercase;
+  }
+  
+  .benefit_description_text {
+    color: #fff;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
 }
 
 img {
