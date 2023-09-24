@@ -1,11 +1,13 @@
 
-import React, { useEffect, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import React, {useEffect, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {LoaderArgs, json} from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from './Hero';
-import { App } from '../../api/type';
+import {App} from '../../api/type';
+import ProductList from '../../components/ProductList';
+import Collections from '../../components/Collections';
 import Benefits from './Benefits';
 import Testimonials from './Testimonials';
 import ShopTheGoal from './ShopTheGoal';
@@ -26,10 +28,9 @@ export async function loader({ context }: LoaderArgs) {
 }
 
 function HomePage() {
-  const { metaobject }: { metaobject: App.HomePageTemplate.Template } =
+  const {metaobject}: {metaobject: App.HomePageTemplate.Template} =
     useLoaderData();
   const [sections, setSections] = useState<App.HomePageTemplate.Sections>([]);
-
 
   useEffect(() => {
     metaobject.fields.forEach((field) => {
@@ -39,9 +40,42 @@ function HomePage() {
     });
   }, [metaobject.fields]);
 
+  const sectionComponents: {[key: string]: React.ComponentType<any>} = {
+    promotion_section: Promotion,
+    hero_section: Hero,
+    benefits_section: Benefits,
+    testimonials_section: Testimonials,
+    shop_the_goal_section: ShopTheGoal,
+    offers_section: Offers,
+    contact_section: Contact,    
+  };
+
+  type SectionType = keyof typeof sectionComponents;
+  type SectionComponentProps = {
+    section: {
+      type: SectionType;
+      fields: any;
+    };
+    key: string;
+  };
+
+  function renderSection(section: {type: string; fields: any}) {
+    const SectionComponent: React.ComponentType<SectionComponentProps> =
+      sectionComponents[section.type];
+    if (SectionComponent) {
+      return <SectionComponent section={section} key={section.type} />;
+    }
+    return null;
+  }
+
+  function renderSections(sections: App.HomePageTemplate.Sections) {
+    return sections.map((section) => renderSection(section));
+  }
+
   return (
     <div className="h-full w-full space-y-6">
-      {sections.map((section) => {
+      {renderSections(sections)}
+      {/* {sections.map((section) => {
         if (section.type === 'promotion_section') {
           return <Promotion section={section} key={section.type} />;
         }
@@ -71,6 +105,7 @@ function HomePage() {
         }
 
       })}
+      })} */}
     </div>
   );
 }
