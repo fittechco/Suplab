@@ -1,10 +1,8 @@
 import { createStorefrontClient } from '@shopify/hydrogen';
-import { createClient, everything } from './gqlts'
-import { getStorefrontHeaders, createRequestHandler } from '@shopify/remix-oxygen';
-
+import { createClient } from './gqlts'
 
 const SHOPQUERY = `#graphql
-query shopName{
+query shopName1{
     shop{
         name
     }
@@ -13,14 +11,13 @@ query shopName{
 
 
 
-// export const TypedQuery = createClient({
-//     url: 'https://suplab.myshopify.com/api/2023-07/graphql.json',
-//     headers: {
-//         'Content-Type': 'application/json',
-//         'X-Shopify-Storefront-Access-Token': "a27f5c0f35281e7103b79896b9c21a04"
-//     },
-// })
-
+export const TypedQuery = createClient({
+    url: 'https://suplab.myshopify.com/api/2023-07/graphql.json',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': "a27f5c0f35281e7103b79896b9c21a04"
+    },
+})
 
 // // gqlts --endpoint https://suplab.myshopify.com/api/2023-07/graphql.json --output ./app/api/gqlts -H "X-Shopify-Storefront-Access-Token: a27f5c0f35281e7103b79896b9c21a04"
 

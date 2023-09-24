@@ -1,4 +1,5 @@
-import storefront from "../api/storefrontApi";
+import SearchController from "../ft-lib/ft-server/controllers/SearchController"
+import util from "util"
 
 const METAOBJECTQUERY = `#graphql
 metafield(handle: "offers") {
@@ -9,7 +10,7 @@ metafield(handle: "offers") {
 }
 `
 const LAYOUT_QUERY = `#graphql
-  query layout {
+  query testLayout {
     shop {
       id
       name
@@ -32,7 +33,10 @@ const LAYOUT_QUERY = `#graphql
 async function storeFrontApiTest() {
 
 
-  const res = await storefront.query(LAYOUT_QUERY)
+  // todo - search is not working
+  const res = await SearchController.searchProducts({ query: "whey" })
+  console.log(util.inspect(res, { depth: null }));
+
 
 }
 

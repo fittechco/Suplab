@@ -1,7 +1,7 @@
-import {useMatches, NavLink} from '@remix-run/react';
-import type {FooterQuery} from 'storefrontapi.generated';
+import { useMatches, NavLink } from '@remix-run/react';
+import type { FooterQuery } from 'storefrontapi.generated';
 
-export function Footer({menu}: FooterQuery) {
+export function Footer({ menu }: FooterQuery) {
   return (
     <footer className="footer">
       <FooterMenu menu={menu} />
@@ -9,7 +9,7 @@ export function Footer({menu}: FooterQuery) {
   );
 }
 
-function FooterMenu({menu}: Pick<FooterQuery, 'menu'>) {
+function FooterMenu({ menu }: Pick<FooterQuery, 'menu'>) {
   const [root] = useMatches();
   const publicStoreDomain = root?.data?.publicStoreDomain;
   return (
@@ -19,7 +19,7 @@ function FooterMenu({menu}: Pick<FooterQuery, 'menu'>) {
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain)
+            item.url.includes(publicStoreDomain)
             ? new URL(item.url).pathname
             : item.url;
         const isExternal = !url.startsWith('/');

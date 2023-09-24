@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useLoaderData } from '@remix-run/react';
-import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from './Hero';
@@ -69,7 +69,6 @@ function HomePage() {
         if (section.type === 'contact_section') {
           return <Contact section={section} key={section.type} />;
         }
-
 
       })}
     </div>
@@ -143,7 +142,7 @@ fragment Metaobject on Metaobject {
 
 
 const SHOPQUERY = `#graphqls
-query shopName{
+query ShopName {
   metaobject(handle: {handle: "homepage", type: "page"}) {
     fields {
       type

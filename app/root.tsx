@@ -14,7 +14,7 @@ import {
   type ShouldRevalidateFunction,
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
-import type { HydrogenSession } from '../server/server';
+import type { HydrogenSession } from '../server';
 import favicon from '../public/favicon.svg';
 import resetStyles from './styles/reset.css';
 import appStyles from './styles/app.css';
@@ -22,9 +22,9 @@ import tailwindCss from './styles/tailwind.css';
 import Layout from './layout/Layout';
 import type { App } from './api/type';
 import { create } from 'zustand';
-import { useEffect } from 'react';
-import StorefrontApi from './api/storefront';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useEffect } from 'react';
+import { TypedQuery } from './api/storefrontApi';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -87,9 +87,7 @@ export async function loader({ context }: LoaderArgs) {
 
 
   // defer the footer query (below the fold)
-  const footerPromise = storefront.query<{
-    menu: App.Shopify.Layout["footer"];
-  }>(FOOTER_QUERY, {
+  const footerPromise = storefront.query(FOOTER_QUERY, {
     cache: storefront.CacheLong(),
     variables: {
       footerMenuHandle: 'footer', // Adjust to your footer menu handle
@@ -97,17 +95,13 @@ export async function loader({ context }: LoaderArgs) {
   });
 
 
-  const layout = storefront.query<{
-    shop: App.Shopify.Layout["shop"];
-  }>(LAYOUT_QUERY, {
+  const layout = storefront.query(LAYOUT_QUERY, {
     cache: storefront.CacheLong(),
   });
 
   // await the header query (above the fold)
-  const headerPromise = storefront.query<{
-    menu: App.Shopify.Layout["header"];
-  }>(HEADER_QUERY, {
-    // cache: storefront.CacheLong(),
+  const headerPromise = storefront.query(HEADER_QUERY, {
+    cache: storefront.CacheLong(),
   });
 
   return defer(
@@ -135,14 +129,6 @@ const queryClient = new QueryClient()
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
-  useEffect(() => {
-    UseShopStore.setState({
-      shop: data.shop.shop,
-      footer: data.footer.menu,
-      header: data.header.menu,
-    })
-  }, [data.shop]);
-
 
   return (
     <html lang="en">
@@ -157,8 +143,8 @@ export default function App() {
           <Layout
             layout={{
               shop: data.shop.shop,
-              header: data.header.menu,
-              footer: data.footer.menu,
+              header: data.header,
+              footer: data.footer,
             }}
           >
             <Outlet />
@@ -221,7 +207,7 @@ export function ErrorBoundary() {
  * @example
  * ```ts
  * //
- * const {isLoggedIn, headers} = await validateCustomerAccessToken(
+ * const {isLoggedIn, headers} = await validateCustomerAccessToken( 
  *  customerAccessToken,
  *  session,
  *  );
@@ -276,7 +262,7 @@ const MENU_FRAGMENT = `#graphql
 ` as const;
 
 const HEADER_QUERY = `#graphql
- query Layout {
+ query Header {
   menu(handle: "main-menu") {
     title
     items{
@@ -290,6 +276,11 @@ const HEADER_QUERY = `#graphql
           id
           title
           url
+          items {
+            id
+            title
+            url
+          }
         }
       }
     }
@@ -313,7 +304,7 @@ const FOOTER_QUERY = `#graphql
 
 
 const LAYOUT_QUERY = `#graphql
-  query layout {
+  query ShopLayout {
     shop {
       id
       name

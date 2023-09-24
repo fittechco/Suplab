@@ -2,9 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import { App } from '../api/type'
 import Header from './Header/Header'
 import Footer from './Footer'
+import { FooterQuery, HeaderQuery, ShopLayoutQuery, } from 'storefrontapi.generated'
 type Props = {
     children: React.ReactNode
-    layout: App.Shopify.Layout
+    layout: {
+        shop: ShopLayoutQuery["shop"]
+        header: HeaderQuery
+        footer: FooterQuery
+    }
 }
 
 const Layout = (props: Props) => {

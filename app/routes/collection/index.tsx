@@ -55,7 +55,7 @@ function HomePage() {
 export default HomePage;
 
 const SHOPQUERY = `#graphql
-query shopName{
+query Metaobjects{
   metaobject(handle: {handle: "homepage", type: "page"}) {
     fields {
       type

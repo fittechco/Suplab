@@ -3,9 +3,10 @@ import type { App } from "app/api/type";
 import FTicons from "app/ft-lib/Icon";
 import { Colors } from "app/ft-lib/shared";
 import { useEffect, useRef, useState } from "react";
+import { HeaderQuery } from "storefrontapi.generated";
 
 type MobileNavItemProps = {
-    menu: App.Shopify.Layout["header"]["items"][0];
+    menu: App.Shopify.Item;
     style?: React.CSSProperties;
 }
 
@@ -65,6 +66,11 @@ export default function MobileNavItem(props: MobileNavItemProps) {
         setAnimate(true);
     }, []);
 
+    if (props.menu == null) {
+        // todo: add a skeleton loader
+        return <div>Loading...</div>;
+    }
+
     return (
         <div
             style={{
@@ -89,11 +95,12 @@ export default function MobileNavItem(props: MobileNavItemProps) {
                         textTransform: 'uppercase',
                     }}
                     className="navMenu__title text-base  ft-text-main"
-                    to={props.menu.url}
+                    // todo - create a Link component that handles this
+                    to={props.menu.url || ""}
                 >
                     {props.menu.title}
                 </Link>
-                {
+                {props.menu.items != null &&
                     props.menu.items?.length > 0 && (
                         <FTicons
                             style={{
@@ -111,33 +118,34 @@ export default function MobileNavItem(props: MobileNavItemProps) {
                     )
                 }
             </div>
-            {props.menu.items?.length > 0 && (
-                <div
-                    ref={navItemRef}
-                    style={{
-                        textDecoration: 'none',
-                        color: Colors.text,
-                        width: '100%',
-                        transition: 'all 0.3s ease',
-                        opacity: isShowingSub === true ? 1 : 0,
-                        height: navItemHeight,
-                        overflow: 'hidden',
-                    }}
-                    className={`navMenu__items  pl-4  `}
-                >
-                    {isShowingSub && props.menu.items?.map((item, index) => (
-                        <MobileNavItem
-                            style={{
-                                borderTop: `1.6px solid ${itemColor}`,
-                                transition: `all 0.4s ease ${index * 0.1}s`,
-                                borderBottom: "none",
-                            }}
-                            key={item.title + index}
-                            menu={item}
-                        />
-                    ))}
-                </div>
-            )
+            {props.menu.items != null &&
+                props.menu.items?.length > 0 && (
+                    <div
+                        ref={navItemRef}
+                        style={{
+                            textDecoration: 'none',
+                            color: Colors.text,
+                            width: '100%',
+                            transition: 'all 0.3s ease',
+                            opacity: isShowingSub === true ? 1 : 0,
+                            height: navItemHeight,
+                            overflow: 'hidden',
+                        }}
+                        className={`navMenu__items  pl-4  `}
+                    >
+                        {isShowingSub && props.menu.items?.map((item, index) => (
+                            <MobileNavItem
+                                style={{
+                                    borderTop: `1.6px solid ${itemColor}`,
+                                    transition: `all 0.4s ease ${index * 0.1}s`,
+                                    borderBottom: "none",
+                                }}
+                                key={item.title + index}
+                                menu={item}
+                            />
+                        ))}
+                    </div>
+                )
             }
         </div >
     );

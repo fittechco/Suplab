@@ -1,5 +1,5 @@
 import { LoaderArgs } from '@shopify/remix-oxygen';
-import { TypedQuery } from '../../app/api/storefrontApi';
+import { TypedQuery } from '../../api/storefrontApi';
 import { App } from '../../app/api/type';
 import invariant from 'tiny-invariant';
 
@@ -10,7 +10,6 @@ class ProductService {
       products: [
         {
           first: 20,
-          query: "title: *black*",
         },
         {
           nodes: {

@@ -1,9 +1,9 @@
 import { Link } from "@remix-run/react";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { Colors } from "../../ft-lib/shared";
-import { App } from "../../api/type";
+import type { App } from "../../api/type";
 
-export default function SubMenuPopup(props: { items: App.Shopify.NavMenu["items"], isTop: boolean, showSub: boolean }) {
+export default function SubMenuPopup(props: { items: App.Shopify.Item[], isTop: boolean, showSub: boolean }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     return (
@@ -19,7 +19,8 @@ export default function SubMenuPopup(props: { items: App.Shopify.NavMenu["items"
             <div
                 className='wrapper  transition-none h-full relative flex justify-center items-start  rounded-b-3xl  gap-16 '>
                 {props.items.map((subItem, index) => {
-                    const subPathname = new URL(subItem.url).pathname;
+                    // todo - fix this
+                    const subPathname = new URL(subItem.url || "").pathname;
                     return (
                         <div
                             key={subItem.title}
@@ -35,7 +36,8 @@ export default function SubMenuPopup(props: { items: App.Shopify.NavMenu["items"
                             </div>
                             <div className="nav-submenus-container flex flex-col space-y-2">
                                 {subItem.items?.map((subSubItem) => {
-                                    const subSubPathname = new URL(subSubItem.url).pathname;
+                                    // todo - fix this
+                                    const subSubPathname = new URL(subSubItem.url || "").pathname;
                                     return (
                                         <Link
                                             key={subSubItem.title}

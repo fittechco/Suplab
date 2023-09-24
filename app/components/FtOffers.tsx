@@ -9,7 +9,7 @@ import { useQuery } from "react-query";
 const storefront = StorefrontApi.storeFront();
 
 export default function Offers() {
-    const offers = useQuery<App.HomePageTemplate.OffersSection>("offers", async () => {
+    const offers = useQuery("offers", async () => {
         const res = await storefront.query(OFFERS_QUERY)
         return res.metaobject;
     });
@@ -19,6 +19,10 @@ export default function Offers() {
     };
 
     const fields = arrayToObject({ array: offers.data?.fields });
+
+    if (fields.offers.references == null) {
+        return <div>Loading ...</div>
+    }
 
     return (
         <div className="offers-container w-full space-y-4">
@@ -47,7 +51,10 @@ export default function Offers() {
                     const offerfields = arrayToObject({ array: offer.fields });
                     return (
                         <div key={index} className="offer w-full flex-shrink-0 card-shadow">
-                            <img src={offerfields.image.reference.image.url} alt="" />
+                            {/* todo add image skeleton */}
+                            {offerfields.image.reference?.image != null &&
+                                <img src={offerfields.image.reference.image.url} />
+                            }
                         </div>
                     )
                 })}

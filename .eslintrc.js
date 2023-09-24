@@ -7,6 +7,11 @@ module.exports = {
     'plugin:hydrogen/recommended',
     'plugin:hydrogen/typescript',
   ],
+  plugins: ['hydrogen'],
+  parserOptions: {
+    project: './tsconfig.json',
+  },
+  parser: '@typescript-eslint/parser',
   rules: {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/naming-convention': 'off',

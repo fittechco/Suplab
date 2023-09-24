@@ -1,3 +1,4 @@
+import type { MenuItem } from "@shopify/hydrogen/storefront-api-types";
 
 export namespace App {
   export namespace HomePageTemplate {
@@ -280,28 +281,41 @@ export namespace App {
       }
     }
 
+    type Shop = {
+
+    };
     export type Layout = {
       shop: {
-        name: string
-        description?: string
+        id: string;
+        name: string;
+        description?: string | null;
+        primaryDomain: {
+          url: string;
+        };
         brand?: {
           logo?: {
             image?: {
-              url?: string
-            }
-          }
-        }
+              url?: string;
+            } | null;
+          } | null;
+        } | null;
       };
-      header: App.Shopify.NavMenu;
-      footer: App.Shopify.NavMenu;
+      header: App.Shopify.NavMenu | null;
+      footer: App.Shopify.NavMenu | null;
     };
     export type NavMenu = {
       items: {
+        id: string;
         title: string;
-        url: string;
-        items: NavMenu['items'];
+        url?: string;
+
+        items?: NavMenu['items'];
       }[];
     };
+
+    export type Item = Pick<MenuItem, "id" | "title" | "url"> & {
+      items?: Item[];
+    }
 
     export namespace MetaobectsDef {
       export type Single_Line_Text_Field<

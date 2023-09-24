@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import FTicons from "../ft-lib/Icon";
 import { Colors } from "../ft-lib/shared";
 import { UseShopStore } from "../root";
-import StorefrontApi from "app/api/storefront";
 import { ON_METAOBJECT } from "app/routes/_index";
 import MobileNavItem from "./Header/MobileNavItem";
 import Offers from "app/components/FtOffers";
@@ -24,6 +23,9 @@ export default function MobileNav(props: Props) {
         }
     }, [props.isOpen]);
 
+    if (header?.items == null) {
+        return null;
+    }
 
     return (
         <div style={{
@@ -80,14 +82,14 @@ export default function MobileNav(props: Props) {
                 <div style={{
                 }} className={`offers-container overflow-hidden flex-shrink-0`}>
                     <div style={{
-                        transitionDelay: `${header.items.length * 0.2}s`,
+                        transitionDelay: `${header?.items.length * 0.2}s`,
                     }} className={`offers-wrapper mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}>
                         <Offers />
                     </div>
                 </div>
                 <div style={{
                 }} className="footer-menus / flex flex-col gap-3 / px-5 text-base w-full">
-                    {footer.items.map((menu, index) => {
+                    {footer?.items.map((menu, index) => {
                         return (
                             <Link
                                 key={index + menu.title}
@@ -96,7 +98,8 @@ export default function MobileNav(props: Props) {
                                     transitionDelay: `${(header.items.length + 1) * 0.2 + index * 0.2}s`,
                                 }}
                                 className={`font-mainFont mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}
-                                to={menu.url}>
+                                // todo - fix this create a Link component that handles this
+                                to={menu.url || ""}>
                                 {menu.title}
                             </Link>
                         )
@@ -108,7 +111,7 @@ export default function MobileNav(props: Props) {
                     <div
                         style={{
                             borderTop: `1px solid ${Colors.secondary}`,
-                            transitionDelay: `${(header.items.length + 1) * 0.2 + footer.items.length * 0.2}s`,
+                            transitionDelay: `${(header.items.length + 1) * 0.2 + footer?.items.length! * 0.2}s`,
                             width: "100%",
                             paddingBlock: "1rem",
                         }}
@@ -144,7 +147,7 @@ query Offers {
 ` as const
 
 const LAYOUT_QUERY = `#graphql
-  query layout {
+  query MobileLayout {
     shop {
       id
       name

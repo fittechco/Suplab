@@ -1,65 +1,65 @@
 
-    import { FieldsSelection, GraphqlOperation, ClientOptions, ClientRequestConfig, Observable } from '@gqlts/runtime'
-    import { Client as WSClient } from "graphql-ws"
-    import { AxiosInstance } from 'axios'
-    export * from './schema'
-    import {QueryRootRequest,QueryRoot,MutationRequest,Mutation} from './schema'
-    export declare const createClient:(options?: ClientOptions) => Client
-    export declare const everything: { __scalar: boolean }
-    export declare const version: string
-  
+import type { FieldsSelection, GraphqlOperation, ClientOptions, ClientRequestConfig, Observable } from '@gqlts/runtime'
+import type { Client as WSClient } from "graphql-ws"
+import type { AxiosInstance } from 'axios'
+export type * from './schema'
+import type { QueryRootRequest, QueryRoot, MutationRequest, Mutation } from './schema'
+export declare const createClient: (options?: ClientOptions) => Client
+export declare const everything: { __scalar: boolean }
+export declare const version: string
 
 
-    export type Head<T extends unknown | unknown[]> = T extends [infer H, ...unknown[]] ? H : never
-    export interface GraphQLError {
-        message: string
-        code?: string
-        locations?: {
-            line: number
-            column: number
-        }[]
-        path?: string | number[]
-        extensions?: {
-          [key: string]: unknown
-        }
-        [key: string]: unknown
-    }
 
-    export interface Extensions {
-        [key: string]: unknown
-    }
+export type Head<T extends unknown | unknown[]> = T extends [infer H, ...unknown[]] ? H : never
+export interface GraphQLError {
+  message: string
+  code?: string
+  locations?: {
+    line: number
+    column: number
+  }[]
+  path?: string | number[]
+  extensions?: {
+    [key: string]: unknown
+  }
+  [key: string]: unknown
+}
 
-    export interface GraphqlResponse<D = any, E = GraphQLError[], X = Extensions> {
-      data?: D;
-      errors?: E;
-      extensions?: X;
-    }
+export interface Extensions {
+  [key: string]: unknown
+}
 
-    export interface Client<FI =AxiosInstance, RC =ClientRequestConfig> {
-        wsClient?: WSClient
-        fetcherInstance?: FI | undefined
-        fetcherMethod: (operation: GraphqlOperation | GraphqlOperation[], config?: RC) => Promise<any>
-        
-        query<R extends QueryRootRequest>(
-            request: R & { __name?: string },
-            config?: RC,
-        ): Promise<GraphqlResponse<FieldsSelection<QueryRoot, R>>>
-        
-        mutation<R extends MutationRequest>(
-            request: R & { __name?: string },
-            config?: RC,
-        ): Promise<GraphqlResponse<FieldsSelection<Mutation, R>>>
-        
-    }
-    
+export interface GraphqlResponse<D = any, E = GraphQLError[], X = Extensions> {
+  data?: D;
+  errors?: E;
+  extensions?: X;
+}
+
+export interface Client<FI = AxiosInstance, RC = ClientRequestConfig> {
+  wsClient?: WSClient
+  fetcherInstance?: FI | undefined
+  fetcherMethod: (operation: GraphqlOperation | GraphqlOperation[], config?: RC) => Promise<any>
+
+  query<R extends QueryRootRequest>(
+    request: R & { __name?: string },
+    config?: RC,
+  ): Promise<GraphqlResponse<FieldsSelection<QueryRoot, R>>>
+
+  mutation<R extends MutationRequest>(
+    request: R & { __name?: string },
+    config?: RC,
+  ): Promise<GraphqlResponse<FieldsSelection<Mutation, R>>>
+
+}
 
 
-        export type QueryResult<fields extends QueryRootRequest> = GraphqlResponse<FieldsSelection<QueryRoot, fields>>
 
-        export declare const generateQueryOp: (fields: QueryRootRequest & { __name?: string }) => GraphqlOperation
-        export type MutationResult<fields extends MutationRequest> = GraphqlResponse<FieldsSelection<Mutation, fields>>
+export type QueryResult<fields extends QueryRootRequest> = GraphqlResponse<FieldsSelection<QueryRoot, fields>>
 
-        export declare const generateMutationOp: (fields: MutationRequest & { __name?: string }) => GraphqlOperation
+export declare const generateQueryOp: (fields: QueryRootRequest & { __name?: string }) => GraphqlOperation
+export type MutationResult<fields extends MutationRequest> = GraphqlResponse<FieldsSelection<Mutation, fields>>
+
+export declare const generateMutationOp: (fields: MutationRequest & { __name?: string }) => GraphqlOperation
 
 export declare const enumArticleSortKeys: {
   readonly ID: 'ID',
