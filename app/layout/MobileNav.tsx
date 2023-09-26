@@ -4,7 +4,7 @@ import { Colors } from "../ft-lib/shared";
 import { UseShopStore } from "../root";
 import { ON_METAOBJECT } from "app/routes/_index";
 import MobileNavItem from "./Header/MobileNavItem";
-import Offers from "app/components/FtOffers";
+import Offer from "app/components/FtOffers";
 import { Link } from "@remix-run/react";
 
 type Props = {
@@ -84,7 +84,7 @@ export default function MobileNav(props: Props) {
                     <div style={{
                         transitionDelay: `${header?.items.length * 0.2}s`,
                     }} className={`offers-wrapper mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}>
-                        <Offers />
+                        <Offer />
                     </div>
                 </div>
                 <div style={{

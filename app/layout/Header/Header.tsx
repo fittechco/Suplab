@@ -250,7 +250,7 @@ function Header(props: Props) {
             background: "rgba(200, 200, 200, 0.40)",
             backdropFilter: "blur(2.5px)",
 
-         }} className='search-container flex justify-center items-end'>
+         }} className='search-container hidden justify-center items-end'>
             <div
                style={{
                   height: 667,

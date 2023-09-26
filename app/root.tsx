@@ -68,6 +68,10 @@ export function links() {
       href: 'https://shop.app',
     },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
+    {
+      rel: "stylesheet",
+      href: "https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css",
+    },
   ];
 }
 

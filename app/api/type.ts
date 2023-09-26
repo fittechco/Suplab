@@ -202,7 +202,7 @@ export namespace App {
       type: 'contact_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-          key: 'email' | 'phone' | 'button_text';
+          key: 'email' | 'phone' | 'location_button_text' | 'contact_button_text';
         }>
         | Shopify.MetaobectsDef.FileReference<{
           key: 'image';

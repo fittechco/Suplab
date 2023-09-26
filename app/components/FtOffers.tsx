@@ -8,7 +8,7 @@ import { useQuery } from "react-query";
 
 const storefront = StorefrontApi.storeFront();
 
-export default function Offers() {
+export default function Offer() {
     const offers = useQuery("offers", async () => {
         const res = await storefront.query(OFFERS_QUERY)
         return res.metaobject;

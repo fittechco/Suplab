@@ -18,11 +18,11 @@ const Benefits = ({section}: BenefitsSectionProps) => {
       key={section.type}
       style={{
         height: '100%',
-        marginTop: "40px"
+        marginTop: '40px',
       }}
       className="benefitSection w-full !container mx-auto"
     >
-      <p className="ft-text-main">{fields.title.value}</p>
+      <p className="ft-text-main text-3xl">{fields.title.value}</p>
 
       <div className="benefitSection__benefits">
         {fields.benefits.references.nodes.map((benefit, index) => {
@@ -31,13 +31,21 @@ const Benefits = ({section}: BenefitsSectionProps) => {
           const benefitFields = arrayToObject({array: benefit.fields});
           const imageUrl =
             benefitFields.image?.reference?.image?.url || benefitImage1;
+
+          const paddingStyle = isEven
+            ? {paddingLeft: '40px'}
+            : {paddingRight: '40px'};
+
           return (
-            <div className="benefitSection__benefit my-10 flex items-center justify-center">
+            <div
+              className="benefitSection__benefit my-10 flex items-center justify-center"
+              key={index}
+            >
               <div
                 className="w-[100%] flex items-center content-center relative"
                 style={{flexDirection: flexDirection}}
               >
-                <div className="w-[80%] h-[195px]  md:w-1/2 md:h-full">
+                <div className="w-[70%] h-[195px] md:w-1/2 md:h-full">
                   <img
                     src={imageUrl}
                     alt="img"
@@ -50,9 +58,9 @@ const Benefits = ({section}: BenefitsSectionProps) => {
 
                 <div
                   className="w-full h-full absolute flex items-center justify-end md:items-start"
-                  style={{flexDirection: flexDirection}}
+                  style={{flexDirection: flexDirection, ...paddingStyle}}
                 >
-                  <div className="benefit_content w-[65%] md:w-1/2 md:pl-10 md:pt-5 gap-1 p-2 md:gap-5">
+                  <div className="benefit_content w-[55%] md:w-1/2 p-2 md:p-4">
                     <p className="benefit_title_text">
                       {benefitFields.title?.value}
                     </p>

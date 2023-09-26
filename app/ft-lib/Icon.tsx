@@ -28,6 +28,7 @@ export default function FTicons(
         | "income"
         | "referal"
         | "leftArrow"
+        | "rightArrow"
         | "indexLine"
         | "cart"
         | "chev-down"

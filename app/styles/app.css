@@ -63,14 +63,17 @@ input:focus {
   text-transform: uppercase;
 }
 
+/* Benefits Section */
+
 .benefit_title_text {
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 36px;
+  font-size: 34px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
   letter-spacing: 0.88px;
   text-transform: uppercase;
+  margin-bottom: 15px;
 }
 
 .benefit_description_text {
@@ -88,6 +91,28 @@ input:focus {
   background: none;
   box-shadow: none;
   backdrop-filter: none;
+}
+
+/* Testimonials Section */
+
+.testimonialsSection__testimonials .swiper-wrapper {
+  display: flex;
+}
+
+/* Shop the goal Section */
+
+.shopTheGoalSection__benefits .swiper-wrapper {
+  display: flex;
+}
+
+/* Offers Section */
+
+.offersSection__offers .swiper-wrapper {
+  display: flex;
+}
+
+.offersSection__slide {
+  width: 500px;
 }
 
 h1,
@@ -265,6 +290,7 @@ a {
     line-height: normal;
     letter-spacing: 0.32px;
     text-transform: uppercase;
+    margin-bottom: 7px;
   }
 
   .benefit_description_text {
@@ -273,6 +299,10 @@ a {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+  }
+
+  .offersSection__slide {
+    width: 335px;
   }
 
 }
