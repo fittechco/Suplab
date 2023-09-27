@@ -143,14 +143,18 @@ function Header(props: Props) {
                   height: 80,
                }}
                className=" flex items-center max-md:justify-between  py-2 px-5 sm:px-6">
-               <div
+               <Link
+                  to={'/'}
                   style={{
                      color: Colors.secondary,
                      fontWeight: 700,
                   }}
                   className="header__logo mr-auto flex items-center">
-                  <img src={props.layout.shop.brand?.logo!.image?.url} className='w-24 md:w-32' />
-               </div>
+                  {props.layout.shop?.brand?.logo?.image != null && (
+                     <img src={props.layout.shop.brand?.logo!.image.url} className='w-24 md:w-32' />
+                  )
+                  }
+               </Link>
                <div className='navmenusContainer flex   items-center justify-center  max-md:hidden h-full'>
                   {props.layout.header.menu?.items.map((item) => {
                      // todo: fix this

@@ -25,6 +25,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect } from 'react';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
+import 'swiper/css/pagination';
 
 
 // This is important to avoid re-fetching root queries on sub-navigations
@@ -60,10 +61,11 @@ export function links() {
       rel: 'preconnect',
       href: '"https://fonts.googleapis.com',
     },
-    {
-      rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap',
-    },
+    // {
+    //   rel: 'stylesheet',
+    //   type: 'text/css',
+    //   href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap',
+    // },
     {
       rel: 'preconnect',
       href: 'https://shop.app',

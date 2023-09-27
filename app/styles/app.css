@@ -136,12 +136,13 @@ input:focus {
 
 /* Offers Section */
 
-.offersSection__offers .swiper-wrapper {
+.swiper-wrapper {
   display: flex;
 }
 
-.offersSection__slide {
-  width: 500px;
+.offersSection__slide,
+.product-image__slide {
+  flex-shrink: 0;
 }
 
 h1,
@@ -330,7 +331,8 @@ a {
     line-height: normal;
   }
 
-  .offersSection__slide {
+  .offersSection__slide,
+  .product-image__slide {
     width: 335px;
   }
 

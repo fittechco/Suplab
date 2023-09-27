@@ -1,22 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import {App} from '../../api/type';
-import {useLoaderData} from '@remix-run/react';
+import { useEffect, useState } from 'react';
+import { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
-import Offer from 'app/components/FtOffers';
-import {Colors} from 'app/ft-lib/shared';
-import FTicons from 'app/ft-lib/Icon';
 import Swiper from 'swiper';
 
 interface OffersSectionProps {
   section: App.HomePageTemplate.OffersSection;
 }
 
-const Offers = ({section}: OffersSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+const Offers = ({ section }: OffersSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
   const [spaceBetween, setSpaceBetween] = useState(10);
-  let swiperInstance: {destroy: () => void};
+  let swiperInstance: { destroy: () => void };
 
   const updateSpaceBetween = () => {
     if (window.innerWidth >= 769) {
@@ -62,7 +57,7 @@ const Offers = ({section}: OffersSectionProps) => {
         <div className="swiper-container">
           <div className="swiper-wrapper">
             {fields.offers.references.nodes.map((offer, index) => {
-              const offerfields = arrayToObject({array: offer.fields});
+              const offerfields = arrayToObject({ array: offer.fields });
               return (
                 <div key={index} className="swiper-slide">
                   <div
