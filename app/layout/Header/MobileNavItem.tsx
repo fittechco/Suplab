@@ -14,7 +14,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
     const [isShowingSub, setIsShowingSub] = useState(false);
     const [animate, setAnimate] = useState(false);
     const [navItemHeight, setNavItemHeight] = useState(0);
-    const itemHeight = 36.8 + 2; // 37px + 2px border and margin top is 12px
+    const itemHeight = 36.8;
     const itemColor = isShowingSub ? Colors.offBlack : Colors.secondary;
     const handleItemClick = () => {
         setIsShowingSub(!isShowingSub);

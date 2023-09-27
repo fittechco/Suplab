@@ -10,7 +10,7 @@ const storefront = StorefrontApi.storeFront();
 
 export default function Offer() {
     const offers = useQuery("offers", async () => {
-        const res = await storefront.query(OFFERS_QUERY)
+        const res = await StorefrontApi.storeFront().query(OFFERS_QUERY)
         return res.metaobject;
     });
 

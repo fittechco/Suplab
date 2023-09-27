@@ -23,8 +23,9 @@ export default function MobileNav(props: Props) {
         }
     }, [props.isOpen]);
 
-    if (header?.items == null) {
-        return null;
+    console.log(header, "header?.items");
+    if (header?.menu?.items == null) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -68,7 +69,7 @@ export default function MobileNav(props: Props) {
                     </div>
                 </div>
                 <div className='navMenus space-y-6 w-full px-5'>
-                    {header?.items?.map((menu, index) => {
+                    {header.menu?.items?.map((menu, index) => {
                         return (
                             <MobileNavItem
                                 style={{
@@ -82,20 +83,20 @@ export default function MobileNav(props: Props) {
                 <div style={{
                 }} className={`offers-container overflow-hidden flex-shrink-0`}>
                     <div style={{
-                        transitionDelay: `${header?.items.length * 0.2}s`,
+                        transitionDelay: `${header?.menu.items.length * 0.2}s`,
                     }} className={`offers-wrapper mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}>
                         <Offer />
                     </div>
                 </div>
                 <div style={{
                 }} className="footer-menus / flex flex-col gap-3 / px-5 text-base w-full">
-                    {footer?.items.map((menu, index) => {
+                    {footer.menu?.items.map((menu, index) => {
                         return (
                             <Link
                                 key={index + menu.title}
                                 style={{
                                     fontWeight: "400",
-                                    transitionDelay: `${(header.items.length + 1) * 0.2 + index * 0.2}s`,
+                                    transitionDelay: `${((header.menu?.items.length || 0) + 1) * 0.2 + index * 0.2}s`,
                                 }}
                                 className={`font-mainFont mobile-nav-item ${animate === true ? "show-mobile-nav-item" : "hide-mobile-nav-item"}`}
                                 // todo - fix this create a Link component that handles this
@@ -111,7 +112,7 @@ export default function MobileNav(props: Props) {
                     <div
                         style={{
                             borderTop: `1px solid ${Colors.secondary}`,
-                            transitionDelay: `${(header.items.length + 1) * 0.2 + footer?.items.length! * 0.2}s`,
+                            transitionDelay: `${(header.menu.items.length + 1) * 0.2 + footer.menu?.items.length! * 0.2}s`,
                             width: "100%",
                             paddingBlock: "1rem",
                         }}

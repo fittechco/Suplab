@@ -1,5 +1,5 @@
-import { useNonce } from '@shopify/hydrogen';
-import { defer, json, type LoaderArgs } from '@shopify/remix-oxygen';
+import { Script, useNonce } from '@shopify/hydrogen';
+import { defer, LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -15,7 +15,6 @@ import {
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
 import type { HydrogenSession } from '../server';
-import favicon from '../public/favicon.svg';
 import resetStyles from './styles/reset.css';
 import appStyles from './styles/app.css';
 import tailwindCss from './styles/tailwind.css';
@@ -24,7 +23,9 @@ import type { App } from './api/type';
 import { create } from 'zustand';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect } from 'react';
-import { TypedQuery } from './api/storefrontApi';
+import 'swiper/css';
+import 'swiper/swiper-bundle.css';
+
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -67,14 +68,8 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    { rel: 'icon', type: 'image/svg+xml', href: favicon },
-    {
-      rel: "stylesheet",
-      href: "https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css",
-    },
-  ];
+  ]
 }
-
 export async function loader({ context }: LoaderArgs) {
   const { storefront, session, cart } = context;
   const customerAccessToken = await session.get('customerAccessToken');
@@ -133,6 +128,14 @@ const queryClient = new QueryClient()
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    UseShopStore.setState({
+      shop: data.shop.shop,
+      footer: data.footer,
+      header: data.header,
+    })
+  }, [data])
 
   return (
     <html lang="en">
@@ -269,6 +272,7 @@ const HEADER_QUERY = `#graphql
  query Header {
   menu(handle: "main-menu") {
     title
+    handle
     items{
       title
       url

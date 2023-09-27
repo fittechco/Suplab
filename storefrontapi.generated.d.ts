@@ -9,6 +9,99 @@ export type ShopName1QueryVariables = StorefrontAPI.Exact<{
 
 export type ShopName1Query = {shop: Pick<StorefrontAPI.Shop, 'name'>};
 
+export type AllProductsQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type AllProductsQuery = {
+  products: {
+    edges: Array<{
+      node: Pick<StorefrontAPI.Product, 'id' | 'title' | 'description'> & {
+        images: {
+          edges: Array<{node: Pick<StorefrontAPI.Image, 'originalSrc'>}>;
+        };
+      };
+    }>;
+  };
+};
+
+export type ProductQueryVariables = StorefrontAPI.Exact<{
+  id: StorefrontAPI.Scalars['ID'];
+}>;
+
+export type ProductQuery = {
+  product?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title' | 'description'> & {
+      priceRange: {
+        minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+      };
+      images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
+    }
+  >;
+};
+
+export type ProductByCollectionQueryVariables = StorefrontAPI.Exact<{
+  collectionId: StorefrontAPI.Scalars['ID'];
+}>;
+
+export type ProductByCollectionQuery = {
+  collection?: StorefrontAPI.Maybe<{
+    products: {
+      edges: Array<{
+        node: Pick<StorefrontAPI.Product, 'id' | 'title' | 'description'> & {
+          images: {
+            edges: Array<{node: Pick<StorefrontAPI.Image, 'originalSrc'>}>;
+          };
+        };
+      }>;
+    };
+  }>;
+};
+
+export type ProductsByTagQueryVariables = StorefrontAPI.Exact<{
+  tag: StorefrontAPI.Scalars['String'];
+}>;
+
+export type ProductsByTagQuery = {
+  products: {
+    nodes: Array<
+      Pick<StorefrontAPI.Product, 'id' | 'title' | 'description'> & {
+        images: {
+          edges: Array<{node: Pick<StorefrontAPI.Image, 'originalSrc'>}>;
+        };
+      }
+    >;
+  };
+};
+
+export type ProductByHandleQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String'];
+}>;
+
+export type ProductByHandleQuery = {
+  productByHandle?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Product, 'id' | 'title' | 'description'> & {
+      images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
+    }
+  >;
+};
+
+export type ProductRecommendationsQueryVariables = StorefrontAPI.Exact<{
+  productId: StorefrontAPI.Scalars['ID'];
+}>;
+
+export type ProductRecommendationsQuery = {
+  productRecommendations?: StorefrontAPI.Maybe<
+    Array<
+      Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle' | 'description'> & {
+        images: {
+          edges: Array<{node: Pick<StorefrontAPI.Image, 'originalSrc'>}>;
+        };
+      }
+    >
+  >;
+};
+
 export type SearchWithFiltersQueryVariables = StorefrontAPI.Exact<{
   query: StorefrontAPI.Scalars['String'];
   first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
@@ -33,9 +126,13 @@ export type SearchProductsQuery = {
   products: {
     nodes: Array<
       Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle' | 'description'> & {
-        images: {
-          edges: Array<{node: Pick<StorefrontAPI.Image, 'originalSrc'>}>;
+        priceRange: {
+          minVariantPrice: Pick<
+            StorefrontAPI.MoneyV2,
+            'amount' | 'currencyCode'
+          >;
         };
+        images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
       }
     >;
   };
@@ -153,7 +250,7 @@ export type HeaderQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
 
 export type HeaderQuery = {
   menu?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Menu, 'title'> & {
+    Pick<StorefrontAPI.Menu, 'title' | 'handle'> & {
       items: Array<
         Pick<StorefrontAPI.MenuItem, 'title' | 'url'> & {
           items: Array<
@@ -451,11 +548,35 @@ interface GeneratedQueryTypes {
     return: ShopName1Query;
     variables: ShopName1QueryVariables;
   };
+  '#graphql\n      query AllProducts{\n        products(first: 20) {\n          edges {\n            node {\n              id\n              title\n              description\n              images(first: 2) {\n                edges {\n                  node {\n                    originalSrc\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    ': {
+    return: AllProductsQuery;
+    variables: AllProductsQueryVariables;
+  };
+  '#graphql\n      query Product($id: ID!) {\n        product(id: $id) {\n          id\n          handle\n          title\n          description\n          priceRange {\n            minVariantPrice {\n              amount\n              currencyCode\n            }\n          }\n          images(first: 5) {\n              nodes {\n                url\n              }\n          }\n        }\n      }\n    ': {
+    return: ProductQuery;
+    variables: ProductQueryVariables;
+  };
+  '#graphql\n      query ProductByCollection($collectionId: ID!) {\n        collection(id: $collectionId) {\n          products(first: 10) {\n            edges {\n              node {\n                id\n                title\n                description\n                images(first: 1) {\n                  edges {\n                    node {\n                      originalSrc\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    ': {
+    return: ProductByCollectionQuery;
+    variables: ProductByCollectionQueryVariables;
+  };
+  '#graphql\n      query ProductsByTag ($tag: String!){\n        products(first: 10, query: "tag: $tag") {\n            nodes {\n              id\n              title\n              description\n              images(first: 1) {\n                edges {\n                  node {\n                    originalSrc\n                  }\n                }\n              }\n            }\n        }\n      }\n    ': {
+    return: ProductsByTagQuery;
+    variables: ProductsByTagQueryVariables;
+  };
+  '#graphql\n      query ProductByHandle($handle: String!) {\n        productByHandle(handle: $handle) {\n          id\n          title\n          description\n          images(first: 10) {\n              nodes {\n                url\n              }\n          }\n        }\n      }\n    ': {
+    return: ProductByHandleQuery;
+    variables: ProductByHandleQueryVariables;
+  };
+  '#graphql\n      query ProductRecommendations($productId: ID!) {\n        productRecommendations(productId: $productId) {\n          id\n          title\n          handle\n          description\n          images(first: 1) {\n            edges {\n              node {\n                originalSrc\n              }\n            }\n          }\n        }\n      }\n    ': {
+    return: ProductRecommendationsQuery;
+    variables: ProductRecommendationsQueryVariables;
+  };
   '#graphql\n          query searchWithFilters($query: String!, $first: Int, $productFilters: [ProductFilter!]) {\n              search(query: $query, first: $first, productFilters: $productFilters) {\n                  edges {\n                      node {\n                          ... on Product {\n                              id\n                              title\n                              vendor\n                          }\n                      }\n                  }\n              }\n          }\n      ': {
     return: SearchWithFiltersQuery;
     variables: SearchWithFiltersQueryVariables;
   };
-  '#graphql\n    query SearchProducts($query: String!) {\n        products(query: $query, first: 10) {\n                nodes {\n                    ... on Product {\n                        id\n                        title\n                        handle\n                        description\n                        images(first: 1) {\n                            edges {\n                                node {\n                                    originalSrc\n                                }\n                            }\n                        }\n                    }\n                }\n        }\n    }\n': {
+  '#graphql\n    query SearchProducts($query: String!) {\n        products(query: $query, first: 10) {\n                nodes {\n                    ... on Product {\n                        id\n                        title\n                        handle\n                        description\n                        priceRange {\n                            minVariantPrice {\n                                amount\n                                currencyCode\n                            }\n                        }\n                        images(first: 1) {\n                                nodes {\n                                    url\n                                }\n                        }\n                    }\n                }\n        }\n    }\n': {
     return: SearchProductsQuery;
     variables: SearchProductsQueryVariables;
   };
@@ -467,7 +588,7 @@ interface GeneratedQueryTypes {
     return: MobileLayoutQuery;
     variables: MobileLayoutQueryVariables;
   };
-  '#graphql\n query Header {\n  menu(handle: "main-menu") {\n    title\n    items{\n      title\n      url\n      items {\n        id\n        title\n        url\n        items {\n          id\n          title\n          url\n          items {\n            id\n            title\n            url\n          }\n        }\n      }\n    }\n  }\n}\n': {
+  '#graphql\n query Header {\n  menu(handle: "main-menu") {\n    title\n    handle\n    items{\n      title\n      url\n      items {\n        id\n        title\n        url\n        items {\n          id\n          title\n          url\n          items {\n            id\n            title\n            url\n          }\n        }\n      }\n    }\n  }\n}\n': {
     return: HeaderQuery;
     variables: HeaderQueryVariables;
   };

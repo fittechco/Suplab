@@ -1,5 +1,4 @@
 import ProductService from '../services/productService';
-import { App } from '../../app/api/type';
 
 class ProductController {
   static async getAllProducts() {
@@ -26,7 +25,7 @@ class ProductController {
   static async getProductsByTag(args: { tag: string }) {
     const { tag } = args;
     try {
-      const products = await ProductService.getProductsByTag(tag);
+      const products = await ProductService.getProductsByTag({ tag });
       return products;
     } catch (error) {
       return error;
@@ -37,7 +36,7 @@ class ProductController {
     const { collectionId } = args;
     try {
       const products = await ProductService.getProductsByCollection(
-        collectionId,
+        { collectionId }
       );
       return products;
     } catch (error) {
@@ -49,11 +48,11 @@ class ProductController {
   static async getProductByHandle(args: { handle: string }) {
     const { handle } = args;
     try {
-      const product = await ProductService.getProductByHandle(handle);
+      const product = await ProductService.getProductByHandle({ handle });
       return product;
     } catch (error) {
       console.error(error);
-      return error;
+      throw error;
     }
   }
 
@@ -61,7 +60,7 @@ class ProductController {
     const { productId } = args;
     try {
       const products = await ProductService.getProductRecommendations(
-        productId,
+        { productId }
       );
       return products;
     } catch (error) {

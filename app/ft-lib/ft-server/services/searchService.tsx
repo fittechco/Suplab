@@ -62,12 +62,16 @@ const SEARCHQUERY = `#graphql
                         title
                         handle
                         description
-                        images(first: 1) {
-                            edges {
-                                node {
-                                    originalSrc
-                                }
+                        priceRange {
+                            minVariantPrice {
+                                amount
+                                currencyCode
                             }
+                        }
+                        images(first: 1) {
+                                nodes {
+                                    url
+                                }
                         }
                     }
                 }

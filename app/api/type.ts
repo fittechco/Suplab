@@ -1,4 +1,5 @@
 import type { MenuItem } from "@shopify/hydrogen/storefront-api-types";
+import type { FooterQuery, HeaderQuery, ShopLayoutQuery } from "storefrontapi.generated";
 
 export namespace App {
   export namespace HomePageTemplate {
@@ -285,23 +286,9 @@ export namespace App {
 
     };
     export type Layout = {
-      shop: {
-        id: string;
-        name: string;
-        description?: string | null;
-        primaryDomain: {
-          url: string;
-        };
-        brand?: {
-          logo?: {
-            image?: {
-              url?: string;
-            } | null;
-          } | null;
-        } | null;
-      };
-      header: App.Shopify.NavMenu | null;
-      footer: App.Shopify.NavMenu | null;
+      shop: ShopLayoutQuery["shop"]
+      header: HeaderQuery
+      footer: FooterQuery
     };
     export type NavMenu = {
       items: {
@@ -313,7 +300,7 @@ export namespace App {
       }[];
     };
 
-    export type Item = Pick<MenuItem, "id" | "title" | "url"> & {
+    export type Item = Pick<MenuItem, "title" | "url"> & {
       items?: Item[];
     }
 

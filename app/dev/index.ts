@@ -1,4 +1,5 @@
 import SearchController from "../ft-lib/ft-server/controllers/SearchController"
+import ProductController from "../ft-lib/ft-server/controllers/ProductController"
 import util from "util"
 
 const METAOBJECTQUERY = `#graphql
@@ -33,8 +34,7 @@ const LAYOUT_QUERY = `#graphql
 async function storeFrontApiTest() {
 
 
-  // todo - search is not working
-  const res = await SearchController.searchProducts({ query: "whey" })
+  const res = await ProductController.getAllProducts()
   console.log(util.inspect(res, { depth: null }));
 
 

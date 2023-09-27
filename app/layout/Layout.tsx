@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { App } from '../api/type'
+import React from 'react'
 import Header from './Header/Header'
 import Footer from './Footer'
 import { FooterQuery, HeaderQuery, ShopLayoutQuery, } from 'storefrontapi.generated'
@@ -14,9 +13,17 @@ type Props = {
 
 const Layout = (props: Props) => {
     return (
-        <div className=''>
+        <div style={{
+            height: "100%",
+        }} className=''>
             <Header layout={props.layout} />
-            <div className="content">
+            <div
+                style={{
+                    marginTop: 100,
+                    marginBottom: 20,
+                    height: '100%'
+                }}
+                className="content">
                 {props.children}
             </div>
             <Footer layout={props.layout} />
