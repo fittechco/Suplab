@@ -136,6 +136,10 @@ class ProductService {
                 url
               }
           }
+          options {
+            name,
+            values
+          }
           variants(first: 1) {
             nodes {
               id

@@ -38,9 +38,7 @@ input:focus {
 
 .ft-text-main {
   font-family: 'Roboto Condensed', sans-serif;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
+  font-weight: 600;
   letter-spacing: 0.68px;
   text-transform: uppercase;
 }

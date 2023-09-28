@@ -12,6 +12,7 @@ import 'swiper/css/pagination';
 import { Colors } from 'app/ft-lib/shared';
 import { Image, Money } from '@shopify/hydrogen';
 import FTicons from 'app/ft-lib/Icon';
+import Quantity from 'app/components/Quantity';
 
 export async function loader({ context, params }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -28,6 +29,7 @@ const ProductPage = () => {
   const { product } = useLoaderData<typeof loader>();
   const swiperContainer = useRef<HTMLDivElement | null>(null);
   let swiperInstance: { destroy: () => void };
+  const [quantity, setQuantity] = useState(1);
   const updateSpaceBetween = () => {
     if (window.innerWidth >= 769) {
       setSpaceBetween(25);
@@ -75,90 +77,104 @@ const ProductPage = () => {
         marginTop: '40px',
         overflow: 'hidden',
       }}
-      className="offersSection w-full !container mx-auto"
+      className="offersSection w-full !container mx-auto "
     >
-      <div className="offersSection__offers relative w-full space-y-5">
-        <div ref={swiperContainer} className="swiper-container relative">
-          <div className="swiper-wrapper">
-            {product.images.nodes.map((image, index) => {
-              return (
-                <div style={{
+      <div className="offersSection__offers relative w-full space-y-5 ">
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+          }}
+          className='product-image-container'>
+          <div ref={swiperContainer} className="swiper-container relative">
+            <div className="swiper-wrapper">
+              {product.images.nodes.map((image, index) => {
+                return (
+                  <div style={{
 
-                }} key={index} className="swiper-slide product-image__slide">
-                  <div
-                    className=" card-shadow "
-                    style={{
-                      height: "75vh",
-                      width: "100%",
-                      borderRadius: '24px',
-                      background: '#707070',
-                    }}
-                  >
-                    <Image
+                  }} key={index} className="swiper-slide product-image__slide">
+                    <div
+                      className="card-shadow "
                       style={{
-                        height: "100%",
+                        height: "75vh",
                         width: "100%",
-                        objectFit: "cover",
                         borderRadius: '24px',
+                        background: '#707070',
                       }}
-                      className=""
-                      src={image.url}
-                    />
+                    >
+                      <Image
+                        style={{
+                          height: "100%",
+                          width: "100%",
+                          objectFit: "cover",
+                          borderRadius: '24px',
+                        }}
+                        className=""
+                        src={image.url}
+                      />
+                    </div>
+                  </div>
+                );
+              }
+              )}
+            </div>
+            <div className="swiper-pagination" />
+          </div>
+        </div>
+
+        <div
+          style={{
+            backgroundColor: Colors.offWhite,
+            borderRadius: '24px',
+          }}
+          className='box space-y-4 shadow-lg'>
+          <div style={{
+            position: "sticky",
+          }} className='cta-button top-32'>
+            <button
+              style={{
+                background: Colors.primary,
+                borderRadius: '9999px',
+                width: '100%',
+                color: Colors.textSecondary,
+              }}
+              className='text-2xl px-3.5 py-1.5 rounded-lg ft-text-main'>Add to cart</button>
+          </div>
+          <div className='product-details'>
+            <h1 className='text-2xl ft-text-main'>{product.title}</h1>
+            <Money className='text-2xl font-bold uppercase' data={product.variants.nodes[0].price} withoutTrailingZeros />
+          </div>
+          <Quantity onChange={(value) => {
+            setQuantity(value)
+          }}
+            value={quantity}
+          />
+          <div className='options flex flex-col gap-5'>
+            {product.options.map((option, index) => {
+              return (
+                <div key={index} className='option flex flex-col'>
+                  <h1 className='text-xl font-bold uppercase'>{option.name}</h1>
+                  <div className='values flex gap-3 flex-wrap mt-2'>
+                    {option.values.map((value, index) => {
+                      return (
+                        <div
+                          style={{
+                            background: Colors.secondary,
+                            color: Colors.textSecondary,
+                            borderRadius: '9999px',
+                          }}
+                          key={index} className='value px-3 py-1'>
+                          <p className='text-sm font-medium capitalize tracking-wider'>{value}</p>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
-              );
-            }
-            )}
+              )
+            })}
           </div>
-          <div className="swiper-pagination" />
         </div>
-        <div style={{
-          position: "sticky",
-          bottom: '0',
-        }} className='cta-button'>
-          <button
-            style={{
-              background: Colors.primary,
-              borderRadius: '9999px',
-              width: '100%',
-              color: Colors.textSecondary,
-            }}
-            className='text-2xl px-3.5 py-1.5 rounded-lg ft-text-main'>Add to cart</button>
-        </div>
-        <div className='product-details'>
-          <h1 className='text-2xl ft-text-main'>{product.title}</h1>
-          <Money className='text-2xl font-bold uppercase' data={product.variants.nodes[0].price} withoutTrailingZeros />
-        </div>
-        <div
-          className='quantity w-fit flex items-center '
-          style={{
-            backgroundColor: Colors.secondary,
-            borderRadius: '9999px',
 
-          }} >
-          <div
-            className='plus h-full flex items-center py-3 px-6 '>
-            <FTicons style={{
-              width: 24,
-              height: 24
-            }} fill={Colors.offWhite} name='minus' />
-          </div>
-
-          <div
-            className='quantity-number text-xl border-l border-r bold py-3 px-6'
-            style={{
-              color: Colors.textSecondary,
-              borderColor: Colors.secondaryLight
-            }}
-          >2</div>
-          <div className='plus h-full flex items-center py-3 px-6 '>
-            <FTicons style={{
-              width: 24,
-              height: 24
-            }} fill={Colors.offWhite} name='plus' />
-          </div>
-        </div>
-        <div className='options'></div>
       </div>
     </div >
   );
