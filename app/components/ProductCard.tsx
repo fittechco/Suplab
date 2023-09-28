@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react'
+import { Image } from '@shopify/hydrogen'
 import { Colors } from 'app/ft-lib/shared'
 import React from 'react'
 import { ProductQuery } from 'storefrontapi.generated'
@@ -25,11 +26,11 @@ export default function ProductCard(props: Props) {
                     overflow: "hidden",
                 }}
                 className='h-[240px] md:h-[280px]'>
-                <img
+                <Image
                     style={{
                         height: "100%",
-                        width: "100%",
                     }}
+                    width={500}
                     src={product.images.nodes[0].url} className='w-full h-full object-cover' alt="" />
             </div>
             <div className='flex flex-col'>

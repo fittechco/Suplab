@@ -136,6 +136,25 @@ class ProductService {
                 url
               }
           }
+          variants(first: 1) {
+            nodes {
+              id
+              title
+              availableForSale
+              price {
+                currencyCode
+                amount
+              }
+              compareAtPrice {
+                currencyCode
+                amount
+              }
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
         }
       }
     `;
@@ -162,6 +181,25 @@ class ProductService {
             edges {
               node {
                 originalSrc
+              }
+            }
+          }
+          variants(first: 1) {
+            nodes {
+              id
+              title
+              availableForSale
+              price {
+                currencyCode
+                amount
+              }
+              compareAtPrice {
+                currencyCode
+                amount
+              }
+              selectedOptions {
+                name
+                value
               }
             }
           }

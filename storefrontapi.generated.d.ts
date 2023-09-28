@@ -82,6 +82,22 @@ export type ProductByHandleQuery = {
   productByHandle?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Product, 'id' | 'title' | 'description'> & {
       images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
+      variants: {
+        nodes: Array<
+          Pick<
+            StorefrontAPI.ProductVariant,
+            'id' | 'title' | 'availableForSale'
+          > & {
+            price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+            compareAtPrice?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+            >;
+            selectedOptions: Array<
+              Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+            >;
+          }
+        >;
+      };
     }
   >;
 };
@@ -96,6 +112,22 @@ export type ProductRecommendationsQuery = {
       Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle' | 'description'> & {
         images: {
           edges: Array<{node: Pick<StorefrontAPI.Image, 'originalSrc'>}>;
+        };
+        variants: {
+          nodes: Array<
+            Pick<
+              StorefrontAPI.ProductVariant,
+              'id' | 'title' | 'availableForSale'
+            > & {
+              price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+              compareAtPrice?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+              >;
+              selectedOptions: Array<
+                Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+              >;
+            }
+          >;
         };
       }
     >
@@ -564,11 +596,11 @@ interface GeneratedQueryTypes {
     return: ProductsByTagQuery;
     variables: ProductsByTagQueryVariables;
   };
-  '#graphql\n      query ProductByHandle($handle: String!) {\n        productByHandle(handle: $handle) {\n          id\n          title\n          description\n          images(first: 10) {\n              nodes {\n                url\n              }\n          }\n        }\n      }\n    ': {
+  '#graphql\n      query ProductByHandle($handle: String!) {\n        productByHandle(handle: $handle) {\n          id\n          title\n          description\n          images(first: 10) {\n              nodes {\n                url\n              }\n          }\n          variants(first: 1) {\n            nodes {\n              id\n              title\n              availableForSale\n              price {\n                currencyCode\n                amount\n              }\n              compareAtPrice {\n                currencyCode\n                amount\n              }\n              selectedOptions {\n                name\n                value\n              }\n            }\n          }\n        }\n      }\n    ': {
     return: ProductByHandleQuery;
     variables: ProductByHandleQueryVariables;
   };
-  '#graphql\n      query ProductRecommendations($productId: ID!) {\n        productRecommendations(productId: $productId) {\n          id\n          title\n          handle\n          description\n          images(first: 1) {\n            edges {\n              node {\n                originalSrc\n              }\n            }\n          }\n        }\n      }\n    ': {
+  '#graphql\n      query ProductRecommendations($productId: ID!) {\n        productRecommendations(productId: $productId) {\n          id\n          title\n          handle\n          description\n          images(first: 1) {\n            edges {\n              node {\n                originalSrc\n              }\n            }\n          }\n          variants(first: 1) {\n            nodes {\n              id\n              title\n              availableForSale\n              price {\n                currencyCode\n                amount\n              }\n              compareAtPrice {\n                currencyCode\n                amount\n              }\n              selectedOptions {\n                name\n                value\n              }\n            }\n          }\n        }\n      }\n    ': {
     return: ProductRecommendationsQuery;
     variables: ProductRecommendationsQueryVariables;
   };

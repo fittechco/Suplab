@@ -10,8 +10,6 @@ export default {
     },
     fontFamily: {
       "mainFont": ['Roboto Condensed', `sans-serif`],
-      "mainFontBold": ['Roboto Condensed Bold', `sans-serif`],
-      "mainFontLight": ['Roboto Condensed Light', `sans-serif`],
     },
     container: {
       screens: {

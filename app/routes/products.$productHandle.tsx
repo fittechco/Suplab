@@ -10,6 +10,8 @@ import { useLoaderData } from '@remix-run/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css/pagination';
 import { Colors } from 'app/ft-lib/shared';
+import { Image, Money } from '@shopify/hydrogen';
+import FTicons from 'app/ft-lib/Icon';
 
 export async function loader({ context, params }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -47,6 +49,10 @@ const ProductPage = () => {
       pagination: {
         clickable: true,
         el: '.swiper-pagination',
+        bulletActiveClass: 'swiper-pagination-bullet-active-product-page',
+        renderBullet: function (index, className) {
+          return `<span class="${className} !opacity-50"></span>`;
+        }
       }
     });
 
@@ -71,8 +77,8 @@ const ProductPage = () => {
       }}
       className="offersSection w-full !container mx-auto"
     >
-      <div className="offersSection__offers relative w-full">
-        <div ref={swiperContainer} className="swiper-container">
+      <div className="offersSection__offers relative w-full space-y-5">
+        <div ref={swiperContainer} className="swiper-container relative">
           <div className="swiper-wrapper">
             {product.images.nodes.map((image, index) => {
               return (
@@ -82,13 +88,13 @@ const ProductPage = () => {
                   <div
                     className=" card-shadow "
                     style={{
-                      height: "70vh",
+                      height: "75vh",
                       width: "100%",
                       borderRadius: '24px',
                       background: '#707070',
                     }}
                   >
-                    <img
+                    <Image
                       style={{
                         height: "100%",
                         width: "100%",
@@ -106,15 +112,53 @@ const ProductPage = () => {
           </div>
           <div className="swiper-pagination" />
         </div>
-        <div className='cta-button'>
+        <div style={{
+          position: "sticky",
+          bottom: '0',
+        }} className='cta-button'>
           <button
             style={{
               background: Colors.primary,
               borderRadius: '9999px',
               width: '100%',
+              color: Colors.textSecondary,
             }}
-            className='font-mainFont text-2xl text-white px-3.5 py-1.5 rounded-lg'>Add to cart</button>
+            className='text-2xl px-3.5 py-1.5 rounded-lg ft-text-main'>Add to cart</button>
         </div>
+        <div className='product-details'>
+          <h1 className='text-2xl ft-text-main'>{product.title}</h1>
+          <Money className='text-2xl font-bold uppercase' data={product.variants.nodes[0].price} withoutTrailingZeros />
+        </div>
+        <div
+          className='quantity w-fit flex items-center '
+          style={{
+            backgroundColor: Colors.secondary,
+            borderRadius: '9999px',
+
+          }} >
+          <div
+            className='plus h-full flex items-center py-3 px-6 '>
+            <FTicons style={{
+              width: 24,
+              height: 24
+            }} fill={Colors.offWhite} name='minus' />
+          </div>
+
+          <div
+            className='quantity-number text-xl border-l border-r bold py-3 px-6'
+            style={{
+              color: Colors.textSecondary,
+              borderColor: Colors.secondaryLight
+            }}
+          >2</div>
+          <div className='plus h-full flex items-center py-3 px-6 '>
+            <FTicons style={{
+              width: 24,
+              height: 24
+            }} fill={Colors.offWhite} name='plus' />
+          </div>
+        </div>
+        <div className='options'></div>
       </div>
     </div >
   );

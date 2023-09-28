@@ -61,15 +61,19 @@ export function links() {
       rel: 'preconnect',
       href: '"https://fonts.googleapis.com',
     },
-    // {
-    //   rel: 'stylesheet',
-    //   type: 'text/css',
-    //   href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap',
-    // },
+    {
+      rel: 'stylesheet',
+      type: 'text/css',
+      href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap',
+    },
     {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
+    {
+      rel: "stylesheet",
+      href: "https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    }
   ]
 }
 export async function loader({ context }: LoaderArgs) {
