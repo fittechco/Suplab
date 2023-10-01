@@ -23,7 +23,7 @@ function Acordion(props: Props) {
                     setShowAcordion(!showAcordion);
                 }}
                 className='flex justify-between items-center py-1 cursor-pointer'>
-                <h1 className='text-2xl font-bold uppercase'>{props.title}</h1>
+                <h1 className='text-xl md:text-2xl font-bold uppercase'>{props.title}</h1>
                 <FTicons
                     className='md:w-6 md:h-6 w-5 h-5'
                     fill={Colors.secondary}

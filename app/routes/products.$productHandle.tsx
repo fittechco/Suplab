@@ -17,13 +17,24 @@ import ProductOptions from 'app/lib/productPage/ProductOptions';
 import Acordion from 'app/components/Acordion';
 import Quantity from 'app/components/Quantity';
 
-export async function loader({ context, params }: LoaderArgs) {
+export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
+  const searchParams = new URL(request.url).searchParams  // get the search params from the url;
+  const selectedOptions: { name: string, value: string }[] = []
+  searchParams.forEach((value, key) => {
+    selectedOptions.push({
+      name: key,
+      value: value
+    })
+  })
   console.log(productHandle);
   invariant(productHandle != null, 'productHandle is required');
-  const product = await ProductController.getProductByHandle({ handle: productHandle });
+  const product = await ProductController.getProductByHandle({ handle: productHandle, selectedOptions });
+  const selectedVariant =
+    product.selectedVariant ?? product?.variants?.nodes[0];
   return {
     product: product,
+    selectedVariant: selectedVariant,
   }
 }
 
@@ -35,26 +46,13 @@ const ProductPage = () => {
     spaceBetween: 10,
     slidesPerView: 1,
   });
-  const { product } = useLoaderData<typeof loader>();
+  const { product, selectedVariant } = useLoaderData<typeof loader>();
   const swiperContainer = useRef<HTMLDivElement | null>(null);
   const [quantity, setQuantity] = useState(1);
   const productRecommendations = useQuery('productRecommendations', () => {
     return ProductController.getProductRecommendations({ productId: product.id });
   });
   const [isTop, setIsTop] = useState(true);
-  const updateSpaceBetween = () => {
-    if (window.innerWidth >= 769) {
-      setSwiperConfig({
-        spaceBetween: 10,
-        slidesPerView: 1,
-      });
-    } else {
-      setSwiperConfig({
-        spaceBetween: 10,
-        slidesPerView: 1,
-      });
-    }
-  };
 
 
   useEffect(() => {
@@ -68,14 +66,12 @@ const ProductPage = () => {
   }, []);
 
   useEffect(() => {
-    updateSpaceBetween();
     productRecommendations.refetch();
-    window.addEventListener('resize', updateSpaceBetween);
     if (swiperContainer.current == null) {
       return;
     }
     const swiper = new Swiper(swiperContainer.current, {
-      spaceBetween: swiperConfig.spaceBetween,
+      spaceBetween: 10,
       modules: [Pagination],
       slidesPerView: 1,
       pagination: {
@@ -87,15 +83,12 @@ const ProductPage = () => {
         }
       }
     });
-
     return () => {
-      window.removeEventListener('resize', updateSpaceBetween);
-
       if (swiper != null) {
         swiper.destroy();
       }
     };
-  }, [product]);
+  }, [product.images.nodes.length]);
 
 
   if (product == null) {
@@ -112,7 +105,7 @@ const ProductPage = () => {
         <div
           style={{
             zIndex: 1,
-            maxHeight: "calc(100vh - 110px)",
+            maxHeight: "calc(100vh - 100px)",
           }}
           className='product-image-container md:max-w-3xl w-full md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0'>
           <div
@@ -172,7 +165,7 @@ const ProductPage = () => {
               />
             </div>
           </div>
-          <ProductOptions options={product.options} />
+          <ProductOptions selectedVariant={selectedVariant} options={product.options} />
           <Quantity
             onChange={(value) => {
               setQuantity(value);
@@ -189,9 +182,9 @@ const ProductPage = () => {
               }} />
           </div>
           <Acordion title='Description' details={product.description} />
-          <Acordion title='Shop Info' details={"Shiping info goes here"} />
+          <Acordion title='Shipping Info' details={"Shipping info goes here"} />
         </div>
-        <MobileProductDetails isTop={isTop} product={product} />
+        <MobileProductDetails selectedVariant={selectedVariant} isTop={isTop} product={product} />
       </div>
       <div
         style={{

@@ -14,7 +14,7 @@ class ProductController {
     console.log('getProductById controller', args);
     const { id } = args;
     try {
-      const product = await ProductService.getProduct({ id: args.id });
+      const product = await ProductService.getProduct({ id: args.id, selectedOptions: [] });
       return product;
     } catch (error) {
       console.log(error);
@@ -45,10 +45,10 @@ class ProductController {
     }
   }
 
-  static async getProductByHandle(args: { handle: string }) {
+  static async getProductByHandle(args: { handle: string, selectedOptions: { name: string, value: string }[] }) {
     const { handle } = args;
     try {
-      const product = await ProductService.getProductByHandle({ handle });
+      const product = await ProductService.getProductByHandle({ handle, selectedOptions: args.selectedOptions });
       return product;
     } catch (error) {
       console.error(error);

@@ -10,6 +10,7 @@ import CTAButton from 'app/components/CTAButton'
 type Props = {
     product: NonNullable<ProductQuery["product"]>
     isTop: boolean
+    selectedVariant: NonNullable<ProductQuery["product"]>["variants"]["nodes"][0]
 }
 
 export default function MobileProductDetails(props: Props) {
@@ -31,7 +32,7 @@ export default function MobileProductDetails(props: Props) {
             }}
                 value={quantity}
             />
-            <ProductOptions options={product.options} />
+            <ProductOptions selectedVariant={props.selectedVariant} options={product.options} />
             <div style={{
                 position: "sticky",
                 bottom: "0%",
@@ -39,10 +40,12 @@ export default function MobileProductDetails(props: Props) {
             }} className='cta-button '>
                 <CTAButton fullWidth text='Add to cart' />
             </div>
-            <div className='product-details-accordion'>
+            <div className='product-details-accordion space-y-4'>
                 <Acordion
                     title="Description"
                     details={product.description} />
+                <Acordion title='Shop Info' details={"Shiping info goes here"} />
+
             </div>
         </div>
     )

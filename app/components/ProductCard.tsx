@@ -22,7 +22,7 @@ export default function ProductCard(props: Props) {
                 border: `1px solid rgb(240, 238, 232)`,
                 borderRadius: 12,
             }}
-            key={product.id} className='search-result-item flex flex-col gap-2 h-fit p-1'>
+            key={product.id} className='search-result-item flex flex-col gap-2 h-fit '>
             <div
                 style={{
                     backgroundColor: Colors.offWhite,
@@ -46,7 +46,7 @@ export default function ProductCard(props: Props) {
                     src={product.images.nodes[0].url}
                 />
             </div>
-            <div className='flex flex-col'>
+            <div className='flex flex-col p-1'>
                 <p style={{
                     color: Colors.secondaryDark,
                     fontWeight: 700,

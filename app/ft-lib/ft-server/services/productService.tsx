@@ -68,18 +68,52 @@ class ProductService {
     return data.products.edges.map((edge: any) => edge.node);
   }
 
-  static async getProduct(args: { id: string }) {
+  static async getProduct(args: { id: string, selectedOptions: { name: string, value: string }[] }) {
     const query = `#graphql
-      query Product($id: ID!) {
+      query Product($id: ID!, $selectedOptions: [SelectedOptionInput!]!) {
         product(id: $id) {
           ...ProductFragment
+          selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+            id
+            availableForSale
+            selectedOptions {
+              name
+              value
+            }
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
+              amount
+              currencyCode
+            }
+            sku
+            title
+            unitPrice {
+              amount
+              currencyCode
+            }
+            product {
+              title
+              handle
+            }
+          }
         }
       }
       ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
-        id: args.id
+        id: args.id,
+        selectedOptions: args.selectedOptions
       }
     });
     invariant(data.product != null, 'Product not found');
@@ -132,19 +166,53 @@ class ProductService {
   }
 
   static async getProductByHandle(
-    args: { handle: string, }
+    args: { handle: string, selectedOptions: { name: string, value: string }[] }
   ) {
     const query = `#graphql
-      query ProductByHandle($handle: String!) {
+      query ProductByHandle($handle: String!, $selectedOptions: [SelectedOptionInput!]!) {
         productByHandle(handle: $handle) {
           ...ProductFragment
+          selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+            id
+            availableForSale
+            selectedOptions {
+              name
+              value
+            }
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
+              amount
+              currencyCode
+            }
+            sku
+            title
+            unitPrice {
+              amount
+              currencyCode
+            }
+            product {
+              title
+              handle
+            }
+          }
         }
       }
       ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
-        handle: args.handle
+        handle: args.handle,
+        selectedOptions: args.selectedOptions
       }
     })
     invariant(data.productByHandle != null, 'Product not found');

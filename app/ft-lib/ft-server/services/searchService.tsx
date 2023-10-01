@@ -56,7 +56,7 @@ class SearchService {
 export default SearchService;
 const SEARCHQUERY = `#graphql
     query SearchProducts($query: String!) {
-        products(query: $query, first: 10) {
+        products(query: $query, first: 100) {
                 nodes {
                     ... on Product {
                          ...ProductFragment

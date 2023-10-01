@@ -82,7 +82,7 @@ export default function Search(props: Props) {
             paddingTop: 90,
             opacity: animate ? 1 : 0,
             transition: "all 0.3s ease-in-out",
-        }} className='search-container backdrop-blur-sm md:px-5 container'>
+        }} className='search-container backdrop-blur-sm md:px-5 md:container'>
             <div
                 ref={searchContainerRef}
                 style={{
@@ -150,7 +150,7 @@ export default function Search(props: Props) {
                         overflowY: "scroll",
                         width: "100%",
                     }}
-                    className='search-result-container custom-scroll grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 px-5'>
+                    className='search-result-container custom-scroll grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-5 px-5'>
                     {searchedProducts.map((product) => {
                         return (
                             <div onClick={() => {
