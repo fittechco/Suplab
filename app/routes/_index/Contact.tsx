@@ -54,43 +54,40 @@ const Contact = ({section}: ContactSectionProps) => {
           className="w-full flex flex-col gap-5 md:gap-4 z-10 items-center justify-end container"
         >
           <div
-            // use styles so that on mobile width is 100% and on desktop width is 55%
             style={{
               width: isMobile ? '100%' : '55%',
             }}
-            className="contactSection__content mb-12 flex flex-col"
+            className="contactSection__content md:mb-12 mb-6 flex flex-col"
           >
             <div className="flex flex-col">
               {fields.email.value != null && (
                 <div
                   style={{
                     color: Colors.textSecondary,
-                    fontSize: '34px',
                   }}
                   className="flex mb-6 items-end"
                 >
                   <p
                     style={{
                       fontFamily: 'Roboto Condensed',
-                      fontSize: '34px',
                       fontStyle: 'normal',
                       fontWeight: '700',
                       lineHeight: 'normal',
-                      letterSpacing: '0.68px',
                       textTransform: 'uppercase',
                     }}
+                    className='md:text-3xl text-xl'
                     // className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
                   >
                     Email:
                   </p>
                   <p
                     style={{
-                      fontSize: '24px',
                       fontStyle: 'normal',
                       fontWeight: '400',
                       lineHeight: 'normal',
                       marginLeft: '10px',
                     }}
+                    className='md:text-3xl text-xl'
                   >
                     {fields.email.value}
                   </p>
@@ -106,7 +103,6 @@ const Contact = ({section}: ContactSectionProps) => {
                   <p
                     style={{
                       fontFamily: 'Roboto Condensed',
-                      fontSize: '34px',
                       fontStyle: 'normal',
                       fontWeight: '700',
                       lineHeight: 'normal',
@@ -114,17 +110,19 @@ const Contact = ({section}: ContactSectionProps) => {
                       textTransform: 'uppercase',
                     }}
                     // className="md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
+                    className='md:text-3xl text-xl'
                   >
                     Phone:
                   </p>
                   <p
                     style={{
-                      fontSize: '24px',
+                      // fontSize: '24px',
                       fontStyle: 'normal',
                       fontWeight: '400',
                       lineHeight: 'normal',
                       marginLeft: '10px',
                     }}
+                    className='md:text-3xl text-xl'
                   >
                     {fields.phone.value}
                   </p>
@@ -147,13 +145,12 @@ const Contact = ({section}: ContactSectionProps) => {
                     style={{
                       color: 'var(--Off-White, #FAF9F6)',
                       fontFamily: 'Roboto Condensed',
-                      fontSize: '34px',
                       fontStyle: 'normal',
                       fontWeight: 700,
                       lineHeight: 'normal',
-                      letterSpacing: '0.68px',
                       textTransform: 'uppercase',
                     }}
+                    className='md:text-3xl text-xl'
                   >
                     {fields.contact_button_text.value}
                   </p>
@@ -174,13 +171,12 @@ const Contact = ({section}: ContactSectionProps) => {
                     style={{
                       color: 'var(--Off-White, #FAF9F6)',
                       fontFamily: 'Roboto Condensed',
-                      fontSize: '34px',
                       fontStyle: 'normal',
                       fontWeight: 700,
                       lineHeight: 'normal',
-                      letterSpacing: '0.68px',
                       textTransform: 'uppercase',
                     }}
+                    className='md:text-3xl text-xl'
                   >
                     {fields.location_button_text.value}
                   </p>

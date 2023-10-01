@@ -14,7 +14,7 @@ const Footer = (props: Props) => {
     return (
         <div
             style={{
-                backgroundColor: Colors.primaryLight,
+                backgroundColor: Colors.offWhite,
                 width: '100%',
             }}
             className="footer h-fit max-md:p-5 md:h-72">

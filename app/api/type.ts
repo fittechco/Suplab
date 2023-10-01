@@ -1,4 +1,5 @@
 import type { MenuItem } from "@shopify/hydrogen/storefront-api-types";
+import { type } from "os";
 import type { FooterQuery, HeaderQuery, ShopLayoutQuery } from "storefrontapi.generated";
 
 export namespace App {
@@ -98,10 +99,10 @@ export namespace App {
       type: 'section_collection_products';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-          key: 'button_text';
+          key: 'title' | 'shop_button_text' | 'collection_one_button_text' | 'collection_two_button_text';
         }>
         | Shopify.MetaobectsDef.Metaobject_Reference<{
-          key: 'collection';
+          key: 'collection_one' | 'collection_two';
           reference: Shopify.Storefront.Collection;
         }>
       >;
@@ -216,8 +217,30 @@ export namespace App {
       >;
     };
 
+    export type FaqSection = {
+      type: 'faq_section';
+      fields: Array<
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+          key: 'title';
+        }>
+        | Shopify.MetaobectsDef.List_Metaobject_Reference<{
+          key: 'faqs';
+          references: {
+            nodes: Array<{
+              type: 'faq';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'question' | 'answer';
+                }>
+              >;
+            }>;
+          };
+        }>
+      >;
+    };
+
     export type Sections = Array<
-      PromotionsSection | HeroSection | BenefitsSection | SectionCollectionProducts | TestimonialsSection | ShopTheGoalSection | OffersSection | ContactSection
+      PromotionsSection | HeroSection | BenefitsSection | SectionCollectionProducts | TestimonialsSection | ShopTheGoalSection | OffersSection | ContactSection | FaqSection
     >;
   }
 

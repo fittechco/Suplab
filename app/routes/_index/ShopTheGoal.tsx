@@ -1,8 +1,8 @@
-import React from 'react';
-import {Swiper, SwiperSlide} from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+import {useEffect, useState} from 'react';
 import {App} from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
+import 'swiper/swiper-bundle.css';
+import Swiper from 'swiper';  
 
 interface ShopTheGoalSectionProps {
   section: App.HomePageTemplate.ShopTheGoalSection;
@@ -10,6 +10,34 @@ interface ShopTheGoalSectionProps {
 
 const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
   const fields = arrayToObject({array: section.fields});
+  const [spaceBetween, setSpaceBetween] = useState(10);
+  let swiperInstance;
+
+  const updateSpaceBetween = () => {
+    if (window.innerWidth >= 769) {
+      setSpaceBetween(25);
+    } else {
+      setSpaceBetween(10);
+    }
+  };
+
+  useEffect(() => {
+    updateSpaceBetween();
+    window.addEventListener('resize', updateSpaceBetween);
+
+    swiperInstance = new Swiper('.swiper-container', {
+      spaceBetween: spaceBetween,
+      slidesPerView: 'auto',
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+
+    return () => {
+      window.removeEventListener('resize', updateSpaceBetween);
+    };
+  }, [spaceBetween]);
 
   return (
     <div
@@ -21,24 +49,18 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
       className="shopTheGoalSection w-full container mx-auto"
     >
       <p className="ft-text-main text-3xl mb-10">{fields.title.value}</p>
-      <div className="shopTheGoalSection__benefits relative">
-        <Swiper
-          spaceBetween={25}
-          slidesPerView={'auto'}
-          // navigation={{
-          //   prevEl: '.swiper-button-prev',
-          //   nextEl: '.swiper-button-next',
-          // }}
-        >
+      <div className="shopTheGoalSection__benefits relative swiper-container">
+        <div className='swiper-wrapper'>
           {fields.shop_the_goals.references.nodes.map((shopTheGoal, index) => {
             const goalFields = arrayToObject({array: shopTheGoal.fields});
             const goalImage = goalFields.goal_image?.reference?.image?.url;
             return (
-              <SwiperSlide
+              <div
                 key={index}
                 style={{
                   width: '315px',
                 }}
+                className="swiper-slide"
               >
                 <div
                   className="shopTheGoalSection__shopTheGoal"
@@ -57,7 +79,7 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
                       width: '310px',
                       height: '441.29px',
                       borderRadius: '17.419px',
-                      background: `url(${goalImage}), lightgray 50% / cover no-repeat`,
+                      // background: `url(${goalImage}), lightgray 50% / cover no-repeat`,
                       boxShadow:
                         '0px 8.70968px 13.06452px 0px rgba(0, 0, 0, 0.16)',
                       display: 'flex',
@@ -66,11 +88,16 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
                       marginBottom: '12px',
                     }}
                   >
+                    <img style={{
+                      borderRadius: '17.419px',
+                    }} src={goalImage} alt="" className="w-full h-full object-cover" />
                     <div
                       style={{
                         display: 'flex',
-                        width: '100%',
+                        width: '310px',
+                        borderRadius: '17.419px',
                         marginBottom: '25px',
+                        position: 'absolute',
                       }}
                     >
                       <div
@@ -137,11 +164,11 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
                     </p>
                   </button>
                 </div>
-              </SwiperSlide>
+              </div>
             );
           })}
-        </Swiper>
-        {/* <div className="swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden flex">
+        </div>
+        <div className="swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden flex">
           <button
             className="swiper-button-prev-icon text-4xl"
             style={{
@@ -160,8 +187,8 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
           >
             &larr;
           </button>
-        </div> */}
-        {/* <div className="swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden flex">
+        </div>
+        <div className="swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden flex">
           <button
             className="swiper-button-next-icon text-4xl"
             style={{
@@ -180,7 +207,7 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
           >
             &rarr;
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

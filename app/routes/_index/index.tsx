@@ -12,6 +12,8 @@ import ShopTheGoal from './ShopTheGoal';
 import Contact from './Contact';
 import Promotion from './Promotion';
 import Offers from './Offers';
+import FeaturedCollections from './FeaturedCollections';
+import FAQ from './FAQ';
 
 export type Shop = {
   name: string;
@@ -42,6 +44,7 @@ function HomePage() {
   return (
     <div className="h-full w-full space-y-6">
       {sections.map((section) => {
+        console.log(section);
         if (section.type === 'promotion_section') {
           return <Promotion section={section} key={section.type} />;
         }
@@ -52,6 +55,10 @@ function HomePage() {
 
         if (section.type === 'benefits_section') {
           return <Benefits section={section} key={section.type} />;
+        }
+        
+        if (section.type === 'section_collection_products') {
+          return <FeaturedCollections section={section} key={section.type} />;
         }
 
         if (section.type === 'testimonials_section') {
@@ -68,6 +75,10 @@ function HomePage() {
 
         if (section.type === 'contact_section') {
           return <Contact section={section} key={section.type} />;
+        }
+
+        if (section.type === 'faq_section') {
+          return <FAQ section={section} key={section.type} />;
         }
 
       })}
