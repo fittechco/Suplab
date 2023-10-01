@@ -4,6 +4,7 @@ import { App } from '../../api/type';
 import { useLoaderData } from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
 import FTicons from 'app/ft-lib/Icon';
+import { Colors } from 'app/ft-lib/shared';
 
 interface FAQSectionProps {
   section: App.HomePageTemplate.FaqSection;
@@ -50,8 +51,8 @@ const FAQ = ({ section }: FAQSectionProps) => {
                     style={{
                       width: '24px',
                       height: '24px',
-                      color: 'grey',
                     }}
+                    fill={Colors.secondary}
                   />
                 </button>
               </div>

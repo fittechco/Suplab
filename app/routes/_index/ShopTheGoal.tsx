@@ -1,8 +1,9 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {App} from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';  
+import {Navigation} from 'swiper/modules'
 
 interface ShopTheGoalSectionProps {
   section: App.HomePageTemplate.ShopTheGoalSection;
@@ -10,35 +11,34 @@ interface ShopTheGoalSectionProps {
 
 const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
   const fields = arrayToObject({array: section.fields});
-  const [spaceBetween, setSpaceBetween] = useState(10);
-  let swiperInstance;
-
-  const updateSpaceBetween = () => {
-    if (window.innerWidth >= 769) {
-      setSpaceBetween(25);
-    } else {
-      setSpaceBetween(10);
-    }
-  };
+  const swiperContainer = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    updateSpaceBetween();
-    window.addEventListener('resize', updateSpaceBetween);
-
-    swiperInstance = new Swiper('.swiper-container', {
-      spaceBetween: spaceBetween,
+    if (swiperContainer.current == null) {
+      return;
+    }
+    const swiper = new Swiper(swiperContainer.current, {
+      spaceBetween: 20,
       slidesPerView: 'auto',
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
+      breakpoints: {
+        768: {
+          spaceBetween: 20,
+        },
+      },
+      modules: [Navigation],
     });
 
     return () => {
-      window.removeEventListener('resize', updateSpaceBetween);
+      if (swiper != null) {
+        swiper.destroy();
+      }
     };
-  }, [spaceBetween]);
-
+  }, []);
+  
   return (
     <div
       key={section.type}
@@ -48,7 +48,7 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
       }}
       className="shopTheGoalSection w-full container mx-auto"
     >
-      <p className="ft-text-main text-3xl mb-10">{fields.title.value}</p>
+      <p className="ft-text-main md:text-3xl text-2xl mb-10">{fields.title.value}</p>
       <div className="shopTheGoalSection__benefits relative swiper-container">
         <div className='swiper-wrapper'>
           {fields.shop_the_goals.references.nodes.map((shopTheGoal, index) => {

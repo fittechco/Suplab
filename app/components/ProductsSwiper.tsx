@@ -5,8 +5,8 @@ import Swiper from 'swiper';
 import 'swiper/css/scrollbar';
 import { Scrollbar, Mousewheel } from "swiper/modules"
 type Props = {
-    products: NonNullable<ProductRecommendationsQuery["productRecommendations"]>,
-    title: string
+    products: ProductQuery["product"][]
+    title?: string
 }
 
 export default function ProductsSwiper(props: Props) {
@@ -39,7 +39,9 @@ export default function ProductsSwiper(props: Props) {
     return (
         <div
             className='space-y-4'>
-            <h3 className='ft-text-main text-2xl  container'>{props.title}</h3>
+            {props.title &&
+                <h3 className='ft-text-main text-2xl  container'>{props.title}</h3>
+            }
             <div ref={swiperContainer} className="swiper-container overflow-hidden container">
                 <div className="swiper-wrapper">
                     {props.products.map((product, index) => {

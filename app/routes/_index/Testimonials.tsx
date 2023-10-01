@@ -1,8 +1,9 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {App} from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
+import {Navigation} from 'swiper/modules'
 import beforeAndAfter from '../../../public/before&after.png';
 
 interface TestimonialsSectionProps {
@@ -11,40 +12,35 @@ interface TestimonialsSectionProps {
 
 const Testimonials = ({section}: TestimonialsSectionProps) => {
   const fields = arrayToObject({array: section.fields});
-  const [spaceBetween, setSpaceBetween] = useState(10);
   const [currentSlide, setCurrentSlide] = useState(0); // Track the current slide index
 
-  const updateSpaceBetween = () => {
-    if (window.innerWidth >= 769) {
-      setSpaceBetween(25);
-    } else {
-      setSpaceBetween(10);
-    }
-  };
+  const swiperContainer = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    updateSpaceBetween();
-    window.addEventListener('resize', updateSpaceBetween);
-
-    const swiperInstance = new Swiper('.swiper-container', {
-      spaceBetween: spaceBetween,
+    if (swiperContainer.current == null) {
+      return;
+    }
+    const swiper = new Swiper(swiperContainer.current, {
+      spaceBetween: 20,
       slidesPerView: 'auto',
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
-      on: {
-        slideChange: () => {
-          setCurrentSlide(swiperInstance.activeIndex);
+      breakpoints: {
+        768: {
+          spaceBetween: 20,
         },
       },
+      modules: [Navigation],
     });
 
     return () => {
-      window.removeEventListener('resize', updateSpaceBetween);
-      // swiperInstance.destroy();
+      if (swiper != null) {
+        swiper.destroy();
+      }
     };
-  }, [spaceBetween]);
+  }, []);
 
   return (
     <div
@@ -55,17 +51,13 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
       }}
       className="testimonialsSection w-full !container mx-auto"
     >
-      <p className="ft-text-main text-3xl mb-10">{fields.title.value}</p>
+      <p className="ft-text-main md:text-3xl text-2xl mb-10">{fields.title.value}</p>
       <div className="testimonialsSection__testimonials relative swiper-container">
         <div className="swiper-wrapper">
           {fields.testimonials.references.nodes.map((testimonial, index) => {
             const testimonialFields = arrayToObject({
               array: testimonial.fields,
             });
-            const beforeImage =
-              testimonialFields.before_image?.reference?.image?.url;
-            const afterImage =
-              testimonialFields.after_image?.reference?.image?.url;
 
             const isFirstSlide = index === 0;
             const isLastSlide =
@@ -170,7 +162,6 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
             currentSlide === 0 ? 'hidden' : 'flex'
           }`}
         >
-          {/* Only show Prev button if not on the first slide */}
           <button
             className="swiper-button-prev-icon text-4xl"
             style={{
@@ -197,7 +188,6 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
               : 'flex'
           }`}
         >
-          {/* Only show Next button if not on the last slide */}
           <button
             className="swiper-button-next-icon text-4xl"
             style={{

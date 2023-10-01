@@ -1,6 +1,6 @@
 import type { MenuItem } from "@shopify/hydrogen/storefront-api-types";
 import { type } from "os";
-import type { FooterQuery, HeaderQuery, ShopLayoutQuery } from "storefrontapi.generated";
+import type { FooterQuery, HeaderQuery, ProductQuery, ShopLayoutQuery } from "storefrontapi.generated";
 
 export namespace App {
   export namespace HomePageTemplate {
@@ -22,7 +22,7 @@ export namespace App {
       | 'promotion_section'
       | 'hero_section'
       | 'benefits_section'
-      | 'collection_products_section'
+      | 'section_collection_products'
       | 'testimonials_section'
       | 'shop_the_goal_section'
       | 'offers_section'
@@ -255,26 +255,28 @@ export namespace App {
         };
       };
 
-      export type Product = {
-        id: string;
-        title: string;
-        handle: string;
-        description: string;
-        images: {
-          nodes: Array<{
-            url: string;
-          }>;
-        };
-        featuredImage: {
-          url: string;
-        };
-        priceRange: {
-          minVariantPrice: {
-            amount: string;
-            currencyCode: 'USD';
-          };
-        };
-      };
+      export type Product = ProductQuery["product"];
+      // {
+      //   id: string;
+      //   title: string;
+      //   handle: string;
+      //   description: string;
+      //   images: {
+      //     nodes: Array<{
+      //       url: string;
+      //     }>;
+      //   };
+      //   vendor: string;
+      //   featuredImage: {
+      //     url: string;
+      //   };
+      //   priceRange: {
+      //     minVariantPrice: {
+      //       amount: string;
+      //       currencyCode: 'USD';
+      //     };
+      //   };
+      // };
       export namespace Cart {
         export type LineItem = {
           id: string;

@@ -22,7 +22,7 @@ const Benefits = ({section}: BenefitsSectionProps) => {
       }}
       className="benefitSection w-full !container mx-auto"
     >
-      <p className="ft-text-main text-3xl">{fields.title.value}</p>
+      <p className="ft-text-main md:text-3xl text-2xl">{fields.title.value}</p>
 
       <div className="benefitSection__benefits">
         {fields.benefits.references.nodes.map((benefit, index) => {

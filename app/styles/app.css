@@ -111,6 +111,14 @@ input:focus {
 
 /* Offers Section */
 
+.offersSection__slide {
+  width: 548px;
+  border-radius: 12px;
+  background: var(--background-linear, linear-gradient(90deg, rgba(54, 54, 49, 0.60) 0%, rgba(74, 74, 73, 0.50) 48.39%, rgba(74, 74, 73, 0.40) 96.26%));
+  box-shadow: 0px 4.61905px 6.92857px 0px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(1.290789008140564px);
+}
+
 .swiper-pagination-bullet-active-product-page {
   background-color: #93C147 !important;
 }
@@ -167,12 +175,28 @@ input:focus {
 }
 
 /* Featured Collections Section */
-.featuredCollectionsSection__divider {
-  width: 1px;
-  background: linear-gradient(to top, transparent 0%, #4A4A49 50%, transparent 100%);
-  height: 100%;
-  margin: 0 20px;
+.featuredCollectionsButtonsContainer {
+  position: relative; 
 }
+
+.featuredCollectionsButtonsContainer::before,
+.featuredCollectionsButtonsContainer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to left, transparent 0%, #4A4A49 50%, transparent 100%);
+}
+
+.featuredCollectionsButtonsContainer::before {
+  top: 0;
+}
+
+.featuredCollectionsButtonsContainer::after {
+  bottom: 0;
+}
+
 
 
 h1,
@@ -364,6 +388,10 @@ a {
   .offersSection__slide,
   .product-image__slide {
     width: 335px;
+  }
+
+  .faqSection__questions {
+    width: 85%;
   }
 
 }
