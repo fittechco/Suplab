@@ -1,58 +1,48 @@
-
-import React, { useEffect, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { LoaderArgs, json } from '@shopify/remix-oxygen';
-// import 'swiper/css';
-// import 'swiper/css/pagination';
-// import Hero from './Hero';
-import { App } from '../../api/type';
-// import ProductList from '../../components/ProductList';
-// import Collections from '../../components/Collections';
+import React, {useEffect, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {LoaderArgs, json} from '@shopify/remix-oxygen';
+import {App} from '../../api/type';
+import Hero from '../_index/Hero';
+import ProductCard from 'app/components/ProductCard';
 
 export type Shop = {
   name: string;
 };
 
-export async function loader({ context }: LoaderArgs) {
-  const storefront =
-    await context.storefront.query(SHOPQUERY);
-  const { metaobject } = storefront;
+export async function loader({context, params}: LoaderArgs) {
+  console.log(params);
+  const storefront = await context.storefront.query(SHOPQUERY);
+  const {metaobject} = storefront;
   return json({
     metaobject,
   });
 }
 
-function HomePage() {
-  const { metaobject }: { metaobject: App.HomePageTemplate.Template } =
-    useLoaderData();
-  const [sections, setSections] = useState<App.HomePageTemplate.Sections>([]);
-
-
-  useEffect(() => {
-    metaobject.fields.forEach((field) => {
-      // console.log(field);
-      if (field.key === 'sections') {
-        setSections(field.references.nodes);
-      }
-    });
-  }, [metaobject.fields]);
+function Collection() {
+  const data = useLoaderData<typeof loader>();
+  const [shop, setShop] = useState<Shop | null>(null);
+  console.log('collections', data);
 
   return (
-    <div className="h-full w-full space-y-6">
-      {/* {sections.map((section) => {
-        if (section.type === 'hero_section') {
-          return <Hero section={section} key={section.type} />;
-        }
+    <div>
+      {/* <Hero /> */}
+      <main className="flex flex-col px-[2.6vw] py-3 my-9">
+        <div className="filtersContainer flex">
+          
+        </div>
+        <div className="productsGrid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <ProductCard />
+        </div>
+      </main>
 
-        return null;
-      })} */}
-      {/* <ProductList /> */}
-      {/* <Collections /> */}
+      {/* <Hero />p
+      <Collections />
+      <ProductList /> */}
     </div>
   );
 }
 
-export default HomePage;
+export default Collection;
 
 const SHOPQUERY = `#graphql
 query Metaobjects{
