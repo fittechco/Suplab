@@ -1,11 +1,12 @@
 import { Link } from '@remix-run/react'
-import { Image } from '@shopify/hydrogen'
+import { Image, Money } from '@shopify/hydrogen'
 import { Colors } from 'app/ft-lib/shared'
 import React from 'react'
 import { ProductQuery } from 'storefrontapi.generated'
 
 type Props = {
     product: ProductQuery["product"]
+    style?: React.CSSProperties
 }
 export default function ProductCard(props: Props) {
     const { product } = props
@@ -15,35 +16,48 @@ export default function ProductCard(props: Props) {
     }
     return (
         <Link
-            to={`products/${product.handle}`}
+            relative='path'
+            to={`/products/${product.handle}`}
             style={{
+                border: `1px solid rgb(240, 238, 232)`,
+                borderRadius: 12,
             }}
-            key={product.id} className='search-result-item flex flex-col gap-2 h-fit'>
+            key={product.id} className='search-result-item flex flex-col gap-2 h-fit p-1'>
             <div
                 style={{
-                    backgroundColor: "#E8E7E3",
+                    backgroundColor: Colors.offWhite,
                     borderRadius: 12,
                     overflow: "hidden",
+                    height: 300,
+                    ...props.style
                 }}
-                className='h-[240px] md:h-[280px]'>
+                className=''>
                 <Image
                     style={{
+                        objectFit: "cover",
                         height: "100%",
+                        width: "auto",
+                        margin: "auto",
+                        borderRadius: '24px',
                     }}
-                    width={500}
-                    src={product.images.nodes[0].url} className='w-full h-full object-cover' alt="" />
+                    sizes='100%, 800px'
+                    aspectRatio='0.77/1'
+                    className=""
+                    src={product.images.nodes[0].url}
+                />
             </div>
             <div className='flex flex-col'>
                 <p style={{
                     color: Colors.secondaryDark,
                     fontWeight: 700,
-                }} className='text-sm'>{product.title}</p>
-                <p
-                    style={{
-                        color: Colors.secondary,
-                        fontWeight: 600,
-                    }}
-                    className='text-[14px] font-mainFontBold'>{product.priceRange.minVariantPrice.amount}{" "} {product.priceRange.minVariantPrice.currencyCode}</p>
+                }} className='text-base'>{product.title}</p>
+                <Money style={{
+                    color: Colors.secondary,
+                }}
+                    className='font-mainFont font-bold text-base'
+                    data={product.priceRange.minVariantPrice}
+                    withoutTrailingZeros />
+
             </div>
         </Link>
     )

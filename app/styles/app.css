@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  background: #fff;
+  background: #FAF9F6;
   font-family: 'Roboto Condensed', sans-serif;
   padding: 0px;
   margin: 0px;
@@ -112,6 +112,16 @@ input:focus {
 
 .swiper-pagination-bullet-active-product-page {
   background-color: #93C147 !important;
+}
+
+.white-background-blur {
+  border: 1px solid rgba(174, 209, 118, 0.70);
+  background: rgba(250, 249, 246, 0.80);
+  backdrop-filter: blur(2.5px);
+}
+
+.fade-border {
+  border-color: linear-gradient(90deg, rgba(74, 74, 73, 0.20211834733893552) 0%, rgba(74, 74, 73, 1) 50%, rgba(0, 0, 0, 0.16010154061624648) 100%);
 }
 
 h1,
@@ -298,11 +308,6 @@ a {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-  }
-
-  .offersSection__slide,
-  .product-image__slide {
-    width: 335px;
   }
 
 }

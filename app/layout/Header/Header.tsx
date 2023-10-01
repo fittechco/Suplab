@@ -8,7 +8,7 @@ import FTicons from 'app/ft-lib/Icon';
 import { Colors } from 'app/ft-lib/shared';
 import { QueryClient } from 'react-query';
 import StorefrontApi from 'app/api/storefront';
-import type { FooterQuery, HeaderQuery, SearchProductsQuery, ShopLayoutQuery } from 'storefrontapi.generated';
+import type { FooterQuery, HeaderQuery, ShopLayoutQuery } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
 
 type Props = {
@@ -21,8 +21,6 @@ type Props = {
 
 
 const queryClient = new QueryClient()
-
-
 
 function Header(props: Props) {
    const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
@@ -80,8 +78,6 @@ function Header(props: Props) {
       }
    }, [showSub])
 
-
-
    useEffect(() => {
       console.log(showSearch, "showSearch");
    }, [showSearch])
@@ -114,6 +110,9 @@ function Header(props: Props) {
    //   }
    // }
 
+   if (props.layout.shop == null) {
+      return null
+   }
 
    return (
       <header
@@ -130,14 +129,11 @@ function Header(props: Props) {
          <div
             ref={headerRef}
             style={{
-               border: "1px solid rgba(174, 209, 118, 0.70)",
                borderRadius: "0px 0px 12px 12px",
-               background: "rgba(250, 249, 246, 0.80)",
-               backdropFilter: "blur(2.5px)",
                transition: "all 0.3s ease",
                height: 80,
                overflow: "hidden",
-            }} className='header-wrapper'>
+            }} className='header-wrapper white-background-blur'>
             <div
                style={{
                   height: 80,

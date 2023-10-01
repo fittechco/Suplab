@@ -65,7 +65,7 @@ class ProductController {
       return products;
     } catch (error) {
       console.error(error);
-      return error;
+      throw error;
     }
   }
 }

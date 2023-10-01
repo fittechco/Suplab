@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { App } from '../api/type';
-import arrayToObject from "../ft-lib/ArrayToObject";
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
 import { LoaderArgs } from '@shopify/remix-oxygen';
@@ -11,7 +9,12 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css/pagination';
 import { Colors } from 'app/ft-lib/shared';
 import { Image, Money } from '@shopify/hydrogen';
-import FTicons from 'app/ft-lib/Icon';
+import { useQuery } from 'react-query';
+import ProductsSwiper from 'app/components/ProductsSwiper';
+import MobileProductDetails from 'app/lib/productPage/MobileProductDetails';
+import CTAButton from 'app/components/CTAButton';
+import ProductOptions from 'app/lib/productPage/ProductOptions';
+import Acordion from 'app/components/Acordion';
 import Quantity from 'app/components/Quantity';
 
 export async function loader({ context, params }: LoaderArgs) {
@@ -25,27 +28,54 @@ export async function loader({ context, params }: LoaderArgs) {
 }
 
 const ProductPage = () => {
-  const [spaceBetween, setSpaceBetween] = useState(10);
+  const [swiperConfig, setSwiperConfig] = useState<{
+    spaceBetween: number;
+    slidesPerView: number;
+  }>({
+    spaceBetween: 10,
+    slidesPerView: 1,
+  });
   const { product } = useLoaderData<typeof loader>();
   const swiperContainer = useRef<HTMLDivElement | null>(null);
-  let swiperInstance: { destroy: () => void };
   const [quantity, setQuantity] = useState(1);
+  const productRecommendations = useQuery('productRecommendations', () => {
+    return ProductController.getProductRecommendations({ productId: product.id });
+  });
+  const [isTop, setIsTop] = useState(true);
   const updateSpaceBetween = () => {
     if (window.innerWidth >= 769) {
-      setSpaceBetween(25);
+      setSwiperConfig({
+        spaceBetween: 10,
+        slidesPerView: 1,
+      });
     } else {
-      setSpaceBetween(10);
+      setSwiperConfig({
+        spaceBetween: 10,
+        slidesPerView: 1,
+      });
     }
   };
 
+
+  useEffect(() => {
+    const updateScrollDirection = () => {
+      window.scrollY > 0 ? setIsTop(false) : setIsTop(true);
+    };
+    window.addEventListener("scroll", updateScrollDirection); // add event listener
+    return () => {
+      window.removeEventListener("scroll", updateScrollDirection); // clean up
+    }
+  }, []);
+
   useEffect(() => {
     updateSpaceBetween();
+    productRecommendations.refetch();
     window.addEventListener('resize', updateSpaceBetween);
     if (swiperContainer.current == null) {
       return;
     }
     const swiper = new Swiper(swiperContainer.current, {
-      spaceBetween: spaceBetween,
+      spaceBetween: swiperConfig.spaceBetween,
       modules: [Pagination],
       slidesPerView: 1,
       pagination: {
@@ -65,7 +95,8 @@ const ProductPage = () => {
         swiper.destroy();
       }
     };
-  }, [spaceBetween]);
+  }, [product]);
+
 
   if (product == null) {
     return null;
@@ -75,40 +106,42 @@ const ProductPage = () => {
     <div
       style={{
         marginTop: '40px',
-        overflow: 'hidden',
       }}
-      className="offersSection w-full !container mx-auto "
-    >
-      <div className="offersSection__offers relative w-full space-y-5 ">
+      className="Product-container w-full mx-auto">
+      <div className="Product-wrapper w-full md:flex md:gap-5 md:container mx-auto">
         <div
           style={{
-            position: "sticky",
-            top: 0,
+            zIndex: 1,
+            maxHeight: "calc(100vh - 110px)",
           }}
-          className='product-image-container'>
-          <div ref={swiperContainer} className="swiper-container relative">
+          className='product-image-container md:max-w-3xl w-full md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0'>
+          <div
+            style={{
+            }}
+            ref={swiperContainer} className="swiper-container max-md:h-[70vh] aspect-square  w-full max-md:px-5  md:w-auto overflow-hidden relative">
             <div className="swiper-wrapper">
               {product.images.nodes.map((image, index) => {
                 return (
-                  <div style={{
-
-                  }} key={index} className="swiper-slide product-image__slide">
+                  <div key={index} className="swiper-slide">
                     <div
-                      className="card-shadow "
+                      className="max-md:card-shadow"
                       style={{
-                        height: "75vh",
                         width: "100%",
+                        height: "100%",
                         borderRadius: '24px',
-                        background: '#707070',
+                        background: Colors.bg,
                       }}
                     >
                       <Image
                         style={{
-                          height: "100%",
-                          width: "100%",
                           objectFit: "cover",
+                          height: "100%",
+                          width: "auto",
+                          margin: "auto",
                           borderRadius: '24px',
                         }}
+                        sizes='100%, 800px'
+                        // aspectRatio='0.77/1'
                         className=""
                         src={image.url}
                       />
@@ -121,62 +154,58 @@ const ProductPage = () => {
             <div className="swiper-pagination" />
           </div>
         </div>
-
-        <div
-          style={{
-            backgroundColor: Colors.offWhite,
-            borderRadius: '24px',
-          }}
-          className='box space-y-4 shadow-lg'>
-          <div style={{
-            position: "sticky",
-          }} className='cta-button top-32'>
-            <button
-              style={{
-                background: Colors.primary,
-                borderRadius: '9999px',
-                width: '100%',
-                color: Colors.textSecondary,
-              }}
-              className='text-2xl px-3.5 py-1.5 rounded-lg ft-text-main'>Add to cart</button>
+        <div className='product-details max-md:hidden flex flex-col gap-5 w-full'>
+          <span
+            style={{
+              backgroundColor: Colors.secondaryLight,
+              color: Colors.textSecondary,
+            }}
+            className='p-1 text-sm w-fit rounded-md'>{product.vendor}</span>
+          <div>
+            <div className='product-title'>
+              <h1 className='text-2xl font-bold'>{product.title}</h1>
+            </div>
+            <div className='product-price'>
+              <Money
+                data={product.priceRange.minVariantPrice}
+                className='text-xl font-bold'
+              />
+            </div>
           </div>
-          <div className='product-details'>
-            <h1 className='text-2xl ft-text-main'>{product.title}</h1>
-            <Money className='text-2xl font-bold uppercase' data={product.variants.nodes[0].price} withoutTrailingZeros />
+          <ProductOptions options={product.options} />
+          <Quantity
+            onChange={(value) => {
+              setQuantity(value);
+            }}
+            value={quantity} />
+          <div className='flex items-center'>
+            <CTAButton
+              fullWidth
+              text="Add to Cart"
+              onClick={() => {
+                if (quantity > 1) {
+                  setQuantity(quantity - 1);
+                }
+              }} />
           </div>
-          <Quantity onChange={(value) => {
-            setQuantity(value)
-          }}
-            value={quantity}
-          />
-          <div className='options flex flex-col gap-5'>
-            {product.options.map((option, index) => {
-              return (
-                <div key={index} className='option flex flex-col'>
-                  <h1 className='text-xl font-bold uppercase'>{option.name}</h1>
-                  <div className='values flex gap-3 flex-wrap mt-2'>
-                    {option.values.map((value, index) => {
-                      return (
-                        <div
-                          style={{
-                            background: Colors.secondary,
-                            color: Colors.textSecondary,
-                            borderRadius: '9999px',
-                          }}
-                          key={index} className='value px-3 py-1'>
-                          <p className='text-sm font-medium capitalize tracking-wider'>{value}</p>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          <Acordion title='Description' details={product.description} />
+          <Acordion title='Shop Info' details={"Shiping info goes here"} />
         </div>
-
+        <MobileProductDetails isTop={isTop} product={product} />
       </div>
-    </div >
+      <div
+        style={{
+          backgroundColor: Colors.bg,
+          zIndex: 10,
+          position: "relative",
+        }}>
+        <div className='recommended-prducts py-5 relative'>
+          {productRecommendations.data != null && (
+            <ProductsSwiper title='Similar Products' products={productRecommendations.data} />
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

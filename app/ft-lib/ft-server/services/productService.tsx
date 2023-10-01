@@ -2,6 +2,54 @@ import { LoaderArgs } from '@shopify/remix-oxygen';
 import StorefrontApi from '../../../api/storefront';
 import invariant from 'tiny-invariant';
 
+// the following is a fragment of what the product fields are 
+export const PRODUCTFRAGMENT = `#graphql
+  fragment ProductFragment on Product {
+    id
+    title
+    vendor
+    handle
+    description
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    images(first: 10) {
+        nodes {
+          url
+          height
+          width
+          altText
+        }
+    }
+    options {
+      name,
+      values
+    }
+    variants(first: 10) {
+      nodes {
+        id
+        title
+        availableForSale
+        price {
+          currencyCode
+          amount
+        }
+        compareAtPrice {
+          currencyCode
+          amount
+        }
+        selectedOptions {
+          name
+          value
+        }
+      }
+    }
+  }
+    `
+
 class ProductService {
   static async getAllProducts() {
     const query = `#graphql
@@ -9,20 +57,12 @@ class ProductService {
         products(first: 20) {
           edges {
             node {
-              id
-              title
-              description
-              images(first: 2) {
-                edges {
-                  node {
-                    originalSrc
-                  }
-                }
-              }
+              ...ProductFragment
             }
           }
         }
       }
+      ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query);
     return data.products.edges.map((edge: any) => edge.node);
@@ -32,23 +72,10 @@ class ProductService {
     const query = `#graphql
       query Product($id: ID!) {
         product(id: $id) {
-          id
-          handle
-          title
-          description
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          images(first: 5) {
-              nodes {
-                url
-              }
-          }
+          ...ProductFragment
         }
       }
+      ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
@@ -66,23 +93,13 @@ class ProductService {
       query ProductByCollection($collectionId: ID!) {
         collection(id: $collectionId) {
           products(first: 10) {
-            edges {
-              node {
-                id
-                title
-                description
-                images(first: 1) {
-                  edges {
-                    node {
-                      originalSrc
-                    }
-                  }
-                }
-              }
-            }
+           nodes{
+            ...ProductFragment
+           }
           }
         }
       }
+      ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
@@ -90,7 +107,7 @@ class ProductService {
       }
     })
     invariant(data.collection != null, 'Collection not found');
-    return data.collection.products.edges.map((edge: any) => edge.node);
+    return data.collection.products.nodes.map((edge: any) => edge.node);
   }
 
   static async getProductsByTag(
@@ -100,19 +117,11 @@ class ProductService {
       query ProductsByTag ($tag: String!){
         products(first: 10, query: "tag: $tag") {
             nodes {
-              id
-              title
-              description
-              images(first: 1) {
-                edges {
-                  node {
-                    originalSrc
-                  }
-                }
-              }
+              ...ProductFragment
             }
         }
       }
+      ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
@@ -128,39 +137,10 @@ class ProductService {
     const query = `#graphql
       query ProductByHandle($handle: String!) {
         productByHandle(handle: $handle) {
-          id
-          title
-          description
-          images(first: 10) {
-              nodes {
-                url
-              }
-          }
-          options {
-            name,
-            values
-          }
-          variants(first: 1) {
-            nodes {
-              id
-              title
-              availableForSale
-              price {
-                currencyCode
-                amount
-              }
-              compareAtPrice {
-                currencyCode
-                amount
-              }
-              selectedOptions {
-                name
-                value
-              }
-            }
-          }
+          ...ProductFragment
         }
       }
+      ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
@@ -177,38 +157,10 @@ class ProductService {
     const query = `#graphql
       query ProductRecommendations($productId: ID!) {
         productRecommendations(productId: $productId) {
-          id
-          title
-          handle
-          description
-          images(first: 1) {
-            edges {
-              node {
-                originalSrc
-              }
-            }
-          }
-          variants(first: 1) {
-            nodes {
-              id
-              title
-              availableForSale
-              price {
-                currencyCode
-                amount
-              }
-              compareAtPrice {
-                currencyCode
-                amount
-              }
-              selectedOptions {
-                name
-                value
-              }
-            }
-          }
+            ...ProductFragment 
         }
       }
+      ${PRODUCTFRAGMENT}
     `;
 
     const data = await StorefrontApi.storeFront().query(query, {

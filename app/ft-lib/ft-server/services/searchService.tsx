@@ -1,5 +1,6 @@
 import StorefrontApi from '../../../api/storefront';
 import type { App } from '../../../api/type';
+import { PRODUCTFRAGMENT } from './productService';
 
 class SearchService {
     static async searchProducts(
@@ -58,23 +59,10 @@ const SEARCHQUERY = `#graphql
         products(query: $query, first: 10) {
                 nodes {
                     ... on Product {
-                        id
-                        title
-                        handle
-                        description
-                        priceRange {
-                            minVariantPrice {
-                                amount
-                                currencyCode
-                            }
-                        }
-                        images(first: 1) {
-                                nodes {
-                                    url
-                                }
-                        }
+                         ...ProductFragment
                     }
                 }
         }
     }
+    ${PRODUCTFRAGMENT}
 `;

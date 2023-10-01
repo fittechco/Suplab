@@ -64,7 +64,7 @@ export function links() {
     {
       rel: 'stylesheet',
       type: 'text/css',
-      href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=Roboto:wght@300;400;700&display=swap',
     },
     {
       rel: 'preconnect',

@@ -73,6 +73,8 @@ export default function Search(props: Props) {
             position: "fixed",
             top: 0,
             left: 0,
+            right: 0,
+            margin: "auto",
             width: "100%",
             height: "100%",
             zIndex: 100,
@@ -80,7 +82,7 @@ export default function Search(props: Props) {
             paddingTop: 90,
             opacity: animate ? 1 : 0,
             transition: "all 0.3s ease-in-out",
-        }} className='search-container backdrop-blur-sm md:px-5'>
+        }} className='search-container backdrop-blur-sm md:px-5 container'>
             <div
                 ref={searchContainerRef}
                 style={{
@@ -144,17 +146,21 @@ export default function Search(props: Props) {
                     className="ft-text-main w-full text-center ">No Products were found</h3>}
                 <div
                     style={{
-                        height: 500,
+                        // height: 500,
                         overflowY: "scroll",
                         width: "100%",
                     }}
-                    className='search-result-container custom-scroll grid grid-cols-2 md:grid-cols-4 gap-5 px-5'>
+                    className='search-result-container custom-scroll grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 px-5'>
                     {searchedProducts.map((product) => {
                         return (
                             <div onClick={() => {
                                 props.setShowSearch(false)
                             }} className="h-fit">
-                                <ProductCard product={product} />
+                                <ProductCard
+                                    style={{
+                                        height: 260,
+                                    }}
+                                    product={product} />
                             </div>
                         )
                     })}

@@ -22,15 +22,15 @@ export default function Quantity(props: Props) {
                         onChange(value - 1)
                     }
                 }}
-                className='plus h-full flex items-center py-3 px-6 '>
+                className='plus h-full flex items-center py-3 px-6 cursor-pointer '>
                 <FTicons style={{
-                    width: 24,
-                    height: 24
+                    width: 20,
+                    height: 20
                 }} fill={Colors.offWhite} name='minus' />
             </div>
 
             <div
-                className='quantity-number text-xl border-l border-r bold py-3 px-6'
+                className='quantity-number text-base border-l border-r bold py-3 px-6'
                 style={{
                     color: Colors.textSecondary,
                     borderColor: Colors.secondaryLight
@@ -40,10 +40,10 @@ export default function Quantity(props: Props) {
                 onClick={() => {
                     onChange(value + 1)
                 }}
-                className='plus h-full flex items-center py-3 px-6 '>
+                className='plus h-full flex items-center py-3 px-6 cursor-pointer'>
                 <FTicons style={{
-                    width: 24,
-                    height: 24
+                    width: 20,
+                    height: 20
                 }} fill={Colors.offWhite} name='plus' />
             </div>
         </div>

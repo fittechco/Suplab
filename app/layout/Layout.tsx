@@ -20,7 +20,6 @@ const Layout = (props: Props) => {
             <div
                 style={{
                     marginTop: 100,
-                    marginBottom: 20,
                     height: '100%'
                 }}
                 className="content">
