@@ -8,7 +8,7 @@ import { useLoaderData } from '@remix-run/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css/pagination';
 import { Colors } from 'app/ft-lib/shared';
-import { Image, Money } from '@shopify/hydrogen';
+import { CartForm, Image, Money } from '@shopify/hydrogen';
 import { useQuery } from 'react-query';
 import ProductsSwiper from 'app/components/ProductsSwiper';
 import MobileProductDetails from 'app/lib/productPage/MobileProductDetails';
@@ -172,14 +172,37 @@ const ProductPage = () => {
             }}
             value={quantity} />
           <div className='flex items-center'>
-            <CTAButton
-              fullWidth
-              text="Add to Cart"
-              onClick={() => {
-                if (quantity > 1) {
-                  setQuantity(quantity - 1);
-                }
-              }} />
+            <CartForm
+              route="/cart"
+              inputs={{
+                lines: [
+                  {
+                    merchandiseId: selectedVariant.id,
+
+                  },
+                ],
+              }}
+              action={CartForm.ACTIONS.LinesAdd}
+            >
+              {(fetcher) => (
+                <>
+                  <CTAButton
+                    onClick={() => {
+                      window.location.href = window.location.href + '#cart-aside';
+                    }}
+                    disabled={
+                      !selectedVariant.availableForSale ??
+                      fetcher.state !== 'idle'
+                    }
+                    fullWidth
+                    text={selectedVariant?.availableForSale
+                      ? 'Add to cart'
+                      : 'Sold out'}
+                  />
+                </>
+              )}
+            </CartForm>
+
           </div>
           <Acordion title='Description' details={product.description} />
           <Acordion title='Shipping Info' details={"Shipping info goes here"} />

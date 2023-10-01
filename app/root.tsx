@@ -129,7 +129,7 @@ export const UseShopStore = create<App.Shopify.Layout>((set: any) => ({
 }
 ))
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 
 export default function App() {
   const nonce = useNonce();

@@ -10,6 +10,8 @@ import { QueryClient } from 'react-query';
 import StorefrontApi from 'app/api/storefront';
 import type { FooterQuery, HeaderQuery, ShopLayoutQuery } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
+import Cart from 'app/components/Cart';
+import { queryClient } from 'app/root';
 
 type Props = {
    layout: {
@@ -20,7 +22,6 @@ type Props = {
 }
 
 
-const queryClient = new QueryClient()
 
 function Header(props: Props) {
    const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
@@ -30,7 +31,7 @@ function Header(props: Props) {
    const [isOpen, setIsOpen] = useState(false);
    const [showSub, setShowSub] = useState(false);
    const [showSearch, setShowSearch] = useState(false)
-
+   const [showCart, setShowCart] = useState(false)
    queryClient.prefetchQuery('offers', async () => {
       const res = await StorefrontApi.storeFront().query(OFFERS_QUERY)
       return res.metaobject
@@ -84,6 +85,11 @@ function Header(props: Props) {
    useEffect(() => {
       console.log(isOpen, "isOpen");
    }, [isOpen])
+
+   useEffect(() => {
+      setShowCart(true)
+   }, [])
+
    // creating a mutation observer to detect when the sub header is added and change the height of the header based on it 
 
    // const handleOpenCart = () => {
@@ -251,6 +257,15 @@ function Header(props: Props) {
             />,
             document.body
          )}
+         {/* {showCart === true && createPortal(
+            <Cart
+               showCart={showCart}
+               setShowCart={setShowCart}
+            />,
+            document.body
+         )} */}
+
+
       </header >
 
    )

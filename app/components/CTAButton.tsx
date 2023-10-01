@@ -5,12 +5,15 @@ type Props = {
     text: string
     onClick?: () => void
     fullWidth?: boolean
+    disabled?: boolean
 }
 
 export default function CTAButton(props: Props) {
     return (
         <button
             onClick={props.onClick}
+            disabled={props.disabled}
+            type='submit'
             style={{
                 background: Colors.primary,
                 borderRadius: '9999px',
