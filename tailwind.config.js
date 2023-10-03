@@ -1,33 +1,36 @@
-import formsPlugin from '@tailwindcss/forms';
-import typographyPlugin from '@tailwindcss/typography';
-
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./app/**/*.{js,ts,jsx,tsx}'],
+module.exports = {
+  darkMode: ["class"],
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+	],
   theme: {
-    dropShadow: {
-      "cardShadow": "0px 6px 9px 0px rgba(0, 0, 0, 0.16)"
-    },
-    fontFamily: {
-      "mainFont": ['Roboto Condensed', `sans-serif`],
-      "secondaryFont": ['Roboto', `sans-serif`],
-    },
     container: {
+      center: true,
+      padding: "2rem",
       screens: {
-        sm: "100%",
-        md: "100%",
-        // lg: "1023px",
-        xl: "1440px",
-      },
-      padding: {
-        DEFAULT: '1.25rem',
-        sm: '1.5rem',
-        lg: '1.5rem',
-        xl: '2rem',
-        '2xl': '3rem',
+        "2xl": "1400px",
       },
     },
-    extend: {},
+    extend: {
+      keyframes: {
+        "accordion-down": {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
   },
-  plugins: [formsPlugin, typographyPlugin],
-};
+  plugins: [require("tailwindcss-animate")],
+}
