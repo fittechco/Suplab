@@ -24,8 +24,6 @@ type Option = {
 function Dropdown({placeholder, options, param}: DropdownProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log(searchParams.get(param));
-
   const getOptionFromValue = (value: string | null) => {
     if (!value) return null;
     return options.find((option) => option.value === value);
@@ -34,10 +32,15 @@ function Dropdown({placeholder, options, param}: DropdownProps) {
   return (
     <Select
       onValueChange={(value) => {
-        setSearchParams((prev) => {
-          prev.set(param, value);
-          return prev;
-        });
+        setSearchParams(
+          (prev) => {
+            prev.set(param, value);
+            return prev;
+          },
+          {
+            replace: true,
+          },
+        );
       }}
     >
       {/* <SelectTrigger className="w-[180px]"> */}

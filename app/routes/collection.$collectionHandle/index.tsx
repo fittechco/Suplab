@@ -13,11 +13,13 @@ export type Shop = {
 };
 
 export async function loader({context, params}: LoaderArgs) {
-  console.log(params);
-  const storefront = await context.storefront.query(SHOPQUERY);
-  const {metaobject} = storefront;
+  const {collectionHandle} = params;
+  const result = await context.storefront.query(COLLECTIONQUERY, {
+    variables: {collectionId: `gid://shopify/Collection/${collectionHandle}`},
+  });
+  const collection = result.collection;
   return json({
-    metaobject,
+    collection,
   });
 }
 
@@ -32,7 +34,7 @@ function Collection() {
     <div>
       {/* <Hero /> */}
       <main className="flex flex-col px-[2.6vw]">
-        <div className="filtersContainer flex py-3 my-9 gap-10 items-center">
+        <div className="filtersContainer flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
           <Dropdown
             placeholder="brands"
             param="brand"
@@ -77,7 +79,7 @@ function Collection() {
           />
           <div className="sliderContainer w-1/4 flex flex-col gap-2 justify-center">
             <h4 className="sliderTitle uppercase text-2xl text-bold">Price</h4>
-            <Slider className="" />
+            <Slider className="min-w-[250px]" />
           </div>
         </div>
         <div className="productsGrid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -98,71 +100,31 @@ function Collection() {
 
 export default Collection;
 
-const SHOPQUERY = `#graphql
-query Metaobjects{
-  metaobject(handle: {handle: "homepage", type: "page"}) {
-    fields {
-      type
-      key
-      value
-      references(first: 20) {
-        nodes {
-          ... on Metaobject {
-            type
-            fields {
-              key
-              value
-              type
-              references(first: 20) {
-                nodes {
-                  ... on Metaobject {
-                    type
-                    fields {
-                      key
-                      value
-                      type
-                    }
-                  }
-                }
-              }
-              reference {
-                ... on MediaImage {
-                  image {
-                    url
-                  }
-                }
-                ... on Collection {
-                  handle
-                  title
-                  products(first: 20) {
-                    nodes {
-                      title
-                      handle
-                      description
-                      priceRange{
-                        minVariantPrice{
-                          amount
-                          currencyCode
-                        }
-                        }
-                      images(first: 20) {
-                        nodes {
-                          url
-                        }
-                      }
-                      featuredImage {
-                        url
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-          __typename
-        }
+const COLLECTIONQUERY = `#graphql
+query GetCollection($collectionId: ID!) {
+  collection(id: $collectionId) {
+      id
+      title
+      image {
+        url
       }
-    }
+      products(first: 10) {
+          edges {
+              node {
+                id 
+                title
+                priceRange {
+                  minVariantPrice {
+                    amount
+                    currencyCode
+                  }
+                }
+                featuredImage {
+                  url
+                }                  
+              }
+          }
+      }
   }
 }
 `;

@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.filtersContainer {
+  overflow-x: auto; /* Enable horizontal overflow */
+  white-space: nowrap; /* Prevent wrapping of content */
+  scrollbar-width: thin; /* Set the scrollbar width to thin (Firefox) */
+  scrollbar-color: transparent transparent #2c2c2b; /* Set thumb color */
+}
+
+/* Webkit browsers (Chrome, Safari) */
+.filtersContainer::-webkit-scrollbar {
+  width: 12px; /* Adjust scrollbar width */
+  height: 9px;
+  
+}
+
+.filtersContainer::-webkit-scrollbar-thumb {
+  background-color: #2c2c2b; /* Set thumb background color */
+  border: none; /* Remove thumb border */
+  border-radius: 9999px;
+}

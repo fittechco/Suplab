@@ -627,90 +627,31 @@ export type MetaobjectFragment = Pick<StorefrontAPI.Metaobject, 'type'> & {
   >;
 };
 
-export type MetaobjectsQueryVariables = StorefrontAPI.Exact<{
-  [key: string]: never;
+export type GetCollectionQueryVariables = StorefrontAPI.Exact<{
+  collectionId: StorefrontAPI.Scalars['ID'];
 }>;
 
-export type MetaobjectsQuery = {
-  metaobject?: StorefrontAPI.Maybe<{
-    fields: Array<
-      Pick<StorefrontAPI.MetaobjectField, 'type' | 'key' | 'value'> & {
-        references?: StorefrontAPI.Maybe<{
-          nodes: Array<
-            | {
-                __typename:
-                  | 'Collection'
-                  | 'GenericFile'
-                  | 'MediaImage'
-                  | 'Page'
-                  | 'Product'
-                  | 'ProductVariant'
-                  | 'Video';
-              }
-            | ({__typename: 'Metaobject'} & Pick<
-                StorefrontAPI.Metaobject,
-                'type'
-              > & {
-                  fields: Array<
-                    Pick<
-                      StorefrontAPI.MetaobjectField,
-                      'key' | 'value' | 'type'
-                    > & {
-                      references?: StorefrontAPI.Maybe<{
-                        nodes: Array<
-                          Pick<StorefrontAPI.Metaobject, 'type'> & {
-                            fields: Array<
-                              Pick<
-                                StorefrontAPI.MetaobjectField,
-                                'key' | 'value' | 'type'
-                              >
-                            >;
-                          }
-                        >;
-                      }>;
-                      reference?: StorefrontAPI.Maybe<
-                        | (Pick<
-                            StorefrontAPI.Collection,
-                            'handle' | 'title'
-                          > & {
-                            products: {
-                              nodes: Array<
-                                Pick<
-                                  StorefrontAPI.Product,
-                                  'title' | 'handle' | 'description'
-                                > & {
-                                  priceRange: {
-                                    minVariantPrice: Pick<
-                                      StorefrontAPI.MoneyV2,
-                                      'amount' | 'currencyCode'
-                                    >;
-                                  };
-                                  images: {
-                                    nodes: Array<
-                                      Pick<StorefrontAPI.Image, 'url'>
-                                    >;
-                                  };
-                                  featuredImage?: StorefrontAPI.Maybe<
-                                    Pick<StorefrontAPI.Image, 'url'>
-                                  >;
-                                }
-                              >;
-                            };
-                          })
-                        | {
-                            image?: StorefrontAPI.Maybe<
-                              Pick<StorefrontAPI.Image, 'url'>
-                            >;
-                          }
-                      >;
-                    }
-                  >;
-                })
-          >;
+export type GetCollectionQuery = {
+  collection?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id' | 'title'> & {
+      image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
+      products: {
+        edges: Array<{
+          node: Pick<StorefrontAPI.Product, 'id' | 'title'> & {
+            priceRange: {
+              minVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+            };
+            featuredImage?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url'>
+            >;
+          };
         }>;
-      }
-    >;
-  }>;
+      };
+    }
+  >;
 };
 
 export type MoneyFragment = Pick<
@@ -872,9 +813,9 @@ interface GeneratedQueryTypes {
     return: ShopLayoutQuery;
     variables: ShopLayoutQueryVariables;
   };
-  '#graphql\nquery Metaobjects{\n  metaobject(handle: {handle: "homepage", type: "page"}) {\n    fields {\n      type\n      key\n      value\n      references(first: 20) {\n        nodes {\n          ... on Metaobject {\n            type\n            fields {\n              key\n              value\n              type\n              references(first: 20) {\n                nodes {\n                  ... on Metaobject {\n                    type\n                    fields {\n                      key\n                      value\n                      type\n                    }\n                  }\n                }\n              }\n              reference {\n                ... on MediaImage {\n                  image {\n                    url\n                  }\n                }\n                ... on Collection {\n                  handle\n                  title\n                  products(first: 20) {\n                    nodes {\n                      title\n                      handle\n                      description\n                      priceRange{\n                        minVariantPrice{\n                          amount\n                          currencyCode\n                        }\n                        }\n                      images(first: 20) {\n                        nodes {\n                          url\n                        }\n                      }\n                      featuredImage {\n                        url\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n          __typename\n        }\n      }\n    }\n  }\n}\n': {
-    return: MetaobjectsQuery;
-    variables: MetaobjectsQueryVariables;
+  '#graphql\nquery GetCollection($collectionId: ID!) {\n  collection(id: $collectionId) {\n      id\n      title\n      image {\n        url\n      }\n      products(first: 10) {\n          edges {\n              node {\n                id \n                title\n                priceRange {\n                  minVariantPrice {\n                    amount\n                    currencyCode\n                  }\n                }\n                featuredImage {\n                  url\n                }                  \n              }\n          }\n      }\n  }\n}\n': {
+    return: GetCollectionQuery;
+    variables: GetCollectionQueryVariables;
   };
 }
 

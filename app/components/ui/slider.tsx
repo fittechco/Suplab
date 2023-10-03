@@ -26,31 +26,34 @@ const Slider = React.forwardRef<
         parseInt(searchParams.get('max') ?? '75'),
       ]}
       step={1}
-      // change the url min and max params to change the slider range
       min={0}
       max={100}
       onValueChange={(value) => {
-        setSearchParams((prev) => {
-          
-          prev.set('min', value[0].toString());
-          prev.set('max', value[1].toString());
-          return prev;
-        });
+        setSearchParams(
+          (prev) => {
+            prev.set('min', value[0].toString());
+            prev.set('max', value[1].toString());
+            return prev;
+          },
+          {
+            replace: true,
+          },
+        );
       }}
     >
       {/* <SliderPrimitive.Track className="relative h-2 w-1/2 grow overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800"> */}
-      <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-[#4A4A49]">
+      <SliderPrimitive.Track className="relative cursor-pointer h-2 w-full grow overflow-hidden rounded-full bg-[#4A4A49]">
         <SliderPrimitive.Range className="absolute h-full #4A4A49" />
       </SliderPrimitive.Track>
       <SliderPrimitive.Thumb
         className={
-          'block h-[20px] w-[10px] transition-colors focus-visible:outline-none  disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-50 dark:bg-neutral-950 dark:ring-offset-neutral-950 rounded-md border border-[#696968] bg-[#2C2C2B]'
+          'cursor-pointer block h-[20px] w-[10px] transition-colors focus-visible:outline-none  disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-50 dark:bg-neutral-950 dark:ring-offset-neutral-950 rounded-md border border-[#696968] bg-[#2C2C2B]'
         }
       />
 
       <SliderPrimitive.Thumb
         className={
-          'block h-[20px] w-[10px] transition-colors focus-visible:outline-none  disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-50 dark:bg-neutral-950 dark:ring-offset-neutral-950 rounded-md border border-[#696968] bg-[#2C2C2B]'
+          'cursor-pointer block h-[20px] w-[10px] transition-colors focus-visible:outline-none  disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-50 dark:bg-neutral-950 dark:ring-offset-neutral-950 rounded-md border border-[#696968] bg-[#2C2C2B]'
         }
       />
     </SliderPrimitive.Root>
