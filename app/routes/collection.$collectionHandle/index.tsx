@@ -12,6 +12,9 @@ export type Shop = {
   name: string;
 };
 
+// todo add hero image to storefront
+// todo design for select options
+
 export async function loader({context, params}: LoaderArgs) {
   const {collectionHandle} = params;
   const result = await context.storefront.query(COLLECTIONQUERY, {
