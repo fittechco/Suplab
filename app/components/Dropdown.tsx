@@ -9,6 +9,7 @@ import {
   SelectItem,
   SelectSeparator,
 } from './ui/select';
+import {useEffect} from 'react';
 
 type DropdownProps = {
   placeholder: string;
@@ -28,7 +29,10 @@ function Dropdown({placeholder, options, param}: DropdownProps) {
     if (!value) return null;
     return options.find((option) => option.value === value);
   };
+  var a = 1;
+  a = 2;
 
+  useEffect(() => {}, [a]);
   return (
     <Select
       onValueChange={(value) => {

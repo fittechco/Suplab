@@ -3,29 +3,30 @@ import {Image, Money} from '@shopify/hydrogen';
 import {Colors} from 'app/ft-lib/shared';
 import React from 'react';
 import {ProductQuery} from 'storefrontapi.generated';
+import { App } from '../api/type';
 
 type Props = {
-  product: ProductQuery['product'];
+  // product: ProductQuery['product'];
+  product: App.CollectionPageTemplate.ProductCard;
   style?: React.CSSProperties;
 };
-// export default function ProductCard(props: Props) {
-export default function ProductCard() {
-  // const { product } = props
-  // if (!product) {
-  //     // todo - implement skeleton loader
-  //     return <div>Loading...</div>
-  // }
+export default function ProductCard(props: Props) {
+  // export default function ProductCard() {
+  const {product} = props;
+  if (!product) {
+    // todo - implement skeleton loader
+    return <div>Loading...</div>;
+  }
   return (
     <Link
       relative="path"
-      // to={`/products/${product.handle}`}
-      to={`#`}
+      to={`/products/${product.handle}`}
       style={{
         border: `1px solid rgb(240, 238, 232)`,
         borderRadius: 12,
       }}
-      // key={product.id} className='search-result-item flex flex-col gap-2 h-fit '>
-      className="search-result-item flex flex-col gap-2 h-fit "
+      key={product.id}
+      className="search-result-item flex flex-col gap-2 h-fit"
     >
       <div
         style={{
@@ -39,8 +40,8 @@ export default function ProductCard() {
       >
         <Image
           style={{
-            // objectFit: 'cover',
-            objectFit: 'contain',
+            objectFit: 'cover',
+            // objectFit: 'contain',
             height: '100%',
             width: 'auto',
             margin: 'auto',
@@ -49,10 +50,10 @@ export default function ProductCard() {
           sizes="100%, 800px"
           aspectRatio="0.77/1"
           className=""
-          src={
-            'https://m.media-amazon.com/images/I/71BVaeB-5PL._AC_SL1500_.jpg'
-          }
-          // src={product.images.nodes[0].url}
+          src={product.images.nodes[0].url}
+          // src={
+          //   'https://m.media-amazon.com/images/I/71BVaeB-5PL._AC_SL1500_.jpg'
+          // }
         />
       </div>
       <div className="flex flex-col p-1">
@@ -60,22 +61,22 @@ export default function ProductCard() {
           style={{
             color: Colors.secondaryDark,
             fontWeight: 700,
-            // }} className='text-base'>{product.title}</p>
           }}
           className="text-base"
         >
-          Iso Whey Zero
+          {/* Iso Whey Zero */}
+          {product.title}
         </p>
         <Money
           style={{
             color: Colors.secondary,
           }}
           className="font-mainFont font-bold text-base"
-          // data={product.priceRange.minVariantPrice}
-          data={{
-            amount: '100',
-            currencyCode: 'USD',
-          }}
+          data={product.priceRange.minVariantPrice}
+          // data={{
+          //   amount: '100',
+          //   currencyCode: 'USD',
+          // }}
           withoutTrailingZeros
         />
       </div>
