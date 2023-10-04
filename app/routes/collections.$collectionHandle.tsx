@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {useLoaderData, useSearchParams} from '@remix-run/react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import {App} from '../../api/type';
-import Hero from '../_index/Hero';
+import React, { useEffect, useState } from 'react';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
+import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import { App } from '../api/type';
+import Hero from './_index/Hero';
 import ProductCard from 'app/components/ProductCard';
-import {Slider} from '~/app/components/ui/slider';
-import {Select} from '~/app/components/ui/select';
+import { Slider } from '~/app/components/ui/slider';
+import { Select } from '~/app/components/ui/select';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
+import invariant from 'tiny-invariant';
 
 export type Shop = {
   name: string;
@@ -64,12 +65,16 @@ const dropdowns = [
   },
 ];
 
-export async function loader({context, params}: LoaderArgs) {
-  const {collectionHandle} = params;
+export async function loader({ context, params }: LoaderArgs) {
+  const { collectionHandle } = params;
+
+  invariant(collectionHandle, 'Collection handle is required');
+
   const result = await context.storefront.query(COLLECTIONQUERY, {
-    variables: {collectionId: `gid://shopify/Collection/${collectionHandle}`},
+    variables: { handle: collectionHandle },
   });
   const collection = result.collection;
+  console.log('collection', collection);
   return json({
     collection,
   });
@@ -91,8 +96,8 @@ function Collection() {
   return (
     <div>
       {/* <Hero /> */}
-      <main className="flex flex-col px-[2.6vw] relative">
-        <div className="filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+      <main className="flex flex-col relative container">
+        <div className="filtersContainer  lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
           {dropdowns.map((dropdown) => (
             <Dropdown
               key={dropdown.param}
@@ -108,8 +113,8 @@ function Collection() {
           </div>
         </div>
         <div className="productsGrid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {data.collection.products.edges.map((product) => (
-            <ProductCard key={product.node.id} product={product.node} />
+          {data.collection.products.nodes.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
@@ -120,7 +125,7 @@ function Collection() {
           }}
         >
           <FilterIcon />
-        </div>        
+        </div>
       </main>
 
       {/* <Hero />p
@@ -133,29 +138,28 @@ function Collection() {
 export default Collection;
 
 const COLLECTIONQUERY = `#graphql
-query GetCollection($collectionId: ID!) {
-  collection(id: $collectionId) {
+query GetCollection($handle: String!) {
+  collection(handle: $handle) {
     id
     title
     image {
       url
     }
+    description
     products(first: 10) {
-      edges {
-        node {
-          id 
-          title
-          handle
-          images(first: 5) {
-            nodes {
-              url
-            }
+      nodes {
+        id 
+        title
+        handle
+        images(first: 5) {
+          nodes {
+            url
           }
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
+        }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
           }
         }
       }

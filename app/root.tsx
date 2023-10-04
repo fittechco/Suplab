@@ -15,7 +15,6 @@ import {
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
 import type { HydrogenSession } from '../server';
-import resetStyles from './styles/reset.css';
 import appStyles from './styles/app.css';
 import tailwindCss from './styles/tailwind.css';
 import Layout from './layout/Layout';
@@ -52,7 +51,6 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 export function links() {
   return [
     { rel: 'stylesheet', href: tailwindCss },
-    { rel: 'stylesheet', href: resetStyles },
     { rel: 'stylesheet', href: appStyles },
     {
       rel: 'preconnect',

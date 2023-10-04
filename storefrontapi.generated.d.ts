@@ -628,16 +628,16 @@ export type MetaobjectFragment = Pick<StorefrontAPI.Metaobject, 'type'> & {
 };
 
 export type GetCollectionQueryVariables = StorefrontAPI.Exact<{
-  collectionId: StorefrontAPI.Scalars['ID'];
+  handle: StorefrontAPI.Scalars['String'];
 }>;
 
 export type GetCollectionQuery = {
   collection?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Collection, 'id' | 'title'> & {
+    Pick<StorefrontAPI.Collection, 'id' | 'title' | 'description'> & {
       image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
       products: {
-        edges: Array<{
-          node: Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle'> & {
+        nodes: Array<
+          Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle'> & {
             images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
             priceRange: {
               minVariantPrice: Pick<
@@ -645,8 +645,8 @@ export type GetCollectionQuery = {
                 'amount' | 'currencyCode'
               >;
             };
-          };
-        }>;
+          }
+        >;
       };
     }
   >;
@@ -811,7 +811,7 @@ interface GeneratedQueryTypes {
     return: ShopLayoutQuery;
     variables: ShopLayoutQueryVariables;
   };
-  '#graphql\nquery GetCollection($collectionId: ID!) {\n  collection(id: $collectionId) {\n    id\n    title\n    image {\n      url\n    }\n    products(first: 10) {\n      edges {\n        node {\n          id \n          title\n          handle\n          images(first: 5) {\n            nodes {\n              url\n            }\n          }\n          priceRange {\n            minVariantPrice {\n              amount\n              currencyCode\n            }\n          }\n        }\n      }\n    }\n  }\n}\n': {
+  '#graphql\nquery GetCollection($handle: String!) {\n  collection(handle: $handle) {\n    id\n    title\n    image {\n      url\n    }\n    description\n    products(first: 10) {\n      nodes {\n        id \n        title\n        handle\n        images(first: 5) {\n          nodes {\n            url\n          }\n        }\n        priceRange {\n          minVariantPrice {\n            amount\n            currencyCode\n          }\n        }\n      }\n    }\n  }\n}\n': {
     return: GetCollectionQuery;
     variables: GetCollectionQueryVariables;
   };
