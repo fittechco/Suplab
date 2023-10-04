@@ -30,6 +30,7 @@ export const PRODUCTFRAGMENT = `#graphql
     }
     variants(first: 10) {
       nodes {
+        quantityAvailable
         id
         title
         availableForSale
@@ -75,6 +76,7 @@ class ProductService {
           ...ProductFragment
           selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
             id
+            quantityAvailable
             availableForSale
             selectedOptions {
               name
@@ -174,6 +176,7 @@ class ProductService {
           ...ProductFragment
           selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
             id
+            quantityAvailable
             availableForSale
             selectedOptions {
               name

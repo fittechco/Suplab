@@ -26,6 +26,8 @@ import { useEffect } from 'react';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/pagination';
+import { CartProvider } from './components/CartProvider';
+import CartDrawer from './components/CartDrawer';
 
 
 // This is important to avoid re-fetching root queries on sub-navigations
@@ -77,7 +79,7 @@ export function links() {
   ]
 }
 export async function loader({ context }: LoaderArgs) {
-  const { storefront, session, cart } = context;
+  const { storefront, session } = context;
   const customerAccessToken = await session.get('customerAccessToken');
   const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;
 
@@ -88,7 +90,6 @@ export async function loader({ context }: LoaderArgs) {
   );
 
   // defer the cart query by not awaiting it
-  const cartPromise = cart.get();
 
 
   // defer the footer query (below the fold)
@@ -111,7 +112,6 @@ export async function loader({ context }: LoaderArgs) {
 
   return defer(
     {
-      cart: cartPromise,
       shop: await layout,
       footer: await footerPromise,
       header: await headerPromise,
@@ -122,10 +122,13 @@ export async function loader({ context }: LoaderArgs) {
   );
 }
 
-export const UseShopStore = create<App.Shopify.Layout>((set: any) => ({
+export const UseShopStore = create<App.Shopify.Layout & {
+  showCart: boolean
+}>((set: any) => ({
   shop: null as any,
   footer: null as any,
   header: null as any,
+  showCart: false
 }
 ))
 
@@ -153,18 +156,22 @@ export default function App() {
       </head>
       <QueryClientProvider client={queryClient}>
         <body>
-          <Layout
-            layout={{
-              shop: data.shop.shop,
-              header: data.header,
-              footer: data.footer,
-            }}
-          >
-            <Outlet />
-          </Layout>
-          <ScrollRestoration nonce={nonce} />
-          <Scripts nonce={nonce} />
-          <LiveReload nonce={nonce} />
+          <CartProvider>
+            <Layout
+              layout={{
+                shop: data.shop.shop,
+                header: data.header,
+                footer: data.footer,
+              }}
+            >
+              <Outlet />
+            </Layout>
+            <CartDrawer />,
+            document.body
+            <ScrollRestoration nonce={nonce} />
+            <Scripts nonce={nonce} />
+            <LiveReload nonce={nonce} />
+          </CartProvider>
         </body>
       </QueryClientProvider>
     </html >
@@ -193,7 +200,7 @@ export function ErrorBoundary() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className=''>
         <Layout {...root.data}>
           <div className="route-error">
             <h1>Oops</h1>

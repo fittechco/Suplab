@@ -10,8 +10,7 @@ export class Colors {
     static offWhite = '#FAF9F6';
     static offBlack = '#202020';
     static textSecondary = this.offWhite;
-    static textThird = this.secondary;
-    static textMain = this.primary;
+    static textThird = this.secondaryLight;
     static bg = this.offWhite
     static bgSecondary = '#3D3D3D';
 }

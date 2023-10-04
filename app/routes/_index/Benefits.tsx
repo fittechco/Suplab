@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import {App} from '../../api/type';
-import {useLoaderData} from '@remix-run/react';
+import React, { useEffect, useState } from 'react';
+import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import { App } from '../../api/type';
+import { useLoaderData } from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import benefitImage1 from '../../../public/florian-kurrasch-HyivyCRdz14-unsplash.png';
 
@@ -9,9 +9,8 @@ interface BenefitsSectionProps {
   section: App.HomePageTemplate.BenefitsSection;
 }
 
-const Benefits = ({section}: BenefitsSectionProps) => {
-  console.log(section);
-  const fields = arrayToObject({array: section.fields});
+const Benefits = ({ section }: BenefitsSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
 
   return (
     <div
@@ -28,13 +27,13 @@ const Benefits = ({section}: BenefitsSectionProps) => {
         {fields.benefits.references.nodes.map((benefit, index) => {
           const isEven = index % 2 === 0;
           const flexDirection = isEven ? 'row' : 'row-reverse';
-          const benefitFields = arrayToObject({array: benefit.fields});
+          const benefitFields = arrayToObject({ array: benefit.fields });
           const imageUrl =
             benefitFields.image?.reference?.image?.url || benefitImage1;
 
           const paddingStyle = isEven
-            ? {paddingLeft: '40px'}
-            : {paddingRight: '40px'};
+            ? { paddingLeft: '40px' }
+            : { paddingRight: '40px' };
 
           return (
             <div
@@ -43,7 +42,7 @@ const Benefits = ({section}: BenefitsSectionProps) => {
             >
               <div
                 className="w-[100%] flex items-center content-center relative"
-                style={{flexDirection: flexDirection}}
+                style={{ flexDirection: flexDirection }}
               >
                 <div className="w-[70%] h-[195px] md:w-1/2 md:h-full">
                   <img
@@ -58,7 +57,7 @@ const Benefits = ({section}: BenefitsSectionProps) => {
 
                 <div
                   className="w-full h-full absolute flex items-center justify-end md:items-start"
-                  style={{flexDirection: flexDirection, ...paddingStyle}}
+                  style={{ flexDirection: flexDirection, ...paddingStyle }}
                 >
                   <div className="benefit_content w-[55%] md:w-1/2 p-2 md:p-4">
                     <p className="benefit_title_text">

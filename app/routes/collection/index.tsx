@@ -30,7 +30,6 @@ function HomePage() {
 
   useEffect(() => {
     metaobject.fields.forEach((field) => {
-      // console.log(field);
       if (field.key === 'sections') {
         setSections(field.references.nodes);
       }

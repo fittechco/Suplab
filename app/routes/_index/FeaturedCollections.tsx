@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import {App} from '../../api/type';
-import {useLoaderData} from '@remix-run/react';
+import React, { useState } from 'react';
+import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import { App } from '../../api/type';
+import { useLoaderData } from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import {Colors} from 'app/ft-lib/shared';
+import { Colors } from 'app/ft-lib/shared';
 import ProductCard from 'app/components/ProductCard';
 import ProductsSwiper from 'app/components/ProductsSwiper';
 
@@ -11,15 +11,11 @@ interface FeaturedCollectionsSectionProps {
   section: App.HomePageTemplate.SectionCollectionProducts;
 }
 
-const FeaturedCollections = ({section}: FeaturedCollectionsSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
-  console.log(fields);
+const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
 
   const collectionOneProducts = fields.collection_one.reference.products.nodes;
   const collectionTwoProducts = fields.collection_two.reference.products.nodes;
-
-  console.log(collectionOneProducts, 'collectionOneProducts');
-  console.log(collectionTwoProducts, 'collectionTwoProducts');
 
   const [activeButton, setActiveButton] = useState('collection_one');
 

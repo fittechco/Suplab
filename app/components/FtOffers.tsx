@@ -1,7 +1,7 @@
 import StorefrontApi from "app/api/storefront";
 import type { App } from "app/api/type";
 import arrayToObject from "app/ft-lib/ArrayToObject";
-import FTicons from "app/ft-lib/Icon";
+import FTicons from "app/ft-lib/FTicon";
 import { Colors } from "app/ft-lib/shared";
 import { OFFERS_QUERY } from "app/layout/MobileNav";
 import { useQuery } from "react-query";

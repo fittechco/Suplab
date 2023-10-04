@@ -19,7 +19,6 @@ export default function ProductsSwiper(props: Props) {
         const swiper = new Swiper(swiperContainer.current, {
             slidesPerView: 1.5,
             spaceBetween: 20,
-            mousewheel: true,
             modules: [Scrollbar, Mousewheel],
             breakpoints: {
                 768: {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import FTicons from "../ft-lib/Icon";
+import FTicons from "../ft-lib/FTicon";
 import { Colors } from "../ft-lib/shared";
 import { UseShopStore } from "../root";
 import { ON_METAOBJECT } from "app/routes/_index";
@@ -23,7 +23,6 @@ export default function MobileNav(props: Props) {
         }
     }, [props.isOpen]);
 
-    console.log(header, "header?.items");
     if (header?.menu?.items == null) {
         return <div>Loading...</div>;
     }
@@ -44,7 +43,7 @@ export default function MobileNav(props: Props) {
                 style={{
                     height: "100%",
                     width: "100%",
-                    overflowY: "scroll",
+                    overflowY: "auto",
                 }}
                 className='mobileNav__container  flex flex-col gap-5  justify-start items-start'>
                 <div className="navHeader w-full flex justify-end px-5">

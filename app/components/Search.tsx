@@ -40,13 +40,11 @@ export default function Search(props: Props) {
         const closeOnAnimationEnd = () => {
             if (searchContainerRef.current != null) {
                 searchContainerRef.current.ontransitionend = () => {
-                    console.log("animation ended");
                     props.setShowSearch(false)
                 }
             }
         }
         const handleClickOutside = (event: MouseEvent) => {
-            console.log("clicked outside");
             if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
                 closeOnAnimationEnd()
                 setAnimate(false)

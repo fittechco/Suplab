@@ -17,6 +17,10 @@ body {
   transition: all 0.7s ease,
 }
 
+.product-form form {
+  width: 100%;
+}
+
 textarea:focus,
 input:focus {
   outline: none;
@@ -75,7 +79,9 @@ input:focus {
 }
 
 .lds-dual-ring {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 24px;
   height: 24px;
 }
@@ -83,9 +89,8 @@ input:focus {
 .lds-dual-ring:after {
   content: " ";
   display: block;
-  width: 20px;
-  height: 20px;
-  margin: 6px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   border: 3px solid #fff;
   border-color: #93C147 transparent #93C147 transparent;
@@ -176,7 +181,7 @@ input:focus {
 
 /* Featured Collections Section */
 .featuredCollectionsButtonsContainer {
-  position: relative; 
+  position: relative;
 }
 
 .featuredCollectionsButtonsContainer::before,
@@ -277,28 +282,36 @@ a {
 }
 
 /* width */
-.custom-scroll::-webkit-scrollbar {
-  width: 10px;
-  border-radius: 50px;
-  height: 10px;
+::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 9999px;
+  height: 5px;
 }
 
 /* Track */
-.custom-scroll::-webkit-scrollbar-track {
-  background: #cbcbcbad;
+::-webkit-scrollbar-track {
+  background: transparent;
   border-radius: 50px;
   height: 20px;
 }
 
 /* Handle */
-.custom-scroll::-webkit-scrollbar-thumb {
-  background: #242424c0;
-  border-radius: 50px;
+::-webkit-scrollbar-thumb {
+  background: #696968;
+  border-radius: 9999px;
 }
 
 /* Handle on hover */
-.custom-scroll::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 9999px;
+    height: 3px;
+  }
 }
 
 .glassy-card {

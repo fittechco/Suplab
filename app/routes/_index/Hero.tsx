@@ -8,7 +8,6 @@ interface HeroSectionProps {
 }
 
 const Hero = ({ section }: HeroSectionProps) => {
-  console.log(section);
   const fields = arrayToObject({ array: section.fields });
   const isMobile = window.innerWidth <= 768;
   const [image, setImage] = React.useState<string | null>(null)

@@ -4,14 +4,15 @@ import { App } from '../../api/type';
 import { createPortal } from 'react-dom';
 import MobileNav, { OFFERS_QUERY } from '../MobileNav';
 import SubMenuPopup from './SubMenuPopup';
-import FTicons from 'app/ft-lib/Icon';
+import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
 import { QueryClient } from 'react-query';
 import StorefrontApi from 'app/api/storefront';
 import type { FooterQuery, HeaderQuery, ShopLayoutQuery } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
-import Cart from 'app/components/Cart';
-import { queryClient } from 'app/root';
+import CartDrawer from 'app/components/CartDrawer';
+import { UseShopStore, queryClient } from 'app/root';
+import { useCart } from 'app/components/CartProvider';
 
 type Props = {
    layout: {
@@ -57,13 +58,11 @@ function Header(props: Props) {
 
    const handleMouseEnter = useCallback(() => {
       setShowSub(true)
-      console.log(headerRef.current?.scrollHeight, "headerRef.current?.offsetHeight");
-
-
       if (headerRef.current != null) {
          headerRef.current.style.height = headerRef.current?.scrollHeight + "px";
       }
    }, [])
+
 
    const handleMouseLeave = useCallback(() => {
       setShowSub(false)
@@ -79,42 +78,8 @@ function Header(props: Props) {
       }
    }, [showSub])
 
-   useEffect(() => {
-      console.log(showSearch, "showSearch");
-   }, [showSearch])
-   useEffect(() => {
-      console.log(isOpen, "isOpen");
-   }, [isOpen])
-
-   useEffect(() => {
-      setShowCart(true)
-   }, [])
 
    // creating a mutation observer to detect when the sub header is added and change the height of the header based on it 
-
-   // const handleOpenCart = () => {
-   //   const cartId = localStorage.getItem("cartId");
-   //   if (!cartId) {
-   //     cartController.createCart().then((res) => {
-   //       if (res.error) {
-   //         console.error(res.error);
-   //       } else {
-   //         localStorage.setItem("cartId", res.id);
-   //         UseShopStore.getState().setCart(res);
-   //         setIsOpen(true);
-   //       }
-   //     });
-   //   } else {
-   //     cartController.getCart({ cartId }).then((res) => {
-   //       if (res.error) {
-   //         console.error(res.error);
-   //       } else {
-   //         UseShopStore.getState().setCart(res);
-   //         setIsOpen(true);
-   //       }
-   //     });
-   //   }
-   // }
 
    if (props.layout.shop == null) {
       return null
@@ -204,16 +169,18 @@ function Header(props: Props) {
                         className='transition-all ease-out duration-300'
                         name='search' />
                   </div>
-                  <div className='icons_item'>
-                     {/* <button onClick={() => handleOpenCart()} className="cursor-pointer"> */}
-                     <FTicons
-                        fill={Colors.secondary}
-                        style={{
-                           width: "24px",
-                           height: "24px",
-                        }}
-                        name='bag' />
-                     {/* </button> */}
+                  <div className='icons_item cursor-pointer'>
+                     <button onClick={() => {
+                        UseShopStore.setState({ showCart: true })
+                     }} className="cursor-pointer">
+                        <FTicons
+                           fill={Colors.secondary}
+                           style={{
+                              width: "24px",
+                              height: "24px",
+                           }}
+                           name='bag' />
+                     </button>
                   </div>
                   <div
                      onClick={() => setIsOpen(true)}
@@ -257,15 +224,6 @@ function Header(props: Props) {
             />,
             document.body
          )}
-         {/* {showCart === true && createPortal(
-            <Cart
-               showCart={showCart}
-               setShowCart={setShowCart}
-            />,
-            document.body
-         )} */}
-
-
       </header >
 
    )

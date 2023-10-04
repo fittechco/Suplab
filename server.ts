@@ -71,8 +71,6 @@ export default {
         cartQueryFragment: CART_QUERY_FRAGMENT,
       });
 
-      // console.log(storefront, "Shopify storefrong");
-      // await StorefrontApi.SetStorefront(storefront);
 
       /**
        * Create a Remix request handler and pass

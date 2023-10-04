@@ -1,5 +1,7 @@
+import { useLoaderData } from '@remix-run/react';
 import { CartForm, type CartQueryData } from '@shopify/hydrogen';
-import { ActionArgs, json } from '@shopify/remix-oxygen';
+import { ActionArgs, LoaderArgs, json } from '@shopify/remix-oxygen';
+import Cart from 'app/components/CartDrawer';
 import invariant from 'tiny-invariant';
 
 export async function action({ request, context }: ActionArgs) {
@@ -31,4 +33,16 @@ export async function action({ request, context }: ActionArgs) {
         result,
         { status: 200, headers },
     );
+}
+
+export async function loader({ context }: LoaderArgs) {
+    const { cart } = context;
+    return {
+        cart: await cart.get()
+    }
+}
+
+export default function CartRoute() {
+    const { cart } = useLoaderData<typeof loader>();
+    return <Cart />;
 }

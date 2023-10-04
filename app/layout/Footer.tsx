@@ -39,7 +39,7 @@ const Footer = (props: Props) => {
                                         {menu.items.map((item, index) => {
                                             const itemRoute = new URL(item.url || "").pathname
                                             return (
-                                                <Link key={item.url} to={itemRoute}>{item.title}</Link>
+                                                <Link key={itemRoute + index} to={itemRoute}>{item.title}</Link>
                                             )
                                         })}
                                     </div>

@@ -12,7 +12,6 @@ class SearchService {
                 query: searchQuery,
             }
         });
-        console.log(data,);
         return data.products;
     }
 

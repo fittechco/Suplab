@@ -11,7 +11,6 @@ class ProductController {
   }
 
   static async getProductById(args: { id: string }) {
-    console.log('getProductById controller', args);
     const { id } = args;
     try {
       const product = await ProductService.getProduct({ id: args.id, selectedOptions: [] });

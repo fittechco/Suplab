@@ -3,7 +3,7 @@ import { LoaderArgs, json } from '@shopify/remix-oxygen';
 import { App } from '../../api/type';
 import { useLoaderData } from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import FTicons from 'app/ft-lib/Icon';
+import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
 
 interface FAQSectionProps {
@@ -57,9 +57,8 @@ const FAQ = ({ section }: FAQSectionProps) => {
                 </button>
               </div>
               <div
-                className={`faqSection__questions__question__answer w-full ${
-                  isOpen[index] ? 'open' : ''
-                }`}
+                className={`faqSection__questions__question__answer w-full ${isOpen[index] ? 'open' : ''
+                  }`}
               >
                 <p className="text-xl">{faqFields.answer.value}</p>
               </div>

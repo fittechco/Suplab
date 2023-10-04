@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import type { App } from "app/api/type";
-import FTicons from "app/ft-lib/Icon";
+import FTicons from "app/ft-lib/FTicon";
 import { Colors } from "app/ft-lib/shared";
 import { useEffect, useRef, useState } from "react";
 import { HeaderQuery } from "storefrontapi.generated";
@@ -27,11 +27,9 @@ export default function MobileNavItem(props: MobileNavItemProps) {
 
         const observer = new MutationObserver((mutation) => {
 
-            console.log("mutation");
             mutation.forEach((item) => {
                 //   for every mutation we check if the mutation is a childList mutation
                 // then with the nodes length we calculate the height of the menu and set it to the state
-                console.log(item.addedNodes.length, "item");
                 if (item.type !== "childList") {
                     return
                 }

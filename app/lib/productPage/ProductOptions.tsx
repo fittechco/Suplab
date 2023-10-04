@@ -59,6 +59,7 @@ export default function ProductOptions(props: Props) {
                                             color: isSelected ? Colors.textSecondary : Colors.textSecondary,
                                             borderRadius: '9999px',
                                         }}
+                                        preventScrollReset
                                         key={index}
                                         to={`${pathname}?${linkParams.toString()}`}>
                                         <p className='text-sm md:text-base font-medium capitalize tracking-wider'>{value}</p>

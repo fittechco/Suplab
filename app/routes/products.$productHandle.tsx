@@ -8,14 +8,11 @@ import { useLoaderData } from '@remix-run/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css/pagination';
 import { Colors } from 'app/ft-lib/shared';
-import { CartForm, Image, Money } from '@shopify/hydrogen';
+import { Image } from '@shopify/hydrogen';
 import { useQuery } from 'react-query';
 import ProductsSwiper from 'app/components/ProductsSwiper';
 import MobileProductDetails from 'app/lib/productPage/MobileProductDetails';
-import CTAButton from 'app/components/CTAButton';
-import ProductOptions from 'app/lib/productPage/ProductOptions';
-import Acordion from 'app/components/Acordion';
-import Quantity from 'app/components/Quantity';
+import ProductForm from 'app/lib/productPage/ProductForm';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -27,11 +24,11 @@ export async function loader({ context, params, request }: LoaderArgs) {
       value: value
     })
   })
-  console.log(productHandle);
   invariant(productHandle != null, 'productHandle is required');
   const product = await ProductController.getProductByHandle({ handle: productHandle, selectedOptions });
   const selectedVariant =
     product.selectedVariant ?? product?.variants?.nodes[0];
+  console.log(product.selectedVariant, "product.selectedVariant");
   return {
     product: product,
     selectedVariant: selectedVariant,
@@ -54,7 +51,6 @@ const ProductPage = () => {
   });
   const [isTop, setIsTop] = useState(true);
 
-
   useEffect(() => {
     const updateScrollDirection = () => {
       window.scrollY > 0 ? setIsTop(false) : setIsTop(true);
@@ -69,6 +65,7 @@ const ProductPage = () => {
     productRecommendations.refetch();
     if (swiperContainer.current == null) {
       return;
+
     }
     const swiper = new Swiper(swiperContainer.current, {
       spaceBetween: 10,
@@ -147,65 +144,8 @@ const ProductPage = () => {
             <div className="swiper-pagination" />
           </div>
         </div>
-        <div className='product-details max-md:hidden flex flex-col gap-5 w-full'>
-          <span
-            style={{
-              backgroundColor: Colors.secondaryLight,
-              color: Colors.textSecondary,
-            }}
-            className='p-1 text-sm w-fit rounded-md'>{product.vendor}</span>
-          <div>
-            <div className='product-title'>
-              <h1 className='text-2xl font-bold'>{product.title}</h1>
-            </div>
-            <div className='product-price'>
-              <Money
-                data={product.priceRange.minVariantPrice}
-                className='text-xl font-bold'
-              />
-            </div>
-          </div>
-          <ProductOptions selectedVariant={selectedVariant} options={product.options} />
-          <Quantity
-            onChange={(value) => {
-              setQuantity(value);
-            }}
-            value={quantity} />
-          <div className='flex items-center'>
-            <CartForm
-              route="/cart"
-              inputs={{
-                lines: [
-                  {
-                    merchandiseId: selectedVariant.id,
-
-                  },
-                ],
-              }}
-              action={CartForm.ACTIONS.LinesAdd}
-            >
-              {(fetcher) => (
-                <>
-                  <CTAButton
-                    onClick={() => {
-                      window.location.href = window.location.href + '#cart-aside';
-                    }}
-                    disabled={
-                      !selectedVariant.availableForSale ??
-                      fetcher.state !== 'idle'
-                    }
-                    fullWidth
-                    text={selectedVariant?.availableForSale
-                      ? 'Add to cart'
-                      : 'Sold out'}
-                  />
-                </>
-              )}
-            </CartForm>
-
-          </div>
-          <Acordion title='Description' details={product.description} />
-          <Acordion title='Shipping Info' details={"Shipping info goes here"} />
+        <div className='max-md:hidden'>
+          <ProductForm selectedVariant={selectedVariant} product={product} />
         </div>
         <MobileProductDetails selectedVariant={selectedVariant} isTop={isTop} product={product} />
       </div>

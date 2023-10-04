@@ -1,4 +1,4 @@
-import FTicons from 'app/ft-lib/Icon'
+import FTicons from 'app/ft-lib/FTicon'
 import { Colors } from 'app/ft-lib/shared'
 import React, { useRef, useState } from 'react'
 

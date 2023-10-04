@@ -179,7 +179,7 @@ export default function FTicons(
                     style={style}
                     className={`${className}`}
                     xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.33333 1.33334L14.6667 14.6667M1.33333 14.6667L14.6667 1.33334" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M1.33333 1.33334L14.6667 14.6667M1.33333 14.6667L14.6667 1.33334" stroke="#202020" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
 
 
@@ -232,8 +232,15 @@ export default function FTicons(
             )
         case "trash":
             return (
-                <svg style={style} onClick={handle} className={className} width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path className="fill-inherit" d="M9.99967 31.6667C9.99967 33.5 11.4997 35 13.333 35H26.6663C28.4997 35 29.9997 33.5 29.9997 31.6667V11.6667H9.99967V31.6667ZM13.333 15H26.6663V31.6667H13.333V15ZM25.833 6.66667L24.1663 5H15.833L14.1663 6.66667H8.33301V10H31.6663V6.66667H25.833Z" fill="#D43A3A" />
+                <svg
+                    viewBox="0 0 24 24"
+                    fill={fill}
+                    style={style}
+                    height="1em"
+                    width="1em"
+
+                >
+                    <path d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12z" />
                 </svg>
 
 
