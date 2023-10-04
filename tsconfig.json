@@ -28,7 +28,7 @@
     ],
     "paths": {
       "~/*": [
-        "index.ts/*"
+        "./*"
       ]
     },
     "noEmit": true
