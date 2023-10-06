@@ -71,7 +71,9 @@ export default function MobileFiltersMenu(props: Props) {
   const searchedParams = Array.from(searchParams.entries())
     .filter(([key]) => key !== 'min' && key !== 'max')
     .map((param) => {
-      const [key, value] = Object.entries(param)[0];
+      const [key, value] = param;
+      // console.log('key', key, 'value', value, param);
+
       return (
         <MobileFilterOption
           key={key}
@@ -79,6 +81,7 @@ export default function MobileFiltersMenu(props: Props) {
           label={removeDash(value)}
           value={value}
           isSelected={true}
+          hasX={true}
         />
       );
     });
@@ -110,10 +113,10 @@ export default function MobileFiltersMenu(props: Props) {
                 />
               );
             })} */}
-            {searchedParams}
+          {searchedParams}
         </div>
 
-        <HorizontalRule />
+        {searchedParams.length > 0 && <HorizontalRule />}
 
         <div className="filtersGroup flex flex-col gap-3">
           <h4 className="filtersTitle text-[#4A4A49] text-bold text-lg">
