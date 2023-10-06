@@ -165,7 +165,6 @@ export default function App() {
               <Outlet />
             </Layout>
             <CartDrawer />,
-            document.body
             <ScrollRestoration nonce={nonce} />
             <Scripts nonce={nonce} />
             <LiveReload nonce={nonce} />

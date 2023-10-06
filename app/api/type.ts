@@ -279,7 +279,7 @@ export namespace App {
       fields: Array<
         | Shopify.MetaobectsDef.Multi_Line_Text_Field<'sub_headline'>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-          key: 'headline' | 'button_text';
+          key: 'headline';
         }>
         | Shopify.MetaobectsDef.FileReference<{
           key: 'desktop_image' | 'mobile_image';
