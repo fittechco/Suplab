@@ -1,15 +1,12 @@
-import {useSearchParams} from '@remix-run/react';
+import { useSearchParams } from '@remix-run/react';
 import {
   Select,
-  SelectGroup,
-  SelectValue,
   SelectTrigger,
+  SelectValue,
   SelectContent,
-  SelectLabel,
   SelectItem,
-  SelectSeparator,
 } from './ui/select';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 
 type DropdownProps = {
   placeholder: string;
@@ -22,17 +19,14 @@ type Option = {
   label: string;
 };
 
-function Dropdown({placeholder, options, param}: DropdownProps) {
+function Dropdown({ placeholder, options, param }: DropdownProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const getOptionFromValue = (value: string | null) => {
     if (!value) return null;
     return options.find((option) => option.value === value);
   };
-  var a = 1;
-  a = 2;
 
-  useEffect(() => {}, [a]);
   return (
     <Select
       onValueChange={(value) => {
@@ -47,7 +41,6 @@ function Dropdown({placeholder, options, param}: DropdownProps) {
         );
       }}
     >
-      {/* <SelectTrigger className="w-[180px]"> */}
       <SelectTrigger className="uppercase">
         <SelectValue
           placeholder={
@@ -61,7 +54,6 @@ function Dropdown({placeholder, options, param}: DropdownProps) {
             {option.label}
           </SelectItem>
         ))}
-        {/* <SelectItem value="light">Light</SelectItem> */}
       </SelectContent>
     </Select>
   );

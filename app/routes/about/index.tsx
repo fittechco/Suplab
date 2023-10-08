@@ -1,10 +1,149 @@
+import { useEffect, useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
+import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import { App } from '../../api/type';
+import AboutUsHero from './AboutUsHero';
+import Features from './Features';
+import Services from './Services';
+import Contact from '../_index/Contact';
+import FAQ from '../_index/FAQ';
+
+export type Shop = {
+  name: string;
+};
+
+export async function loader({ context }: LoaderArgs) {
+  const storefront = await context.storefront.query(SHOPQUERY);
+  const { metaobject } = storefront;
+  return json({
+    metaobject,
+  });
+}
+
 function AboutPage() {
+  const { metaobject }: { metaobject: App.AboutPageTemplate.Template } =
+    useLoaderData();
+  const [sections, setSections] = useState<App.AboutPageTemplate.Sections>([]);
+
+  useEffect(() => {
+    metaobject.fields.forEach((field) => {
+      if (field.key === 'sections') {
+        setSections(field.references.nodes);
+      }
+    });
+  }, [metaobject.fields]);
+
   return (
-    <div>
-      <h1>About Page</h1>
-      <p>This is the about page</p>
+    <div className="h-full w-full space-y-6">
+      {sections.map((section) => {
+        console.log(section);
+        if (section.type === 'hero_section') {
+          return <AboutUsHero section={section} key={section.type} />;
+        }
+
+        if (section.type === 'features_section') {
+          return <Features section={section} key={section.type} />;
+        }
+
+        if (section.type === 'services_section') {
+          return <Services section={section} key={section.type} />;
+        }
+        
+        if (section.type === 'contact_section') {
+          return <Contact section={section} key={section.type} />;
+        }
+
+        if (section.type === 'faq_section') {
+          return <FAQ section={section} key={section.type} />;
+        }
+
+      })}
     </div>
   );
 }
 
 export default AboutPage;
+
+export const ON_METAOBJECT = `#graphql
+fragment Metaobject on Metaobject {
+  type
+  fields {
+    key
+    value
+    type
+    references(first: 20) {
+      nodes {
+        ... on Metaobject {
+          type
+          fields {
+            key
+            value
+            type
+            reference{
+              ... on MediaImage {
+                image {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    reference {
+      ... on MediaImage {
+        image {
+          url
+        }
+      }
+      ... on Collection {
+        handle
+        title
+        products(first: 20) {
+          nodes {
+            title
+            handle
+            description
+            priceRange{
+              minVariantPrice{
+                amount
+                currencyCode
+              }
+              }
+            images(first: 20) {
+              nodes {
+                url
+              }
+            }
+            featuredImage {
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`
+
+
+const SHOPQUERY = `#graphqls
+query ShopName {
+  metaobject(handle: {handle: "aboutpage", type: "page"}) {
+    fields {
+      type
+      key
+      value
+      references(first: 20) {
+        nodes {
+          ... on Metaobject {
+           ...Metaobject
+          }
+          __typename
+        }
+      }
+    }
+  }
+}
+${ON_METAOBJECT}
+`;

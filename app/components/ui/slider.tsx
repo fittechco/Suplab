@@ -29,10 +29,15 @@ const Slider = React.forwardRef<
       min={0}
       max={100}
       onValueChange={(value) => {
+        const [min, max] = value;
+        // Format the values as an object
+        const priceFilter = { price: { min, max } };
+
+        // Update the search params
         setSearchParams(
           (prev) => {
-            prev.set('min', value[0].toString());
-            prev.set('max', value[1].toString());
+            //set price filter
+            prev.set('price', JSON.stringify(priceFilter));
             return prev;
           },
           {

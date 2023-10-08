@@ -32,7 +32,9 @@ const Promotion = ({section}: PromotionSectionProps) => {
         }}
         className="flex md:flex-row justify-start items-end relative"
       >
-        <p className="ft-text-main">{fields.title.value}</p>
+        {fields.title != null && (
+          <p className="ft-text-main">{fields.title.value}</p>
+        )}
       </div>
     </div>
   );

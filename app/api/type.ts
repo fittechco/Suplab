@@ -263,8 +263,7 @@ export namespace App {
       | FaqSection
     >;
   }
-
-  export namespace CollectionPageTemplate {
+  export namespace AboutPageTemplate {
     export type Template = {
       fields: Array<
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
@@ -279,9 +278,15 @@ export namespace App {
       >;
     };
 
-    export type SectionType = 'hero_section' | 'products_section';
+    export type SectionType =
+      | 'hero_section'
+      | 'features_section'
+      | 'services_section'
+      | 'contact_section'
+      | 'faq_section';
 
-    export type HeroSection = {
+    export type AboutUsHeroSection = {
+
       type: 'hero_section';
       fields: Array<
         | Shopify.MetaobectsDef.Multi_Line_Text_Field<'sub_headline'>
@@ -299,17 +304,110 @@ export namespace App {
       >;
     };
 
-    // export type ProductsSection = {
-    //   type: 'products_section';
-    //   fields: Array<ProductCard>;
-    // };
+    export type FeaturesSection = {
+      type: 'features_section';
+      fields: Array<
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+          key: 'title';
+        }>
+        | Shopify.MetaobectsDef.List_Metaobject_Reference<{
+          key: 'features';
+          references: {
+            nodes: Array<{
+              type: 'feature';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title';
+                }>
+                | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
+      >;
+    };
 
-    // export type ProductCard = Pick<
-    //   Shopify.Storefront.Product,
-    //   'id' | 'priceRange' | 'title' | 'handle' | 'images'
-    // >;
+    export type ServicesSection = {
+      type: 'services_section';
+      fields: Array<
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+          key: 'title';
+        }>
+        | Shopify.MetaobectsDef.List_Metaobject_Reference<{
+          key: 'services';
+          references: {
+            nodes: Array<{
+              type: 'service';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title' | 'button_text';
+                }>
+                | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
+      >;
+    };
 
-    export type Sections = Array<HeroSection>;
+    export type ContactSection = {
+      type: 'contact_section';
+      fields: Array<
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+          key: 'email' | 'phone' | 'location_button_text' | 'contact_button_text';
+        }>
+        | Shopify.MetaobectsDef.FileReference<{
+          key: 'image';
+          reference: {
+            image: {
+              url: string;
+            };
+          };
+        }>
+      >;
+    };
+
+    export type FaqSection = {
+      type: 'faq_section';
+      fields: Array<
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+          key: 'title';
+        }>
+        | Shopify.MetaobectsDef.List_Metaobject_Reference<{
+          key: 'faqs';
+          references: {
+            nodes: Array<{
+              type: 'faq';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'question' | 'answer';
+                }>
+              >;
+            }>;
+          };
+        }>
+      >;
+    };
+
+    export type Sections = Array<
+      AboutUsHeroSection | FeaturesSection | ServicesSection | ContactSection | FaqSection
+    >;
   }
 
   export namespace Shopify {

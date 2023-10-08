@@ -5,63 +5,16 @@ import MobileFilterOption from './MobileFilterOption';
 import {Slider} from './ui/slider';
 import {useLocation, useNavigation, useSearchParams} from '@remix-run/react';
 import {Fragment} from 'react';
+import {VariantOptionFilter} from '@shopify/hydrogen/storefront-api-types';
 
 type Props = {
   show: boolean;
   setShow: (show: boolean) => void;
+  filters: {name: string; options: VariantOptionFilter[]}[];
 };
 
-const filters = [
-  {
-    param: 'brand',
-    options: [
-      {
-        value: 'brand-1',
-        label: 'brand 1',
-      },
-      {
-        value: 'brand-2',
-        label: 'brand 2',
-      },
-    ],
-  },
-  {
-    param: 'color',
-    options: [
-      {
-        value: 'color-1',
-        label: 'color 1',
-      },
-      {
-        value: 'color-2',
-        label: 'color 2',
-      },
-      {
-        value: 'color-3',
-        label: 'color 3',
-      },
-      {
-        value: 'color-4',
-        label: 'color 4',
-      },
-    ],
-  },
-  {
-    param: 'size',
-    options: [
-      {
-        value: 'size-1',
-        label: 'size 1',
-      },
-      {
-        value: 'size-2',
-        label: 'size 2',
-      },
-    ],
-  },
-];
-
 export default function MobileFiltersMenu(props: Props) {
+  console.log('props.filters', props.filters);
   const {pathname, search} = useLocation();
   const [searchParams] = useSearchParams();
   const navigation = useNavigation();
@@ -72,7 +25,7 @@ export default function MobileFiltersMenu(props: Props) {
     .filter(([key]) => key !== 'min' && key !== 'max')
     .map((param) => {
       const [key, value] = param;
-      // console.log('key', key, 'value', value, param);
+      console.log('key', key, 'value', value, param);
 
       return (
         <MobileFilterOption
@@ -129,11 +82,11 @@ export default function MobileFiltersMenu(props: Props) {
 
         <HorizontalRule classNames="mt-4" />
 
-        {filters.map((filter) => (
-          <Fragment key={filter.param}>
+        {props.filters.map((filter) => (
+          <Fragment key={filter.name}>
             <div className="filtersGroup flex flex-col gap-3">
               <h4 className="filtersTitle text-[#4A4A49] text-bold text-lg">
-                {filter.param}
+                {filter.name}
               </h4>
               <div
                 className="filtersWrapper grid grid-cols-3 gap-5"
@@ -142,13 +95,13 @@ export default function MobileFiltersMenu(props: Props) {
                 }}
               >
                 {filter.options.map((option) => {
-                  const currentOptionVal = searchParams.get(filter.param);
+                  const currentOptionVal = searchParams.get(filter.name);
                   const isSelected = currentOptionVal === option.value;
                   return (
                     <MobileFilterOption
                       key={option.value}
-                      param={filter.param}
-                      label={option.label}
+                      param={filter.name}
+                      label={option.name}
                       value={option.value}
                       isSelected={isSelected}
                     />

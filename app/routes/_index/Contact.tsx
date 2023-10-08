@@ -29,13 +29,10 @@ const Contact = ({section}: ContactSectionProps) => {
     >
       <div
         style={{
-          borderRadius: '24px',
           boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
-          height: '100%',
-          width: '100%',
           overflow: 'hidden',
         }}
-        className="flex md:flex-row w-full justify-center items-center relative"
+        className="flex md:flex-row w-full h-full justify-center items-center relative rounded-3xl"
       >
         <img
           className="w-full h-full object-cover"
@@ -46,12 +43,8 @@ const Contact = ({section}: ContactSectionProps) => {
           style={{
             position: 'absolute',
             backgroundColor: 'rgba(0,0,0,0.5)',
-            height: '100%',
-            width: '100%',
-            top: 0,
-            left: 0,
           }}
-          className="w-full flex flex-col gap-5 md:gap-4 z-10 items-center justify-end container"
+          className="w-full h-full top-0 left-0 flex flex-col gap-5 md:gap-4 z-10 items-center justify-end container"
         >
           <div
             style={{
@@ -60,7 +53,7 @@ const Contact = ({section}: ContactSectionProps) => {
             className="contactSection__content md:mb-12 mb-6 flex flex-col"
           >
             <div className="flex flex-col">
-              {fields.email.value != null && (
+              {fields.email != null && (
                 <div
                   style={{
                     color: Colors.textSecondary,
@@ -75,8 +68,7 @@ const Contact = ({section}: ContactSectionProps) => {
                       lineHeight: 'normal',
                       textTransform: 'uppercase',
                     }}
-                    className='md:text-3xl text-xl'
-                    // className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
+                    className="md:text-3xl text-xl"
                   >
                     Email:
                   </p>
@@ -87,13 +79,13 @@ const Contact = ({section}: ContactSectionProps) => {
                       lineHeight: 'normal',
                       marginLeft: '10px',
                     }}
-                    className='md:text-3xl text-xl'
+                    className="md:text-3xl text-xl"
                   >
                     {fields.email.value}
                   </p>
                 </div>
               )}
-              {fields.phone.value != null && (
+              {fields.phone != null && (
                 <div
                   style={{
                     color: Colors.textSecondary,
@@ -109,20 +101,18 @@ const Contact = ({section}: ContactSectionProps) => {
                       letterSpacing: '0.68px',
                       textTransform: 'uppercase',
                     }}
-                    // className="md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
-                    className='md:text-3xl text-xl'
+                    className="md:text-3xl text-xl"
                   >
                     Phone:
                   </p>
                   <p
                     style={{
-                      // fontSize: '24px',
                       fontStyle: 'normal',
                       fontWeight: '400',
                       lineHeight: 'normal',
                       marginLeft: '10px',
                     }}
-                    className='md:text-3xl text-xl'
+                    className="md:text-3xl text-xl"
                   >
                     {fields.phone.value}
                   </p>
@@ -150,7 +140,7 @@ const Contact = ({section}: ContactSectionProps) => {
                       lineHeight: 'normal',
                       textTransform: 'uppercase',
                     }}
-                    className='md:text-3xl text-xl'
+                    className="md:text-3xl text-xl"
                   >
                     {fields.contact_button_text.value}
                   </p>
@@ -176,7 +166,7 @@ const Contact = ({section}: ContactSectionProps) => {
                       lineHeight: 'normal',
                       textTransform: 'uppercase',
                     }}
-                    className='md:text-3xl text-xl'
+                    className="md:text-3xl text-xl"
                   >
                     {fields.location_button_text.value}
                   </p>

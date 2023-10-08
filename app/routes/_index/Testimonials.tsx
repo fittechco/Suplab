@@ -3,8 +3,8 @@ import {App} from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
-import {Navigation} from 'swiper/modules'
-import beforeAndAfter from '../../../public/before&after.png';
+import {Navigation} from 'swiper/modules';
+import {Colors} from 'app/ft-lib/shared';
 
 interface TestimonialsSectionProps {
   section: App.HomePageTemplate.TestimonialsSection;
@@ -12,7 +12,7 @@ interface TestimonialsSectionProps {
 
 const Testimonials = ({section}: TestimonialsSectionProps) => {
   const fields = arrayToObject({array: section.fields});
-  const [currentSlide, setCurrentSlide] = useState(0); // Track the current slide index
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const swiperContainer = useRef<HTMLDivElement | null>(null);
 
@@ -22,7 +22,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
     }
     const swiper = new Swiper(swiperContainer.current, {
       spaceBetween: 20,
-      slidesPerView: 'auto',
+      slidesPerView: 1.25,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -30,6 +30,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
       breakpoints: {
         768: {
           spaceBetween: 20,
+          slidesPerView: 4,
         },
       },
       modules: [Navigation],
@@ -51,8 +52,15 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
       }}
       className="testimonialsSection w-full !container mx-auto"
     >
-      <p className="ft-text-main md:text-3xl text-2xl mb-10">{fields.title.value}</p>
-      <div className="testimonialsSection__testimonials relative swiper-container">
+      {fields.title != null && (
+        <p className="ft-text-main md:text-3xl text-2xl mb-10">
+          {fields.title.value}
+        </p>
+      )}
+      <div
+        ref={swiperContainer}
+        className="testimonialsSection__testimonials swiper-container relative"
+      >
         <div className="swiper-wrapper">
           {fields.testimonials.references.nodes.map((testimonial, index) => {
             const testimonialFields = arrayToObject({
@@ -67,90 +75,79 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
               <div
                 key={index}
                 style={{
-                  width: '315px',
                   marginLeft: isFirstSlide ? 'auto' : '0',
                   marginRight: isLastSlide ? 'auto' : '0',
                 }}
                 className="swiper-slide"
               >
                 <div
-                  className="testimonialsSection__testimonial"
+                  className="testimonialsSection__testimonial flex justify-center items-end h-fit w-fit rounded-[17.5px]"
                   style={{
-                    width: '315px',
-                    height: '441.29px',
-                    borderRadius: '17.419px',
                     boxShadow:
                       '0px 8.70968px 13.06452px 0px rgba(0, 0, 0, 0.16)',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
                   }}
                 >
                   <div className="lightgray 50% / cover no-repeat flex">
-                    <img
-                      style={{
-                        height: '441.29px',
-                        borderRight: '1px solid rgba(255, 255, 255, 0.40)',
-                        borderTopLeftRadius: '17.419px',
-                        borderBottomLeftRadius: '17.419px',
-                      }}
-                      className="w-1/2 h-full"
-                      src={testimonialFields.before_image.reference.image.url}
-                      alt=""
-                    />
-                    <img
-                      style={{
-                        height: '441.29px',
-                        borderLeft: '1px solid rgba(255, 255, 255, 0.40)',
-                        borderTopRightRadius: '17.419px',
-                        borderBottomRightRadius: '17.419px',
-                      }}
-                      className="w-1/2 h-full"
-                      src={testimonialFields.after_image.reference.image.url}
-                      alt=""
-                    />
+                    {testimonialFields.before_image != null && (
+                      <img
+                        style={{
+                          height: '441.29px',
+                          borderRight: '1px solid rgba(255, 255, 255, 0.40)',
+                          borderTopLeftRadius: '17.419px',
+                          borderBottomLeftRadius: '17.419px',
+                        }}
+                        className="w-1/2 h-full object-fill"
+                        src={testimonialFields.before_image.reference.image.url}
+                        alt=""
+                      />
+                    )}
+                    {testimonialFields.after_image != null && (
+                      <img
+                        style={{
+                          height: '441.29px',
+                          borderLeft: '1px solid rgba(255, 255, 255, 0.40)',
+                          borderTopRightRadius: '17.419px',
+                          borderBottomRightRadius: '17.419px',
+                        }}
+                        className="w-1/2 h-full object-fill"
+                        src={testimonialFields.after_image.reference.image.url}
+                        alt=""
+                      />
+                    )}
                   </div>
                   <div
                     style={{
-                      display: 'flex',
-                      width: '291.774px',
-                      padding: '8px',
-                      flexDirection: 'column',
-                      justifyContent: 'flex-end',
-                      alignItems: 'flex-start',
-                      borderRadius: '17.419px',
                       background: 'rgba(250, 249, 246, 0.60)',
                       backdropFilter: 'blur(3.6290323734283447px)',
-                      marginBottom: '15px',
-                      margin: '12px',
-                      position: 'absolute',
                     }}
-                    className="testimonial__content"
+                    className="testimonial__content absolute flex p-2 flex-col justify-end items-start rounded-[17.5px] mb-[15px] m-3"
                   >
-                    <p
-                      style={{
-                        fontFamily: 'Montserrat',
-                        fontStyle: 'normal',
-                        fontWeight: 'bold',
-                        fontSize: '20px',
-                        lineHeight: '24px',
-                        color: '#FFFFFF',
-                      }}
-                    >
-                      {testimonialFields.name.value}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: 'Montserrat',
-                        fontStyle: 'normal',
-                        fontWeight: 'normal',
-                        fontSize: '14px',
-                        lineHeight: '17px',
-                        color: '#FFFFFF',
-                      }}
-                    >
-                      {testimonialFields.description.value}
-                    </p>
+                    {testimonialFields.name != null && (
+                      <p
+                        style={{
+                          fontFamily: 'Roboto Condensed',
+                          fontStyle: 'normal',
+                          fontWeight: 'bold',
+                          fontSize: '20px',
+                          lineHeight: '24px',
+                        }}
+                      >
+                        {testimonialFields.name.value}
+                      </p>
+                    )}
+                    {testimonialFields.description != null && (
+                      <p
+                        style={{
+                          fontFamily: 'Roboto Condensed',
+                          fontStyle: 'normal',
+                          fontWeight: 'normal',
+                          fontSize: '14px',
+                          lineHeight: '17px',
+                        }}
+                      >
+                        {testimonialFields.description.value}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -162,24 +159,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
             currentSlide === 0 ? 'hidden' : 'flex'
           }`}
         >
-          <button
-            className="swiper-button-prev-icon text-4xl"
-            style={{
-              borderRadius: '33px',
-              border: '1px solid rgba(148, 148, 148, 0.40)',
-              background: 'rgba(255, 255, 255, 0.40)',
-              backdropFilter: 'blur(2.5px)',
-              display: 'flex',
-              width: '39px',
-              height: '39px',
-              padding: '9px 12px 8.222px 13px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexShrink: '0',
-            }}
-          >
-            &larr;
-          </button>
+          <button className="swiper-button-prev-icon"></button>
         </div>
         <div
           className={`swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden ${
@@ -188,24 +168,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
               : 'flex'
           }`}
         >
-          <button
-            className="swiper-button-next-icon text-4xl"
-            style={{
-              borderRadius: '33px',
-              border: '1px solid rgba(148, 148, 148, 0.40)',
-              background: 'rgba(255, 255, 255, 0.40)',
-              backdropFilter: 'blur(2.5px)',
-              display: 'flex',
-              width: '39px',
-              height: '39px',
-              padding: '9px 12px 8.222px 13px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexShrink: '0',
-            }}
-          >
-            &rarr;
-          </button>
+          <button className="swiper-button-next-icon"></button>
         </div>
       </div>
     </div>

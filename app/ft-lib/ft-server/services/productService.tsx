@@ -1,6 +1,7 @@
-import { LoaderArgs } from '@shopify/remix-oxygen';
+import {LoaderArgs} from '@shopify/remix-oxygen';
 import StorefrontApi from '../../../api/storefront';
 import invariant from 'tiny-invariant';
+import { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 
 // the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
@@ -12,6 +13,10 @@ export const PRODUCTFRAGMENT = `#graphql
     description
     priceRange {
       minVariantPrice {
+        amount
+        currencyCode
+      }
+      maxVariantPrice {
         amount
         currencyCode
       }
@@ -263,9 +268,98 @@ class ProductService {
     invariant(data.product != null, 'Product not found');
     return data.product;
   }
+  static async getFilteredProducts(args: { handle: string; filters: ProductFilter[] }) {
+    const query = `#graphql
+      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!]) {
+        collection(handle: $handle) {
+          id
+          title
+          image {
+            url
+          }
+          description
+          products(first: 10, filters: $filters) {
+            nodes {
+              id
+              title
+              handle
+              images(first: 5) {
+                nodes {
+                  url
+                }
+              }
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+                maxVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+              availableForSale
+              productType
+              vendor
+              variants(first: 10) {
+                nodes {
+                  selectedOptions {
+                    name
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
 
+    const data = await StorefrontApi.storeFront().query(query, {
+      variables: {
+        handle: args.handle,
+        filters: args.filters,
+      },
+    });
+    console.log('data', data);
+    invariant(data.collection != null, 'Collection not found');
+    return data.collection;
+  }
+  
+  static async getAvailableFilters(args: {handle: string}) {
+    console.log('args from service', args);
+    const query = `#graphql
+    query GetAvailableFilters($handle: String!) {
+      collection(handle: $handle) {
+        handle
+        products(first: 10) {
+          filters {
+            id
+            label
+            type
+            values {
+              id
+              label
+              count
+              input
+            }
+          }
+        }
+      }
+    }
+    `;
 
-  static async getProductRecommendations(args: { productId: string }) {
+    const data = await StorefrontApi.storeFront().query(query, {
+      variables: {
+        handle: args.handle,
+      },
+    });
+    console.log('data', data);
+    invariant(data.collection != null, 'Collection not found');
+    return data.collection;
+  }
+
+  static async getProductRecommendations(args: {productId: string}) {
     const query = `#graphql
       query ProductRecommendations($productId: ID!) {
         productRecommendations(productId: $productId) {

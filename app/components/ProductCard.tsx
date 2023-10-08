@@ -8,6 +8,7 @@ import LazyImage from '../ft-lib/LazyImage';
 
 type Props = {
   product: ProductQuery['product'];
+  // product: App.CollectionPageTemplate.ProductCard;
   style?: React.CSSProperties;
 };
 
@@ -32,7 +33,8 @@ export default function ProductCard(props: Props) {
         ...props.style,
       }}
       key={product.id}
-      className="search-result-item flex flex-col gap-2"
+      // className="search-result-item flex flex-col gap-2"
+      className="search-result-item flex flex-col gap-2 h-[300px]"
     >
       <div
         style={{

@@ -11,80 +11,86 @@ import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
 import { createPortal } from 'react-dom';
+import {Colors} from '../ft-lib/shared';
+import {
+  SelectedOption,
+  VariantOptionFilter,
+  Product,
+  ProductFilter,
+} from '@shopify/hydrogen/storefront-api-types';
+import {ProductQuery} from '../../storefrontapi.generated';
+import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 
 export type Shop = {
   name: string;
 };
 
-// todo add hero image to storefront
-// todo design for select options
-// todo go to collections page dynamically
-// todo bottom drawer
-// todo invariant
-
-const dropdowns = [
-  {
-    placeholder: 'brands',
-    param: 'brand',
-    options: [
-      {
-        value: 'brand-1',
-        label: 'brand 1',
-      },
-      {
-        value: 'brand-2',
-        label: 'brand 2',
-      },
-    ],
-  },
-  {
-    placeholder: 'flavors',
-    param: 'flavor',
-    options: [
-      {
-        value: 'flavor-1',
-        label: 'flavor 1',
-      },
-      {
-        value: 'flavor-2',
-        label: 'flavor 2',
-      },
-    ],
-  },
-  {
-    placeholder: 'dietary requirements',
-    param: 'dietary',
-    options: [
-      {
-        value: 'dietary-1',
-        label: 'dietary 1',
-      },
-      {
-        value: 'dietary-2',
-        label: 'dietary 2',
-      },
-    ],
-  },
-];
-
-export async function loader({context, params}: LoaderArgs) {
-  const {collectionHandle} = params;
+export async function loader({ context, params, request }: LoaderArgs) {
+  const collectionHandle = params.collectionHandle;
+  console.log('collectionHandle', collectionHandle);
 
   invariant(collectionHandle, 'Collection handle is required');
 
-  const result = await context.storefront.query(COLLECTIONQUERY, {
-    variables: {handle: collectionHandle},
+  const searchParams = new URL(request.url).searchParams;
+
+  const dynamicFilters: any = [];
+
+  searchParams.forEach((value, param) => {
+    try {
+      const parsedValue = JSON.parse(value);
+      console.log('parsedValue', parsedValue);
+      dynamicFilters.push(parsedValue);
+    } catch (error) {
+      dynamicFilters.push({ [param]: value });
+    }
   });
-  const collection = result.collection;
+
+  const availableFilters = await ProductController.getAvailableFilters({
+    handle: collectionHandle,
+  });
+
+  console.log('availableFilters', availableFilters);
+
+  const availableDynamicFilters = extractAvailableFilters(
+    availableFilters.products.filters
+  );
+
+  console.log('availableDynamicFilters', availableDynamicFilters);
+
+  const collection = await ProductController.getFilteredProducts({
+    handle: collectionHandle,
+    filters: dynamicFilters,
+  });
+
+  console.log('dynamicFilters', dynamicFilters);
+
   console.log('collection', collection);
+
   return json({
-    collection,
+    collection: collection,
+    availableFilters: availableDynamicFilters,
   });
 }
+
+const extractAvailableFilters = (filters: any) => {
+  return filters.map((filter: any) => {
+    return {
+      param: filter.label,
+      options: filter.values.map((option: any) => ({
+        value: option.input,
+        label: option.label,
+      })),
+    };
+  });
+};
+
 
 function Collection() {
   const data = useLoaderData<typeof loader>();
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
+
+  const filtersData = data.availableFilters;
+  console.log('filtersData', filtersData);
 
   if (!data.collection) {
     return <div>Loading...</div>;
@@ -96,25 +102,68 @@ function Collection() {
 
   return (
     <div>
-      {/* <Hero /> */}
       <main className="flex flex-col relative container">
+        <div className="collectionHero__Section w-full mx-auto md:h-[470px] h-[215px]">
+          <div
+            style={{
+              borderRadius: '24px',
+              boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
+            }}
+            className="collectionHero__Section__Image flex w-full h-full overflow-hidden md:flex-row justify-start items-end relative"
+          >
+            {data.collection.image != null && (
+              <img
+                className="w-full h-full object-cover"
+                src={data.collection.image?.url}
+                alt={data.collection.title}
+              />
+            )}
+            <div className="heroHeader absolute w-full flex flex-col gap-0 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0">
+              {data.collection.title != null && (
+                <div
+                  style={{
+                    color: Colors.textSecondary,
+                    width: '90%',
+                    fontSize: '34px',
+                  }}
+                  className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
+                >
+                  {data.collection.title}
+                </div>
+              )}
+              {data.collection.description != null && (
+                <div
+                  style={{
+                    color: Colors.textSecondary,
+                    width: '80%',
+                  }}
+                  className="subHeader text-base md:text-lg"
+                >
+                  {data.collection.description}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
         <div className="filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
-          {dropdowns.map((dropdown) => (
+          {filtersData.map((filter: any) => (
             <Dropdown
-              key={dropdown.param}
-              placeholder={dropdown.placeholder}
-              param={dropdown.param}
-              options={dropdown.options}
+              key={filter.param}
+              placeholder={filter.param}
+              param={filter.param}
+              options={filter.options.map((option: any) => ({
+                label: option.label,
+                value: option.value,
+              }))}
             />
           ))}
-
           <div className="sliderContainer w-1/4 flex flex-col gap-2 justify-center">
             <h4 className="sliderTitle uppercase text-2xl text-bold">Price</h4>
             <Slider className="min-w-[250px]" />
           </div>
         </div>
-        <div className="productsGrid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {data.collection.products.nodes.map((product) => (
+        <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9">
+          {data.collection.products.nodes.map((product: any) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -135,6 +184,7 @@ function Collection() {
           <MobileFiltersMenu
             show={showMobileFilters}
             setShow={setShowMobileFilters}
+            filters={filtersData}
           />,
           document.body,
         )}
@@ -143,34 +193,3 @@ function Collection() {
 }
 
 export default Collection;
-
-const COLLECTIONQUERY = `#graphql
-query GetCollection($handle: String!) {
-  collection(handle: $handle) {
-    id
-    title
-    image {
-      url
-    }
-    description
-    products(first: 10) {
-      nodes {
-        id 
-        title
-        handle
-        images(first: 5) {
-          nodes {
-            url
-          }
-        }
-        priceRange {
-          minVariantPrice {
-            amount
-            currencyCode
-          }
-        }
-      }
-    }
-  }
-}
-`;
