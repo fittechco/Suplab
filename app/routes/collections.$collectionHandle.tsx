@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useLoaderData, useSearchParams } from '@remix-run/react';
-import { LoaderArgs, json } from '@shopify/remix-oxygen';
-import { App } from '../api/type';
+import React, {useEffect, useState} from 'react';
+import {useLoaderData, useSearchParams} from '@remix-run/react';
+import {LoaderArgs, json} from '@shopify/remix-oxygen';
+import {App} from '../api/type';
 import Hero from './_index/Hero';
 import ProductCard from 'app/components/ProductCard';
-import { Slider } from '~/app/components/ui/slider';
-import { Select } from '~/app/components/ui/select';
+import {Slider} from '~/app/components/ui/slider';
+import {Select} from '~/app/components/ui/select';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
+import MobileFiltersMenu from '../components/MobileFiltersMenu';
+import { createPortal } from 'react-dom';
 
 export type Shop = {
   name: string;
@@ -65,13 +67,13 @@ const dropdowns = [
   },
 ];
 
-export async function loader({ context, params }: LoaderArgs) {
-  const { collectionHandle } = params;
+export async function loader({context, params}: LoaderArgs) {
+  const {collectionHandle} = params;
 
   invariant(collectionHandle, 'Collection handle is required');
 
   const result = await context.storefront.query(COLLECTIONQUERY, {
-    variables: { handle: collectionHandle },
+    variables: {handle: collectionHandle},
   });
   const collection = result.collection;
   console.log('collection', collection);
@@ -82,22 +84,21 @@ export async function loader({ context, params }: LoaderArgs) {
 
 function Collection() {
   const data = useLoaderData<typeof loader>();
-  console.log('collections', data);
+  const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
 
   if (!data.collection) {
     return <div>Loading...</div>;
   }
 
-  const heroProps = {
-    type: 'hero_section',
-    fields: [],
+  const toggleFiltersMenu = () => {
+    setShowMobileFilters((prev) => !prev);
   };
 
   return (
     <div>
       {/* <Hero /> */}
       <main className="flex flex-col relative container">
-        <div className="filtersContainer  lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+        <div className="filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
           {dropdowns.map((dropdown) => (
             <Dropdown
               key={dropdown.param}
@@ -119,18 +120,24 @@ function Collection() {
         </div>
 
         <div
-          className="mobileFilterMenuTrigger h-[38px] w-[38px] bg-main sticky bottom-3 left-5 z-50 flex lg:hidden items-center justify-center rounded-full shadow-md"
+          className="mobileFilterMenuTrigger h-[50px] w-[50px] bg-main sticky bottom-3 left-5 z-50 my-3 flex lg:hidden items-center justify-center rounded-full shadow-md cursor-pointer hover:scale-105 transition-all"
           style={{
             backgroundColor: 'rgba(74, 74, 73, 0.60)',
+            transitionDuration: '0.2s',
           }}
+          onClick={toggleFiltersMenu}
         >
           <FilterIcon />
         </div>
       </main>
-
-      {/* <Hero />p
-      <Collections />
-      <ProductList /> */}
+      {showMobileFilters === true &&
+        createPortal(
+          <MobileFiltersMenu
+            show={showMobileFilters}
+            setShow={setShowMobileFilters}
+          />,
+          document.body,
+        )}
     </div>
   );
 }
