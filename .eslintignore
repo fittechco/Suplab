@@ -3,3 +3,8 @@ node_modules
 bin
 *.d.ts
 dist
+tailwind.config.js
+remix.config.js
+postcss.config.js
+utils
+

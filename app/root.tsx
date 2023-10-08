@@ -1,5 +1,6 @@
-import { Script, useNonce } from '@shopify/hydrogen';
-import { defer, LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
+
+import { useNonce } from '@shopify/hydrogen';
+import { defer, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -12,6 +13,7 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
+  useNavigation,
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
 import type { HydrogenSession } from '../server';
@@ -27,7 +29,7 @@ import 'swiper/swiper-bundle.css';
 import 'swiper/css/pagination';
 import { CartProvider } from './components/CartProvider';
 import CartDrawer from './components/CartDrawer';
-
+import RoutesLoader from './components/RoutesLoader';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -71,10 +73,10 @@ export function links() {
       href: 'https://shop.app',
     },
     {
-      rel: "stylesheet",
-      href: "https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
-    }
-  ]
+      rel: 'stylesheet',
+      href: 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css',
+    },
+  ];
 }
 export async function loader({ context }: LoaderArgs) {
   const { storefront, session } = context;
@@ -86,10 +88,6 @@ export async function loader({ context }: LoaderArgs) {
     customerAccessToken,
     session,
   );
-
-  // defer the cart query by not awaiting it
-
-
   // defer the footer query (below the fold)
   const footerPromise = storefront.query(FOOTER_QUERY, {
     cache: storefront.CacheLong(),
@@ -97,7 +95,6 @@ export async function loader({ context }: LoaderArgs) {
       footerMenuHandle: 'footer', // Adjust to your footer menu handle
     },
   });
-
 
   const layout = storefront.query(LAYOUT_QUERY, {
     cache: storefront.CacheLong(),
@@ -120,20 +117,24 @@ export async function loader({ context }: LoaderArgs) {
   );
 }
 
-export const UseShopStore = create<App.Shopify.Layout & {
-  showCart: boolean
-}>((set: any) => ({
+export const UseShopStore = create<
+  App.Shopify.Layout & {
+    showCart: boolean;
+    routesLoader: boolean;
+  }
+>((set: any) => ({
   shop: null as any,
   footer: null as any,
   header: null as any,
-  showCart: false
-}
-))
+  showCart: false,
+  routesLoader: true,
+}));
 
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient();
 
 export default function App() {
   const nonce = useNonce();
+  const navigation = useNavigation();
   const data = useLoaderData<typeof loader>();
 
   useEffect(() => {
@@ -141,8 +142,22 @@ export default function App() {
       shop: data.shop.shop,
       footer: data.footer,
       header: data.header,
-    })
-  }, [data])
+    });
+  }, [data]);
+
+  // checking if the app navigation is not idle
+  useEffect(() => {
+    console.log(navigation);
+    if (navigation.state !== 'idle') {
+      if (navigation.location.search != "" && navigation.location.state == null) {
+        console.log("no showing loader because its a search");
+        return UseShopStore.setState({ routesLoader: false });
+      }
+      UseShopStore.setState({ routesLoader: true });
+    } else {
+      UseShopStore.setState({ routesLoader: false });
+    }
+  }, [navigation]);
 
   return (
     <html lang="en">
@@ -164,15 +179,15 @@ export default function App() {
             >
               <Outlet />
             </Layout>
-            <CartDrawer />,
-            document.body
+            <CartDrawer />
+            <RoutesLoader />
             <ScrollRestoration nonce={nonce} />
             <Scripts nonce={nonce} />
             <LiveReload nonce={nonce} />
           </CartProvider>
         </body>
       </QueryClientProvider>
-    </html >
+    </html>
   );
 }
 
@@ -198,7 +213,7 @@ export function ErrorBoundary() {
         <Meta />
         <Links />
       </head>
-      <body className=''>
+      <body className="">
         <Layout {...root.data}>
           <div className="route-error">
             <h1>Oops</h1>
@@ -225,7 +240,7 @@ export function ErrorBoundary() {
  * @example
  * ```ts
  * //
- * const {isLoggedIn, headers} = await validateCustomerAccessToken( 
+ * const {isLoggedIn, headers} = await validateCustomerAccessToken(
  *  customerAccessToken,
  *  session,
  *  );
@@ -305,7 +320,7 @@ const HEADER_QUERY = `#graphql
     }
   }
 }
-` as const
+` as const;
 
 const FOOTER_QUERY = `#graphql
   query Footer(
@@ -319,8 +334,6 @@ const FOOTER_QUERY = `#graphql
   }
   ${MENU_FRAGMENT}
 ` as const;
-
-
 
 const LAYOUT_QUERY = `#graphql
   query ShopLayout {
@@ -340,4 +353,4 @@ const LAYOUT_QUERY = `#graphql
       }
     }
   }
-` as const
+` as const;

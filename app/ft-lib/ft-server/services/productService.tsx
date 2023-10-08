@@ -2,7 +2,7 @@ import { LoaderArgs } from '@shopify/remix-oxygen';
 import StorefrontApi from '../../../api/storefront';
 import invariant from 'tiny-invariant';
 
-// the following is a fragment of what the product fields are 
+// the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
   fragment ProductFragment on Product {
     id
@@ -49,7 +49,7 @@ export const PRODUCTFRAGMENT = `#graphql
       }
     }
   }
-    `
+    `;
 
 class ProductService {
   static async getAllProducts() {
@@ -69,7 +69,10 @@ class ProductService {
     return data.products.edges.map((edge: any) => edge.node);
   }
 
-  static async getProduct(args: { id: string, selectedOptions: { name: string, value: string }[] }) {
+  static async getProduct(args: {
+    id: string;
+    selectedOptions: { name: string; value: string }[];
+  }) {
     const query = `#graphql
       query Product($id: ID!, $selectedOptions: [SelectedOptionInput!]!) {
         product(id: $id) {
@@ -115,16 +118,14 @@ class ProductService {
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
         id: args.id,
-        selectedOptions: args.selectedOptions
-      }
+        selectedOptions: args.selectedOptions,
+      },
     });
     invariant(data.product != null, 'Product not found');
     return data.product;
   }
 
-  static async getProductsByCollection(
-    args: { collectionId: string, }
-  ) {
+  static async getProductsByCollection(args: { collectionId: string }) {
     const query = `#graphql
       query ProductByCollection($collectionId: ID!) {
         collection(id: $collectionId) {
@@ -139,16 +140,14 @@ class ProductService {
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
-        collectionId: args.collectionId
-      }
-    })
+        collectionId: args.collectionId,
+      },
+    });
     invariant(data.collection != null, 'Collection not found');
     return data.collection.products.nodes.map((edge: any) => edge.node);
   }
 
-  static async getProductsByTag(
-    args: { tag: string, }
-  ) {
+  static async getProductsByTag(args: { tag: string }) {
     const query = `#graphql
       query ProductsByTag ($tag: String!){
         products(first: 10, query: "tag: $tag") {
@@ -161,15 +160,16 @@ class ProductService {
     `;
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
-        tag: args.tag
-      }
-    })
+        tag: args.tag,
+      },
+    });
     return data.products;
   }
 
-  static async getProductByHandle(
-    args: { handle: string, selectedOptions: { name: string, value: string }[] }
-  ) {
+  static async getProductByHandle(args: {
+    handle: string;
+    selectedOptions: { name: string; value: string }[];
+  }) {
     const query = `#graphql
       query ProductByHandle($handle: String!, $selectedOptions: [SelectedOptionInput!]!) {
         productByHandle(handle: $handle) {
@@ -215,16 +215,57 @@ class ProductService {
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
         handle: args.handle,
-        selectedOptions: args.selectedOptions
-      }
-    })
+        selectedOptions: args.selectedOptions,
+      },
+    });
     invariant(data.productByHandle != null, 'Product not found');
     return data.productByHandle;
   }
 
-  static async getProductRecommendations(
-    args: { productId: string, }
-  ) {
+  static async getProductMetafields(args: { productId: string }) {
+    const query = `#graphql
+      query ProductMetafields($productId: ID!) {
+        product(id: $productId) {
+          description
+          metafields(
+            identifiers: [{namespace: "tabs", key: "warnings"}, {namespace: "tabs", key: "ingredients"}, {namespace: "tabs", key: "directions"}]
+          ) {
+            id
+            key
+            value
+            reference {
+              ... on Metaobject {
+                fields {
+                  key
+                  value
+                  reference {
+                    ... on MediaImage {
+                      image {
+                        width
+                        height
+                        url
+                        altText
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+    const data = await StorefrontApi.storeFront().query(query, {
+      variables: {
+        productId: args.productId,
+      },
+    });
+    invariant(data.product != null, 'Product not found');
+    return data.product;
+  }
+
+
+  static async getProductRecommendations(args: { productId: string }) {
     const query = `#graphql
       query ProductRecommendations($productId: ID!) {
         productRecommendations(productId: $productId) {
@@ -236,9 +277,9 @@ class ProductService {
 
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
-        productId: args.productId
-      }
-    })
+        productId: args.productId,
+      },
+    });
     invariant(data.productRecommendations != null, 'Product not found');
     return data.productRecommendations;
   }

@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
-import { App } from '../api/type';
+import {useEffect, useState} from 'react';
+import type {App} from '../api/type';
 // import CollectionController from 'server/controllers/CollectionController';
 
 const Collections = () => {
-  const [collections, setCollections] = useState<Array<App.Shopify.Storefront.Collection>>([]);
+  const [collections, setCollections] = useState<
+    Array<App.Shopify.Storefront.Collection>
+  >([]);
 
   // useEffect(() => {
   //   const fetchCollections = async () => {

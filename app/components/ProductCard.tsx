@@ -1,72 +1,72 @@
-import {Link} from '@remix-run/react';
-import {Image, Money} from '@shopify/hydrogen';
-import {Colors} from 'app/ft-lib/shared';
+import Link from '../components/Link';
+import { Image, Money } from '@shopify/hydrogen';
+import { Colors } from 'app/ft-lib/shared';
 import React from 'react';
-import {ProductQuery} from 'storefrontapi.generated';
-import { App } from '../api/type';
+import type { ProductQuery } from 'storefrontapi.generated';
+import resizeImage from '../ft-lib/resizeImages';
+import LazyImage from '../ft-lib/LazyImage';
 
 type Props = {
-  // product: ProductQuery['product'];
-  product: App.CollectionPageTemplate.ProductCard;
+  product: ProductQuery['product'];
   style?: React.CSSProperties;
 };
+
+// https://cdn.shopify.com/s/files/1/0814/6046/1881/files/91KmDwHGHyL._AC_SL1500.jpg?v=1695242046&width=1000&crop=center
+// The function will take image urls and width param then return the new url
+
+
 export default function ProductCard(props: Props) {
-  // export default function ProductCard() {
-  const {product} = props;
-  if (!product) {
-    // todo - implement skeleton loader
-    return <div>Loading...</div>;
+  const { product } = props;
+  if (product == null) {
+    return null;
   }
   return (
     <Link
+      routeLoader
       relative="path"
       to={`/products/${product.handle}`}
       style={{
         border: `1px solid rgb(240, 238, 232)`,
         borderRadius: 12,
+        height: "fit-content",
+        ...props.style,
       }}
       key={product.id}
-      className="search-result-item flex flex-col gap-2 h-fit"
+      className="search-result-item flex flex-col gap-2"
     >
       <div
         style={{
           backgroundColor: Colors.offWhite,
           borderRadius: 12,
           overflow: 'hidden',
-          height: 300,
-          // ...props.style
         }}
-        className=""
+        className="md:h-[260px] h-[200px] w-full max-md:h-[200px] max-md:mx-auto"
       >
-        <Image
+        <LazyImage
           style={{
             objectFit: 'cover',
-            // objectFit: 'contain',
             height: '100%',
             width: 'auto',
             margin: 'auto',
+            // aspectRatio: "1/1",
             borderRadius: '24px',
           }}
-          sizes="100%, 800px"
-          aspectRatio="0.77/1"
           className=""
-          src={product.images.nodes[0].url}
-          // src={
-          //   'https://m.media-amazon.com/images/I/71BVaeB-5PL._AC_SL1500_.jpg'
-          // }
+          src={resizeImage(product.images.nodes[0].url, 2000)}
         />
       </div>
-      <div className="flex flex-col p-1">
-        <p
+      <div
+        style={{
+        }}
+        className="flex flex-col p-1">
+        <h3
           style={{
             color: Colors.secondaryDark,
-            fontWeight: 700,
+            fontWeight: 400,
           }}
-          className="text-base"
-        >
-          {/* Iso Whey Zero */}
+          className="text-base font-bold uppercase">
           {product.title}
-        </p>
+        </h3>
         <Money
           style={{
             color: Colors.secondary,

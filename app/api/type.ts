@@ -1,6 +1,11 @@
-import type { MenuItem } from "@shopify/hydrogen/storefront-api-types";
-import { type } from "os";
-import type { FooterQuery, HeaderQuery, ProductQuery, ShopLayoutQuery } from "storefrontapi.generated";
+import type { MenuItem } from '@shopify/hydrogen/storefront-api-types';
+import { type } from 'os';
+import type {
+  FooterQuery,
+  HeaderQuery,
+  ProductQuery,
+  ShopLayoutQuery,
+} from 'storefrontapi.generated';
 
 export namespace App {
   export namespace HomePageTemplate {
@@ -235,9 +240,11 @@ export namespace App {
           references: {
             nodes: Array<{
               type: 'faq';
-              fields: Array<Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                key: 'question' | 'answer';
-              }>>;
+              fields: Array<
+                Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'question' | 'answer';
+                }>
+              >;
             }>;
           };
         }>
@@ -292,21 +299,30 @@ export namespace App {
       >;
     };
 
-    export type ProductsSection = {
-      type: 'products_section';
-      fields: Array<ProductCard>;
-    };
+    // export type ProductsSection = {
+    //   type: 'products_section';
+    //   fields: Array<ProductCard>;
+    // };
 
-    export type ProductCard = Pick<
-      Shopify.Storefront.Product,
-      'id' | 'priceRange' | 'title' | 'handle' | 'images'
-    >;
+    // export type ProductCard = Pick<
+    //   Shopify.Storefront.Product,
+    //   'id' | 'priceRange' | 'title' | 'handle' | 'images'
+    // >;
 
     export type Sections = Array<HeroSection>;
   }
 
   export namespace Shopify {
     export namespace Storefront {
+      export type RichText = {
+        children: Array<{
+          type: 'paragraph';
+          children: Array<{
+            type: 'text';
+            value: string;
+          }>;
+        }>;
+      }
       export type Collection = {
         id: string;
         title: string;
@@ -316,7 +332,7 @@ export namespace App {
         };
       };
 
-      export type Product = ProductQuery["product"];
+      export type Product = ProductQuery['product'];
       // {
       //   id: string;
       //   title: string;
@@ -368,7 +384,6 @@ export namespace App {
       }
     }
 
-    type Shop = {};
     export type Layout = {
       shop: ShopLayoutQuery['shop'];
       header: HeaderQuery;

@@ -128,7 +128,7 @@ export namespace Shopify {
       value: string;
       references: V['references'];
     };
-    
+
     export type FileReference<
       V extends {
         key: string;

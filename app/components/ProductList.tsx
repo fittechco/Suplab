@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import { App } from '../api/type';
+import {useEffect, useState} from 'react';
+import type {App} from '../api/type';
 // import CartController from 'server/controllers/CartController';
 
-type IProduct = Pick<App.Shopify.Storefront.Product, 'id' | 'title' | 'description' | "images">;
+type IProduct = Pick<
+  App.Shopify.Storefront.Product,
+  'id' | 'title' | 'description' | 'images'
+>;
 
 const ProductList = () => {
   const [products, setProducts] = useState<IProduct[] | null>(null);
@@ -21,19 +24,19 @@ const ProductList = () => {
   }, []);
 
   if (products == null) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className='products-container'>
+    <div className="products-container">
       {products.map((product) => (
-        <div key={product.id} className='product'>
+        <div key={product.id} className="product">
           <h2>{product.title}</h2>
           <p>{product.description}</p>
         </div>
       ))}
       {cart && (
-        <div className='cart'>
+        <div className="cart">
           <h2>Cart</h2>
           <p>{cart.id}</p>
         </div>

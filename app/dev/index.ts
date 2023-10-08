@@ -1,6 +1,6 @@
-import SearchController from "../ft-lib/ft-server/controllers/SearchController"
-import ProductController from "../ft-lib/ft-server/controllers/ProductController"
-import util from "util"
+import SearchController from '../ft-lib/ft-server/controllers/SearchController';
+import ProductController from '../ft-lib/ft-server/controllers/ProductController';
+import util from 'util';
 
 const METAOBJECTQUERY = `#graphql
 metafield(handle: "offers") {
@@ -9,7 +9,7 @@ metafield(handle: "offers") {
         value
     }
 }
-`
+`;
 const LAYOUT_QUERY = `#graphql
   query testLayout {
     shop {
@@ -28,16 +28,11 @@ const LAYOUT_QUERY = `#graphql
       }
     }
   }
-` as const
-
+` as const;
 
 async function storeFrontApiTest() {
-
-
-  const res = await ProductController.getAllProducts()
-  console.log(util.inspect(res, { depth: null }));
-
-
+  const res = await ProductController.getAllProducts();
+  console.log(util.inspect(res, {depth: null}));
 }
 
-void storeFrontApiTest()
+void storeFrontApiTest();

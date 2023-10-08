@@ -1,11 +1,10 @@
-
 import React, { useEffect, useState } from 'react';
 import { useLoaderData } from '@remix-run/react';
 import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from './Hero';
-import { App } from '../../api/type';
+import type { App } from '../../api/type';
 import Benefits from './Benefits';
 import Testimonials from './Testimonials';
 import ShopTheGoal from './ShopTheGoal';
@@ -14,6 +13,7 @@ import Promotion from './Promotion';
 import Offers from './Offers';
 import FeaturedCollections from './FeaturedCollections';
 import FAQ from './FAQ';
+import { UseShopStore } from '~/app/root';
 
 export type Shop = {
   name: string;
@@ -32,6 +32,9 @@ function HomePage() {
     useLoaderData();
   const [sections, setSections] = useState<App.HomePageTemplate.Sections>([]);
 
+  useEffect(() => {
+    UseShopStore.setState({ routesLoader: false });
+  }, []);
 
   useEffect(() => {
     metaobject.fields.forEach((field) => {
@@ -79,14 +82,12 @@ function HomePage() {
         if (section.type === 'faq_section') {
           return <FAQ section={section} key={section.type} />;
         }
-
       })}
     </div>
   );
 }
 
 export default HomePage;
-
 
 export const ON_METAOBJECT = `#graphql
 fragment Metaobject on Metaobject {
@@ -148,8 +149,7 @@ fragment Metaobject on Metaobject {
     }
   }
 }
-`
-
+`;
 
 const SHOPQUERY = `#graphqls
 query ShopName {

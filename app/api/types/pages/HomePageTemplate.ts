@@ -1,4 +1,4 @@
-import { Shopify } from "../Shopify";
+import type {Shopify} from '../Shopify';
 
 export namespace HomePageTemplate {
   export type Template = {

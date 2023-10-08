@@ -6,22 +6,22 @@
 //         App.Shopify.Storefront.Collection[]
 //     > {
 //         const query = `#graphql
-            // query {
-            //     collections(first: 6) {
-            //         edges {
-            //             node {
-            //                 id
-            //                 products(first: 5) {
-            //                     edges {
-            //                         node {
-            //                             id
-            //                         }
-            //                     }
-            //                 }
-            //              }
-            //         }
-            //     }
-            // }
+// query {
+//     collections(first: 6) {
+//         edges {
+//             node {
+//                 id
+//                 products(first: 5) {
+//                     edges {
+//                         node {
+//                             id
+//                         }
+//                     }
+//                 }
+//              }
+//         }
+//     }
+// }
 //         `;
 //         const { data } = await storeFrontApi({ query });
 //         return data.collections.edges.map((edge: any) => edge.node);
@@ -31,18 +31,18 @@
 //         id: string,
 //     ): Promise<App.Shopify.Storefront.Collection> {
 //         const query = `#graphql
-            // query ($id: ID!) {
-            //     collection(id: $id) {
-            //         id
-            //         products(first: 10) {
-            //             edges {
-            //                 node {
-            //                     id
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+// query ($id: ID!) {
+//     collection(id: $id) {
+//         id
+//         products(first: 10) {
+//             edges {
+//                 node {
+//                     id
+//                 }
+//             }
+//         }
+//     }
+// }
 //         `;
 //         const variables = { id };
 //         const { data } = await storeFrontApi({ query, variables });

@@ -306,6 +306,37 @@ export type ProductByHandleQuery = {
   >;
 };
 
+export type ProductMetafieldsQueryVariables = StorefrontAPI.Exact<{
+  productId: StorefrontAPI.Scalars['ID'];
+}>;
+
+export type ProductMetafieldsQuery = {
+  product?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Product, 'description'> & {
+      metafields: Array<
+        StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Metafield, 'id' | 'key' | 'value'> & {
+            reference?: StorefrontAPI.Maybe<{
+              fields: Array<
+                Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+                  reference?: StorefrontAPI.Maybe<{
+                    image?: StorefrontAPI.Maybe<
+                      Pick<
+                        StorefrontAPI.Image,
+                        'width' | 'height' | 'url' | 'altText'
+                      >
+                    >;
+                  }>;
+                }
+              >;
+            }>;
+          }
+        >
+      >;
+    }
+  >;
+};
+
 export type ProductRecommendationsQueryVariables = StorefrontAPI.Exact<{
   productId: StorefrontAPI.Scalars['ID'];
 }>;
@@ -779,6 +810,10 @@ interface GeneratedQueryTypes {
     return: ProductByHandleQuery;
     variables: ProductByHandleQueryVariables;
   };
+  '#graphql\n      query ProductMetafields($productId: ID!) {\n        product(id: $productId) {\n          description\n          metafields(\n            identifiers: [{namespace: "tabs", key: "warnings"}, {namespace: "tabs", key: "ingredients"}, {namespace: "tabs", key: "directions"}]\n          ) {\n            id\n            key\n            value\n            reference {\n              ... on Metaobject {\n                fields {\n                  key\n                  value\n                  reference {\n                    ... on MediaImage {\n                      image {\n                        width\n                        height\n                        url\n                        altText\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    ': {
+    return: ProductMetafieldsQuery;
+    variables: ProductMetafieldsQueryVariables;
+  };
   '#graphql\n      query ProductRecommendations($productId: ID!) {\n        productRecommendations(productId: $productId) {\n            ...ProductFragment \n        }\n      }\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
     return: ProductRecommendationsQuery;
     variables: ProductRecommendationsQueryVariables;
@@ -787,7 +822,7 @@ interface GeneratedQueryTypes {
     return: SearchWithFiltersQuery;
     variables: SearchWithFiltersQueryVariables;
   };
-  '#graphql\n    query SearchProducts($query: String!) {\n        products(query: $query, first: 100) {\n                nodes {\n                    ... on Product {\n                         ...ProductFragment\n                    }\n                }\n        }\n    }\n    #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n': {
+  '#graphql\n  query SearchProducts($query: String!) {\n    products(query: $query, first: 100) {\n      nodes {\n        ... on Product {\n          ...ProductFragment\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n': {
     return: SearchProductsQuery;
     variables: SearchProductsQueryVariables;
   };
