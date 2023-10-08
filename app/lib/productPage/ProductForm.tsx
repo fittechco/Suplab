@@ -14,10 +14,6 @@ type Props = {
   product: NonNullable<ProductQuery['product']>;
   isTop?: boolean;
 };
-selectedVariant: NonNullable < ProductQuery['product'] > ['variants']['nodes'][0];
-product: NonNullable<ProductQuery['product']>;
-isTop ?: boolean;
-};
 
 export default function ProductForm(props: Props) {
   const { product, selectedVariant } = props;
