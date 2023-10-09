@@ -2,6 +2,8 @@ import { Image } from '@shopify/hydrogen'
 import type { Image as ImageType } from '@shopify/hydrogen/storefront-api-types'
 import React, { useState } from 'react'
 import Accordion from '~/app/components/Accordion'
+import LazyImage from '~/app/ft-lib/LazyImage'
+import resizeImage from '~/app/ft-lib/resizeImages'
 import type { ProductMetafieldsQuery } from '~/storefrontapi.generated'
 
 type Props = {
@@ -79,7 +81,7 @@ export default function ProductTabs(props: Props) {
                     boxShadow: "0px 2px 11px 0px rgba(0, 0, 0, 0.16) inset",
 
                 }}
-                className="product-tabs-values md:p-5 md:min-h-[420px] max-md:hidden">
+                className="product-tabs-values md:p-5 md:min-h-[420px] max-md:hidden h-full w-full">
                 {metafields.map((metafield, index) => {
                     if (metafield == null || index !== selectedTabIndex) {
                         return null
@@ -98,19 +100,13 @@ export default function ProductTabs(props: Props) {
                     return (
                         <div
                             key={metafield.id}
-                            className='product-tabs-value'
+                            className='product-tabs-value flex gap-3 h-full w-full'
                         >
-                            {image != null ? <Image
-                                className="product-tabs-image"
-                                src={image.url ?? ""}
-                                alt={image.altText ?? ""}
-                                width={image?.width ?? 0}
-                                height={image?.height ?? 0}
-                            />
-                                : (
-                                    <p className=''>{value}</p>
-                                )
-                            }
+                            {image != null && <LazyImage
+                                className="product-tabs-image aspect-square h-96"
+                                src={resizeImage(image.url, 600)}
+                            />}
+                            {value != null && <p className=''>{value}</p>}
                         </div>
                     )
                 })}

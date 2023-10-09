@@ -1,26 +1,10 @@
-import Storelogo from "~/public/suplabLogo.png"
+import Storelogo from "../../public/suplabLogo.png"
 import { UseShopStore } from "../root";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 function RoutesLoader() {
     const routesLoader = UseShopStore((state) => state.routesLoader);
     const routesLoaderRef = useRef<HTMLDivElement | null>(null);
-    // useEffect(() => {
-    //     if (routesLoaderRef.current == null) {
-    //         return;
-    //     }
-    //     if (routesLoader === true) {
-    //         routesLoaderRef.current.style.zIndex = '9999';
-    //     } else {
-    //         setTimeout(() => {
-    //             if (routesLoaderRef.current == null) {
-    //                 return;
-    //             }
-    //             routesLoaderRef.current.style.zIndex = '-1';
-    //         }, 1)
-    //     }
-    // }, [routesLoader]);
-
     return (
         <div
             ref={routesLoaderRef}

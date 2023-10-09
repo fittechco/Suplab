@@ -3,6 +3,8 @@ import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
 import React, { useRef, useState } from 'react';
 import type { Image as ImageType } from '@shopify/hydrogen/storefront-api-types'
+import LazyImage from '../ft-lib/LazyImage';
+import resizeImage from '../ft-lib/resizeImages';
 
 type Props = {
   title: string;
@@ -37,28 +39,31 @@ function Accordion(props: Props) {
           name={showAcordion === true ? 'minus' : 'plus'}
         />
       </div>
-      {props.image != null ? (
-        <div className='flex justify-center'>
-          <Image
-            className='max-w-full max-h-full'
-            data={props.image}
-          />
-        </div>
-      )
-        :
-        <p
-          ref={accordionRef}
+      <div
+        style={{
+          height: showAcordion ? accordionRef.current?.scrollHeight : '0px',
+          marginBlock: showAcordion ? '0.5rem' : '0px',
+          transition: 'all 0.3s ease-in-out',
+        }}
+        ref={accordionRef}
+        className="overflow-hidden">
+        {props.image != null && (
+          <div className='flex justify-center w-full'>
+            <LazyImage
+              className='max-w-full max-h-full w-full aspect-square'
+              src={resizeImage(props.image.url, 600)}
+            />
+          </div>)}
+        {props.details != null && (<p
           style={{
             color: Colors.text,
-            height: showAcordion ? accordionRef.current?.scrollHeight : '0px',
-            marginBlock: showAcordion ? '0.5rem' : '0px',
-            transition: 'all 0.3s ease-in-out',
           }}
           className="text-sm font-secondaryFont font-medium"
         >
           {props.details}
-        </p>
-      }
+        </p>)
+        }
+      </div>
     </div >
   );
 }

@@ -11,8 +11,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
 import 'swiper/css';
-
-
 import { Colors } from 'app/ft-lib/shared';
 import ProductsSwiper from 'app/components/ProductsSwiper';
 import ProductForm from 'app/lib/productPage/ProductForm';
@@ -20,6 +18,14 @@ import ProductTabs from '../lib/productPage/ProductTabs';
 import resizeImage from '../ft-lib/resizeImages';
 import LazyImage from '../ft-lib/LazyImage';
 import { UseShopStore } from '../root';
+
+const seo = ({ data }: { data: any }) => ({
+  title: data?.product?.title,
+  description: data?.product?.description.substr(0, 154),
+});
+export const handle = {
+  seo,
+};
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -62,7 +68,10 @@ export async function loader({ context, params, request }: LoaderArgs) {
     recommendedProducts,
     product,
     selectedVariant,
-    productMetafields
+    productMetafields,
+    analytics: {
+      pageType: 'product',
+    }
   })
 }
 

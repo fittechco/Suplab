@@ -1,5 +1,5 @@
 
-import { useNonce } from '@shopify/hydrogen';
+import { Seo, useNonce } from '@shopify/hydrogen';
 import { defer, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
@@ -14,6 +14,7 @@ import {
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
   useNavigation,
+  useLocation,
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
 import type { HydrogenSession } from '../server';
@@ -23,13 +24,15 @@ import Layout from './layout/Layout';
 import type { App } from './api/type';
 import { create } from 'zustand';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/pagination';
 import { CartProvider } from './components/CartProvider';
 import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
+import { usePageAnalytics } from './utils';
+import StoreLogo from "~/public/suplabLogo.png"
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -96,7 +99,7 @@ export async function loader({ context }: LoaderArgs) {
     },
   });
 
-  const layout = storefront.query(LAYOUT_QUERY, {
+  const layout = await storefront.query(LAYOUT_QUERY, {
     cache: storefront.CacheLong(),
   });
 
@@ -107,9 +110,12 @@ export async function loader({ context }: LoaderArgs) {
 
   return defer(
     {
-      shop: await layout,
+      shop: layout,
       footer: await footerPromise,
       header: await headerPromise,
+      analytics: {
+        shopId: layout.shop.id,
+      },
       isLoggedIn,
       publicStoreDomain,
     },
@@ -136,6 +142,21 @@ export default function App() {
   const nonce = useNonce();
   const navigation = useNavigation();
   const data = useLoaderData<typeof loader>();
+  const location = useLocation();
+  const lastLocationKey = useRef('');
+  const pageAnalytics = usePageAnalytics();
+
+
+
+
+  useEffect(() => {
+    // Filter out useEffect running twice
+    if (lastLocationKey.current === location.key) return;
+
+    lastLocationKey.current = location.key;
+    console.log(pageAnalytics, "pageAnalytics");
+    // This hook is where you can send a page view event to Shopify and other third-party analytics
+  }, [location, pageAnalytics]);
 
   useEffect(() => {
     UseShopStore.setState({
@@ -165,6 +186,7 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
+        <Seo />
         <Links />
       </head>
       <QueryClientProvider client={queryClient}>

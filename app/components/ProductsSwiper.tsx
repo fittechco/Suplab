@@ -3,10 +3,10 @@ import type { ProductQuery } from 'storefrontapi.generated';
 import ProductCard from './ProductCard';
 import Swiper from 'swiper';
 import 'swiper/css/scrollbar';
-import { Scrollbar, Mousewheel } from 'swiper/modules';
+import { Scrollbar, Mousewheel, FreeMode } from 'swiper/modules';
 import _ from 'lodash';
-import ProductSkeleton from '../lib/skeletons/ProductSkeleton';
-import ProductSwiperSkeleton from '../lib/skeletons/ProductSwiperSkeleton';
+import ProductSkeleton from '../lib/skeleton/ProductSkeleton';
+import ProductSwiperSkeleton from '../lib/skeleton/ProductSwiperSkeleton';
 type Props = {
   products: ProductQuery['product'][] | null;
   title?: string;
@@ -22,7 +22,12 @@ export default function ProductsSwiper(props: Props) {
     const swiper = new Swiper(swiperContainer.current, {
       slidesPerView: 2,
       spaceBetween: 20,
-      modules: [Scrollbar, Mousewheel],
+      modules: [Scrollbar, Mousewheel, FreeMode],
+      mousewheel: {
+        releaseOnEdges: true,
+      },
+      touchReleaseOnEdges: true,
+      freeMode: true,
       breakpoints: {
         768: {
           slidesPerView: 4,

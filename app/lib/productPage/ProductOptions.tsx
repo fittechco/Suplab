@@ -10,6 +10,8 @@ import { UseShopStore } from '~/app/root';
 
 // removing the undefined type from the following line
 
+
+
 type Props = {
   options: NonNullable<ProductByHandleQuery['productByHandle']>['options'];
   selectedVariant:
@@ -23,6 +25,7 @@ export default function ProductOptions(props: Props) {
   const { pathname, search } = useLocation();
   const [currentSearchParams] = useSearchParams();
   const navigation = useNavigation();
+
 
   const paramsWithDefaults = (() => {
     const defaultParams = new URLSearchParams(currentSearchParams);

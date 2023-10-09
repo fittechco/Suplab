@@ -1,6 +1,6 @@
 import React from 'react'
 import { Colors } from '~/app/ft-lib/shared'
-import logoImage from "~/public/suplabLogo.png"
+import logoImage from "../../../public/suplabLogo.png"
 
 export default function ProductSkeleton() {
     return (

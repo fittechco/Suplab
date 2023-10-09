@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useRef } from 'react'
 import Swiper from 'swiper';
-import { Scrollbar, Mousewheel } from 'swiper/modules';
+import { Scrollbar, Mousewheel, FreeMode, } from 'swiper/modules';
 import ProductSkeleton from './ProductSkeleton';
 
 type Props = {
@@ -18,7 +18,12 @@ export default function ProductSwiperSkeleton(props: Props) {
         const swiper = new Swiper(swiperContainer.current, {
             slidesPerView: 2,
             spaceBetween: 20,
-            modules: [Scrollbar, Mousewheel],
+            modules: [Scrollbar, Mousewheel, FreeMode],
+            mousewheel: {
+                releaseOnEdges: true,
+            },
+            touchReleaseOnEdges: true,
+            freeMode: true,
             breakpoints: {
                 768: {
                     slidesPerView: 4,
