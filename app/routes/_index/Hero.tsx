@@ -47,7 +47,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           }}
           className="heroHeader w-full flex flex-col gap-5 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0"
         >
-          {fields.headline.value != null && (
+          {fields.headline != null && (
             <div
               style={{
                 color: Colors.textSecondary,
@@ -59,7 +59,7 @@ const Hero = ({ section }: HeroSectionProps) => {
               {fields.headline.value}
             </div>
           )}
-          {fields.sub_headline.value != null && (
+          {fields.sub_headline != null && (
             <div
               style={{
                 color: Colors.textSecondary,

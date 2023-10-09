@@ -1,5 +1,5 @@
 import {useEffect, useState, useRef} from 'react';
-import {App} from '../../api/type';
+import type {App} from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';

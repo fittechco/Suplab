@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import {App} from '../../api/type';
+import type {App} from '../../api/type';
 import {useLoaderData} from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
 import {Colors} from 'app/ft-lib/shared';

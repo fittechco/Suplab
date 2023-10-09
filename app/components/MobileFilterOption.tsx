@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {Colors} from '../ft-lib/shared';
-import {Link, useSearchParams} from '@remix-run/react';
+import {Link, useSearchParams, useLocation} from '@remix-run/react';
 
 type Props = {
   param: string;
@@ -17,65 +17,40 @@ export default function MobileFilterOption({
   isSelected,
   hasX = false,
 }: Props) {
-  // const [isSelected, setIsSelected] = useState(false);
+  
+  console.log('props', param, label, value, isSelected, hasX);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // useEffect(() => {
-  //   if (!selected) {
-  //     if (searchParams.get(param) === value) {
-  //       setIsSelected(true);
-  //     }
-  //   } else if (selected) {
-  //     if (searchParams.get(param) !== value) {
-  //       setIsSelected(false);
-  //     }
-  //   }
-  // }, [searchParams]);
+  const {pathname, search} = useLocation();
 
-  const handleClick = () => {
-    const currentOptionVal = searchParams.get(param);
-    if (isSelected) {
-      setSearchParams((prev) => {
-        prev.delete(param);
-        return prev;
-      });
-    } else {
-      setSearchParams((prev) => {
-        prev.set(param, value);
-        return prev;
-      });
-    }
-  };
+  const linkParams = new URLSearchParams(search);
+  
+  if(hasX === true){
+    linkParams.delete(param)
+  } else {
+    linkParams.set(param, value)
+  }
+  
+
 
   return (
     <div className="gridItemWrapper w-full flex items-center justify-center">
-      <button
+      <Link
         className="filterOption p-2 font-bold text-xs min-w-[106px] md:py-3 md:text-lg w-full rounded-full text-center whitespace-nowrap cursor-pointer border-none outline-transparent uppercase flex items-center justify-center"
         style={{
           backgroundColor: isSelected
             ? Colors.primary
-            : Colors.offBlackSecondary,
+            : Colors.secondary,
           color: Colors.textSecondary,
         }}
-        onClick={handleClick}
+        to={`${pathname}?${linkParams.toString()}`}
+        preventScrollReset
       >
         <span className="leading-normal w-fit flex items-center justify-center gap-1">
           {label} {hasX && <XIcon strokeColor={Colors.textSecondary} />}
         </span>
-      </button>
-      {/* <Link
-        className="filterOption p-2 font-bold text-xs min-w-[106px] md:py-3 md:text-lg w-full rounded-full text-center whitespace-nowrap cursor-pointer border-none outline-transparent uppercase"
-        style={{
-          backgroundColor: isSelected
-            ? Colors.primary
-            : Colors.offBlackSecondary,
-          color:  Colors.textSecondary,
-        }}
-        onClick={handleClick}
-      >
-        <span>{label}</span>
-      </Link> */}
+      </Link>
     </div>
   );
 }

@@ -1,47 +1,50 @@
-import {Colors} from '../ft-lib/shared';
 import {cn} from '~/app/lib/utils';
 import BottomDrawer from './BottomDrawer';
 import MobileFilterOption from './MobileFilterOption';
 import {Slider} from './ui/slider';
-import {useLocation, useNavigation, useSearchParams} from '@remix-run/react';
+import {useSearchParams} from '@remix-run/react';
 import {Fragment} from 'react';
-import {VariantOptionFilter} from '@shopify/hydrogen/storefront-api-types';
 
 type Props = {
   show: boolean;
   setShow: (show: boolean) => void;
-  filters: {name: string; options: VariantOptionFilter[]}[];
+  filters: {param: string; options: {label: string; value: string}[]}[];
 };
 
 export default function MobileFiltersMenu(props: Props) {
-  console.log('props.filters', props.filters);
-  const {pathname, search} = useLocation();
   const [searchParams] = useSearchParams();
-  const navigation = useNavigation();
 
-  const removeDash = (s: string) => s.replace(/\-/g, ' ');
+  const filters = props.filters;
 
-  const searchedParams = Array.from(searchParams.entries())
+  const searchedParamsWithoutMinMax = Array.from(searchParams.entries())
     .filter(([key]) => key !== 'min' && key !== 'max')
-    .map((param) => {
-      const [key, value] = param;
-      console.log('key', key, 'value', value, param);
 
-      return (
-        <MobileFilterOption
-          key={key}
-          param={key}
-          label={removeDash(value)}
-          value={value}
-          isSelected={true}
-          hasX={true}
-        />
-      );
+  const searchedParams = searchedParamsWithoutMinMax.map((param) => {
+    const [key, value] = param;
+    const labels = filters.map((filter) => {
+      if (filter.param === key) {
+        const option = filter.options.find((option) => option.value === value);
+        return option?.label;
+      }
+      return '';
     });
+    const label = labels.filter(Boolean).join(', ');
+
+    return (
+      <MobileFilterOption
+        key={key}
+        param={key}
+        label={label}
+        value={value}
+        isSelected={true}
+        hasX={true}
+      />
+    );
+  });
 
   return (
     <BottomDrawer show={props.show} setShow={props.setShow}>
-      <div className="filtersContainer h-full w-full px-[5%] flex flex-col uppercase">
+      <div className="filtersContainer h-full w-full px-[5%] flex flex-col uppercase overflow-y-scroll">
         <h2 className="filtersTitle text-[#4A4A49] text-bold text-2xl">
           Filters
         </h2>
@@ -52,20 +55,6 @@ export default function MobileFiltersMenu(props: Props) {
             rowGap: '0.75rem',
           }}
         >
-          {/* {Array.from(searchParams.entries())
-            .filter(([key]) => key !== 'min' && key !== 'max')
-            .map((param) => {
-              const [key, value] = Object.entries(param)[0];
-              return (
-                <MobileFilterOption
-                  key={key}
-                  param={key}
-                  label={removeDash(value)}
-                  value={value}
-                  isSelected={true}
-                />
-              );
-            })} */}
           {searchedParams}
         </div>
 
@@ -82,11 +71,11 @@ export default function MobileFiltersMenu(props: Props) {
 
         <HorizontalRule classNames="mt-4" />
 
-        {props.filters.map((filter) => (
-          <Fragment key={filter.name}>
+        {filters.map((filter) => (
+          <Fragment key={filter.param}>
             <div className="filtersGroup flex flex-col gap-3">
               <h4 className="filtersTitle text-[#4A4A49] text-bold text-lg">
-                {filter.name}
+                {filter.param}
               </h4>
               <div
                 className="filtersWrapper grid grid-cols-3 gap-5"
@@ -95,13 +84,13 @@ export default function MobileFiltersMenu(props: Props) {
                 }}
               >
                 {filter.options.map((option) => {
-                  const currentOptionVal = searchParams.get(filter.name);
+                  const currentOptionVal = searchParams.get(filter.param);
                   const isSelected = currentOptionVal === option.value;
                   return (
                     <MobileFilterOption
                       key={option.value}
-                      param={filter.name}
-                      label={option.name}
+                      param={filter.param}
+                      label={option.label}
                       value={option.value}
                       isSelected={isSelected}
                     />

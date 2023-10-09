@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import {App} from '../../api/type';
+import type {App} from '../../api/type';
 import {useLoaderData} from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
 import FTicons from 'app/ft-lib/FTicon';
@@ -32,9 +32,11 @@ const FAQ = ({section}: FAQSectionProps) => {
       className="faqSection w-full mx-auto"
     >
       <div className="faqSection__wrapper">
-        <p className="ft-text-main md:text-3xl text-2xl">
-          {fields.title.value}
-        </p>
+        {fields.title != null && (
+          <p className="ft-text-main md:text-3xl text-2xl">
+            {fields.title.value}
+          </p>
+        )}
         {fields.faqs.references.nodes.map((faq, index) => {
           const faqFields = arrayToObject({array: faq.fields});
 

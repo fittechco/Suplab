@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LoaderArgs, json } from '@shopify/remix-oxygen';
-import { App } from '../../api/type';
+import type { App } from '../../api/type';
 import { useLoaderData } from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import benefitImage1 from '../../../public/florian-kurrasch-HyivyCRdz14-unsplash.png';
@@ -44,7 +44,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
             >
               <div
                 className="w-[100%] flex items-center content-center relative"
-                style={{ flexDirection: flexDirection }}
+                style={{ flexDirection }}
               >
                 {imageUrl && (
                   <div className="w-[70%] h-[195px] md:w-1/2 md:h-full">
@@ -58,7 +58,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
 
                 <div
                   className="w-full h-full absolute flex items-center justify-end md:items-start"
-                  style={{ flexDirection: flexDirection, ...paddingStyle }}
+                  style={{ flexDirection, ...paddingStyle }}
                 >
                   <div className="benefit_content w-[55%] md:w-1/2 p-2 md:p-4">
                     {benefitFields.title && (

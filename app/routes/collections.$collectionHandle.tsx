@@ -1,29 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {useLoaderData, useSearchParams} from '@remix-run/react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
+import {type LoaderArgs, json} from '@shopify/remix-oxygen';
 import {App} from '../api/type';
 import Hero from './_index/Hero';
 import ProductCard from 'app/components/ProductCard';
 import {Slider} from '~/app/components/ui/slider';
-import {Select} from '~/app/components/ui/select';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
 import { createPortal } from 'react-dom';
 import {Colors} from '../ft-lib/shared';
-import {
-  SelectedOption,
-  VariantOptionFilter,
-  Product,
-  ProductFilter,
-} from '@shopify/hydrogen/storefront-api-types';
-import {ProductQuery} from '../../storefrontapi.generated';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
-
-export type Shop = {
-  name: string;
-};
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const collectionHandle = params.collectionHandle;
@@ -67,7 +55,7 @@ export async function loader({ context, params, request }: LoaderArgs) {
   console.log('collection', collection);
 
   return json({
-    collection: collection,
+    collection,
     availableFilters: availableDynamicFilters,
   });
 }
@@ -89,7 +77,7 @@ function Collection() {
   const data = useLoaderData<typeof loader>();
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
 
-  const filtersData = data.availableFilters;
+  const filtersData = data.availableFilters.filter((filter: any) => filter.param !== 'Price');
   console.log('filtersData', filtersData);
 
   if (!data.collection) {
