@@ -9,6 +9,89 @@ export type ShopName1QueryVariables = StorefrontAPI.Exact<{
 
 export type ShopName1Query = {shop: Pick<StorefrontAPI.Shop, 'name'>};
 
+export type GetAllCollectionsQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type GetAllCollectionsQuery = {
+  collections: {
+    nodes: Array<
+      Pick<StorefrontAPI.Collection, 'id'> & {
+        products: {nodes: Array<Pick<StorefrontAPI.Product, 'id'>>};
+      }
+    >;
+  };
+};
+
+export type GetCollectionByIdQueryVariables = StorefrontAPI.Exact<{
+  id: StorefrontAPI.Scalars['ID'];
+}>;
+
+export type GetCollectionByIdQuery = {
+  collection?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id'> & {
+      products: {nodes: Array<Pick<StorefrontAPI.Product, 'id'>>};
+    }
+  >;
+};
+
+export type GetCollectionByHandleQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String'];
+}>;
+
+export type GetCollectionByHandleQuery = {
+  collectionByHandle?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id'> & {
+      products: {
+        nodes: Array<
+          Pick<
+            StorefrontAPI.Product,
+            'id' | 'title' | 'vendor' | 'handle' | 'description'
+          > & {
+            priceRange: {
+              minVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+              maxVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+            };
+            images: {
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.Image,
+                  'url' | 'height' | 'width' | 'altText'
+                >
+              >;
+            };
+            options: Array<
+              Pick<StorefrontAPI.ProductOption, 'name' | 'values'>
+            >;
+            variants: {
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.ProductVariant,
+                  'quantityAvailable' | 'id' | 'title' | 'availableForSale'
+                > & {
+                  price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+                  compareAtPrice?: StorefrontAPI.Maybe<
+                    Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+                  >;
+                  selectedOptions: Array<
+                    Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                  >;
+                }
+              >;
+            };
+          }
+        >;
+      };
+    }
+  >;
+};
+
 export type ProductFragmentFragment = Pick<
   StorefrontAPI.Product,
   'id' | 'title' | 'vendor' | 'handle' | 'description'
@@ -857,6 +940,18 @@ interface GeneratedQueryTypes {
   '#graphql\nquery shopName1{\n    shop{\n        name\n    }\n}\n': {
     return: ShopName1Query;
     variables: ShopName1QueryVariables;
+  };
+  '#graphql\n        query GetAllCollections {\n            collections(first: 6) {\n                nodes {\n                    id\n                    products(first: 5) {\n                        nodes {\n                            id\n                        }\n                    }\n                }\n            }\n        }\n        ': {
+    return: GetAllCollectionsQuery;
+    variables: GetAllCollectionsQueryVariables;
+  };
+  '#graphql\n        query GetCollectionById ($id: ID!) {\n            collection(id: $id) {\n                id\n                products(first: 10) {\n                    nodes {\n                        id\n                    }\n                }\n            }\n        }\n        ': {
+    return: GetCollectionByIdQuery;
+    variables: GetCollectionByIdQueryVariables;
+  };
+  '#graphql\n        query GetCollectionByHandle ($handle: String!) {\n            collectionByHandle(handle: $handle) {\n                id\n                products(first: 10) {\n                    nodes {\n                        ...ProductFragment\n                    }\n                }\n            }\n        }\n        #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n        ': {
+    return: GetCollectionByHandleQuery;
+    variables: GetCollectionByHandleQueryVariables;
   };
   '#graphql\n      query AllProducts{\n        products(first: 20) {\n          edges {\n            node {\n              ...ProductFragment\n            }\n          }\n        }\n      }\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
     return: AllProductsQuery;

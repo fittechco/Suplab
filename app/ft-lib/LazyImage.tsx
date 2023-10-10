@@ -37,7 +37,7 @@ function LazyImage(props: Props) {
         border: `1px solid ${Colors.bg}`,
     }
     return (
-        <div className='relative h-full w-full'>
+        <div className='relative h-full w-full flex items-center justify-center'>
             <LazyLoadImage
                 style={{
                     ...style,

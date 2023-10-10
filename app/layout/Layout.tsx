@@ -20,14 +20,14 @@ const Layout = (props: Props) => {
     <div
       style={{
         height: '100%',
+        minHeight: '100vh',
       }}
-      className=""
+      className="flex flex-col justify-between"
     >
       <Header layout={props.layout} />
       <div
         style={{
           marginTop: 100,
-          height: '100%',
         }}
         className="content"
       >

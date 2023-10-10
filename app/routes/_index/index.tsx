@@ -20,7 +20,12 @@ export type Shop = {
 };
 
 export async function loader({ context }: LoaderArgs) {
-  const storefront = await context.storefront.query(SHOPQUERY);
+  const storefront = await context.storefront.query(SHOPQUERY, {
+    cache: {
+      maxAge: 60 * 60 * 24,
+      staleWhileRevalidate: 60 * 60 * 24,
+    }
+  });
   const { metaobject } = storefront;
   return json({
     metaobject,

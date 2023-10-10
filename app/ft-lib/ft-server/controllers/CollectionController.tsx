@@ -1,28 +1,34 @@
-// import CollectionService from '../services/collectionService';
-// import { App } from '../../app/api/type';
+import CollectionService from "../services/collectionService";
 
-// class CollectionController {
-//   static async getAllCollections(): Promise<
-//     App.Shopify.Storefront.Collection[]
-//   > {
-//     try {
-//       const collections = await CollectionService.getAllCollections();
-//       return collections;
-//     } catch (error) {
-//       return [];
-//     }
-//   }
+class CollectionController {
+    static async getAllCollections() {
+        try {
+            const collections = await CollectionService.getAllCollections();
+            return collections;
+        } catch (error) {
+            return [];
+        }
+    }
 
-//   static async getCollection(args: { collectionId: string }) {
-//     const { collectionId } = args;
-//     try {
-//       const collection = await CollectionService.getCollection(collectionId);
-//       return collection;
-//     } catch (error) {
-//       console.error(error);
-//       return { error: 'Internal server error' };
-//     }
-//   }
-// }
+    static async getCollection(args: { collectionId: string }) {
+        const { collectionId } = args;
+        try {
+            const collection = await CollectionService.getCollectionById(collectionId);
+            return collection;
+        } catch (error) {
+            console.error(error);
+            return { error: 'Internal server error' };
+        }
+    }
+    static async getCollectionByHandle(args: {
+        handle: string
+    }) {
+        const collection = await CollectionService.getCollectionByHandle(args.handle);
 
-// export default CollectionController;
+        return collection;
+    }
+}
+
+
+
+export default CollectionController;

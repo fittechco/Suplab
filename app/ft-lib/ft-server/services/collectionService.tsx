@@ -1,75 +1,72 @@
-// import { storeFrontApi } from '../../app/api/storefrontApi';
-// import { App } from '../../app/api/type';
+import StorefrontApi from '../../../api/storefront';
+import { PRODUCTFRAGMENT } from './productService';
 
-// class CollectionService {
-//     static async getAllCollections(): Promise<
-//         App.Shopify.Storefront.Collection[]
-//     > {
-//         const query = `#graphql
-// query {
-//     collections(first: 6) {
-//         edges {
-//             node {
-//                 id
-//                 products(first: 5) {
-//                     edges {
-//                         node {
-//                             id
-//                         }
-//                     }
-//                 }
-//              }
-//         }
-//     }
-// }
-//         `;
-//         const { data } = await storeFrontApi({ query });
-//         return data.collections.edges.map((edge: any) => edge.node);
-//     }
+const storefront = StorefrontApi.storeFront()
 
-//     static async getCollection(
-//         id: string,
-//     ): Promise<App.Shopify.Storefront.Collection> {
-//         const query = `#graphql
-// query ($id: ID!) {
-//     collection(id: $id) {
-//         id
-//         products(first: 10) {
-//             edges {
-//                 node {
-//                     id
-//                 }
-//             }
-//         }
-//     }
-// }
-//         `;
-//         const variables = { id };
-//         const { data } = await storeFrontApi({ query, variables });
-//         return data.collection;
-//     }
+class CollectionService {
+    static async getAllCollections() {
+        const query = `#graphql
+        query GetAllCollections {
+            collections(first: 6) {
+                nodes {
+                    id
+                    products(first: 5) {
+                        nodes {
+                            id
+                        }
+                    }
+                }
+            }
+        }
+        `;
+        const { collections } = await storefront.query(query);
+        return collections.nodes.map((edge: any) => edge.node);
+    }
 
-//     static async getCollectionByHandle(
-//         handle: string,
-//     ): Promise<App.Shopify.Storefront.Collection> {
-//         const query = `#graphql
-//             query ($handle: String!) {
-//                 collectionByHandle(handle: $handle) {
-//                     id
-//                     products(first: 10) {
-//                         edges {
-//                             node {
-//                                 id
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         `;
-//         const variables = { handle };
-//         const { data } = await storeFrontApi({ query, variables });
-//         return data.collectionByHandle;
-//     }
-// }
+    static async getCollectionById(
+        id: string,
+    ) {
+        const query = `#graphql
+        query GetCollectionById ($id: ID!) {
+            collection(id: $id) {
+                id
+                products(first: 10) {
+                    nodes {
+                        id
+                    }
+                }
+            }
+        }
+        `;
+        const variables = { id };
+        const { collection } = await storefront.query(query, {
+            variables,
+        });
+        return collection;
+    }
 
-// export default CollectionService;
+    static async getCollectionByHandle(
+        handle: string,
+    ) {
+        const query = `#graphql
+        query GetCollectionByHandle ($handle: String!) {
+            collectionByHandle(handle: $handle) {
+                id
+                products(first: 10) {
+                    nodes {
+                        ...ProductFragment
+                    }
+                }
+            }
+        }
+        ${PRODUCTFRAGMENT}
+        `;
+        const variables = { handle };
+        const { collectionByHandle } = await storefront.query(query, {
+            variables,
+        });
+        return collectionByHandle;
+    }
+}
+
+export default CollectionService;

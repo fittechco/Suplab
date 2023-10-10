@@ -1,7 +1,7 @@
-import {LoaderArgs} from '@shopify/remix-oxygen';
+import { LoaderArgs } from '@shopify/remix-oxygen';
 import StorefrontApi from '../../../api/storefront';
 import invariant from 'tiny-invariant';
-import { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
+import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 
 // the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
@@ -325,8 +325,8 @@ class ProductService {
     invariant(data.collection != null, 'Collection not found');
     return data.collection;
   }
-  
-  static async getAvailableFilters(args: {handle: string}) {
+
+  static async getAvailableFilters(args: { handle: string }) {
     console.log('args from service', args);
     const query = `#graphql
     query GetAvailableFilters($handle: String!) {
@@ -359,7 +359,7 @@ class ProductService {
     return data.collection;
   }
 
-  static async getProductRecommendations(args: {productId: string}) {
+  static async getProductRecommendations(args: { productId: string }) {
     const query = `#graphql
       query ProductRecommendations($productId: ID!) {
         productRecommendations(productId: $productId) {

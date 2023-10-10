@@ -227,9 +227,10 @@ const ProductPage = () => {
                     >
                       <LazyImage
                         style={{
-                          objectFit: 'cover',
+                          objectFit: 'contain',
                           height: '100%',
-                          width: 'auto',
+                          width: '100%',
+                          maxWidth: '100%',
                           margin: 'auto',
                           borderRadius: '24px',
                         }}
