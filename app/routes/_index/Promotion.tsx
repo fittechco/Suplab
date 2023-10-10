@@ -1,20 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import type {App} from '../../api/type';
-import {useLoaderData} from '@remix-run/react';
+import React, { useEffect, useState } from 'react';
+import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import type { App } from '../../api/type';
+import { useLoaderData } from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 
 interface PromotionSectionProps {
   section: App.HomePageTemplate.PromotionsSection;
 }
 
-const Promotion = ({section}: PromotionSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+const Promotion = ({ section }: PromotionSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
   return (
     <div
       key={section.type}
       style={{
-        marginTop: '115px',
         height: '215px',
       }}
       className="promotionSection w-full !container mx-auto"
