@@ -59,11 +59,11 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
         className="shopTheGoalSection__benefits relative swiper-container"
       >
         <div className="swiper-wrapper flex">
-          {fields.shop_the_goals.references.nodes.map((shopTheGoal, index) => {
+          {fields.shop_the_goals && fields.shop_the_goals.references.nodes.map((shopTheGoal, index) => {
             const goalFields = arrayToObject({array: shopTheGoal.fields});
             const goalImage = goalFields.goal_image?.reference?.image?.url;
             return (
-              <div key={index} className="swiper-slide">
+              <div key={shopTheGoal.id} className="swiper-slide">
                 <div className="shopTheGoalSection__shopTheGoal flex flex-col justify-center items-center rounded-[17.5]">
                   <div
                     style={{

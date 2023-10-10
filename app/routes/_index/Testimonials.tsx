@@ -12,6 +12,9 @@ interface TestimonialsSectionProps {
 
 const Testimonials = ({section}: TestimonialsSectionProps) => {
   const fields = arrayToObject({array: section.fields});
+  if(section.fields[0]?.key == "testimonials" ){
+    section.fields[0]
+  }
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const swiperContainer = useRef<HTMLDivElement | null>(null);
@@ -34,6 +37,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
         },
       },
       modules: [Navigation],
+      
     });
 
     return () => {
@@ -62,18 +66,21 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
         className="testimonialsSection__testimonials swiper-container relative"
       >
         <div className="swiper-wrapper">
-          {fields.testimonials.references.nodes.map((testimonial, index) => {
+          {fields.testimonials != null && fields.testimonials.references?.nodes?.map((testimonial, index) => {
+          console.log("hello from testimonials1")
             const testimonialFields = arrayToObject({
               array: testimonial.fields,
             });
-
+            console.log("hello from testimonials2", testimonialFields)
             const isFirstSlide = index === 0;
-            const isLastSlide =
-              index === fields.testimonials.references.nodes.length - 1;
+            let isLastSlide = null
+            if (fields.testimonials != null && fields) {
+              isLastSlide = index === fields.testimonials.references.nodes.length - 1;
+            }
 
             return (
               <div
-                key={index}
+                key={testimonial.id}
                 style={{
                   marginLeft: isFirstSlide ? 'auto' : '0',
                   marginRight: isLastSlide ? 'auto' : '0',
@@ -162,11 +169,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
           <button className="swiper-button-prev-icon"></button>
         </div>
         <div
-          className={`swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden ${
-            currentSlide === fields.testimonials.references.nodes.length - 1
-              ? 'hidden'
-              : 'flex'
-          }`}
+          className={`swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden `}
         >
           <button className="swiper-button-next-icon"></button>
         </div>
@@ -174,5 +177,11 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
     </div>
   );
 };
+
+// ${
+  // currentSlide === fields.testimonials?.references.nodes.length - 1 
+  // ? 'hidden'
+  // : 'flex'
+// }
 
 export default Testimonials;

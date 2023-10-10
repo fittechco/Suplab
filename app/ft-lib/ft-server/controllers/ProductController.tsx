@@ -1,4 +1,4 @@
-import { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
+import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 import ProductService from '../services/productService'
 
 class ProductController {
@@ -78,7 +78,6 @@ class ProductController {
       throw error;
     }
   }
-// =======
 
   static async getFilteredProducts(args: { handle: string; filters: ProductFilter[] }) {
     try {

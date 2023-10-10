@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import React, {useEffect, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {type LoaderArgs, json} from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from './Hero';
-import type { App } from '../../api/type';
+import type {App} from '../../api/type';
 import Benefits from './Benefits';
 import Testimonials from './Testimonials';
 import ShopTheGoal from './ShopTheGoal';
@@ -13,32 +13,32 @@ import Promotion from './Promotion';
 import Offers from './Offers';
 import FeaturedCollections from './FeaturedCollections';
 import FAQ from './FAQ';
-import { UseShopStore } from '~/app/root';
+import {UseShopStore} from '~/app/root';
 
 export type Shop = {
   name: string;
 };
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({context}: LoaderArgs) {
   const storefront = await context.storefront.query(SHOPQUERY, {
     cache: {
       maxAge: 60 * 60 * 24,
       staleWhileRevalidate: 60 * 60 * 24,
-    }
+    },
   });
-  const { metaobject } = storefront;
+  const {metaobject} = storefront;
   return json({
     metaobject,
   });
 }
 
 function HomePage() {
-  const { metaobject }: { metaobject: App.HomePageTemplate.Template } =
+  const {metaobject}: {metaobject: App.HomePageTemplate.Template} =
     useLoaderData();
   const [sections, setSections] = useState<App.HomePageTemplate.Sections>([]);
 
   useEffect(() => {
-    UseShopStore.setState({ routesLoader: false });
+    UseShopStore.setState({routesLoader: false});
   }, []);
 
   useEffect(() => {
@@ -54,38 +54,28 @@ function HomePage() {
       {sections.map((section) => {
         if (section.type === 'promotion_section') {
           return <Promotion section={section} key={section.type} />;
-        }
-
-        if (section.type === 'hero_section') {
+        } else if (section.type === 'hero_section') {
           return <Hero section={section} key={section.type} />;
-        }
-
-        if (section.type === 'benefits_section') {
+        } else if (section.type === 'benefits_section') {
           return <Benefits section={section} key={section.type} />;
-        }
-
-        if (section.type === 'section_collection_products') {
+        } else if (section.type === 'section_collection_products') {
           return <FeaturedCollections section={section} key={section.type} />;
-        }
-
-        if (section.type === 'testimonials_section') {
+        } else if (section.type === 'testimonials_section') {
           return <Testimonials section={section} key={section.type} />;
-        }
-
-        if (section.type === 'shop_the_goal_section') {
+        } else if (section.type === 'shop_the_goal_section') {
           return <ShopTheGoal section={section} key={section.type} />;
-        }
-
-        if (section.type === 'offers_section') {
+        } else if (section.type === 'offers_section') {
           return <Offers section={section} key={section.type} />;
-        }
-
-        if (section.type === 'contact_section') {
+        } else if (section.type === 'contact_section') {
           return <Contact section={section} key={section.type} />;
-        }
-
-        if (section.type === 'faq_section') {
+        } else if (section.type === 'faq_section') {
           return <FAQ section={section} key={section.type} />;
+        } else {
+          return (
+            <div key={''}>
+              <h1>Section type not found</h1>
+            </div>
+          );
         }
       })}
     </div>
@@ -104,6 +94,7 @@ fragment Metaobject on Metaobject {
     references(first: 20) {
       nodes {
         ... on Metaobject {
+          id
           type
           fields {
             key

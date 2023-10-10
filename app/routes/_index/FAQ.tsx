@@ -13,7 +13,7 @@ interface FAQSectionProps {
 const FAQ = ({section}: FAQSectionProps) => {
   const fields = arrayToObject({array: section.fields});
   const [isOpen, setIsOpen] = useState<boolean[]>(
-    new Array(fields.faqs.references.nodes.length).fill(false),
+    new Array(fields.faqs?.references.nodes.length).fill(false),
   );
 
   const toggleOpen = (index: number) => {
@@ -37,13 +37,13 @@ const FAQ = ({section}: FAQSectionProps) => {
             {fields.title.value}
           </p>
         )}
-        {fields.faqs.references.nodes.map((faq, index) => {
+        {fields.faqs && fields.faqs.references.nodes.map((faq, index) => {
           const faqFields = arrayToObject({array: faq.fields});
 
           return (
             <div
               className="faqSection__questions w-full flex items-start justify-start"
-              key={index}
+              key={faq.id}
             >
               <div className="flex items-center justify-between w-full">
                 {faqFields.question != null && (
@@ -72,7 +72,7 @@ const FAQ = ({section}: FAQSectionProps) => {
                   isOpen[index] ? 'open' : ''
                 }`}
               >
-                <p className="text-xl">{faqFields.answer.value}</p>
+                <p className="text-xl">{faqFields.answer?.value}</p>
               </div>
               <div className="faqDivider" />
             </div>

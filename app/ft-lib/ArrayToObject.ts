@@ -10,7 +10,7 @@ type ObjectToFields<T> = T extends Array<infer Field>
   ? Field extends {
       key: string;
     }
-    ? {[P in Field['key']]: Field}
+    ? {[P in Field['key']]: Field | null}
     : never
   : never;
 

@@ -79,6 +79,7 @@ export namespace App {
           key: 'benefits';
           references: {
             nodes: Array<{
+              id: string;
               type: 'benefit';
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{
@@ -127,6 +128,7 @@ export namespace App {
           key: 'testimonials';
           references: {
             nodes: Array<{
+              id: string;
               type: 'testimonial';
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{
@@ -143,8 +145,8 @@ export namespace App {
                 }>
               >;
             }>;
-          };
-        }>
+          } ;
+        }> 
       >;
     };
 
@@ -158,6 +160,7 @@ export namespace App {
           key: 'shop_the_goals';
           references: {
             nodes: Array<{
+              id: string;
               type: 'shop_the_goal';
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{
@@ -191,6 +194,7 @@ export namespace App {
           key: 'offers';
           references: {
             nodes: Array<{
+              id: string;
               type: 'offer';
               fields: Array<
                 Shopify.MetaobectsDef.FileReference<{
@@ -239,6 +243,7 @@ export namespace App {
           key: 'faqs';
           references: {
             nodes: Array<{
+              id: string;
               type: 'faq';
               fields: Array<
                 Shopify.MetaobectsDef.Single_Line_Text_Field<{
