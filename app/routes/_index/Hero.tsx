@@ -14,8 +14,8 @@ const Hero = ({ section }: HeroSectionProps) => {
   const [image, setImage] = React.useState<string | null>(null);
 
   const backgroundImageSrc = isMobile
-    ? fields.mobile_image.reference.image.url
-    : fields.desktop_image.reference.image.url;
+    ? fields.mobile_image?.reference.image.url
+    : fields.desktop_image?.reference.image.url;
 
   return (
     <div

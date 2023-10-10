@@ -71,11 +71,11 @@ const Offers = ({section}: OffersSectionProps) => {
       <div className="offersSection__offers relative">
         <div ref={swiperContainer} className="swiper-container">
           <div className="swiper-wrapper">
-            {fields.offers.references.nodes.map((offer, index) => {
+            {fields.offers && fields.offers.references.nodes.map((offer, index) => {
               const offerfields = arrayToObject({array: offer.fields});
               return (
-                <div key={index} className="swiper-slide w-fit h-fit">
-                  {offerfields.image.reference?.image != null && (
+                <div key={offer.id} className="swiper-slide w-fit h-fit">
+                  {offerfields.image?.reference?.image != null && (
                     <img
                       className="object-fill rounded-3xl"
                       src={offerfields.image.reference.image.url}

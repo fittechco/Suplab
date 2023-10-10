@@ -15,8 +15,8 @@ const Contact = ({section}: ContactSectionProps) => {
   const [image, setImage] = React.useState<string | null>(null);
 
   const backgroundImageSrc = isMobile
-    ? fields.image.reference.image.url
-    : fields.image.reference.image.url;
+    ? fields.image?.reference.image.url
+    : fields.image?.reference.image.url;
   return (
     <div
       key={section.type}

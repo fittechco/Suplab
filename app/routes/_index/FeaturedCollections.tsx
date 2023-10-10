@@ -14,8 +14,8 @@ interface FeaturedCollectionsSectionProps {
 const FeaturedCollections = ({section}: FeaturedCollectionsSectionProps) => {
   const fields = arrayToObject({array: section.fields});
 
-  const collectionOneProducts = fields.collection_one.reference.products.nodes;
-  const collectionTwoProducts = fields.collection_two.reference.products.nodes;
+  const collectionOneProducts = fields.collection_one?.reference.products.nodes || [];
+  const collectionTwoProducts = fields.collection_two?.reference.products.nodes || [];
 
   const [activeButton, setActiveButton] = useState('collection_one');
 

@@ -26,7 +26,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
         </p>
       )}
       <div className="benefitSection__benefits">
-        {fields.benefits.references.nodes.map((benefit, index) => {
+        {fields.benefits && fields.benefits.references.nodes.map((benefit, index) => {
           const isEven = index % 2 === 0;
           const flexDirection = isEven ? 'row' : 'row-reverse';
           const benefitFields = arrayToObject({ array: benefit.fields });
@@ -40,7 +40,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
           return (
             <div
               className="benefitSection__benefit my-10 flex items-center justify-center"
-              key={index}
+              key={benefit.id}
             >
               <div
                 className="w-[100%] flex items-center content-center relative"
