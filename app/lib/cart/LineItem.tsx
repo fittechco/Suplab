@@ -7,9 +7,9 @@ import LazyImage from "~/app/ft-lib/LazyImage";
 import resizeImage from "~/app/ft-lib/resizeImages";
 import { Colors } from "~/app/ft-lib/shared";
 
-export default function LineItem(props: { lineItem: CartLine | ComponentizableCartLine | undefined }) {
+export default function LineItem(props: { lineItem: CartLine | ComponentizableCartLine }) {
     const { lineItem } = props;
-    const [quantity, setQuantity] = useState(lineItem?.quantity ?? 0);
+    const [quantity, setQuantity] = useState(lineItem?.quantity || 1);
     if (lineItem == null) {
         return null;
     }

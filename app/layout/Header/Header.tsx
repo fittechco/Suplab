@@ -217,7 +217,7 @@ function Header(props: Props) {
                   }}
                   className="ml-1"
                 >
-                  {cart?.totalQuantity}
+                  {cart?.totalQuantity || 0}
                 </span>
               </button>
             </div>
