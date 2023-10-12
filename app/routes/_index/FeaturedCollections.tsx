@@ -57,6 +57,9 @@ const FeaturedCollections = ({section}: FeaturedCollectionsSectionProps) => {
                   backgroundColor: Colors.primary,
                   color: Colors.textSecondary,
                 }}
+                onClick={() => {
+                  window.location.href = activeButton === 'collection_one' ? '/collections/' + fields.collection_one?.reference.title : '/collections/' + fields.collection_two?.reference.title;
+                }}
                 className="ft-text-main w-max btn md:px-4 md:py-2 px-4 py-1 rounded-full text-main text-center font-bold md:text-xl text-sm uppercase"
               >
                 {fields.shop_button_text.value}

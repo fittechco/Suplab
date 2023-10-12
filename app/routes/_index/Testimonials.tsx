@@ -37,7 +37,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
         },
       },
       modules: [Navigation],
-      
+
     });
 
     return () => {
@@ -56,7 +56,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
       }}
       className="testimonialsSection w-full !container mx-auto"
     >
-      {fields.title != null && (
+      {fields.title != null && fields.testimonials != null && (
         <p className="ft-text-main md:text-3xl text-2xl mb-10">
           {fields.title.value}
         </p>
@@ -67,11 +67,9 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
       >
         <div className="swiper-wrapper">
           {fields.testimonials != null && fields.testimonials.references?.nodes?.map((testimonial, index) => {
-          console.log("hello from testimonials1")
             const testimonialFields = arrayToObject({
               array: testimonial.fields,
             });
-            console.log("hello from testimonials2", testimonialFields)
             const isFirstSlide = index === 0;
             let isLastSlide = null
             if (fields.testimonials != null && fields) {

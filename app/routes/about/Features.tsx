@@ -1,14 +1,13 @@
 import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import { Colors } from '../../ft-lib/shared';
-import { App } from '../../api/type';
+import type { App } from '../../api/type';
 
 interface FeaturesHeroSectionProps {
   section: App.AboutPageTemplate.FeaturesSection;
 }
 
 const Features = ({ section }: FeaturesHeroSectionProps) => {
-  console.log(section);
   const fields = arrayToObject({ array: section.fields });
 
   return (
@@ -26,10 +25,9 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
       )}
 
       <div className="featureSection__features">
-        {fields.features.references.nodes.map((feature, index) => {
+        {fields.features?.references.nodes.map((feature, index) => {
           const isEven = index % 2 === 0;
           const featureFields = arrayToObject({ array: feature.fields });
-          console.log(featureFields, 'fields');
 
           const imageUrl = featureFields.image?.reference?.image?.url;
 
@@ -44,11 +42,11 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
           return (
             <div
               className="featureSection__feature my-[80px] md:my-10 flex items-center md:justify-center justify-between"
-              key={index}
+              key={feature.id}
             >
               <div
                 className="w-[100%] flex items-center content-center relative"
-                style={{ flexDirection: flexDirection }}
+                style={{ flexDirection }}
               >
                 {imageUrl && (
                   <div className="w-full h-[195px] md:w-1/2 md:h-full">
@@ -62,7 +60,7 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
 
                 <div
                   className="w-[90%] md:w-full h-full absolute flex md:top-0 top-[25%] items-center justify-end md:justify-end md:items-start"
-                  style={{ flexDirection: flexDirection, ...paddingStyle }}
+                  style={{ flexDirection, ...paddingStyle }}
                 >
                   <div className="feature_content w-full md:w-1/2 p-2 md:p-4">
                     {featureFields.title && (

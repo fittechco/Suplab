@@ -1,16 +1,13 @@
-import StorefrontApi from 'app/api/storefront';
-import type {App} from 'app/api/type';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import FTicons from 'app/ft-lib/FTicon';
 import {Colors} from 'app/ft-lib/shared';
 import {OFFERS_QUERY} from 'app/layout/MobileNav';
 import {useQuery} from 'react-query';
+import StorefrontApi from '../api/storefront';
 
 const storefront = StorefrontApi.storeFront();
-
 export default function Offer() {
   const offers = useQuery('offers', async () => {
-    const res = await StorefrontApi.storeFront().query(OFFERS_QUERY);
+    const res = await storefront.query(OFFERS_QUERY);
     return res.metaobject;
   });
 

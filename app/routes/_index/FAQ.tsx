@@ -7,7 +7,7 @@ import FTicons from 'app/ft-lib/FTicon';
 import {Colors} from 'app/ft-lib/shared';
 
 interface FAQSectionProps {
-  section: App.HomePageTemplate.FaqSection;
+  section: App.HomePageTemplate.FaqSection | App.AboutPageTemplate.FaqSection;
 }
 
 const FAQ = ({section}: FAQSectionProps) => {

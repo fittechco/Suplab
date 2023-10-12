@@ -1,27 +1,23 @@
 import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import { Colors } from '../../ft-lib/shared';
-import { App } from '../../api/type';
+import type { App } from '../../api/type';
 
 interface AboutUsHeroSectionProps {
   section: App.AboutPageTemplate.AboutUsHeroSection;
 }
 
 const AboutUsHero = ({ section }: AboutUsHeroSectionProps) => {
-  console.log(section);
   const fields = arrayToObject({ array: section.fields });
   const isMobile = window.innerWidth <= 768;
     const [image, setImage] = React.useState<string | null>(null)
 
     const backgroundImageSrc = isMobile
-      ? fields.mobile_image.reference.image.url
-      : fields.desktop_image.reference.image.url;
+      ? fields.mobile_image?.reference.image.url
+      : fields.desktop_image?.reference.image.url;
   
   return (
     <div
-    // style={{
-    //     height: '680px',
-    // }}
     className="hero-section-container w-full md:h-[550px] h-[500px] !container mx-auto"
     >
         <div style={{
@@ -53,18 +49,6 @@ const AboutUsHero = ({ section }: AboutUsHeroSectionProps) => {
               className="subHeader text-base md:text-lg"
             >
               {fields.sub_headline.value}
-            </div>
-          )}
-          {fields.button_text != null && (
-            <div
-              style={{
-                backgroundColor: Colors.primary,
-                color: Colors.textSecondary,
-              }}
-              onClick={() => { window.location.href = '/shop' }}
-              className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
-            >
-              {fields.button_text.value}
             </div>
           )}
           </div>

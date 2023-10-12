@@ -20,7 +20,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
       }}
       className="benefitSection w-full h-full !container mx-auto"
     >
-      {fields.title != null && (
+      {fields.title != null && fields.benefits != null && (
         <p className="ft-text-main md:text-3xl text-2xl">
           {fields.title.value}
         </p>
