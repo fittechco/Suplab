@@ -12,6 +12,7 @@ interface ContactSectionProps {
 
 const Contact = ({ section }: ContactSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
+  console.log(fields, 'fields form contact');
   const isMobile = window.innerWidth <= 768;
   const [image, setImage] = React.useState<string | null>(null);
 
@@ -123,10 +124,12 @@ const Contact = ({ section }: ContactSectionProps) => {
             <div className="flex flex-col items-center">
               {fields.contact_button_text != null && (
                 <Link
-                  to={"/contact"}
+                  to={`${fields.contact_url?.value}`}
+                  target='_blank'
                   style={{
                     backgroundColor: Colors.primary,
                     color: Colors.textSecondary,
+                    cursor: 'pointer',
                   }}
 
                   className="w-full btn px-4 py-2 rounded-full text-main text-center w- font-bold text-xl capitalize mb-6"
@@ -147,8 +150,9 @@ const Contact = ({ section }: ContactSectionProps) => {
                 </Link>
               )}
               {fields.location_button_text != null && (
-                // todo:  fix add redirect to google maps
-                <div
+                <Link
+                  to={`${fields.location_url?.value}`}
+                  target='_blank'
                   style={{
                     backgroundColor: Colors.secondary,
                     color: Colors.textSecondary,
@@ -168,7 +172,7 @@ const Contact = ({ section }: ContactSectionProps) => {
                   >
                     {fields.location_button_text.value}
                   </p>
-                </div>
+                </Link>
               )}
             </div>
           </div>

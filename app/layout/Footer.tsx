@@ -1,13 +1,13 @@
-import { Link } from '@remix-run/react';
-import { Colors } from '../ft-lib/shared';
+import {Link} from '@remix-run/react';
+import {Colors} from '../ft-lib/shared';
 import type {
   ShopLayoutQuery,
   HeaderQuery,
   FooterQuery,
 } from 'storefrontapi.generated';
-import { Image } from '@shopify/hydrogen';
+import {Image} from '@shopify/hydrogen';
 import FTicons from '../ft-lib/FTicon';
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 
 type Props = {
   layout: {
@@ -72,24 +72,28 @@ const Footer = (props: Props) => {
             )}
           </Link>
           <div className="shop-name__text flex gap-2 ml-2">
-            <FTicons
-              fill={Colors.secondary}
-              style={{
-                stroke: Colors.secondary,
-                width: 32,
-                height: 32,
-              }}
-              name="instagram"
-            />
-            <FTicons
-              fill="none"
-              style={{
-                stroke: Colors.secondary,
-                width: 32,
-                height: 32,
-              }}
-              name="tiktok"
-            />
+            <Link to={`https://www.instagram.com/suplab_nutrition`} target='_blank'>
+              <FTicons
+                fill={Colors.secondary}
+                style={{
+                  stroke: Colors.secondary,
+                  width: 32,
+                  height: 32,
+                }}
+                name="instagram"
+              />
+            </Link>
+            <Link to={`https://www.tiktok.com/@suplabnutrition`} target='_blank'>
+              <FTicons
+                fill="none"
+                style={{
+                  stroke: Colors.secondary,
+                  width: 32,
+                  height: 32,
+                }}
+                name="tiktok"
+              />
+            </Link>
           </div>
         </div>
         {isMobile ? (

@@ -2,6 +2,7 @@ import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import {Colors} from '../../ft-lib/shared';
 import type {App} from '../../api/type';
+import {Link} from '@remix-run/react';
 
 interface ServicesSectionProps {
   section: App.AboutPageTemplate.ServicesSection;
@@ -67,7 +68,9 @@ const Services = ({section}: ServicesSectionProps) => {
                   </div>
                 )}
                 {serviceFields.button_text != null && (
-                  <div
+                  <Link
+                    to={`${serviceFields.button_url?.value}`}
+                    target='_blank'
                     style={{
                       backgroundColor: Colors.primary,
                       color: Colors.textSecondary,
@@ -78,7 +81,7 @@ const Services = ({section}: ServicesSectionProps) => {
                     className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
                   >
                     {serviceFields.button_text.value}
-                  </div>
+                  </Link>
                 )}
               </div>
             </div>
