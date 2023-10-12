@@ -1,11 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
 import type {App} from '../../api/type';
-import {useLoaderData} from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import Swiper from 'swiper';
 import {Pagination, Autoplay} from 'swiper/modules';
-
 
 interface PromotionSectionProps {
   section: App.HomePageTemplate.PromotionsSection;
@@ -14,7 +11,6 @@ interface PromotionSectionProps {
 const Promotion = ({section}: PromotionSectionProps) => {
   const fields = arrayToObject({array: section.fields});
   const isMobile = window.innerWidth <= 768;
-  const [image, setImage] = React.useState<string | null>(null);
 
   const swiperContainer = useRef<HTMLDivElement | null>(null);
 
@@ -43,7 +39,7 @@ const Promotion = ({section}: PromotionSectionProps) => {
         },
       },
       autoplay: {
-        delay: 5000
+        delay: 5000,
       },
       loop: true,
       modules: [Pagination, Autoplay],
@@ -62,36 +58,35 @@ const Promotion = ({section}: PromotionSectionProps) => {
       className="promotionSection container mx-auto md:h-[300px] h-[250px] overflow-hidden"
       ref={swiperContainer}
     >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: '12px',
-          boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
-        }}
-        className="swiper-wrapper flex md:flex-row justify-start items-end relative"
-      > 
-        {fields.promotions?.references.nodes.map((promotion, index) => {
-          const promotionFields = arrayToObject({array: promotion.fields});
-          const imageUrl = isMobile
-            ? promotionFields.mobile_image?.reference.image.url
-            : promotionFields.desktop_image?.reference.image.url;
-          return (
-            <div
-              key={promotion.id}
-              className="swiper-slide w-full h-full"
-              >
-            <img
-              src={imageUrl}
-              alt="img"
-              className="w-full h-full rounded-xl"
-            />
-            </div>
-          );
-        })}
-      <div className="swiper-pagination" />
-      </div>
+      {fields.promotions != null && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '12px',
+            boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
+          }}
+          className="swiper-wrapper flex md:flex-row justify-start items-end relative"
+        >
+          {fields.promotions?.references.nodes.map((promotion, index) => {
+            const promotionFields = arrayToObject({array: promotion.fields});
+            const imageUrl = isMobile
+              ? promotionFields.mobile_image?.reference.image.url
+              : promotionFields.desktop_image?.reference.image.url;
+            return (
+              <div key={promotion.id} className="swiper-slide w-full h-full">
+                <img
+                  src={imageUrl}
+                  alt="img"
+                  className="w-full h-full rounded-xl"
+                />
+              </div>
+            );
+          })}
+          <div className="swiper-pagination" />
+        </div>
+      )}
     </div>
   );
 };

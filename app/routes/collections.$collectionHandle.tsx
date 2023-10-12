@@ -1,21 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import {useEffect, useRef, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {type LoaderArgs, json} from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
-import { Slider } from '~/app/components/ui/slider';
+import {Slider} from '~/app/components/ui/slider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
-import { createPortal } from 'react-dom';
-import { Colors } from '../ft-lib/shared';
+import {createPortal} from 'react-dom';
+import {Colors} from '../ft-lib/shared';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
-import type { App } from '../api/type';
+import type {App} from '../api/type';
 
-
-export async function loader({ context, params, request }: LoaderArgs) {
+export async function loader({context, params, request}: LoaderArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
 
@@ -25,7 +24,7 @@ export async function loader({ context, params, request }: LoaderArgs) {
 
   searchParams.forEach((value, param) => {
     if (param === 'cursor') {
-      return
+      return;
     }
     const parsedValue = JSON.parse(value) as string;
     dynamicFilters.push(parsedValue);
@@ -36,13 +35,13 @@ export async function loader({ context, params, request }: LoaderArgs) {
   });
 
   const availableDynamicFilters = extractAvailableFilters(
-    availableFilters.products.filters
+    availableFilters.products.filters,
   );
 
   const collection = await ProductController.getFilteredProducts({
     handle: collectionHandle,
     filters: dynamicFilters,
-    cursor: null
+    cursor: null,
   });
   return json({
     collection,
@@ -65,33 +64,53 @@ const extractAvailableFilters = (filters: any) => {
 function Collection() {
   const data = useLoaderData<typeof loader>();
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
-  const filtersData = data.availableFilters.filter((filter: any) => filter.param !== 'Price');
+  const filtersData = data.availableFilters.filter(
+    (filter: any) => filter.param !== 'Price',
+  );
   const lastProductRef = useRef<HTMLDivElement | null>(null);
-  const [products, setProducts] = useState<App.Shopify.Storefront.Product[]>(data.collection.products.nodes);
-  const [hasNextPage, setHasNextPage] = useState<boolean>(data.collection.products.pageInfo.hasNextPage);
-  const [cursor, setCursor] = useState<string | null>(data.collection.products.pageInfo.endCursor || null);
+  const [products, setProducts] = useState<App.Shopify.Storefront.Product[]>(
+    data.collection.products.nodes,
+  );
+  const [hasNextPage, setHasNextPage] = useState<boolean>(
+    data.collection.products.pageInfo.hasNextPage,
+  );
+  const [cursor, setCursor] = useState<string | null>(
+    data.collection.products.pageInfo.endCursor || null,
+  );
 
   useEffect(() => {
     if (lastProductRef.current == null) {
-      return
+      return;
     }
     const observer = new IntersectionObserver(async (entries) => {
-      if (entries[0].isIntersecting === true && hasNextPage === true && cursor != null) {
-        console.log("Load more products");
+      if (
+        entries[0].isIntersecting === true &&
+        hasNextPage === true &&
+        cursor != null
+      ) {
+        console.log('Load more products');
         console.log(hasNextPage, cursor);
-        const productsAfterCursor = await ProductController.getFilteredProducts({
-          handle: data.collection.handle,
-          filters: [],
-          cursor
-        })
+        const productsAfterCursor = await ProductController.getFilteredProducts(
+          {
+            handle: data.collection.handle,
+            filters: [],
+            cursor,
+          },
+        );
         console.log(productsAfterCursor, 'productsAfterCursor');
         setHasNextPage(productsAfterCursor.products.pageInfo.hasNextPage);
-        setCursor(productsAfterCursor.products.pageInfo.endCursor ?? null)
+        setCursor(productsAfterCursor.products.pageInfo.endCursor ?? null);
         setProducts([...products, ...productsAfterCursor.products.nodes]);
       }
     });
     observer.observe(lastProductRef.current);
-  }, [cursor, data.collection.handle, data.collection.products, hasNextPage, products]);
+  }, [
+    cursor,
+    data.collection.handle,
+    data.collection.products,
+    hasNextPage,
+    products,
+  ]);
 
   useEffect(() => {
     setProducts(data.collection.products.nodes);
@@ -110,8 +129,8 @@ function Collection() {
   return (
     <div>
       <main className="flex flex-col relative container">
-        <div className="collectionHero__Section w-full mx-auto md:h-[470px] h-[215px]">
-          {data.collection.image != null && (
+        {data.collection.image != null && (
+          <div className="collectionHero__Section w-full mx-auto md:h-[470px] h-[215px]">
             <div
               style={{
                 borderRadius: '24px',
@@ -151,8 +170,8 @@ function Collection() {
                 )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
         <div className="filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
           {filtersData.map((filter: any) => (
             <Dropdown
@@ -173,7 +192,7 @@ function Collection() {
         <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9">
           {products.map((product, index) => {
             if (product == null) {
-              return null
+              return null;
             }
             return (
               <div
@@ -182,24 +201,25 @@ function Collection() {
                     lastProductRef.current = ref;
                   }
                 }}
-                key={product.id} className=''>
+                key={product.id}
+                className=""
+              >
                 <ProductCard product={product} />
               </div>
-            )
+            );
           })}
         </div>
-        {
-          hasNextPage === true && (
-            <div
-              style={{
-                color: Colors.textSecondary,
-                width: '80%',
-              }}
-              className="loading-more loader ft-text-main text-2xl">
-              Loading
-            </div>
-          )
-        }
+        {hasNextPage === true && (
+          <div
+            style={{
+              color: Colors.textSecondary,
+              width: '80%',
+            }}
+            className="loading-more loader ft-text-main text-2xl"
+          >
+            Loading
+          </div>
+        )}
         <div
           className="mobileFilterMenuTrigger h-[50px] w-[50px] bg-main sticky bottom-3 left-5 z-50 my-3 flex lg:hidden items-center justify-center rounded-full shadow-md cursor-pointer hover:scale-105 transition-all"
           style={{
@@ -218,7 +238,7 @@ function Collection() {
             setShow={setShowMobileFilters}
             filters={filtersData}
           />,
-          document.body
+          document.body,
         )}
     </div>
   );
