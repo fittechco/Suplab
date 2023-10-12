@@ -25,7 +25,6 @@
     "@types/react-lazy-load-image-component": "^1.6.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "eslint-config-prettier": "^9.0.0",
     "graphql": "^16.8.0",
     "graphql-tag": "^2.12.6",
     "isbot": "^3.6.6",
