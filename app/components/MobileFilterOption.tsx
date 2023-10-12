@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
-import {Colors} from '../ft-lib/shared';
-import {Link, useSearchParams, useLocation} from '@remix-run/react';
+import { useEffect, useState } from 'react';
+import { Colors } from '../ft-lib/shared';
+import { Link, useSearchParams, useLocation } from '@remix-run/react';
 
 type Props = {
   param: string;
@@ -17,22 +17,18 @@ export default function MobileFilterOption({
   isSelected,
   hasX = false,
 }: Props) {
-  
+
   console.log('props', param, label, value, isSelected, hasX);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const {pathname, search} = useLocation();
+  const { pathname, search } = useLocation();
 
   const linkParams = new URLSearchParams(search);
-  
-  if(hasX === true){
+
+  if (hasX === true) {
     linkParams.delete(param)
   } else {
     linkParams.set(param, value)
   }
-  
-
 
   return (
     <div className="gridItemWrapper w-full flex items-center justify-center">
@@ -55,7 +51,7 @@ export default function MobileFilterOption({
   );
 }
 
-const XIcon = ({strokeColor}: {strokeColor?: string}) => (
+const XIcon = ({ strokeColor }: { strokeColor?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="14"

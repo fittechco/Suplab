@@ -16,8 +16,10 @@ export type GetAllCollectionsQueryVariables = StorefrontAPI.Exact<{
 export type GetAllCollectionsQuery = {
   collections: {
     nodes: Array<
-      Pick<StorefrontAPI.Collection, 'id'> & {
-        products: {nodes: Array<Pick<StorefrontAPI.Product, 'id'>>};
+      Pick<StorefrontAPI.Collection, 'id' | 'title' | 'handle'> & {
+        image?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Image, 'id' | 'altText' | 'url'>
+        >;
       }
     >;
   };
@@ -130,8 +132,8 @@ export type AllProductsQueryVariables = StorefrontAPI.Exact<{
 
 export type AllProductsQuery = {
   products: {
-    edges: Array<{
-      node: Pick<
+    nodes: Array<
+      Pick<
         StorefrontAPI.Product,
         'id' | 'title' | 'vendor' | 'handle' | 'description'
       > & {
@@ -167,8 +169,8 @@ export type AllProductsQuery = {
             }
           >;
         };
-      };
-    }>;
+      }
+    >;
   };
 };
 
@@ -440,24 +442,32 @@ export type GetFilteredProductsQueryVariables = StorefrontAPI.Exact<{
   filters?: StorefrontAPI.InputMaybe<
     Array<StorefrontAPI.ProductFilter> | StorefrontAPI.ProductFilter
   >;
+  cursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
 }>;
 
 export type GetFilteredProductsQuery = {
   collection?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Collection, 'id' | 'title' | 'description'> & {
+    Pick<
+      StorefrontAPI.Collection,
+      'id' | 'handle' | 'title' | 'description'
+    > & {
       image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
       products: {
+        pageInfo: Pick<
+          StorefrontAPI.PageInfo,
+          'hasNextPage' | 'hasPreviousPage' | 'endCursor'
+        >;
         nodes: Array<
           Pick<
             StorefrontAPI.Product,
-            | 'id'
-            | 'title'
-            | 'handle'
             | 'availableForSale'
             | 'productType'
             | 'vendor'
+            | 'id'
+            | 'title'
+            | 'handle'
+            | 'description'
           > & {
-            images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
             priceRange: {
               minVariantPrice: Pick<
                 StorefrontAPI.MoneyV2,
@@ -469,12 +479,32 @@ export type GetFilteredProductsQuery = {
               >;
             };
             variants: {
-              nodes: Array<{
-                selectedOptions: Array<
-                  Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
-                >;
-              }>;
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.ProductVariant,
+                  'quantityAvailable' | 'id' | 'title' | 'availableForSale'
+                > & {
+                  selectedOptions: Array<
+                    Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                  >;
+                  price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+                  compareAtPrice?: StorefrontAPI.Maybe<
+                    Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+                  >;
+                }
+              >;
             };
+            images: {
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.Image,
+                  'url' | 'height' | 'width' | 'altText'
+                >
+              >;
+            };
+            options: Array<
+              Pick<StorefrontAPI.ProductOption, 'name' | 'values'>
+            >;
           }
         >;
       };
@@ -626,7 +656,7 @@ export type OffersQuery = {
         Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
           references?: StorefrontAPI.Maybe<{
             nodes: Array<
-              Pick<StorefrontAPI.Metaobject, 'type'> & {
+              Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
                 fields: Array<
                   Pick<
                     StorefrontAPI.MetaobjectField,
@@ -729,9 +759,9 @@ export type HeaderQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
 
 export type HeaderQuery = {
   menu?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Menu, 'title' | 'handle'> & {
+    Pick<StorefrontAPI.Menu, 'title' | 'id' | 'handle'> & {
       items: Array<
-        Pick<StorefrontAPI.MenuItem, 'title' | 'url'> & {
+        Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
           items: Array<
             Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
               items: Array<
@@ -795,7 +825,7 @@ export type MetaobjectFragment = Pick<StorefrontAPI.Metaobject, 'type'> & {
     Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
       references?: StorefrontAPI.Maybe<{
         nodes: Array<
-          Pick<StorefrontAPI.Metaobject, 'type'> & {
+          Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
             fields: Array<
               Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
                 reference?: StorefrontAPI.Maybe<{
@@ -832,6 +862,98 @@ export type MetaobjectFragment = Pick<StorefrontAPI.Metaobject, 'type'> & {
       >;
     }
   >;
+};
+
+export type AboutPageShopNameQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type AboutPageShopNameQuery = {
+  metaobject?: StorefrontAPI.Maybe<{
+    fields: Array<
+      Pick<StorefrontAPI.MetaobjectField, 'type' | 'key' | 'value'> & {
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<
+            | {
+                __typename:
+                  | 'Collection'
+                  | 'GenericFile'
+                  | 'MediaImage'
+                  | 'Page'
+                  | 'Product'
+                  | 'ProductVariant'
+                  | 'Video';
+              }
+            | ({__typename: 'Metaobject'} & Pick<
+                StorefrontAPI.Metaobject,
+                'type'
+              > & {
+                  fields: Array<
+                    Pick<
+                      StorefrontAPI.MetaobjectField,
+                      'key' | 'value' | 'type'
+                    > & {
+                      references?: StorefrontAPI.Maybe<{
+                        nodes: Array<
+                          Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
+                            fields: Array<
+                              Pick<
+                                StorefrontAPI.MetaobjectField,
+                                'key' | 'value' | 'type'
+                              > & {
+                                reference?: StorefrontAPI.Maybe<{
+                                  image?: StorefrontAPI.Maybe<
+                                    Pick<StorefrontAPI.Image, 'url'>
+                                  >;
+                                }>;
+                              }
+                            >;
+                          }
+                        >;
+                      }>;
+                      reference?: StorefrontAPI.Maybe<
+                        | (Pick<
+                            StorefrontAPI.Collection,
+                            'handle' | 'title'
+                          > & {
+                            products: {
+                              nodes: Array<
+                                Pick<
+                                  StorefrontAPI.Product,
+                                  'title' | 'handle' | 'description'
+                                > & {
+                                  priceRange: {
+                                    minVariantPrice: Pick<
+                                      StorefrontAPI.MoneyV2,
+                                      'amount' | 'currencyCode'
+                                    >;
+                                  };
+                                  images: {
+                                    nodes: Array<
+                                      Pick<StorefrontAPI.Image, 'url'>
+                                    >;
+                                  };
+                                  featuredImage?: StorefrontAPI.Maybe<
+                                    Pick<StorefrontAPI.Image, 'url'>
+                                  >;
+                                }
+                              >;
+                            };
+                          })
+                        | {
+                            image?: StorefrontAPI.Maybe<
+                              Pick<StorefrontAPI.Image, 'url'>
+                            >;
+                          }
+                      >;
+                    }
+                  >;
+                })
+          >;
+        }>;
+      }
+    >;
+  }>;
 };
 
 export type MoneyFragment = Pick<
@@ -941,7 +1063,7 @@ interface GeneratedQueryTypes {
     return: ShopName1Query;
     variables: ShopName1QueryVariables;
   };
-  '#graphql\n        query GetAllCollections {\n            collections(first: 6) {\n                nodes {\n                    id\n                    products(first: 5) {\n                        nodes {\n                            id\n                        }\n                    }\n                }\n            }\n        }\n        ': {
+  '#graphql\n        query GetAllCollections {\n            collections(first: 10) {\n              nodes {\n                id\n                title\n                handle\n                image{\n                    id\n                    altText\n                    url\n                }\n              }\n            }\n          }\n        ': {
     return: GetAllCollectionsQuery;
     variables: GetAllCollectionsQueryVariables;
   };
@@ -953,7 +1075,7 @@ interface GeneratedQueryTypes {
     return: GetCollectionByHandleQuery;
     variables: GetCollectionByHandleQueryVariables;
   };
-  '#graphql\n      query AllProducts{\n        products(first: 20) {\n          edges {\n            node {\n              ...ProductFragment\n            }\n          }\n        }\n      }\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
+  '#graphql\n      query AllProducts{\n        products(first: 20) {\n            nodes {\n              ...ProductFragment\n            }\n        }\n      }\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
     return: AllProductsQuery;
     variables: AllProductsQueryVariables;
   };
@@ -977,7 +1099,7 @@ interface GeneratedQueryTypes {
     return: ProductMetafieldsQuery;
     variables: ProductMetafieldsQueryVariables;
   };
-  '#graphql\n      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!]) {\n        collection(handle: $handle) {\n          id\n          title\n          image {\n            url\n          }\n          description\n          products(first: 10, filters: $filters) {\n            nodes {\n              id\n              title\n              handle\n              images(first: 5) {\n                nodes {\n                  url\n                }\n              }\n              priceRange {\n                minVariantPrice {\n                  amount\n                  currencyCode\n                }\n                maxVariantPrice {\n                  amount\n                  currencyCode\n                }\n              }\n              availableForSale\n              productType\n              vendor\n              variants(first: 10) {\n                nodes {\n                  selectedOptions {\n                    name\n                    value\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    ': {
+  '#graphql\n      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {\n        collection(handle: $handle) {\n          id\n          handle\n          title\n          image {\n            url\n          }\n          description\n          products(first: 10, filters: $filters, after: $cursor) {\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            nodes {\n              ...ProductFragment\n              priceRange {\n                minVariantPrice {\n                  amount\n                  currencyCode\n                }\n                maxVariantPrice {\n                  amount\n                  currencyCode\n                }\n              }\n              availableForSale\n              productType\n              vendor\n              variants(first: 10) {\n                nodes {\n                  selectedOptions {\n                    name\n                    value\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
     return: GetFilteredProductsQuery;
     variables: GetFilteredProductsQueryVariables;
   };
@@ -997,7 +1119,7 @@ interface GeneratedQueryTypes {
     return: SearchProductsQuery;
     variables: SearchProductsQueryVariables;
   };
-  '#graphql\nquery Offers {\n    metaobject(handle: {handle:"offers", type:"offers_section"}) {\n        ...Metaobject\n    }\n  }\n  #graphql\nfragment Metaobject on Metaobject {\n  type\n  fields {\n    key\n    value\n    type\n    references(first: 20) {\n      nodes {\n        ... on Metaobject {\n          type\n          fields {\n            key\n            value\n            type\n            reference{\n              ... on MediaImage {\n                image {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    reference {\n      ... on MediaImage {\n        image {\n          url\n        }\n      }\n      ... on Collection {\n        handle\n        title\n        products(first: 20) {\n          nodes {\n            title\n            handle\n            description\n            priceRange{\n              minVariantPrice{\n                amount\n                currencyCode\n              }\n              }\n            images(first: 20) {\n              nodes {\n                url\n              }\n            }\n            featuredImage {\n              url\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\n': {
+  '#graphql\nquery Offers {\n    metaobject(handle: {handle:"offers", type:"offers_section"}) {\n        ...Metaobject\n    }\n  }\n  #graphql\nfragment Metaobject on Metaobject {\n  type\n  fields {\n    key\n    value\n    type\n    references(first: 20) {\n      nodes {\n        ... on Metaobject {\n          id\n          type\n          fields {\n            key\n            value\n            type\n            reference{\n              ... on MediaImage {\n                image {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    reference {\n      ... on MediaImage {\n        image {\n          url\n        }\n      }\n      ... on Collection {\n        handle\n        title\n        products(first: 20) {\n          nodes {\n            title\n            handle\n            description\n            priceRange{\n              minVariantPrice{\n                amount\n                currencyCode\n              }\n              }\n            images(first: 20) {\n              nodes {\n                url\n              }\n            }\n            featuredImage {\n              url\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\n': {
     return: OffersQuery;
     variables: OffersQueryVariables;
   };
@@ -1005,7 +1127,7 @@ interface GeneratedQueryTypes {
     return: MobileLayoutQuery;
     variables: MobileLayoutQueryVariables;
   };
-  '#graphql\n query Header {\n  menu(handle: "main-menu") {\n    title\n    handle\n    items{\n      title\n      url\n      items {\n        id\n        title\n        url\n        items {\n          id\n          title\n          url\n          items {\n            id\n            title\n            url\n          }\n        }\n      }\n    }\n  }\n}\n': {
+  '#graphql\n query Header {\n  menu(handle: "main-menu") {\n    title\n    id\n    handle\n    items{\n      id\n      title\n      url\n      items {\n        id\n        title\n        url\n        items {\n          id\n          title\n          url\n          items {\n            id\n            title\n            url\n          }\n        }\n      }\n    }\n  }\n}\n': {
     return: HeaderQuery;
     variables: HeaderQueryVariables;
   };
@@ -1016,6 +1138,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  query ShopLayout {\n    shop {\n      id\n      name\n      description\n      primaryDomain {\n        url\n      }\n      brand {\n        logo {\n          image {\n            url\n          }\n        }\n      }\n    }\n  }\n': {
     return: ShopLayoutQuery;
     variables: ShopLayoutQueryVariables;
+  };
+  '#graphql\nquery AboutPageShopName {\n  metaobject(handle: {handle: "aboutpage", type: "page"}) {\n    fields {\n      type\n      key\n      value\n      references(first: 20) {\n        nodes {\n          ... on Metaobject {\n           ...Metaobject\n          }\n          __typename\n        }\n      }\n    }\n  }\n}\n#graphql\nfragment Metaobject on Metaobject {\n  type\n  fields {\n    key\n    value\n    type\n    references(first: 20) {\n      nodes {\n        ... on Metaobject {\n          id\n          type\n          fields {\n            key\n            value\n            type\n            reference{\n              ... on MediaImage {\n                image {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    reference {\n      ... on MediaImage {\n        image {\n          url\n        }\n      }\n      ... on Collection {\n        handle\n        title\n        products(first: 20) {\n          nodes {\n            title\n            handle\n            description\n            priceRange{\n              minVariantPrice{\n                amount\n                currencyCode\n              }\n              }\n            images(first: 20) {\n              nodes {\n                url\n              }\n            }\n            featuredImage {\n              url\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\n': {
+    return: AboutPageShopNameQuery;
+    variables: AboutPageShopNameQueryVariables;
   };
 }
 

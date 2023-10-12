@@ -65,7 +65,7 @@ class ProductController {
     }
   }
 
-// <<<<<<< Updated upstream
+  // <<<<<<< Updated upstream
   static async getProductMetafields(args: { productId: string }) {
     const { productId } = args;
     try {
@@ -79,28 +79,24 @@ class ProductController {
     }
   }
 
-  static async getFilteredProducts(args: { handle: string; filters: ProductFilter[] }) {
+  static async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
     try {
       const { handle } = args;
-      console.log('handle', handle);
       console.log('filters', args.filters);
-      const filteredProducts = await ProductService.getFilteredProducts({ handle, filters: args.filters });
-      console.log('filteredProducts', filteredProducts);
+      const filteredProducts = await ProductService.getFilteredProducts({ handle, filters: args.filters, cursor: args.cursor });
       return filteredProducts;
     } catch (error) {
       console.error(error);
       throw error;
     }
-  }  
+  }
 
-  static async getAvailableFilters(args: {handle: string}) {
+  static async getAvailableFilters(args: { handle: string }) {
     try {
-      console.log('args from controller', args);
       const { handle } = args;
       const availableFilters = await ProductService.getAvailableFilters({ handle });
-      console.log('availableFilters', availableFilters);
       return availableFilters;
-// >>>>>>> Stashed changes
+      // >>>>>>> Stashed changes
     } catch (error) {
       console.error(error);
       throw error;

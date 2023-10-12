@@ -83,7 +83,7 @@ function Header(props: Props) {
 
   // creating a mutation observer to detect when the sub header is added and change the height of the header based on it
 
-  if (props.layout.shop == null) {
+  if (props.layout == null) {
     return null;
   }
 
@@ -109,7 +109,7 @@ function Header(props: Props) {
           height: 80,
           overflow: 'hidden',
         }}
-        className="header-wrapper white-background-blur"
+        className="header-wrapper white-background-blur "
       >
         <div
           style={{
@@ -137,6 +137,7 @@ function Header(props: Props) {
             {props.layout.header.menu?.items.map((item) => {
               // todo: fix this
               const pathname = new URL(item.url || '').pathname;
+              const hasChildren = item.items?.length > 0;
               return (
                 <div
                   onMouseEnter={() => {
@@ -153,16 +154,30 @@ function Header(props: Props) {
                   key={item.title}
                   className="nav-menu h-full flex items-center justify-center cursor-pointer relative px-4 ft-text-main"
                 >
-                  <Link
-                    style={{
-                      color: Colors.text,
-                      fontWeight: '700',
-                    }}
-                    to={pathname}
-                    className="navmenusContainer_item ft-text-main text-sm lg:text-base uppercase transition-all ease-out duration-300"
-                  >
-                    {item.title}
-                  </Link>
+                  {hasChildren === true ? (
+                    <div
+                      style={{
+                        color: Colors.text,
+                        fontWeight: '700',
+                      }}
+                      className="navmenusContainer_item-with-children ft-text-main text-sm lg:text-base uppercase transition-all ease-out duration-300"
+                    >
+                      {item.title}
+                    </div>
+                  ) : (
+                    <Link
+                      style={{
+                        color: Colors.text,
+                        fontWeight: '700',
+                      }}
+                      to={pathname}
+                      className="navmenusContainer_item ft-text-main text-sm lg:text-base uppercase transition-all ease-out duration-300"
+                    >
+                      {item.title}
+                    </Link>
+                  )
+                  }
+
                 </div>
               );
             })}

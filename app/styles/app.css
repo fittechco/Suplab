@@ -292,8 +292,9 @@ input:focus {
   backdrop-filter: blur(2.5px);
 }
 
-.swiper-button-prev:after .swiper-button-next:after {
-  font-size: 25px !important;
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 23px !important;
   font-weight: bold !important;
 }
 

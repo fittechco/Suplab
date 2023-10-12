@@ -6,7 +6,7 @@ class CollectionController {
             const collections = await CollectionService.getAllCollections();
             return collections;
         } catch (error) {
-            return [];
+            throw new Error();
         }
     }
 

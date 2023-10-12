@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import FTicons from '../ft-lib/FTicon';
-import {Colors} from '../ft-lib/shared';
-import {UseShopStore} from '../root';
-import {ON_METAOBJECT} from 'app/routes/_index';
+import { Colors } from '../ft-lib/shared';
+import { UseShopStore } from '../root';
+import { ON_METAOBJECT } from 'app/routes/_index';
 import MobileNavItem from './Header/MobileNavItem';
 import Offer from 'app/components/FtOffers';
-import {Link} from '@remix-run/react';
+import { Link } from '@remix-run/react';
 
 type Props = {
   isOpen: boolean;
@@ -58,9 +58,8 @@ export default function MobileNav(props: Props) {
               }, 500);
             }}
             style={{}}
-            className={`navHeader__close my-2 mobile-nav-item ${
-              animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
-            }`}
+            className={`navHeader__close my-2 mobile-nav-item ${animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
+              }`}
           >
             <FTicons
               fill={'none'}
@@ -80,7 +79,7 @@ export default function MobileNav(props: Props) {
                 style={{
                   transitionDelay: `${index * 0.2}s`,
                 }}
-                key={index}
+                key={menu.id}
                 menu={menu}
               />
             );
@@ -94,9 +93,8 @@ export default function MobileNav(props: Props) {
             style={{
               transitionDelay: `${header?.menu.items.length * 0.2}s`,
             }}
-            className={`offers-wrapper mobile-nav-item ${
-              animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
-            }`}
+            className={`offers-wrapper mobile-nav-item ${animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
+              }`}
           >
             <Offer />
           </div>
@@ -106,20 +104,19 @@ export default function MobileNav(props: Props) {
           className="footer-menus / flex flex-col gap-3 / px-5 text-base w-full"
         >
           {footer.menu?.items.map((menu, index) => {
+
             return (
               <Link
-                key={index + menu.title}
+                key={menu.id}
                 style={{
                   fontWeight: '400',
-                  transitionDelay: `${
-                    ((header.menu?.items.length || 0) + 1) * 0.2 + index * 0.2
-                  }s`,
+                  transitionDelay: `${((header.menu?.items.length || 0) + 1) * 0.2 + index * 0.2
+                    }s`,
                 }}
-                className={`font-mainFont mobile-nav-item ${
-                  animate === true
-                    ? 'show-mobile-nav-item'
-                    : 'hide-mobile-nav-item'
-                }`}
+                className={`font-mainFont mobile-nav-item ${animate === true
+                  ? 'show-mobile-nav-item'
+                  : 'hide-mobile-nav-item'
+                  }`}
                 // todo - fix this create a Link component that handles this
                 to={menu.url || ''}
               >
@@ -132,19 +129,17 @@ export default function MobileNav(props: Props) {
           <div
             style={{
               borderTop: `1px solid ${Colors.secondary}`,
-              transitionDelay: `${
-                (header.menu.items.length + 1) * 0.2 +
-                footer.menu?.items.length! * 0.2
-              }s`,
+              transitionDelay: `${(header.menu.items.length + 1) * 0.2 +
+                (footer.menu?.items.length || 1) * 0.2
+                }`,
               width: '100%',
               paddingBlock: '1rem',
             }}
             className={`social-media-wrapper flex justify-center items-center gap-5 mobile-nav-item
-                         ${
-                           animate === true
-                             ? 'show-mobile-nav-item'
-                             : 'hide-mobile-nav-item'
-                         }`}
+                         ${animate === true
+                ? 'show-mobile-nav-item'
+                : 'hide-mobile-nav-item'
+              }`}
           >
             <FTicons
               style={{

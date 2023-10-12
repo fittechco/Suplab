@@ -61,17 +61,15 @@ class ProductService {
     const query = `#graphql
       query AllProducts{
         products(first: 20) {
-          edges {
-            node {
+            nodes {
               ...ProductFragment
             }
-          }
         }
       }
       ${PRODUCTFRAGMENT}
     `;
     const data = await StorefrontApi.storeFront().query(query);
-    return data.products.edges.map((edge: any) => edge.node);
+    return data.products;
   }
 
   static async getProduct(args: {
@@ -268,26 +266,25 @@ class ProductService {
     invariant(data.product != null, 'Product not found');
     return data.product;
   }
-  static async getFilteredProducts(args: { handle: string; filters: ProductFilter[] }) {
+  static async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
     const query = `#graphql
-      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!]) {
+      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {
         collection(handle: $handle) {
           id
+          handle
           title
           image {
             url
           }
           description
-          products(first: 10, filters: $filters) {
+          products(first: 10, filters: $filters, after: $cursor) {
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              endCursor
+            }
             nodes {
-              id
-              title
-              handle
-              images(first: 5) {
-                nodes {
-                  url
-                }
-              }
+              ...ProductFragment
               priceRange {
                 minVariantPrice {
                   amount
@@ -313,21 +310,21 @@ class ProductService {
           }
         }
       }
+      ${PRODUCTFRAGMENT}
     `;
 
     const data = await StorefrontApi.storeFront().query(query, {
       variables: {
         handle: args.handle,
         filters: args.filters,
+        cursor: args.cursor
       },
     });
-    console.log('data', data);
     invariant(data.collection != null, 'Collection not found');
     return data.collection;
   }
 
   static async getAvailableFilters(args: { handle: string }) {
-    console.log('args from service', args);
     const query = `#graphql
     query GetAvailableFilters($handle: String!) {
       collection(handle: $handle) {
@@ -354,7 +351,6 @@ class ProductService {
         handle: args.handle,
       },
     });
-    console.log('data', data);
     invariant(data.collection != null, 'Collection not found');
     return data.collection;
   }

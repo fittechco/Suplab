@@ -15,6 +15,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
   const [animate, setAnimate] = useState(false);
   const [navItemHeight, setNavItemHeight] = useState(0);
   const itemHeight = 41.6;
+  const hasSubItems = props.menu.items != null && props.menu.items?.length > 0;
   const itemColor = isShowingSub ? Colors.offBlack : Colors.secondary;
   const handleItemClick = () => {
     setIsShowingSub(!isShowingSub);
@@ -83,21 +84,36 @@ export default function MobileNavItem(props: MobileNavItemProps) {
         onClick={handleItemClick}
         className="flex justify-between items-center py-2"
       >
-        <Link
-          routeLoader
-          style={{
-            textDecoration: 'none',
-            color: itemColor,
-            transition: 'all 0.3s ease',
-            textTransform: 'uppercase',
-          }}
-          className="navMenu__title text-base  ft-text-main"
-          // todo - create a Link component that handles this
-          to={props.menu.url || ''}
-        >
-          {props.menu.title}
-        </Link>
-        {props.menu.items != null && props.menu.items?.length > 0 && (
+        {hasSubItems === true || props.menu.url == null ? (
+          <div
+            style={{
+              textDecoration: 'none',
+              color: itemColor,
+              transition: 'all 0.3s ease',
+              textTransform: 'uppercase',
+            }}
+            className="navMenu__title text-base  ft-text-main"
+          >
+            {props.menu.title}
+          </div>
+        ) : (
+          <Link
+            routeLoader
+            style={{
+              textDecoration: 'none',
+              color: itemColor,
+              transition: 'all 0.3s ease',
+              textTransform: 'uppercase',
+            }}
+            className="navMenu__title text-base  ft-text-main"
+            // todo - create a Link component that handles this
+            to={props.menu.url}
+          >
+            {props.menu.title}
+          </Link>
+        )
+        }
+        {hasSubItems === true && (
           <FTicons
             style={{
               transform: isShowingSub ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -113,7 +129,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
           />
         )}
       </div>
-      {props.menu.items != null && props.menu.items?.length > 0 && (
+      {hasSubItems === true && (
         <div
           ref={navItemRef}
           style={{
@@ -144,3 +160,4 @@ export default function MobileNavItem(props: MobileNavItemProps) {
     </div>
   );
 }
+

@@ -41,7 +41,6 @@ export async function action({ request, context }: ActionArgs) {
 
 export async function loader({ context }: LoaderArgs) {
   const { cart } = context;
-  console.log('fetching cart from cart loader');
   const cartProductsRecommendations = CollectionController.getCollectionByHandle({ handle: "all" })
   return defer({
     cart: await cart.get(),
@@ -55,8 +54,6 @@ export default function CartRoute() {
   if (cart == null) {
     return null;
   }
-
-  console.log(cart, 'cart from cart route');
 
   return (
     <div className='cart-container  space-y-4 md:space-y-6'>

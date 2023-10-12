@@ -1,7 +1,7 @@
-import {Link} from '@remix-run/react';
-import {useRef} from 'react';
-import {Colors} from '../../ft-lib/shared';
-import type {App} from '../../api/type';
+import { Link } from '@remix-run/react';
+import { useRef } from 'react';
+import { Colors } from '../../ft-lib/shared';
+import type { App } from '../../api/type';
 
 export default function SubMenuPopup(props: {
   items: App.Shopify.Item[];
@@ -19,7 +19,7 @@ export default function SubMenuPopup(props: {
         height: 'fit-content',
         transition: 'all 0.3s ease-in-out',
       }}
-      className="nav-menu__sub flex justify-between min-h-[30vh] origin-center ease-in-out  z-10 p-5"
+      className="nav-menu__sub flex justify-between min-h-[30vh] origin-center ease-in-out gap-5 z-10 p-5"
     >
       <div className="wrapper  transition-none h-full relative flex justify-center items-start  rounded-b-3xl  gap-16 ">
         {props.items.map((subItem, index) => {

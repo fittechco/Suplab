@@ -7,20 +7,22 @@ class CollectionService {
     static async getAllCollections() {
         const query = `#graphql
         query GetAllCollections {
-            collections(first: 6) {
-                nodes {
+            collections(first: 10) {
+              nodes {
+                id
+                title
+                handle
+                image{
                     id
-                    products(first: 5) {
-                        nodes {
-                            id
-                        }
-                    }
+                    altText
+                    url
                 }
+              }
             }
-        }
+          }
         `;
         const { collections } = await storefront.query(query);
-        return collections.nodes.map((edge: any) => edge.node);
+        return collections;
     }
 
     static async getCollectionById(

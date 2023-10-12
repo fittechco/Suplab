@@ -15,6 +15,7 @@ import {
   type ShouldRevalidateFunction,
   useNavigation,
   useLocation,
+  useNavigate,
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
 import type { HydrogenSession } from '../server';
@@ -33,6 +34,7 @@ import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
 import { usePageAnalytics } from './utils';
 import StoreLogo from "~/public/suplabLogo.png"
+import CTAButton from './components/CTAButton';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -154,7 +156,6 @@ export default function App() {
     if (lastLocationKey.current === location.key) return;
 
     lastLocationKey.current = location.key;
-    console.log(pageAnalytics, "pageAnalytics");
     // This hook is where you can send a page view event to Shopify and other third-party analytics
   }, [location, pageAnalytics]);
 
@@ -168,10 +169,8 @@ export default function App() {
 
   // checking if the app navigation is not idle
   useEffect(() => {
-    console.log(navigation);
-    if (navigation.state !== 'idle') {
+    if (navigation.state === 'loading') {
       if (navigation.location.search != "" && navigation.location.state == null) {
-        console.log("no showing loader because its a search");
         return UseShopStore.setState({ routesLoader: false });
       }
       UseShopStore.setState({ routesLoader: true });
@@ -226,6 +225,10 @@ export function ErrorBoundary() {
   } else if (error instanceof Error) {
     errorMessage = error.message;
   }
+  const navigate = useNavigate();
+  console.log(errorMessage, "errorMessage");
+  // the return type from the loader and its being wrapped in Awaited in order to remove the promise type
+  const data = root.data as Awaited<ReturnType<typeof loader>>["data"];
 
   return (
     <html lang="en">
@@ -235,18 +238,27 @@ export function ErrorBoundary() {
         <Meta />
         <Links />
       </head>
-      <body className="">
-        <Layout {...root.data}>
-          <div className="route-error">
-            <h1>Oops</h1>
-            <h2>{errorStatus}</h2>
-            {errorMessage && (
-              <fieldset>
-                <pre>{errorMessage}</pre>
-              </fieldset>
-            )}
-          </div>
-        </Layout>
+      <body className="container">
+        {/* <Layout
+          layout={}
+        > */}
+        <div className="route-error w-full h-screen">
+          {errorStatus === 404 && (
+            <div className='flex flex-col justify-center items-center h-full w-full'>
+              <h1 className='ft-text-main'>{`${errorStatus} Page not found`}</h1>
+              <CTAButton
+                onClick={() => {
+                  navigate('/collections/all');
+                }}
+                className="md:text-xl"
+              >
+                Continue Shopping
+              </CTAButton>
+            </div>
+          )
+          }
+        </div>
+        {/* </Layout> */}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
         <LiveReload nonce={nonce} />
@@ -320,8 +332,10 @@ const HEADER_QUERY = `#graphql
  query Header {
   menu(handle: "main-menu") {
     title
+    id
     handle
     items{
+      id
       title
       url
       items {
