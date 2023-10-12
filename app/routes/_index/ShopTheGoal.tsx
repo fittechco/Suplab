@@ -49,7 +49,7 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
       }}
       className="shopTheGoalSection w-full container mx-auto"
     >
-      {fields.title != null && (
+      {fields.title != null && fields.shop_the_goals != null && (
         <p className="ft-text-main md:text-3xl text-2xl mb-10 text-center md:text-start">
           {fields.title.value}
         </p>

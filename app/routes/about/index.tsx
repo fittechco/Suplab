@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
-import { App } from '../../api/type';
+import {useEffect, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {type LoaderArgs, json} from '@shopify/remix-oxygen';
+import type {App} from '../../../app/api/type';
 import AboutUsHero from './AboutUsHero';
 import Features from './Features';
 import Services from './Services';
@@ -12,16 +12,16 @@ export type Shop = {
   name: string;
 };
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({context}: LoaderArgs) {
   const storefront = await context.storefront.query(SHOPQUERY);
-  const { metaobject } = storefront;
+  const {metaobject} = storefront;
   return json({
     metaobject,
   });
 }
 
 function AboutPage() {
-  const { metaobject }: { metaobject: App.AboutPageTemplate.Template } =
+  const {metaobject}: {metaobject: App.AboutPageTemplate.Template} =
     useLoaderData();
   const [sections, setSections] = useState<App.AboutPageTemplate.Sections>([]);
 
@@ -36,27 +36,23 @@ function AboutPage() {
   return (
     <div className="h-full w-full space-y-6">
       {sections.map((section) => {
-        console.log(section);
         if (section.type === 'hero_section') {
           return <AboutUsHero section={section} key={section.type} />;
-        }
-
-        if (section.type === 'features_section') {
+        } else if (section.type === 'features_section') {
           return <Features section={section} key={section.type} />;
-        }
-
-        if (section.type === 'services_section') {
+        } else if (section.type === 'services_section') {
           return <Services section={section} key={section.type} />;
-        }
-        
-        if (section.type === 'contact_section') {
+        } else if (section.type === 'contact_section') {
           return <Contact section={section} key={section.type} />;
-        }
-
-        if (section.type === 'faq_section') {
+        } else if (section.type === 'faq_section') {
           return <FAQ section={section} key={section.type} />;
+        } else {
+          return (
+            <div key={''}>
+              <h1>Section type not found</h1>
+            </div>
+          );
         }
-
       })}
     </div>
   );
@@ -65,7 +61,7 @@ function AboutPage() {
 export default AboutPage;
 
 export const ON_METAOBJECT = `#graphql
-fragment Metaobject on Metaobject {
+fragment AboutMetaobject on Metaobject {
   type
   fields {
     key
@@ -124,11 +120,10 @@ fragment Metaobject on Metaobject {
     }
   }
 }
-`
-
+`;
 
 const SHOPQUERY = `#graphqls
-query ShopName {
+query AboutShopName {
   metaobject(handle: {handle: "aboutpage", type: "page"}) {
     fields {
       type
@@ -137,7 +132,7 @@ query ShopName {
       references(first: 20) {
         nodes {
           ... on Metaobject {
-           ...Metaobject
+           ...AboutMetaobject
           }
           __typename
         }

@@ -5,6 +5,11 @@ import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
 import {Colors} from 'app/ft-lib/shared';
 import {Navigation} from 'swiper/modules';
+import CollectionController from '~/app/ft-lib/ft-server/controllers/CollectionController';
+import {Product} from '@shopify/hydrogen/storefront-api-types';
+import type {ProductQuery} from '~/storefrontapi.generated';
+import {useQuery} from 'react-query';
+import {Link} from 'react-router-dom';
 
 interface OffersSectionProps {
   section: App.HomePageTemplate.OffersSection;
@@ -51,7 +56,7 @@ const Offers = ({section}: OffersSectionProps) => {
       className="offersSection w-full !container mx-auto"
     >
       <div className="flex items-center justify-between mb-10">
-        {fields.title != null && (
+        {fields.title != null && fields.offers != null && (
           <p className="ft-text-main md:text-3xl text-2xl">
             {fields.title.value}
           </p>
@@ -62,6 +67,9 @@ const Offers = ({section}: OffersSectionProps) => {
               backgroundColor: Colors.primary,
               color: Colors.textSecondary,
             }}
+            onClick={() => {
+              window.location.href = `/collections/${fields.offers?.key}`;
+            }}
             className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
           >
             {fields.button_text.value}
@@ -71,19 +79,26 @@ const Offers = ({section}: OffersSectionProps) => {
       <div className="offersSection__offers relative">
         <div ref={swiperContainer} className="swiper-container">
           <div className="swiper-wrapper">
-            {fields.offers && fields.offers.references.nodes.map((offer, index) => {
-              const offerfields = arrayToObject({array: offer.fields});
-              return (
-                <div key={offer.id} className="swiper-slide w-fit h-fit">
-                  {offerfields.image?.reference?.image != null && (
-                    <img
-                      className="object-fill rounded-3xl"
-                      src={offerfields.image.reference.image.url}
-                    />
-                  )}
-                </div>
-              );
-            })}
+            {fields?.offers_collection?.reference.products?.nodes?.map(
+              (product: ProductQuery['product']) => {
+                return (
+                  <div
+                    className="swiper-slide w-fit h-fit"
+                    key={product?.id}
+                    onClick={() => {
+                      window.location.href = `/products/${product?.handle}`;
+                    }}
+                  >
+                    {product?.images != null && (
+                      <img
+                        className="object-fill rounded-3xl"
+                        src={product.images.nodes[0].url}
+                      />
+                    )}
+                  </div>
+                );
+              },
+            )}
           </div>
           <div className="swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/1.5 md:hidden flex"></div>
           <div className="swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/1.5 md:hidden flex"></div>

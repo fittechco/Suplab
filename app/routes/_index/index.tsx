@@ -10,10 +10,10 @@ import Testimonials from './Testimonials';
 import ShopTheGoal from './ShopTheGoal';
 import Contact from './Contact';
 import Promotion from './Promotion';
-import Offers from './Offers';
 import FeaturedCollections from './FeaturedCollections';
 import FAQ from './FAQ';
 import {UseShopStore} from '~/app/root';
+import Offers from './Offers';
 
 export type Shop = {
   name: string;

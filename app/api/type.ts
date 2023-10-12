@@ -38,14 +38,28 @@ export namespace App {
       type: 'promotion_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-          key: 'title' | 'button_text';
+          key: 'title';
         }>
-        | Shopify.MetaobectsDef.FileReference<{
-          key: 'desktop_image' | 'mobile_image';
-          reference: {
-            image: {
-              url: string;
-            };
+        | Shopify.MetaobectsDef.List_Metaobject_Reference<{
+          key: 'promotions';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'promotion';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title';
+                }>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'desktop_image' | 'mobile_image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
           };
         }>
       >;
@@ -190,6 +204,10 @@ export namespace App {
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
           key: 'title';
         }>
+        | Shopify.MetaobectsDef.Metaobject_Reference<{
+          key: 'offers_collection';
+          reference: Shopify.Storefront.Collection;
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
           key: 'offers';
           references: {
@@ -319,6 +337,7 @@ export namespace App {
           key: 'features';
           references: {
             nodes: Array<{
+              id: string;
               type: 'feature';
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{
@@ -350,6 +369,7 @@ export namespace App {
           key: 'services';
           references: {
             nodes: Array<{
+              id: string;
               type: 'service';
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{
@@ -398,6 +418,7 @@ export namespace App {
           key: 'faqs';
           references: {
             nodes: Array<{
+              id: string;
               type: 'faq';
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{

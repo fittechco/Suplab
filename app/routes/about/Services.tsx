@@ -1,14 +1,13 @@
 import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import {Colors} from '../../ft-lib/shared';
-import {App} from '../../api/type';
+import type {App} from '../../api/type';
 
 interface ServicesSectionProps {
   section: App.AboutPageTemplate.ServicesSection;
 }
 
 const Services = ({section}: ServicesSectionProps) => {
-  console.log(section);
   const fields = arrayToObject({array: section.fields});
 
   return (
@@ -25,11 +24,11 @@ const Services = ({section}: ServicesSectionProps) => {
         </p>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {fields.services.references.nodes.map((service, index) => {
+        {fields.services?.references.nodes.map((service, index) => {
           const serviceFields = arrayToObject({array: service.fields});
           return (
             <div
-              key={index}
+              key={service.id}
               style={{
                 borderRadius: '24px',
                 boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
