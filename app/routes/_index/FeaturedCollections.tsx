@@ -1,25 +1,28 @@
-import React, {useState} from 'react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import type {App} from '../../api/type';
-import {useLoaderData} from '@remix-run/react';
+import React, { useState } from 'react';
+import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import type { App } from '../../api/type';
+import { useLoaderData } from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import {Colors} from 'app/ft-lib/shared';
+import { Colors } from 'app/ft-lib/shared';
 import ProductCard from 'app/components/ProductCard';
 import ProductsSwiper from 'app/components/ProductsSwiper';
+import Link from '~/app/components/Link';
 
 interface FeaturedCollectionsSectionProps {
   section: App.HomePageTemplate.SectionCollectionProducts;
 }
 
-const FeaturedCollections = ({section}: FeaturedCollectionsSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+type ActiveCollectionsName = "collection_one" | "collection_two"
+
+const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
 
   const collectionOneProducts = fields.collection_one?.reference.products.nodes || [];
   const collectionTwoProducts = fields.collection_two?.reference.products.nodes || [];
 
-  const [activeButton, setActiveButton] = useState('collection_one');
+  const [activeButton, setActiveButton] = useState<ActiveCollectionsName>('collection_one');
 
-  const handleButtonClick = (buttonName: string) => {
+  const handleButtonClick = (buttonName: ActiveCollectionsName) => {
     setActiveButton(buttonName);
   };
 
@@ -30,6 +33,7 @@ const FeaturedCollections = ({section}: FeaturedCollectionsSectionProps) => {
       activeButton === buttonName ? Colors.primaryDark : 'transparent',
   });
 
+  console.log(fields.collection_one?.reference, 'collection_one');
   return (
     <div
       key={section.type}
@@ -52,18 +56,16 @@ const FeaturedCollections = ({section}: FeaturedCollectionsSectionProps) => {
                 padding: '8px 0',
               }}
             >
-              <button
+              <Link
                 style={{
                   backgroundColor: Colors.primary,
                   color: Colors.textSecondary,
                 }}
-                onClick={() => {
-                  window.location.href = activeButton === 'collection_one' ? '/collections/' + fields.collection_one?.reference.title : '/collections/' + fields.collection_two?.reference.title;
-                }}
+                to={`/collections/${activeButton === 'collection_one' ? fields.collection_one?.reference.handle : activeButton === "collection_two" && fields.collection_two?.reference.handle}`}
                 className="ft-text-main w-max btn md:px-4 md:py-2 px-4 py-1 rounded-full text-main text-center font-bold md:text-xl text-sm uppercase"
               >
                 {fields.shop_button_text.value}
-              </button>
+              </Link>
             </div>
           )}
         </div>

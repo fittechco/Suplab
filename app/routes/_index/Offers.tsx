@@ -1,22 +1,23 @@
-import {useEffect, useState, useRef} from 'react';
-import type {App} from '../../api/type';
+import { useEffect, useState, useRef } from 'react';
+import type { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
-import {Colors} from 'app/ft-lib/shared';
-import {Navigation} from 'swiper/modules';
+import { Colors } from 'app/ft-lib/shared';
+import { Navigation } from 'swiper/modules';
 import CollectionController from '~/app/ft-lib/ft-server/controllers/CollectionController';
-import {Product} from '@shopify/hydrogen/storefront-api-types';
-import type {ProductQuery} from '~/storefrontapi.generated';
-import {useQuery} from 'react-query';
-import {Link} from 'react-router-dom';
+import { Product } from '@shopify/hydrogen/storefront-api-types';
+import type { ProductQuery } from '~/storefrontapi.generated';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import { UseShopStore } from '~/app/root';
 
 interface OffersSectionProps {
   section: App.HomePageTemplate.OffersSection;
 }
 
-const Offers = ({section}: OffersSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+const Offers = ({ section }: OffersSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
   const swiperContainer = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -62,18 +63,16 @@ const Offers = ({section}: OffersSectionProps) => {
           </p>
         )}
         {fields.button_text != null && (
-          <button
+          <Link
             style={{
               backgroundColor: Colors.primary,
               color: Colors.textSecondary,
             }}
-            onClick={() => {
-              window.location.href = `/collections/${fields.offers?.key}`;
-            }}
+            to={`/collections/offers`}
             className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
           >
             {fields.button_text.value}
-          </button>
+          </Link>
         )}
       </div>
       <div className="offersSection__offers relative">
@@ -82,11 +81,13 @@ const Offers = ({section}: OffersSectionProps) => {
             {fields?.offers_collection?.reference.products?.nodes?.map(
               (product: ProductQuery['product']) => {
                 return (
-                  <div
-                    className="swiper-slide w-fit h-fit"
-                    key={product?.id}
+                  <Link
+                    className="swiper-slide cursor-pointer w-fit h-fit"
+                    key={product?.id} to={`/products/${product?.handle}`}
                     onClick={() => {
-                      window.location.href = `/products/${product?.handle}`;
+                      UseShopStore.setState({
+
+                      })
                     }}
                   >
                     {product?.images != null && (
@@ -95,7 +96,7 @@ const Offers = ({section}: OffersSectionProps) => {
                         src={product.images.nodes[0].url}
                       />
                     )}
-                  </div>
+                  </Link>
                 );
               },
             )}

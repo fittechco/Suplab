@@ -2,7 +2,7 @@ import { Image } from '@shopify/hydrogen';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { App } from '../../api/type';
 import { createPortal } from 'react-dom';
-import MobileNav, { OFFERS_QUERY } from '../MobileNav';
+import MobileNav from '../MobileNav';
 import SubMenuPopup from './SubMenuPopup';
 import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
@@ -16,6 +16,7 @@ import Search from 'app/components/Search';
 import { UseShopStore, queryClient } from 'app/root';
 import { useCart } from '~/app/components/CartProvider';
 import { Link } from '@remix-run/react';
+import { OFFERS_QUERY } from '~/app/components/FtOffers';
 
 type Props = {
   layout: {

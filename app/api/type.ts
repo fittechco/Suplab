@@ -159,8 +159,8 @@ export namespace App {
                 }>
               >;
             }>;
-          } ;
-        }> 
+          };
+        }>
       >;
     };
 
@@ -450,6 +450,7 @@ export namespace App {
       export type Collection = {
         id: string;
         title: string;
+        handle: string;
         description: string;
         products: {
           nodes: Array<Product>;

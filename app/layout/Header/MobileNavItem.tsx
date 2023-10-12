@@ -8,6 +8,7 @@ import { HeaderQuery } from 'storefrontapi.generated';
 type MobileNavItemProps = {
   menu: App.Shopify.Item;
   style?: React.CSSProperties;
+  setIsOpen: (isOpen: boolean) => void;
 };
 
 export default function MobileNavItem(props: MobileNavItemProps) {
@@ -19,6 +20,10 @@ export default function MobileNavItem(props: MobileNavItemProps) {
   const itemColor = isShowingSub ? Colors.offBlack : Colors.secondary;
   const handleItemClick = () => {
     setIsShowingSub(!isShowingSub);
+    if (hasSubItems === false) {
+      props.setIsOpen(false);
+    }
+
   };
   const navItemRef = useRef<HTMLDivElement | null>(null);
 
@@ -107,7 +112,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
             }}
             className="navMenu__title text-base  ft-text-main"
             // todo - create a Link component that handles this
-            to={props.menu.url}
+            to={new URL(props.menu.url).pathname}
           >
             {props.menu.title}
           </Link>
@@ -151,6 +156,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
                   transition: `all 0.4s ease ${index * 0.1}s`,
                   borderBottom: 'none',
                 }}
+                setIsOpen={props.setIsOpen}
                 key={item.title}
                 menu={item}
               />

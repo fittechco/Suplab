@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {LoaderArgs, json} from '@shopify/remix-oxygen';
-import type {App} from '../../api/type';
-import {useLoaderData} from '@remix-run/react';
+import React, { useEffect, useState } from 'react';
+import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import type { App } from '../../api/type';
+import { Link, useLoaderData } from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
-import {Colors} from 'app/ft-lib/shared';
+import { Colors } from 'app/ft-lib/shared';
 
 interface ContactSectionProps {
   section: App.HomePageTemplate.ContactSection;
 }
 
-const Contact = ({section}: ContactSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+
+const Contact = ({ section }: ContactSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
   const isMobile = window.innerWidth <= 768;
   const [image, setImage] = React.useState<string | null>(null);
 
@@ -121,14 +122,13 @@ const Contact = ({section}: ContactSectionProps) => {
             </div>
             <div className="flex flex-col items-center">
               {fields.contact_button_text != null && (
-                <div
+                <Link
+                  to={"/contact"}
                   style={{
                     backgroundColor: Colors.primary,
                     color: Colors.textSecondary,
                   }}
-                  onClick={() => {
-                    window.location.href = '/shop';
-                  }}
+
                   className="w-full btn px-4 py-2 rounded-full text-main text-center w- font-bold text-xl capitalize mb-6"
                 >
                   <p
@@ -144,16 +144,14 @@ const Contact = ({section}: ContactSectionProps) => {
                   >
                     {fields.contact_button_text.value}
                   </p>
-                </div>
+                </Link>
               )}
               {fields.location_button_text != null && (
+                // todo:  fix add redirect to google maps
                 <div
                   style={{
                     backgroundColor: Colors.secondary,
                     color: Colors.textSecondary,
-                  }}
-                  onClick={() => {
-                    window.location.href = '/shop';
                   }}
                   className="w-full btn px-4 py-2 rounded-full text-main text-center font-bold text-xl capitalize"
                 >

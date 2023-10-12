@@ -5,7 +5,7 @@ import { UseShopStore } from '../root';
 import { ON_METAOBJECT } from 'app/routes/_index';
 import MobileNavItem from './Header/MobileNavItem';
 import Offer from 'app/components/FtOffers';
-import { Link } from '@remix-run/react';
+import { Link, useNavigation } from '@remix-run/react';
 
 type Props = {
   isOpen: boolean;
@@ -16,11 +16,18 @@ export default function MobileNav(props: Props) {
   const header = UseShopStore((state) => state.header);
   const [animate, setAnimate] = useState(false);
   const footer = UseShopStore((state) => state.footer);
+  const navigation = useNavigation()
   useEffect(() => {
     if (props.isOpen === true) {
       setAnimate(true);
     }
   }, [props.isOpen]);
+
+  useEffect(() => {
+    if (navigation.state === "loading") {
+      props.setIsOpen(false)
+    }
+  }, [navigation, props]);
 
   if (header?.menu?.items == null) {
     return <div>Loading...</div>;
@@ -47,56 +54,60 @@ export default function MobileNav(props: Props) {
           width: '100%',
           overflowY: 'auto',
         }}
-        className="mobileNav__container  flex flex-col gap-5  justify-start items-start"
+        className="mobileNav__container  flex flex-col gap-5  justify-between"
       >
-        <div className="navHeader w-full flex justify-end px-5">
-          <div
-            onClick={() => {
-              setAnimate(false);
-              setTimeout(() => {
-                props.setIsOpen(false);
-              }, 500);
-            }}
-            style={{}}
-            className={`navHeader__close my-2 mobile-nav-item ${animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
-              }`}
-          >
-            <FTicons
-              fill={'none'}
-              style={{
-                stroke: Colors.secondary,
-                width: 16,
-                height: 16,
+        <div className='flex flex-col gap-5'>
+          <div className="navHeader w-full flex justify-end px-5">
+            <div
+              onClick={() => {
+                setAnimate(false);
+                setTimeout(() => {
+                  props.setIsOpen(false);
+                }, 500);
               }}
-              name="close"
-            />
-          </div>
-        </div>
-        <div className="navMenus space-y-6 w-full px-5">
-          {header.menu?.items?.map((menu, index) => {
-            return (
-              <MobileNavItem
+              style={{}}
+              className={`navHeader__close my-2 mobile-nav-item ${animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
+                }`}
+            >
+              <FTicons
+                fill={'none'}
                 style={{
-                  transitionDelay: `${index * 0.2}s`,
+                  stroke: Colors.secondary,
+                  width: 16,
+                  height: 16,
                 }}
-                key={menu.id}
-                menu={menu}
+                name="close"
               />
-            );
-          })}
-        </div>
-        <div
-          style={{}}
-          className={`offers-container overflow-hidden flex-shrink-0`}
-        >
+            </div>
+          </div>
+          <div className="navMenus space-y-6 w-full px-5">
+            {header.menu?.items?.map((menu, index) => {
+              return (
+                <MobileNavItem
+                  style={{
+                    transitionDelay: `${index * 0.2}s`,
+                  }}
+                  setIsOpen={props.setIsOpen}
+                  key={menu.id}
+                  menu={menu}
+                />
+              );
+            })}
+          </div>
+
           <div
-            style={{
-              transitionDelay: `${header?.menu.items.length * 0.2}s`,
-            }}
-            className={`offers-wrapper mobile-nav-item ${animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
-              }`}
+            style={{}}
+            className={`offers-container overflow-hidden flex-shrink-0`}
           >
-            <Offer />
+            <div
+              style={{
+                transitionDelay: `${header?.menu.items.length * 0.2}s`,
+              }}
+              className={`offers-wrapper mobile-nav-item ${animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
+                }`}
+            >
+              <Offer />
+            </div>
           </div>
         </div>
         <div
@@ -124,52 +135,43 @@ export default function MobileNav(props: Props) {
               </Link>
             );
           })}
-        </div>
-        <div className="social-media-container w-full">
-          <div
-            style={{
-              borderTop: `1px solid ${Colors.secondary}`,
-              transitionDelay: `${(header.menu.items.length + 1) * 0.2 +
-                (footer.menu?.items.length || 1) * 0.2
-                }`,
-              width: '100%',
-              paddingBlock: '1rem',
-            }}
-            className={`social-media-wrapper flex justify-center items-center gap-5 mobile-nav-item
+          <div className="social-media-container w-full">
+            <div
+              style={{
+                borderTop: `1px solid ${Colors.secondary}`,
+                transitionDelay: `${(header.menu.items.length + 1) * 0.2 +
+                  (footer.menu?.items.length || 1) * 0.2
+                  }`,
+                width: '100%',
+                paddingBlock: '1rem',
+              }}
+              className={`social-media-wrapper flex justify-center items-center gap-5 mobile-nav-item
                          ${animate === true
-                ? 'show-mobile-nav-item'
-                : 'hide-mobile-nav-item'
-              }`}
-          >
-            <FTicons
-              style={{
-                width: '24px',
-                height: '24px',
-              }}
-              name="instagram"
-            />
-            <FTicons
-              style={{
-                width: '24px',
-                height: '24px',
-              }}
-              name="tiktok"
-            />
+                  ? 'show-mobile-nav-item'
+                  : 'hide-mobile-nav-item'
+                }`}
+            >
+              <FTicons
+                style={{
+                  width: '24px',
+                  height: '24px',
+                }}
+                name="instagram"
+              />
+              <FTicons
+                style={{
+                  width: '24px',
+                  height: '24px',
+                }}
+                name="tiktok"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-export const OFFERS_QUERY = `#graphql
-query Offers {
-    metaobject(handle: {handle:"offers", type:"offers_section"}) {
-        ...Metaobject
-    }
-  }
-  ${ON_METAOBJECT}
-` as const;
 
 const LAYOUT_QUERY = `#graphql
   query MobileLayout {

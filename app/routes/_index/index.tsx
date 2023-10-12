@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {useLoaderData} from '@remix-run/react';
-import {type LoaderArgs, json} from '@shopify/remix-oxygen';
+import React, { useEffect, useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
+import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from './Hero';
-import type {App} from '../../api/type';
+import type { App } from '../../api/type';
 import Benefits from './Benefits';
 import Testimonials from './Testimonials';
 import ShopTheGoal from './ShopTheGoal';
@@ -12,33 +12,33 @@ import Contact from './Contact';
 import Promotion from './Promotion';
 import FeaturedCollections from './FeaturedCollections';
 import FAQ from './FAQ';
-import {UseShopStore} from '~/app/root';
+import { UseShopStore } from '~/app/root';
 import Offers from './Offers';
 
 export type Shop = {
   name: string;
 };
 
-export async function loader({context}: LoaderArgs) {
+export async function loader({ context }: LoaderArgs) {
   const storefront = await context.storefront.query(SHOPQUERY, {
     cache: {
       maxAge: 60 * 60 * 24,
       staleWhileRevalidate: 60 * 60 * 24,
     },
   });
-  const {metaobject} = storefront;
+  const { metaobject } = storefront;
   return json({
     metaobject,
   });
 }
 
 function HomePage() {
-  const {metaobject}: {metaobject: App.HomePageTemplate.Template} =
+  const { metaobject }: { metaobject: App.HomePageTemplate.Template } =
     useLoaderData();
   const [sections, setSections] = useState<App.HomePageTemplate.Sections>([]);
 
   useEffect(() => {
-    UseShopStore.setState({routesLoader: false});
+    UseShopStore.setState({ routesLoader: false });
   }, []);
 
   useEffect(() => {
@@ -87,6 +87,7 @@ export default HomePage;
 export const ON_METAOBJECT = `#graphql
 fragment Metaobject on Metaobject {
   type
+  handle
   fields {
     key
     value

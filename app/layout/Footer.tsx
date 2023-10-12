@@ -1,13 +1,13 @@
-import {Link} from '@remix-run/react';
-import {Colors} from '../ft-lib/shared';
+import { Link } from '@remix-run/react';
+import { Colors } from '../ft-lib/shared';
 import type {
   ShopLayoutQuery,
   HeaderQuery,
   FooterQuery,
 } from 'storefrontapi.generated';
-import {Image} from '@shopify/hydrogen';
+import { Image } from '@shopify/hydrogen';
 import FTicons from '../ft-lib/FTicon';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 type Props = {
   layout: {
@@ -40,6 +40,10 @@ const Footer = (props: Props) => {
   const toggleOpen = (index: number) => {
     setOpenMenu(openMenu === index ? -1 : index);
   };
+
+  if (props.layout == null) {
+    return null;
+  }
 
   return (
     <div

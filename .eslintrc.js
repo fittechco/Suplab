@@ -31,5 +31,6 @@ module.exports = {
     "@typescript-eslint/no-namespace": "off",
     "hydrogen/prefer-image-component": "off",
     "jsx-a11y/alt-text": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
   },
 };

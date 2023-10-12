@@ -1,66 +1,97 @@
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import {Colors} from 'app/ft-lib/shared';
-import {OFFERS_QUERY} from 'app/layout/MobileNav';
-import {useQuery} from 'react-query';
+import { Colors } from 'app/ft-lib/shared';
+import { useQuery } from 'react-query';
 import StorefrontApi from '../api/storefront';
+import { ON_METAOBJECT } from '../routes/_index';
+import type { App } from '../api/type';
+import Offers from '../routes/_index/Offers';
 
 const storefront = StorefrontApi.storeFront();
 export default function Offer() {
   const offers = useQuery('offers', async () => {
     const res = await storefront.query(OFFERS_QUERY);
-    return res.metaobject;
+    return res.metaobject as App.HomePageTemplate.OffersSection;
   });
 
   if (offers.data == null) {
     return null;
   }
 
-  const fields = arrayToObject({array: offers.data?.fields});
+  const fields = arrayToObject({ array: offers.data.fields });
 
-  if (fields.offers.references == null) {
+  if (fields.offers?.references == null) {
     return <div>Loading ...</div>;
   }
 
   return (
     <div className="offers-container w-full space-y-4">
-      <div className="offers-header flex justify-between items-center px-4">
-        <h3
-          style={{
-            color: Colors.text,
-          }}
-          className="text-base font-bold"
-        >
-          {fields.title.value}
-        </h3>
-        <button
-          style={{
-            color: Colors.textSecondary,
-            backgroundColor: Colors.primary,
-            borderRadius: '9999px',
-          }}
-          className="main-button ft-text-main text-base px-3 py-1.5"
-        >
-          {fields.button_text.value}
-        </button>
-      </div>
-      <div
-        style={{
-          margin: 0,
-        }}
-        className="offers-wrapper w-full flex overflow-x-scroll  snap-proximity snap-x snap-center gap-2 px-4 py-4"
-      >
-        {fields.offers.references.nodes.map((offer, index) => {
-          const offerfields = arrayToObject({array: offer.fields});
-          return (
-            <div key={index} className="offer w-full flex-shrink-0 card-shadow">
-              {/* todo add image skeleton */}
-              {offerfields.image.reference?.image != null && (
-                <img src={offerfields.image.reference.image.url} />
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <Offers section={offers.data} />
     </div>
   );
 }
+
+export const OFFERS_QUERY = `#graphql
+query Offers {
+    metaobject(handle: {handle:"offers", type:"offers_section"}) {
+      type
+  handle
+  fields {
+    key
+    value
+    type
+    references(first: 20) {
+      nodes {
+        ... on Metaobject {
+          id
+          type
+          fields {
+            key
+            value
+            type
+            reference{
+              ... on MediaImage {
+                image {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    reference {
+      ... on MediaImage {
+        image {
+          url
+        }
+      }
+      ... on Collection {
+        handle
+        title
+        products(first: 20) {
+          nodes {
+            title
+            handle
+            description
+            priceRange{
+              minVariantPrice{
+                amount
+                currencyCode
+              }
+              }
+            images(first: 20) {
+              nodes {
+                url
+              }
+            }
+            featuredImage {
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+    }
+  }
+`;

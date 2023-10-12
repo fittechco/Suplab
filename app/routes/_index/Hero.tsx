@@ -3,6 +3,7 @@ import arrayToObject from '../../ft-lib/ArrayToObject';
 import { Colors } from '../../ft-lib/shared';
 import type { App } from '../../api/type';
 import { Image } from '@shopify/hydrogen';
+import Link from '~/app/components/Link';
 
 interface HeroSectionProps {
   section: App.HomePageTemplate.HeroSection;
@@ -71,18 +72,16 @@ const Hero = ({ section }: HeroSectionProps) => {
             </div>
           )}
           {fields.button_text != null && (
-            <div
+            <Link
               style={{
                 backgroundColor: Colors.primary,
                 color: Colors.textSecondary,
               }}
-              onClick={() => {
-                window.location.href = '/shop';
-              }}
+              to={"/collections/all"}
               className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
             >
               {fields.button_text.value}
-            </div>
+            </Link>
           )}
         </div>
       </div>

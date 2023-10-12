@@ -31,8 +31,20 @@ const LAYOUT_QUERY = `#graphql
 ` as const;
 
 async function storeFrontApiTest() {
-  const res = await ProductController.getAllProducts();
-  console.log(util.inspect(res, {depth: null}));
+  await fetch('https://suplab.myshopify.com/contact', {
+    method: 'POST',
+    body: JSON.stringify({
+      "contact[email]": "testdev@gmail.com",
+      "contact[comment]": "test",
+      "contact[name]": "testdev",
+      "contact[phone]": "1234567890",
+    })
+  }).then(res => {
+    console.log(res);
+    return res.json()
+  })
+    .then(res => console.log(res))
+
 }
 
 void storeFrontApiTest();
