@@ -43,7 +43,7 @@ export default function MobileFilterOption({
         to={`${pathname}?${linkParams.toString()}`}
         preventScrollReset
       >
-        <span className="leading-normal w-fit flex items-center justify-center gap-1">
+        <span className="leading-normal w-fit flex items-center justify-center gap-1 whitespace-pre-wrap">
           {label} {hasX && <XIcon strokeColor={Colors.textSecondary} />}
         </span>
       </Link>
