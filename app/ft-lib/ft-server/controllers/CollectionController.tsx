@@ -1,4 +1,4 @@
-import CollectionService from "../services/CollectionService";
+import CollectionService from "../services/collectionService";
 
 class CollectionController {
     static async getAllCollections() {
