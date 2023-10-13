@@ -24,6 +24,7 @@ export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
   const searchParams = new URL(request.url).searchParams; // get the search params from the url;
   const selectedOptions: { name: string; value: string }[] = [];
+  const PC = new ProductController({ storefront: context.storefront });
   searchParams.forEach((value, key) => {
     selectedOptions.push({
       name: key,
@@ -31,12 +32,12 @@ export async function loader({ context, params, request }: LoaderArgs) {
     });
   });
   invariant(productHandle != null, 'productHandle is required');
-  const product = await ProductController.getProductByHandle({
+  const product = await PC.getProductByHandle({
     handle: productHandle,
     selectedOptions,
   });
-  const recommendedProducts = ProductController.getProductRecommendations({ productId: product.id });
-  const productMetafields = ProductController.getProductMetafields({
+  const recommendedProducts = PC.getProductRecommendations({ productId: product.id });
+  const productMetafields = PC.getProductMetafields({
     productId: product.id,
   });
   if (!product.selectedVariant) {

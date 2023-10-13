@@ -6,7 +6,6 @@ import invariant from 'tiny-invariant';
 import LineItem from '../lib/cart/LineItem';
 import CTAButton from '../components/CTAButton';
 import { Colors } from '../ft-lib/shared';
-import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import CollectionController from '../ft-lib/ft-server/controllers/CollectionController';
 import { Suspense } from 'react';
 import ProductsSwiper from '../components/ProductsSwiper';

@@ -1,22 +1,24 @@
-import {useEffect, useRef, useState} from 'react';
-import {useLoaderData} from '@remix-run/react';
-import {type LoaderArgs, json} from '@shopify/remix-oxygen';
+import { useEffect, useRef, useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
+import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
-import {Slider} from '~/app/components/ui/slider';
+import { Slider } from '~/app/components/ui/slider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
-import {createPortal} from 'react-dom';
-import {Colors} from '../ft-lib/shared';
+import { createPortal } from 'react-dom';
+import { Colors } from '../ft-lib/shared';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
-import type {App} from '../api/type';
+import type { App } from '../api/type';
+import StorefrontApi from '../api/storefront';
 
-export async function loader({context, params, request}: LoaderArgs) {
+export async function loader({ context, params, request }: LoaderArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
+  const PC = new ProductController({ storefront: context.storefront });
 
   const searchParams = new URL(request.url).searchParams;
   let minPrice = 0;
@@ -39,7 +41,7 @@ export async function loader({context, params, request}: LoaderArgs) {
     dynamicFilters.push(parsedValue);
   });
 
-  const availableFilters = await ProductController.getAvailableFilters({
+  const availableFilters = await PC.getAvailableFilters({
     handle: collectionHandle,
   });
 
@@ -47,7 +49,7 @@ export async function loader({context, params, request}: LoaderArgs) {
     availableFilters.products.filters,
   );
 
-  const collection = await ProductController.getFilteredProducts({
+  const collection = await PC.getFilteredProducts({
     handle: collectionHandle,
     filters: dynamicFilters,
     cursor: null,
@@ -103,7 +105,9 @@ function Collection() {
       ) {
         console.log('Load more products');
         console.log(hasNextPage, cursor);
-        const productsAfterCursor = await ProductController.getFilteredProducts(
+        const storefront = StorefrontApi.storeFront()
+        const PC = new ProductController({ storefront });
+        const productsAfterCursor = await PC.getFilteredProducts(
           {
             handle: data.collection.handle,
             filters: [],

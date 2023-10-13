@@ -1,8 +1,8 @@
 import { LoaderArgs } from '@shopify/remix-oxygen';
-import StorefrontApi from '../../../api/storefront';
 import invariant from 'tiny-invariant';
 import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 import { COLLECTIONFRAGMENT } from './collectionService';
+import { Storefront, I18nBase } from '@shopify/hydrogen';
 
 // the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
@@ -62,7 +62,15 @@ export const PRODUCTFRAGMENT = `#graphql
     `;
 
 class ProductService {
-  static async getAllProducts() {
+  storefront: Storefront<I18nBase>;
+  // CollectionService should be initialized with a StorefrontApi instance from the loader
+  constructor(props: {
+    storefront: Storefront<I18nBase>
+  }) {
+    this.storefront = props.storefront;
+  }
+
+  async getAllProducts() {
     const query = `#graphql
       query AllProducts{
         products(first: 20) {
@@ -73,11 +81,11 @@ class ProductService {
       }
       ${PRODUCTFRAGMENT}
     `;
-    const data = await StorefrontApi.storeFront().query(query);
+    const data = await this.storefront.query(query);
     return data.products;
   }
 
-  static async getProduct(args: {
+  async getProduct(args: {
     id: string;
     selectedOptions: { name: string; value: string }[];
   }) {
@@ -123,7 +131,7 @@ class ProductService {
       }
       ${PRODUCTFRAGMENT}
     `;
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         id: args.id,
         selectedOptions: args.selectedOptions,
@@ -133,7 +141,7 @@ class ProductService {
     return data.product;
   }
 
-  static async getProductsByCollection(args: { collectionId: string }) {
+  async getProductsByCollection(args: { collectionId: string }) {
     const query = `#graphql
       query ProductByCollection($collectionId: ID!) {
         collection(id: $collectionId) {
@@ -146,7 +154,7 @@ class ProductService {
       }
       ${PRODUCTFRAGMENT}
     `;
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         collectionId: args.collectionId,
       },
@@ -155,7 +163,7 @@ class ProductService {
     return data.collection.products.nodes.map((edge: any) => edge.node);
   }
 
-  static async getProductsByTag(args: { tag: string }) {
+  async getProductsByTag(args: { tag: string }) {
     const query = `#graphql
       query ProductsByTag ($tag: String!){
         products(first: 10, query: "tag: $tag") {
@@ -166,7 +174,7 @@ class ProductService {
       }
       ${PRODUCTFRAGMENT}
     `;
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         tag: args.tag,
       },
@@ -174,7 +182,7 @@ class ProductService {
     return data.products;
   }
 
-  static async getProductByHandle(args: {
+  async getProductByHandle(args: {
     handle: string;
     selectedOptions: { name: string; value: string }[];
   }) {
@@ -220,7 +228,7 @@ class ProductService {
       }
       ${PRODUCTFRAGMENT}
     `;
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         handle: args.handle,
         selectedOptions: args.selectedOptions,
@@ -230,7 +238,7 @@ class ProductService {
     return data.productByHandle;
   }
 
-  static async getProductMetafields(args: { productId: string }) {
+  async getProductMetafields(args: { productId: string }) {
     const query = `#graphql
       query ProductMetafields($productId: ID!) {
         product(id: $productId) {
@@ -263,7 +271,7 @@ class ProductService {
         }
       }
     `;
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         productId: args.productId,
       },
@@ -271,7 +279,7 @@ class ProductService {
     invariant(data.product != null, 'Product not found');
     return data.product;
   }
-  static async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
+  async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
     const query = `#graphql
       query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {
         collection(handle: $handle) {
@@ -320,7 +328,7 @@ class ProductService {
       ${PRODUCTFRAGMENT}
     `;
 
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         handle: args.handle,
         filters: args.filters,
@@ -331,7 +339,7 @@ class ProductService {
     return data.collection;
   }
 
-  static async getAvailableFilters(args: { handle: string }) {
+  async getAvailableFilters(args: { handle: string }) {
     const query = `#graphql
     query GetAvailableFilters($handle: String!) {
       collection(handle: $handle) {
@@ -353,7 +361,7 @@ class ProductService {
     }
     `;
 
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         handle: args.handle,
       },
@@ -362,7 +370,7 @@ class ProductService {
     return data.collection;
   }
 
-  static async getProductRecommendations(args: { productId: string }) {
+  async getProductRecommendations(args: { productId: string }) {
     const query = `#graphql
       query ProductRecommendations($productId: ID!) {
         productRecommendations(productId: $productId) {
@@ -372,7 +380,7 @@ class ProductService {
       ${PRODUCTFRAGMENT}
     `;
 
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         productId: args.productId,
       },

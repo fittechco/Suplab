@@ -1,41 +1,55 @@
 import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 import ProductService from '../services/productService'
+import { Storefront, I18nBase } from '@shopify/hydrogen';
 
 class ProductController {
-  static async getAllProducts() {
-    const products = await ProductService.getAllProducts();
+  storefront: Storefront<I18nBase>;
+  // CollectionService should be initialized with a StorefrontApi instance from the loader
+  constructor(props: {
+    storefront: Storefront<I18nBase>
+  }) {
+    this.storefront = props.storefront;
+  }
+
+  async getAllProducts() {
+    const PS = new ProductService({ storefront: this.storefront });
+    const products = await PS.getAllProducts();
     return products;
   }
 
-  static async getProductById(args: { id: string }) {
+  async getProductById(args: { id: string }) {
     const { id } = args;
-    const product = await ProductService.getProduct({
+    const PS = new ProductService({ storefront: this.storefront });
+    const product = await PS.getProduct({
       id: args.id,
       selectedOptions: [],
     });
     return product;
   }
 
-  static async getProductsByTag(args: { tag: string }) {
+  async getProductsByTag(args: { tag: string }) {
     const { tag } = args;
-    const products = await ProductService.getProductsByTag({ tag });
+    const PS = new ProductService({ storefront: this.storefront });
+    const products = await PS.getProductsByTag({ tag });
     return products;
   }
 
-  static async getProductsByCollection(args: { collectionId: string }) {
+  async getProductsByCollection(args: { collectionId: string }) {
     const { collectionId } = args;
-    const products = await ProductService.getProductsByCollection({
+    const PS = new ProductService({ storefront: this.storefront });
+    const products = await PS.getProductsByCollection({
       collectionId,
     });
     return products;
   }
 
-  static async getProductByHandle(args: {
+  async getProductByHandle(args: {
     handle: string;
     selectedOptions: { name: string; value: string }[];
   }) {
     const { handle } = args;
-    const product = await ProductService.getProductByHandle({
+    const PS = new ProductService({ storefront: this.storefront });
+    const product = await PS.getProductByHandle({
       handle,
       selectedOptions: args.selectedOptions,
     });
@@ -43,19 +57,21 @@ class ProductController {
   }
 
   // <<<<<<< Updated upstream
-  static async getProductMetafields(args: { productId: string }) {
+  async getProductMetafields(args: { productId: string }) {
     const { productId } = args;
-    const metafields = await ProductService.getProductMetafields({
+    const PS = new ProductService({ storefront: this.storefront });
+    const metafields = await PS.getProductMetafields({
       productId,
     });
     return metafields;
   }
 
-  static async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
+  async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
     try {
       const { handle } = args;
       console.log('filters', args.filters);
-      const filteredProducts = await ProductService.getFilteredProducts({ handle, filters: args.filters, cursor: args.cursor });
+      const PS = new ProductService({ storefront: this.storefront });
+      const filteredProducts = await PS.getFilteredProducts({ handle, filters: args.filters, cursor: args.cursor });
       return filteredProducts;
     } catch (error) {
       console.error(error);
@@ -63,16 +79,18 @@ class ProductController {
     }
   }
 
-  static async getAvailableFilters(args: { handle: string }) {
+  async getAvailableFilters(args: { handle: string }) {
     const { handle } = args;
-    const availableFilters = await ProductService.getAvailableFilters({ handle });
+    const PS = new ProductService({ storefront: this.storefront });
+    const availableFilters = await PS.getAvailableFilters({ handle });
     return availableFilters;
     // >>>>>>> Stashed changes
   }
 
-  static async getProductRecommendations(args: { productId: string }) {
+  async getProductRecommendations(args: { productId: string }) {
     const { productId } = args;
-    const products = await ProductService.getProductRecommendations({
+    const PS = new ProductService({ storefront: this.storefront });
+    const products = await PS.getProductRecommendations({
       productId,
     });
     return products;
