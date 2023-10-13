@@ -12581,10 +12581,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-typescript@5.2.0-dev.20230522:
-  version "5.2.0-dev.20230522"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.0-dev.20230522.tgz#8bd7765fc0044f3a432b420e7b886e0c6c3ec6ce"
-  integrity sha512-t1ScfqYSrFOFNyHU0goJKPTE5z9FIx1WvjXMAl8JxBXUvAzPCqanT4XEMZq7e3GlgLSBrFpZtuvixbQSxVeaow==
+typescript@^4.1.0-dev.20201102:
+  version "4.1.0-dev.20201102"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.0-dev.20201102.tgz#e1978890ac063bb3f13d067067905b312c1e0897"
+  integrity sha512-kyL2MUGRx69NgowtHpnabYzNA3N8CR+XW51kL9my6MfSXyrojytW5P4YmaayHGQhWLRmzzdDvHfkf2PQBHgbUw==
 
 typescript@^5.2.2:
   version "5.2.2"
