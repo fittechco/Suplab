@@ -22,7 +22,7 @@ import { seoPayload } from '../ft-lib/seo.server';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
-  const searchParams = new URL(request.url).searchParams; // get the search params from the url;
+  const searchParams = new URL(request.url).searchParams; // get the search params from the urll;
   const selectedOptions: { name: string; value: string }[] = [];
   const PC = new ProductController({ storefront: context.storefront });
   searchParams.forEach((value, key) => {
