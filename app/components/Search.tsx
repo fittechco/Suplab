@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { SearchProductsQuery } from 'storefrontapi.generated';
 import _ from 'lodash';
 import ProductCard from './ProductCard';
-import { context } from 'react-three-fiber';
 import StorefrontApi from '../api/storefront';
 
 type Props = {
