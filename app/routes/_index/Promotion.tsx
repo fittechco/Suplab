@@ -1,15 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
-import type {App} from '../../api/type';
+import React, { useEffect, useRef, useState } from 'react';
+import type { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import Swiper from 'swiper';
-import {Pagination, Autoplay} from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 
 interface PromotionSectionProps {
   section: App.HomePageTemplate.PromotionsSection;
 }
 
-const Promotion = ({section}: PromotionSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+const Promotion = ({ section }: PromotionSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
   const isMobile = window.innerWidth <= 768;
 
   const swiperContainer = useRef<HTMLDivElement | null>(null);
@@ -70,7 +70,7 @@ const Promotion = ({section}: PromotionSectionProps) => {
           className="swiper-wrapper flex md:flex-row justify-start items-end relative"
         >
           {fields.promotions?.references.nodes.map((promotion, index) => {
-            const promotionFields = arrayToObject({array: promotion.fields});
+            const promotionFields = arrayToObject({ array: promotion.fields });
             const imageUrl = isMobile
               ? promotionFields.mobile_image?.reference.image.url
               : promotionFields.desktop_image?.reference.image.url;
@@ -79,7 +79,7 @@ const Promotion = ({section}: PromotionSectionProps) => {
                 <img
                   src={imageUrl}
                   alt="img"
-                  className="w-full h-full rounded-xl"
+                  className="w-full h-full rounded-xl object-cover"
                 />
               </div>
             );

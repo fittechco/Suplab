@@ -7,10 +7,11 @@ class CollectionService {
     static async getAllCollections() {
         const query = `#graphql
         query GetAllCollections {
-            collections(first: 10) {
+            collections(first: 50) {
               nodes {
                 id
                 title
+                description
                 handle
                 image{
                     id

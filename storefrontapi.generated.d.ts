@@ -71,7 +71,10 @@ export type GetAllCollectionsQueryVariables = StorefrontAPI.Exact<{
 export type GetAllCollectionsQuery = {
   collections: {
     nodes: Array<
-      Pick<StorefrontAPI.Collection, 'id' | 'title' | 'handle'> & {
+      Pick<
+        StorefrontAPI.Collection,
+        'id' | 'title' | 'description' | 'handle'
+      > & {
         image?: StorefrontAPI.Maybe<
           Pick<StorefrontAPI.Image, 'id' | 'altText' | 'url'>
         >;
@@ -1079,7 +1082,7 @@ interface GeneratedQueryTypes {
     return: OffersQuery;
     variables: OffersQueryVariables;
   };
-  '#graphql\n        query GetAllCollections {\n            collections(first: 10) {\n              nodes {\n                id\n                title\n                handle\n                image{\n                    id\n                    altText\n                    url\n                }\n              }\n            }\n          }\n        ': {
+  '#graphql\n        query GetAllCollections {\n            collections(first: 50) {\n              nodes {\n                id\n                title\n                description\n                handle\n                image{\n                    id\n                    altText\n                    url\n                }\n              }\n            }\n          }\n        ': {
     return: GetAllCollectionsQuery;
     variables: GetAllCollectionsQueryVariables;
   };

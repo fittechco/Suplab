@@ -43,6 +43,7 @@ function LazyImage(props: Props) {
                     ...style,
                 }}
                 src={src}
+                placeholder={<Placeholder style={style} />}
                 className={`lazy ${props.className} bg-transparent z-20 relative`}
             />
         </div>

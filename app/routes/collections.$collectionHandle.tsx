@@ -1,20 +1,20 @@
-import {useEffect, useRef, useState} from 'react';
-import {useLoaderData} from '@remix-run/react';
-import {type LoaderArgs, json} from '@shopify/remix-oxygen';
+import { useEffect, useRef, useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
+import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
-import {Slider} from '~/app/components/ui/slider';
+import { Slider } from '~/app/components/ui/slider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
-import {createPortal} from 'react-dom';
-import {Colors} from '../ft-lib/shared';
+import { createPortal } from 'react-dom';
+import { Colors } from '../ft-lib/shared';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
-import type {App} from '../api/type';
+import type { App } from '../api/type';
 
-export async function loader({context, params, request}: LoaderArgs) {
+export async function loader({ context, params, request }: LoaderArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
 

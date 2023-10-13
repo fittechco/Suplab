@@ -1,4 +1,4 @@
-import type {CSSProperties, MouseEventHandler} from 'react';
+import type { CSSProperties, MouseEventHandler } from 'react';
 
 export default function FTicons({
   name,
@@ -8,42 +8,57 @@ export default function FTicons({
   fill,
 }: {
   name:
-    | 'lecture'
-    | 'search'
-    | 'revenue'
-    | 'events'
-    | 'stats'
-    | 'plus'
-    | 'shortArrow'
-    | 'notification'
-    | 'close'
-    | 'filter'
-    | 'options'
-    | 'profile'
-    | 'statistics'
-    | 'info'
-    | 'edit'
-    | 'trash'
-    | 'nav'
-    | 'expenses'
-    | 'income'
-    | 'referal'
-    | 'leftArrow'
-    | 'rightArrow'
-    | 'indexLine'
-    | 'cart'
-    | 'chev-down'
-    | 'bag'
-    | 'instagram'
-    | 'facebook'
-    | 'tiktok'
-    | 'minus';
+  | 'lecture'
+  | 'search'
+  | 'revenue'
+  | 'events'
+  | 'stats'
+  | 'plus'
+  | 'shortArrow'
+  | 'notification'
+  | 'close'
+  | 'filter'
+  | 'options'
+  | 'profile'
+  | 'statistics'
+  | 'info'
+  | 'edit'
+  | 'trash'
+  | 'nav'
+  | 'expenses'
+  | 'income'
+  | 'referal'
+  | 'leftArrow'
+  | 'rightArrow'
+  | 'indexLine'
+  | 'cart'
+  | 'chev-down'
+  | 'bag'
+  | 'instagram'
+  | 'facebook'
+  | 'tiktok'
+  | 'minus'
+  | 'image';
   handle?: MouseEventHandler | undefined;
   className?: string;
   style?: CSSProperties;
   fill?: string;
 }) {
   switch (name) {
+    case 'image':
+      return (
+        <svg
+          fill={fill}
+          viewBox="0 0 16 16"
+          height="1em"
+          width="1em"
+          style={style}
+          className={className}
+        >
+          <path d="M6.002 5.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+          <path d="M2.002 1a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V3a2 2 0 00-2-2h-12zm12 1a1 1 0 011 1v6.5l-3.777-1.947a.5.5 0 00-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 00-.63.062L1.002 12V3a1 1 0 011-1h12z" />
+        </svg>
+      );
     case 'instagram':
       return (
         <svg

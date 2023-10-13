@@ -54,7 +54,7 @@ export default function ProductCard(props: Props) {
             borderRadius: '24px',
           }}
           className=""
-          src={resizeImage(product.images.nodes[0].url, 2000)}
+          src={resizeImage(product.images.nodes[0].url, 1000)}
         />
       </div>
       <div
