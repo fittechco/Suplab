@@ -21,7 +21,6 @@ export const COLLECTIONFRAGMENT = `#graphql
             altText
         }
     }
-    ${PRODUCTFRAGMENT}
 `
 
 class CollectionService {
@@ -76,6 +75,11 @@ class CollectionService {
         query GetCollectionByHandle ($handle: String!) {
             collectionByHandle(handle: $handle) {
                 ...Collection
+                products(first: 10) {
+                    nodes {
+                        ...ProductFragment
+                    }
+                }
             }
         }
         ${COLLECTIONFRAGMENT}

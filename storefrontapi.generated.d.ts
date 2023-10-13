@@ -115,6 +115,53 @@ export type GetCollectionByHandleQuery = {
       StorefrontAPI.Collection,
       'id' | 'handle' | 'title' | 'description'
     > & {
+      products: {
+        nodes: Array<
+          Pick<
+            StorefrontAPI.Product,
+            'id' | 'title' | 'vendor' | 'handle' | 'description'
+          > & {
+            seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
+            priceRange: {
+              minVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+              maxVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+            };
+            images: {
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.Image,
+                  'url' | 'height' | 'width' | 'altText'
+                >
+              >;
+            };
+            options: Array<
+              Pick<StorefrontAPI.ProductOption, 'name' | 'values'>
+            >;
+            variants: {
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.ProductVariant,
+                  'quantityAvailable' | 'id' | 'title' | 'availableForSale'
+                > & {
+                  price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+                  compareAtPrice?: StorefrontAPI.Maybe<
+                    Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+                  >;
+                  selectedOptions: Array<
+                    Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                  >;
+                }
+              >;
+            };
+          }
+        >;
+      };
       seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
       image?: StorefrontAPI.Maybe<
         Pick<StorefrontAPI.Image, 'id' | 'url' | 'width' | 'height' | 'altText'>
@@ -1085,7 +1132,7 @@ interface GeneratedQueryTypes {
     return: GetCollectionByIdQuery;
     variables: GetCollectionByIdQueryVariables;
   };
-  '#graphql\n        query GetCollectionByHandle ($handle: String!) {\n            collectionByHandle(handle: $handle) {\n                ...Collection\n            }\n        }\n        #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n    #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n\n        #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n        ': {
+  '#graphql\n        query GetCollectionByHandle ($handle: String!) {\n            collectionByHandle(handle: $handle) {\n                ...Collection\n                products(first: 10) {\n                    nodes {\n                        ...ProductFragment\n                    }\n                }\n            }\n        }\n        #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n\n        #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n        ': {
     return: GetCollectionByHandleQuery;
     variables: GetCollectionByHandleQueryVariables;
   };
@@ -1113,7 +1160,7 @@ interface GeneratedQueryTypes {
     return: ProductMetafieldsQuery;
     variables: ProductMetafieldsQueryVariables;
   };
-  '#graphql\n      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {\n        collection(handle: $handle) {\n          ...Collection\n          id\n          handle\n          title\n          image {\n            url\n          }\n          description\n          products(first: 10, filters: $filters, after: $cursor) {\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            nodes {\n              ...ProductFragment\n              priceRange {\n                minVariantPrice {\n                  amount\n                  currencyCode\n                }\n                maxVariantPrice {\n                  amount\n                  currencyCode\n                }\n              }\n              availableForSale\n              productType\n              vendor\n              variants(first: 10) {\n                nodes {\n                  selectedOptions {\n                    name\n                    value\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n      #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n    #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
+  '#graphql\n      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {\n        collection(handle: $handle) {\n          ...Collection\n          id\n          handle\n          title\n          image {\n            url\n          }\n          description\n          products(first: 10, filters: $filters, after: $cursor) {\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            nodes {\n              ...ProductFragment\n              priceRange {\n                minVariantPrice {\n                  amount\n                  currencyCode\n                }\n                maxVariantPrice {\n                  amount\n                  currencyCode\n                }\n              }\n              availableForSale\n              productType\n              vendor\n              variants(first: 10) {\n                nodes {\n                  selectedOptions {\n                    name\n                    value\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n      #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
     return: GetFilteredProductsQuery;
     variables: GetFilteredProductsQueryVariables;
   };
