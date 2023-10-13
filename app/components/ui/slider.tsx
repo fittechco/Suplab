@@ -22,8 +22,8 @@ const Slider = React.forwardRef<
       )}
       {...props}
       defaultValue={[
-        parseInt(searchParams.get('min') ?? '25'),
-        parseInt(searchParams.get('max') ?? '75'),
+        parseInt(searchParams.get('min') ?? '0'),
+        parseInt(searchParams.get('max') ?? '100'),
       ]}
       step={1}
       min={0}
