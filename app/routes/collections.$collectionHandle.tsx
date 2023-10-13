@@ -1,25 +1,33 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import {useEffect, useRef, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {type LoaderArgs, json} from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
-import { Slider } from '~/app/components/ui/slider';
+import {Slider} from '~/app/components/ui/slider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
-import { createPortal } from 'react-dom';
-import { Colors } from '../ft-lib/shared';
+import {createPortal} from 'react-dom';
+import {Colors} from '../ft-lib/shared';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
-import type { App } from '../api/type';
-import { seoPayload } from '../ft-lib/seo.server';
+import type {App} from '../api/type';
 
-export async function loader({ context, params, request }: LoaderArgs) {
+export async function loader({context, params, request}: LoaderArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
 
   const searchParams = new URL(request.url).searchParams;
+  let minPrice = 0;
+  let maxPrice = 1000;
+
+  if (searchParams.has('price')) {
+    const priceParam = JSON.parse(searchParams.get('price')!) as { price: { min: number; max: number } };
+
+    minPrice = priceParam.price.min;
+    maxPrice = priceParam.price.max;
+  }
 
   const dynamicFilters: any = [];
 
@@ -44,12 +52,11 @@ export async function loader({ context, params, request }: LoaderArgs) {
     filters: dynamicFilters,
     cursor: null,
   });
-
-  const seo = seoPayload.collection({ collection, url: request.url });
-
   return json({
     collection,
     availableFilters: availableDynamicFilters,
+    maxPrice,
+    minPrice,
   });
 }
 
@@ -71,6 +78,8 @@ function Collection() {
   const filtersData = data.availableFilters.filter(
     (filter: any) => filter.param !== 'Price',
   );
+  const minPrice = data.minPrice;
+  const maxPrice = data.maxPrice;
   const lastProductRef = useRef<HTMLDivElement | null>(null);
   const [products, setProducts] = useState<App.Shopify.Storefront.Product[]>(
     data.collection.products.nodes,
@@ -190,6 +199,10 @@ function Collection() {
           ))}
           <div className="sliderContainer w-1/4 flex flex-col gap-2 justify-center">
             <h4 className="sliderTitle uppercase text-2xl text-bold">Price</h4>
+            <div className="flex justify-between">
+              <span className="text-sm">Min: ${minPrice}</span>
+              <span className="text-sm">Max: ${maxPrice}</span>
+            </div>
             <Slider className="min-w-[250px]" />
           </div>
         </div>
