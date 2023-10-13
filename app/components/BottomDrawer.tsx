@@ -1,10 +1,5 @@
 import { Link } from "@remix-run/react";
-import SearchController from "app/ft-lib/ft-server/controllers/SearchController";
-import { Colors } from "app/ft-lib/shared";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { SearchProductsQuery } from "storefrontapi.generated";
-// import _ from "lodash";
-import ProductCard from "./ProductCard";
 
 type Props = {
   setShow: (show: boolean) => void

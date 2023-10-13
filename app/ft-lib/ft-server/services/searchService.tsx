@@ -1,9 +1,19 @@
-import StorefrontApi from '../../../api/storefront';
+import { Storefront, I18nBase } from '@shopify/hydrogen';
+import StorefrontApi from '~/app/api/storefront';
 import type { App } from '../../../api/type';
 import { PRODUCTFRAGMENT } from './productService';
 class SearchService {
-  static async searchProducts(searchQuery: string) {
-    const data = await StorefrontApi.storeFront().query(SEARCHQUERY, {
+
+  storefront: Storefront<I18nBase>;
+    // CollectionService should be initialized with a StorefrontApi instance from the loader
+    constructor(props: {
+        storefront: Storefront<I18nBase>
+    }) {
+        this.storefront = props.storefront;
+    }
+
+  async searchProducts(searchQuery: string) {
+    const data = await this.storefront.query(SEARCHQUERY, {
       variables: {
         query: searchQuery,
       },
@@ -11,7 +21,7 @@ class SearchService {
     return data.products;
   }
 
-  static async searchWithFilters(
+  async searchWithFilters(
     searchQuery: string,
   ): Promise<App.Shopify.Storefront.Product[]> {
     const query = `#graphql
@@ -38,7 +48,7 @@ class SearchService {
         },
       ],
     };
-    const data = await StorefrontApi.storeFront().query(query, {
+    const data = await this.storefront.query(query, {
       variables: {
         query: searchQuery,
         productFilters: [],
