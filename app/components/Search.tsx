@@ -5,6 +5,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { SearchProductsQuery } from 'storefrontapi.generated';
 import _ from 'lodash';
 import ProductCard from './ProductCard';
+import { context } from 'react-three-fiber';
+import StorefrontApi from '../api/storefront';
 
 type Props = {
   setShowSearch: (show: boolean) => void;
@@ -28,7 +30,9 @@ export default function Search(props: Props) {
         setIsRequesting(false);
         return;
       }
-      const res = await SearchController.searchProducts({ query });
+      const storefront = StorefrontApi.storeFront();
+      const SC = new SearchController({ storefront });
+      const res = await SC.searchProducts({ query });
       if (res.nodes.length === 0) {
         setIsEmpty(true);
       }
