@@ -18,14 +18,7 @@ import ProductTabs from '../lib/productPage/ProductTabs';
 import resizeImage from '../ft-lib/resizeImages';
 import LazyImage from '../ft-lib/LazyImage';
 import { UseShopStore } from '../root';
-
-const seo = ({ data }: { data: any }) => ({
-  title: data?.product?.title,
-  description: data?.product?.description.substr(0, 154),
-});
-export const handle = {
-  seo,
-};
+import { seoPayload } from '../ft-lib/seo.server';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -64,6 +57,14 @@ export async function loader({ context, params, request }: LoaderArgs) {
     product.selectedVariant ?? product?.variants?.nodes[0];
   // we will difer the fetching of the recommendations
   // to the client side
+
+  const seo = seoPayload.product({
+    product,
+    selectedVariant,
+    url: request.url,
+  });
+
+
   return defer({
     recommendedProducts,
     product,

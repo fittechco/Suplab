@@ -3,6 +3,27 @@ import { PRODUCTFRAGMENT } from './productService';
 
 const storefront = StorefrontApi.storeFront()
 
+export const COLLECTIONFRAGMENT = `#graphql
+    fragment Collection on Collection {
+        id
+        handle
+        title
+        description
+        seo {
+            description
+            title
+        }
+        image {
+            id
+            url
+            width
+            height
+            altText
+        }
+    }
+    ${PRODUCTFRAGMENT}
+`
+
 class CollectionService {
     static async getAllCollections() {
         const query = `#graphql
@@ -54,14 +75,10 @@ class CollectionService {
         const query = `#graphql
         query GetCollectionByHandle ($handle: String!) {
             collectionByHandle(handle: $handle) {
-                id
-                products(first: 10) {
-                    nodes {
-                        ...ProductFragment
-                    }
-                }
+                ...Collection
             }
         }
+        ${COLLECTIONFRAGMENT}
         ${PRODUCTFRAGMENT}
         `;
         const variables = { handle };

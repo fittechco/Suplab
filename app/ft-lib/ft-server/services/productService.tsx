@@ -2,6 +2,7 @@ import { LoaderArgs } from '@shopify/remix-oxygen';
 import StorefrontApi from '../../../api/storefront';
 import invariant from 'tiny-invariant';
 import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
+import { COLLECTIONFRAGMENT } from './collectionService';
 
 // the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
@@ -11,6 +12,10 @@ export const PRODUCTFRAGMENT = `#graphql
     vendor
     handle
     description
+    seo {
+      description
+      title
+    }
     priceRange {
       minVariantPrice {
         amount
@@ -270,6 +275,7 @@ class ProductService {
     const query = `#graphql
       query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {
         collection(handle: $handle) {
+          ...Collection
           id
           handle
           title
@@ -310,6 +316,7 @@ class ProductService {
           }
         }
       }
+      ${COLLECTIONFRAGMENT}
       ${PRODUCTFRAGMENT}
     `;
 

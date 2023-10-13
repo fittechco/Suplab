@@ -326,6 +326,7 @@ const MENU_FRAGMENT = `#graphql
       ...ParentMenuItem
     }
   }
+  
 ` as const;
 
 const HEADER_QUERY = `#graphql
@@ -374,17 +375,21 @@ const FOOTER_QUERY = `#graphql
 const LAYOUT_QUERY = `#graphql
   query ShopLayout {
     shop {
-      id
-      name
-      description
-      primaryDomain {
-        url
-      }
-      brand {
-        logo {
-          image {
-            url
-          }
+      ...Shop
+    }
+  }
+
+  fragment Shop on Shop {
+    id
+    name
+    description
+    primaryDomain {
+      url
+    }
+    brand {
+      logo {
+        image {
+          url
         }
       }
     }
