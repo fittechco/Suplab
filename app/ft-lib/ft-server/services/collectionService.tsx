@@ -1,7 +1,5 @@
-import StorefrontApi from '../../../api/storefront';
+import { I18nBase, Storefront } from '@shopify/hydrogen';
 import { PRODUCTFRAGMENT } from './productService';
-
-const storefront = StorefrontApi.storeFront()
 
 export const COLLECTIONFRAGMENT = `#graphql
     fragment Collection on Collection {
@@ -24,7 +22,17 @@ export const COLLECTIONFRAGMENT = `#graphql
 `
 
 class CollectionService {
-    static async getAllCollections() {
+
+    storefront: Storefront<I18nBase>;
+    // CollectionService should be initialized with a StorefrontApi instance from the loader
+    constructor(props: {
+        storefront: Storefront<I18nBase>
+    }) {
+        this.storefront = props.storefront;
+    }
+
+
+    async getAllCollections() {
         const query = `#graphql
         query GetAllCollections {
             collections(first: 50) {
@@ -42,11 +50,11 @@ class CollectionService {
             }
           }
         `;
-        const { collections } = await storefront.query(query);
+        const { collections } = await this.storefront.query(query);
         return collections;
     }
 
-    static async getCollectionById(
+    async getCollectionById(
         id: string,
     ) {
         const query = `#graphql
@@ -62,13 +70,13 @@ class CollectionService {
         }
         `;
         const variables = { id };
-        const { collection } = await storefront.query(query, {
+        const { collection } = await this.storefront.query(query, {
             variables,
         });
         return collection;
     }
 
-    static async getCollectionByHandle(
+    async getCollectionByHandle(
         handle: string,
     ) {
         const query = `#graphql
@@ -86,7 +94,7 @@ class CollectionService {
         ${PRODUCTFRAGMENT}
         `;
         const variables = { handle };
-        const { collectionByHandle } = await storefront.query(query, {
+        const { collectionByHandle } = await this.storefront.query(query, {
             variables,
         });
         return collectionByHandle;

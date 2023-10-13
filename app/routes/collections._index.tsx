@@ -9,7 +9,8 @@ import { Colors } from '../ft-lib/shared';
 import FTicons from '../ft-lib/FTicon';
 
 export async function loader({ context }: LoaderArgs) {
-    const collections = await CollectionController.getAllCollections();
+    const CC = new CollectionController({ storefront: context.storefront });
+    const collections = await CC.getAllCollections();
     return json({ collections })
 }
 

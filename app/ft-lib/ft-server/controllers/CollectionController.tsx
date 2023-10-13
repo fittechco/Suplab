@@ -1,20 +1,34 @@
+import { Storefront, I18nBase } from "@shopify/hydrogen";
 import CollectionService from "../services/collectionService";
 
 class CollectionController {
-    static async getAllCollections() {
-        const collections = await CollectionService.getAllCollections();
+
+    storefront: Storefront<I18nBase>;
+    // CollectionService should be initialized with a StorefrontApi instance from the loader
+    constructor(props: {
+        storefront: Storefront<I18nBase>
+    }) {
+        this.storefront = props.storefront;
+    }
+
+    async getAllCollections() {
+        const CS = new CollectionService({ storefront: this.storefront });
+        const collections = await CS.getAllCollections();
         return collections;
     }
 
-    static async getCollection(args: { collectionId: string }) {
+    async getCollection(args: { collectionId: string }) {
         const { collectionId } = args;
-        const collection = await CollectionService.getCollectionById(collectionId);
+        const CS = new CollectionService({ storefront: this.storefront });
+
+        const collection = await CS.getCollectionById(collectionId);
         return collection;
     }
-    static async getCollectionByHandle(args: {
+    async getCollectionByHandle(args: {
         handle: string
     }) {
-        const collection = await CollectionService.getCollectionByHandle(args.handle);
+        const CS = new CollectionService({ storefront: this.storefront });
+        const collection = await CS.getCollectionByHandle(args.handle);
 
         return collection;
     }
