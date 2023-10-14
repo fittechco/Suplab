@@ -226,7 +226,7 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
   const navigate = useNavigate();
-  console.log(errorMessage, "errorMessage");
+  console.log(error, "errorMessage");
   // the return type from the loader and its being wrapped in Awaited in order to remove the promise type
   const data = root.data as Awaited<ReturnType<typeof loader>>["data"];
 
@@ -243,20 +243,21 @@ export function ErrorBoundary() {
           layout={}
         > */}
         <div className="route-error w-full h-screen">
-          {errorStatus === 404 && (
-            <div className='flex flex-col justify-center items-center h-full w-full'>
+          <div className='flex flex-col justify-center items-center h-full w-full'>
+            {errorStatus === 404 && (
               <h1 className='ft-text-main'>{`${errorStatus} Page not found`}</h1>
-              <CTAButton
-                onClick={() => {
-                  navigate('/collections/all');
-                }}
-                className="md:text-xl"
-              >
-                Continue Shopping
-              </CTAButton>
-            </div>
-          )
-          }
+            )
+            }
+            <CTAButton
+              onClick={() => {
+                navigate('/collections/all');
+              }}
+              className="md:text-xl"
+            >
+              Continue Shopping
+            </CTAButton>
+          </div>
+
         </div>
         {/* </Layout> */}
         <ScrollRestoration nonce={nonce} />
