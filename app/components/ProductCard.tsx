@@ -23,7 +23,6 @@ export default function ProductCard(props: Props) {
   }
   return (
     <Link
-      routeLoader
       relative="path"
       to={`/products/${product.handle}`}
       style={{
