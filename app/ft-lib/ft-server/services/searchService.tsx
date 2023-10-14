@@ -1,16 +1,15 @@
 import { Storefront, I18nBase } from '@shopify/hydrogen';
-import StorefrontApi from '~/app/api/storefront';
 import type { App } from '../../../api/type';
 import { PRODUCTFRAGMENT } from './productService';
 class SearchService {
 
   storefront: Storefront<I18nBase>;
-    // CollectionService should be initialized with a StorefrontApi instance from the loader
-    constructor(props: {
-        storefront: Storefront<I18nBase>
-    }) {
-        this.storefront = props.storefront;
-    }
+  // CollectionService should be initialized with a StorefrontApi instance from the loader
+  constructor(props: {
+    storefront: Storefront<I18nBase>
+  }) {
+    this.storefront = props.storefront;
+  }
 
   async searchProducts(searchQuery: string) {
     const data = await this.storefront.query(SEARCHQUERY, {

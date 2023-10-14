@@ -1,8 +1,12 @@
-import {I18nBase, Storefront, createStorefrontClient} from '@shopify/hydrogen';
+import { I18nBase, Storefront, createStorefrontClient } from '@shopify/hydrogen';
 
 export default class StorefrontApi {
-  static storeFront() {
-    const {storefront} = createStorefrontClient({
+  static async storeFront() {
+    const [cache] = await Promise.all([
+      caches.open('hydrogen'),
+    ]);
+    const { storefront } = createStorefrontClient({
+      cache,
       publicStorefrontToken: 'a27f5c0f35281e7103b79896b9c21a04',
       storeDomain: 'suplab.myshopify.com',
     });

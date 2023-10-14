@@ -6,9 +6,10 @@ import { ON_METAOBJECT } from '../routes/_index';
 import type { App } from '../api/type';
 import Offers from '../routes/_index/Offers';
 
-const storefront = StorefrontApi.storeFront();
+
 export default function Offer() {
   const offers = useQuery('offers', async () => {
+    const storefront = await StorefrontApi.storeFront();
     const res = await storefront.query(OFFERS_QUERY);
     return res.metaobject as App.HomePageTemplate.OffersSection;
   });

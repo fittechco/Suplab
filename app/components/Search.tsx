@@ -29,7 +29,7 @@ export default function Search(props: Props) {
         setIsRequesting(false);
         return;
       }
-      const storefront = StorefrontApi.storeFront();
+      const storefront = await StorefrontApi.storeFront();
       const SC = new SearchController({ storefront });
       const res = await SC.searchProducts({ query });
       if (res.nodes.length === 0) {

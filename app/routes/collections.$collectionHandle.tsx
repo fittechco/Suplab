@@ -105,7 +105,7 @@ function Collection() {
       ) {
         console.log('Load more products');
         console.log(hasNextPage, cursor);
-        const storefront = StorefrontApi.storeFront()
+        const storefront = await StorefrontApi.storeFront()
         const PC = new ProductController({ storefront });
         const productsAfterCursor = await PC.getFilteredProducts(
           {

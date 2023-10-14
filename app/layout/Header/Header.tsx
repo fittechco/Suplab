@@ -36,7 +36,8 @@ function Header(props: Props) {
   const [showSearch, setShowSearch] = useState(false);
   const cart = useCart();
   queryClient.prefetchQuery('offers', async () => {
-    const res = await StorefrontApi.storeFront().query(OFFERS_QUERY);
+    const storefront = await StorefrontApi.storeFront();
+    const res = await storefront.query(OFFERS_QUERY);
     return res.metaobject;
   });
 
