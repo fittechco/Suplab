@@ -15,6 +15,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [fetcher]);
 
   const cart = fetcher.data?.cart || undefined;
+  console.log(cart, 'provider cart');
   return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
 }
 export function useCart() {
