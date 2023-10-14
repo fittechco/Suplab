@@ -1,5 +1,5 @@
-import { Money, CartForm, Image } from "@shopify/hydrogen";
-import type { CartLine, ComponentizableCartLine } from "@shopify/hydrogen/storefront-api-types";
+import { Money, CartForm, Image, CartQueryData } from "@shopify/hydrogen";
+import type { Cart, CartLine, ComponentizableCartLine } from "@shopify/hydrogen/storefront-api-types";
 import { useState } from "react";
 import Quantity from "~/app/components/Quantity";
 import FTicons from "~/app/ft-lib/FTicon";
@@ -7,7 +7,7 @@ import LazyImage from "~/app/ft-lib/LazyImage";
 import resizeImage from "~/app/ft-lib/resizeImages";
 import { Colors } from "~/app/ft-lib/shared";
 
-export default function LineItem(props: { lineItem: CartLine | ComponentizableCartLine }) {
+export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines"]["nodes"][number] }) {
     const { lineItem } = props;
     const [quantity, setQuantity] = useState(lineItem?.quantity || 1);
     if (lineItem == null) {

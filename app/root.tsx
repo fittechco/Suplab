@@ -80,13 +80,10 @@ export const links: LinksFunction = () => {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    // {
-    // rel: 'stylesheet',
-    // href: 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css',
-    // set style-src in CSP to allow loading styles from this origin
-    // see https://shopify.dev/docs/themes/security/content-security-policy#style-src
-
-    // },
+    {
+      rel: 'stylesheet',
+      href: 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css',
+    },
   ];
 }
 export async function loader({ context }: LoaderArgs) {
