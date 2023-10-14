@@ -10,7 +10,21 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const { nonce, header, NonceProvider } = createContentSecurityPolicy();
+  const { nonce, header, NonceProvider } = createContentSecurityPolicy({
+    // we need to allow google fonts because we are using them in the app
+    styleSrc: [
+      "'self'",
+      "'unsafe-inline'",
+      'https://cdn.shopify.com',
+      'https://fonts.googleapis.com',
+    ],
+    defaultSrc: [
+      "'self'",
+
+      'https://cdn.shopify.com',
+      'https://fonts.googleapis.com',
+    ],
+  });
 
   const body = await renderToReadableStream(
     <NonceProvider>
@@ -31,13 +45,9 @@ export default async function handleRequest(
     await body.allReady;
   }
 
-  // responseHeaders.set('Content-Type', 'text/html');
+  responseHeaders.set('Content-Type', 'text/html');
   // responseHeaders.set('Content-Security-Policy', header);
-  // const response = () => new Response(body, {
-  //   headers: responseHeaders,
-  //   status: responseStatusCode,
-  // });
-  // return response();
+
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,

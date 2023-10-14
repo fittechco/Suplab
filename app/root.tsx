@@ -1,6 +1,6 @@
 
 import { Seo, useNonce } from '@shopify/hydrogen';
-import { defer, type LoaderArgs } from '@shopify/remix-oxygen';
+import { defer, LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -55,7 +55,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   return false;
 };
 
-export function links() {
+export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: tailwindCss },
     { rel: 'stylesheet', href: appStyles },
@@ -66,7 +66,10 @@ export function links() {
     // getting font from google fonts
     {
       rel: 'preconnect',
-      href: '"https://fonts.googleapis.com',
+      href: 'https://fonts.googleapis.com',
+      as: 'font',
+      crossOrigin: 'anonymous',
+      type: 'font/woff2',
     },
     {
       rel: 'stylesheet',
@@ -77,10 +80,13 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {
-      rel: 'stylesheet',
-      href: 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css',
-    },
+    // {
+    // rel: 'stylesheet',
+    // href: 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css',
+    // set style-src in CSP to allow loading styles from this origin
+    // see https://shopify.dev/docs/themes/security/content-security-policy#style-src
+
+    // },
   ];
 }
 export async function loader({ context }: LoaderArgs) {
@@ -147,9 +153,6 @@ export default function App() {
   const location = useLocation();
   const lastLocationKey = useRef('');
   const pageAnalytics = usePageAnalytics();
-
-
-
 
   useEffect(() => {
     // Filter out useEffect running twice
