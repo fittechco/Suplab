@@ -244,10 +244,8 @@ export function ErrorBoundary() {
         > */}
         <div className="route-error w-full h-screen">
           <div className='flex flex-col justify-center items-center h-full w-full'>
-            {errorStatus === 404 && (
-              <h1 className='ft-text-main'>{`${errorStatus} Page not found`}</h1>
-            )
-            }
+            <h1 className='ft-text-main'>{`${errorStatus} ${errorStatus === 404 ? "Page not found" : errorMessage}`}</h1>
+
             <CTAButton
               onClick={() => {
                 navigate('/collections/all');
