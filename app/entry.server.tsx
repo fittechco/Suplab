@@ -1,8 +1,8 @@
-import type {EntryContext} from '@shopify/remix-oxygen';
-import {RemixServer} from '@remix-run/react';
+import type { EntryContext } from '@shopify/remix-oxygen';
+import { RemixServer } from '@remix-run/react';
 import isbot from 'isbot';
-import {renderToReadableStream} from 'react-dom/server';
-import {createContentSecurityPolicy} from '@shopify/hydrogen';
+import { renderToReadableStream } from 'react-dom/server';
+import { createContentSecurityPolicy } from '@shopify/hydrogen';
 
 export default async function handleRequest(
   request: Request,
@@ -10,7 +10,7 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const {nonce, header, NonceProvider} = createContentSecurityPolicy();
+  const { nonce, header, NonceProvider } = createContentSecurityPolicy();
 
   const body = await renderToReadableStream(
     <NonceProvider>
@@ -33,13 +33,13 @@ export default async function handleRequest(
 
   // responseHeaders.set('Content-Type', 'text/html');
   // responseHeaders.set('Content-Security-Policy', header);
-  const response = () => new Response(body, {
-    headers: responseHeaders,
-    status: responseStatusCode,
-  });
-  return response();
-  // return new Response(body, {
+  // const response = () => new Response(body, {
   //   headers: responseHeaders,
   //   status: responseStatusCode,
   // });
+  // return response();
+  return new Response(body, {
+    headers: responseHeaders,
+    status: responseStatusCode,
+  });
 }
