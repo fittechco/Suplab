@@ -4,6 +4,8 @@ import type { App } from '../../api/type';
 import { useLoaderData } from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import benefitImage1 from '../../../public/florian-kurrasch-HyivyCRdz14-unsplash.png';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 interface BenefitsSectionProps {
   section: App.HomePageTemplate.BenefitsSection;
@@ -47,17 +49,16 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
                 style={{ flexDirection }}
               >
                 {imageUrl && (
-                  <div className="w-[70%] h-[195px] md:w-1/2 md:h-full">
-                    <img
-                      src={imageUrl}
-                      alt="img"
-                      className="w-full h-full rounded-3xl"
+                  <div className="w-[70%] aspect-[2/1.5] md:w-1/2 md:h-[420px]">
+                    <LazyImage
+                      src={resizeImage(imageUrl, 600)}
+                      className="w-full h-full rounded-2xl object-cover"
                     />
                   </div>
                 )}
 
                 <div
-                  className="w-full h-full absolute flex items-center justify-end md:items-start"
+                  className="w-full h-full absolute flex items-center justify-end md:items-start z-50"
                   style={{ flexDirection, ...paddingStyle }}
                 >
                   <div className="benefit_content w-[55%] md:w-1/2 p-2 md:p-4">

@@ -35,18 +35,19 @@ const Contact = ({ section }: ContactSectionProps) => {
           boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
           overflow: 'hidden',
         }}
-        className="flex md:flex-row w-full h-full justify-center items-center relative rounded-3xl overflow-hidden"
+        className="flex md:flex-row w-full h-full justify-center items-center relative rounded-2xl overflow-hidden"
       >
-        {backgroundImageSrc != null && <LazyImage
-          className="w-full h-full object-cover"
-          src={resizeImage(backgroundImageSrc, 800)}
-        />}
+        {backgroundImageSrc != null &&
+          <LazyImage
+            className="w-full h-full object-cover rounded-2xl"
+            src={resizeImage(backgroundImageSrc, 800)}
+          />}
         <div
           style={{
             position: 'absolute',
             backgroundColor: 'rgba(0,0,0,0.5)',
           }}
-          className="w-full h-full top-0 left-0 flex flex-col gap-5 md:gap-4 z-10 items-center justify-end container z-50"
+          className="w-full h-full top-0 left-0 flex flex-col gap-5 md:gap-4 items-center justify-end container z-50"
         >
           <div
             style={{
