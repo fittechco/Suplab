@@ -1,5 +1,5 @@
-import {createStorefrontClient} from '@shopify/hydrogen';
-import {createClient} from './gqlts';
+import { createStorefrontClient } from '@shopify/hydrogen';
+import { createClient } from './gqlts';
 
 const SHOPQUERY = `#graphql
 query shopName1{
@@ -52,24 +52,24 @@ export async function StorefrontApi(props: Props) {
 
 const env = process.env;
 
-const {storefront} = createStorefrontClient({
-  /* Cache API instance */
-  // cache: await caches.open('hydrogen'),
-  /* Private Storefront API token for your store */
-  /* Public Storefront API token for your store */
-  publicStorefrontToken: 'a27f5c0f35281e7103b79896b9c21a04',
-  /* Desired Storefront API version to use */
-  storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION,
-  /* Your store domain: "https://{shop}.myshopify.com" */
-  storeDomain: `https://${env.PUBLIC_STORE_DOMAIN}`,
-  /* Headers to send with each request */
+// const {storefront} = createStorefrontClient({
+//   /* Cache API instance */
+//   // cache: await caches.open('hydrogen'),
+//   /* Private Storefront API token for your store */
+//   /* Public Storefront API token for your store */
+//   publicStorefrontToken: 'a27f5c0f35281e7103b79896b9c21a04',
+//   /* Desired Storefront API version to use */
+//   storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION,
+//   /* Your store domain: "https://{shop}.myshopify.com" */
+//   storeDomain: `https://${env.PUBLIC_STORE_DOMAIN}`,
+//   /* Headers to send with each request */
 
-  /**
-   * Storefront API headers containing:
-   * - buyerIp: The IP address of the customer.
-   * - requestGroupId: A unique ID to group all the logs for this request.
-   * - cookie: The 'cookie' header from the request.
-   */
-});
+//   /**
+//    * Storefront API headers containing:
+//    * - buyerIp: The IP address of the customer.
+//    * - requestGroupId: A unique ID to group all the logs for this request.
+//    * - cookie: The 'cookie' header from the request.
+//    */
+// });
 
-export default storefront;
+// export default storefront;

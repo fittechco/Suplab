@@ -33,7 +33,6 @@ import { CartProvider } from './components/CartProvider';
 import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
 import { usePageAnalytics } from './utils';
-import StoreLogo from "~/public/suplabLogo.png"
 import CTAButton from './components/CTAButton';
 
 // This is important to avoid re-fetching root queries on sub-navigations

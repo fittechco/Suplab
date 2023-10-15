@@ -12,6 +12,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (fetcher.data || fetcher.state === 'loading') return;
     console.log('fetching cart');
     fetcher.load('/cart');
+    console.log(fetcher, 'fetcher');
   }, [fetcher]);
 
   const cart = fetcher.data?.cart || undefined;
