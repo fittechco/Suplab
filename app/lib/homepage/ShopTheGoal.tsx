@@ -96,7 +96,7 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
                               textTransform: 'uppercase',
                               color: Colors.secondary
                             }}
-                            className="flex justify-center items-start gap-3 md:text-2xl text-xl ft-text-main"
+                            className="flex justify-center items-start gap-3 md:text-2xl text-xl ft-text-main text-center"
                           >
                             {goalFields.goal_title.value}
                           </h3>

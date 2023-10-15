@@ -49,6 +49,10 @@ const Promotion = ({ section }: PromotionSectionProps) => {
     };
   }, []);
 
+  if (fields.promotions == null) {
+    return null;
+  }
+
   return (
     <div
       key={section.type}

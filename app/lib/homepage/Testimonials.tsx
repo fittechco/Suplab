@@ -88,7 +88,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                 className="swiper-slide"
               >
                 <div
-                  className="testimonialsSection__testimonial flex justify-center items-end w-fit rounded-2xl overflow-hidden h-72"
+                  className="testimonialsSection__testimonial flex justify-center items-end w-fit rounded-2xl overflow-hidden h-72 md:h-80"
                 >
                   <div className="lightgray 50% / cover no-repeat flex h-full w-full">
                     {testimonialFields.before_image != null && (
