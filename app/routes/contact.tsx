@@ -39,9 +39,6 @@ export default function Contact() {
         }))
     }
 
-    useEffect(() => {
-        console.log(formData, 'formData');
-    }, [formData])
     return (
         <div className='contact-container w-full h-full'>
             <div className='contact-wrapper flex flex-col md:flex-row-reverse gap-5 w-full h-full container'>
@@ -108,8 +105,7 @@ export default function Contact() {
                     <div className='CTA submit'>
                         <CTAButton
                             onClick={async () => {
-                                console.log(formData);
-                                await fetch('https://suplab.myshopify.com/contact', {
+                                await fetch('/api/contact', {
                                     method: 'POST',
                                     body: JSON.stringify({
                                         formData,

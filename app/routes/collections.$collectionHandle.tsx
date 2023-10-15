@@ -103,8 +103,6 @@ function Collection() {
         hasNextPage === true &&
         cursor != null
       ) {
-        console.log('Load more products');
-        console.log(hasNextPage, cursor);
         const storefront = await StorefrontApi.storeFront()
         const PC = new ProductController({ storefront });
         const productsAfterCursor = await PC.getFilteredProducts(
@@ -114,7 +112,6 @@ function Collection() {
             cursor,
           },
         );
-        console.log(productsAfterCursor, 'productsAfterCursor');
         setHasNextPage(productsAfterCursor.products.pageInfo.hasNextPage);
         setCursor(productsAfterCursor.products.pageInfo.endCursor ?? null);
         setProducts([...products, ...productsAfterCursor.products.nodes]);
@@ -138,7 +135,6 @@ function Collection() {
   const toggleFiltersMenu = () => {
     setShowMobileFilters((prev) => !prev);
   };
-  console.log(products.length, 'products.length');
   if (data.collection === null) {
     return <div>Loading...</div>;
   }

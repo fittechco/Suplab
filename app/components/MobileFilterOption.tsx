@@ -18,8 +18,6 @@ export default function MobileFilterOption({
   hasX = false,
 }: Props) {
 
-  console.log('props', param, label, value, isSelected, hasX);
-
   const { pathname, search } = useLocation();
 
   const linkParams = new URLSearchParams(search);

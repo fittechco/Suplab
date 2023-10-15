@@ -33,7 +33,6 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
       activeButton === buttonName ? Colors.primaryDark : 'transparent',
   });
 
-  console.log(fields.collection_one?.reference, 'collection_one');
   return (
     <div
       key={section.type}

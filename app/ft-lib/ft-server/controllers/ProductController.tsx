@@ -69,7 +69,6 @@ class ProductController {
   async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
     try {
       const { handle } = args;
-      console.log('filters', args.filters);
       const PS = new ProductService({ storefront: this.storefront });
       const filteredProducts = await PS.getFilteredProducts({ handle, filters: args.filters, cursor: args.cursor });
       return filteredProducts;

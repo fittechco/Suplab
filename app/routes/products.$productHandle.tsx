@@ -65,7 +65,6 @@ export async function loader({ context, params, request }: LoaderArgs) {
     url: request.url,
   });
 
-
   return defer({
     recommendedProducts,
     product,
@@ -290,10 +289,11 @@ const ProductPage = () => {
           </Suspense>
         </div>
         <div className='className="recommended-prducts relative"'>
-          <Suspense fallback={<ProductsSwiper
-            title="Similar Products"
-            products={null}
-          />}>
+          <Suspense fallback={
+            <ProductsSwiper
+              title="Similar Products"
+              products={null}
+            />}>
             <Await resolve={recommendedProducts}>
               {(productRecommendations) => {
                 return (

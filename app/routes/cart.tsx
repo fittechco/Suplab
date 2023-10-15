@@ -40,7 +40,7 @@ export async function action({ request, context }: ActionArgs) {
 
 export async function loader({ context }: LoaderArgs) {
   const { cart } = context;
-  console.log(cart, 'cart');
+  console.log(cart, 'loader cart');
   const CC = new CollectionController({ storefront: context.storefront });
   const cartProductsRecommendations = CC.getCollectionByHandle({ handle: "all" })
   console.log(cartProductsRecommendations, 'cartProductsRecommendations');
@@ -79,7 +79,6 @@ export default function CartRoute() {
           </div>
           <div className="cart-summary w-[30%]">
             <div
-              style={{}}
               className="cart-summary space-y-3 md:space-y-5 px-3 md:px-5"
             >
               <div className="total-price flex gap-1 font-bold text-xl">

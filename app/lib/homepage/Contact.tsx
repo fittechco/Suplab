@@ -12,7 +12,6 @@ interface ContactSectionProps {
 
 const Contact = ({ section }: ContactSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
-  console.log(fields, 'fields form contact');
   const isMobile = window.innerWidth <= 768;
   const [image, setImage] = React.useState<string | null>(null);
 

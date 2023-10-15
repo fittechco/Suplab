@@ -189,22 +189,22 @@ export default function App() {
       </head>
       <QueryClientProvider client={queryClient}>
         <body>
-          <CartProvider>
+          {/* <CartProvider>
             <Layout
               layout={{
                 shop: data.shop.shop,
                 header: data.header,
                 footer: data.footer,
               }}
-            >
-              <Outlet />
-            </Layout>
-            <CartDrawer />
-            <RoutesLoader />
-            <ScrollRestoration nonce={nonce} />
-            <Scripts nonce={nonce} />
-            <LiveReload nonce={nonce} />
-          </CartProvider>
+            > */}
+          <Outlet />
+          {/* </Layout> */}
+          <CartDrawer />
+          <RoutesLoader />
+          <ScrollRestoration nonce={nonce} />
+          <Scripts nonce={nonce} />
+          <LiveReload nonce={nonce} />
+          {/* </CartProvider> */}
         </body>
       </QueryClientProvider>
     </html>
