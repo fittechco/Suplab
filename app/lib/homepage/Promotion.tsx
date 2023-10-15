@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import Swiper from 'swiper';
+import 'swiper/swiper-bundle.css';
 import { Pagination, Autoplay } from 'swiper/modules';
 
 interface PromotionSectionProps {
@@ -21,10 +22,6 @@ const Promotion = ({ section }: PromotionSectionProps) => {
     const swiper = new Swiper(swiperContainer.current, {
       spaceBetween: 35,
       slidesPerView: 1,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
       breakpoints: {
         768: {
           slidesPerView: 1,
@@ -61,13 +58,9 @@ const Promotion = ({ section }: PromotionSectionProps) => {
       {fields.promotions != null && (
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '12px',
             boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
           }}
-          className="swiper-wrapper flex md:flex-row justify-start items-end relative"
+          className="swiper-wrapper flex md:flex-row justify-start items-end relative rounded-xl"
         >
           {fields.promotions?.references.nodes.map((promotion, index) => {
             const promotionFields = arrayToObject({ array: promotion.fields });
