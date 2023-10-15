@@ -1,22 +1,20 @@
-import {useEffect, useState, useRef} from 'react';
-import type {App} from '../../api/type';
+import { useEffect, useState, useRef } from 'react';
+import type { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
-import {Navigation} from 'swiper/modules';
-import {Colors} from 'app/ft-lib/shared';
+import { Navigation } from 'swiper/modules';
+import { Colors } from 'app/ft-lib/shared';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 interface TestimonialsSectionProps {
   section: App.HomePageTemplate.TestimonialsSection;
 }
 
-const Testimonials = ({section}: TestimonialsSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
-  if(section.fields[0]?.key == "testimonials" ){
-    section.fields[0]
-  }
+const Testimonials = ({ section }: TestimonialsSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
   const [currentSlide, setCurrentSlide] = useState(0);
-
   const swiperContainer = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -47,6 +45,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
     };
   }, []);
 
+  console.log(section, 'section');
   return (
     <div
       key={section.type}
@@ -82,50 +81,42 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
                 style={{
                   marginLeft: isFirstSlide ? 'auto' : '0',
                   marginRight: isLastSlide ? 'auto' : '0',
+                  boxShadow:
+                    '0px 8.70968px 13.06452px 0px rgba(0, 0, 0, 0.16)',
+                  aspectRatio: '1.5',
                 }}
                 className="swiper-slide"
               >
                 <div
-                  className="testimonialsSection__testimonial flex justify-center items-end h-fit w-fit rounded-[17.5px]"
-                  style={{
-                    boxShadow:
-                      '0px 8.70968px 13.06452px 0px rgba(0, 0, 0, 0.16)',
-                  }}
+                  className="testimonialsSection__testimonial flex justify-center items-end w-fit rounded-2xl overflow-hidden h-72"
                 >
-                  <div className="lightgray 50% / cover no-repeat flex">
+                  <div className="lightgray 50% / cover no-repeat flex h-full w-full">
                     {testimonialFields.before_image != null && (
-                      <img
+                      <LazyImage
                         style={{
-                          height: '441.29px',
-                          borderRight: '1px solid rgba(255, 255, 255, 0.40)',
-                          borderTopLeftRadius: '17.419px',
-                          borderBottomLeftRadius: '17.419px',
+                          height: '440',
+                          width: testimonialFields.after_image != null ? '50%' : '100%',
                         }}
-                        className="w-1/2 h-full object-fill"
-                        src={testimonialFields.before_image.reference.image.url}
-                        alt=""
+                        className="h-full w-full object-fill"
+                        src={resizeImage(testimonialFields.before_image.reference.image.url, 600)}
                       />
                     )}
                     {testimonialFields.after_image != null && (
-                      <img
+                      <LazyImage
                         style={{
                           height: '441.29px',
                           borderLeft: '1px solid rgba(255, 255, 255, 0.40)',
-                          borderTopRightRadius: '17.419px',
-                          borderBottomRightRadius: '17.419px',
                         }}
                         className="w-1/2 h-full object-fill"
-                        src={testimonialFields.after_image.reference.image.url}
-                        alt=""
+                        src={resizeImage(testimonialFields.after_image.reference.image.url, 600)}
                       />
                     )}
                   </div>
                   <div
                     style={{
                       background: 'rgba(250, 249, 246, 0.60)',
-                      backdropFilter: 'blur(3.6290323734283447px)',
                     }}
-                    className="testimonial__content absolute flex p-2 flex-col justify-end items-start rounded-[17.5px] mb-[15px] m-3"
+                    className="testimonial__content absolute flex p-2 flex-col justify-end items-start mb-[15px] m-3 backdrop-blur-sm"
                   >
                     {testimonialFields.name != null && (
                       <p
@@ -160,9 +151,8 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
           })}
         </div>
         <div
-          className={`swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden ${
-            currentSlide === 0 ? 'hidden' : 'flex'
-          }`}
+          className={`swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden ${currentSlide === 0 ? 'hidden' : 'flex'
+            }`}
         >
           <button className="swiper-button-prev-icon"></button>
         </div>
@@ -177,9 +167,9 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
 };
 
 // ${
-  // currentSlide === fields.testimonials?.references.nodes.length - 1 
-  // ? 'hidden'
-  // : 'flex'
+// currentSlide === fields.testimonials?.references.nodes.length - 1 
+// ? 'hidden'
+// : 'flex'
 // }
 
 export default Testimonials;
