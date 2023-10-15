@@ -1,13 +1,13 @@
-import {Link} from '@remix-run/react';
-import {Colors} from '../ft-lib/shared';
+import { Link } from '@remix-run/react';
+import { Colors } from '../ft-lib/shared';
 import type {
   ShopLayoutQuery,
   HeaderQuery,
   FooterQuery,
 } from 'storefrontapi.generated';
-import {Image} from '@shopify/hydrogen';
+import { Image } from '@shopify/hydrogen';
 import FTicons from '../ft-lib/FTicon';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 type Props = {
   layout: {
@@ -170,7 +170,9 @@ const Footer = (props: Props) => {
         >
           © 2023 | Suplab | All Rights Reserved
         </p>
-        <p
+        <Link
+          to={"https://fittech.solutions/"}
+          target="_blank"
           style={{
             color: Colors.secondaryDark,
             fontFamily: 'Roboto Condensed',
@@ -183,7 +185,7 @@ const Footer = (props: Props) => {
           }}
         >
           Developed By FitTech
-        </p>
+        </Link>
       </div>
     </div>
   );

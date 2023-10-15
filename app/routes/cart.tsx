@@ -34,16 +34,13 @@ export async function action({ request, context }: ActionArgs) {
 
   // The Cart ID might change after each mutation, so update it each time.
   const headers = cart.setCartId(result.cart.id);
-  console.log(result, 'result');
   return json(result, { status: 200, headers });
 }
 
 export async function loader({ context }: LoaderArgs) {
   const { cart } = context;
-  console.log(cart, 'loader cart');
   const CC = new CollectionController({ storefront: context.storefront });
   const cartProductsRecommendations = CC.getCollectionByHandle({ handle: "all" })
-  console.log(cartProductsRecommendations, 'cartProductsRecommendations');
   return defer({
     cart: await cart.get(),
     cartProductsRecommendations

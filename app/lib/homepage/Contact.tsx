@@ -4,6 +4,8 @@ import type { App } from '../../api/type';
 import { Link, useLoaderData } from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import { Colors } from 'app/ft-lib/shared';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 interface ContactSectionProps {
   section: App.HomePageTemplate.ContactSection;
@@ -33,19 +35,18 @@ const Contact = ({ section }: ContactSectionProps) => {
           boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
           overflow: 'hidden',
         }}
-        className="flex md:flex-row w-full h-full justify-center items-center relative rounded-3xl"
+        className="flex md:flex-row w-full h-full justify-center items-center relative rounded-3xl overflow-hidden"
       >
-        <img
+        {backgroundImageSrc != null && <LazyImage
           className="w-full h-full object-cover"
-          src={backgroundImageSrc}
-          alt=""
-        />
+          src={resizeImage(backgroundImageSrc, 800)}
+        />}
         <div
           style={{
             position: 'absolute',
             backgroundColor: 'rgba(0,0,0,0.5)',
           }}
-          className="w-full h-full top-0 left-0 flex flex-col gap-5 md:gap-4 z-10 items-center justify-end container"
+          className="w-full h-full top-0 left-0 flex flex-col gap-5 md:gap-4 z-10 items-center justify-end container z-50"
         >
           <div
             style={{

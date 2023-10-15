@@ -1,16 +1,19 @@
-import {useEffect, useState, useRef} from 'react';
-import type {App} from '../../api/type';
+import { useEffect, useState, useRef } from 'react';
+import type { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
-import {Navigation} from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
+import { Colors } from '~/app/ft-lib/shared';
 
 interface ShopTheGoalSectionProps {
   section: App.HomePageTemplate.ShopTheGoalSection;
 }
 
-const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
   const swiperContainer = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -60,47 +63,43 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
       >
         <div className="swiper-wrapper flex">
           {fields.shop_the_goals && fields.shop_the_goals.references.nodes.map((shopTheGoal, index) => {
-            const goalFields = arrayToObject({array: shopTheGoal.fields});
+            const goalFields = arrayToObject({ array: shopTheGoal.fields });
             const goalImage = goalFields.goal_image?.reference?.image?.url;
             return (
               <div key={shopTheGoal.id} className="swiper-slide">
-                <div className="shopTheGoalSection__shopTheGoal flex flex-col justify-center items-center rounded-[17.5]">
+                <div className="shopTheGoalSection__shopTheGoal flex flex-col justify-center items-center rounded-3xl">
                   <div
                     style={{
                       boxShadow:
                         '0px 8.70968px 13.06452px 0px rgba(0, 0, 0, 0.16)',
                     }}
-                    className="flex justify-center items-end mb-3 rounded-[17.5px] cover no-repeat w-full h-[317px] md:h-[375px]"
+                    className="flex justify-center items-end mb-3 rounded-3xl cover no-repeat w-full h-[360px]"
                   >
                     {goalImage && (
-                      <img
-                        src={goalImage}
-                        alt=""
-                        className="h-full w-full rounded-[17.5px] object-fill"
+                      <LazyImage
+                        src={resizeImage(goalImage, 600)}
+                        className="h-full w-full rounded-3xl object-cover"
                       />
                     )}
                     {goalFields.goal_title && (
-                      <div className="absolute flex w-full rounded-[17.5px] mb-6">
+                      <div className="absolute flex w-full rounded-xl mb-6 z-50">
                         <div
                           style={{
                             padding: '9.43px 0px',
                             background: 'rgba(250, 249, 246, 0.60)',
-                            backdropFilter: 'blur(2.946768045425415px)',
                           }}
-                          className="flex w-full justify-center gap-3"
+                          className="flex w-full justify-center gap-3 backdrop-blur-sm"
                         >
-                          <p
+                          <h3
                             style={{
-                              fontFamily: 'Roboto Condensed',
-                              fontStyle: 'normal',
                               fontWeight: '700',
-                              letterSpacing: '0.48px',
                               textTransform: 'uppercase',
+                              color: Colors.secondary
                             }}
-                            className="flex justify-center items-start gap-3 md:text-2xl text-lg"
+                            className="flex justify-center items-start gap-3 md:text-2xl text-xl ft-text-main"
                           >
                             {goalFields.goal_title.value}
-                          </p>
+                          </h3>
                         </div>
                       </div>
                     )}
