@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import StorefrontApi from '../api/storefront';
 import { ON_METAOBJECT } from '../routes/_index';
 import type { App } from '../api/type';
-import Offers from '../routes/_index/Offers';
+import Offers from '../lib/homepage/Offers';
 
 
 export default function Offer() {

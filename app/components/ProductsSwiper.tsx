@@ -61,7 +61,7 @@ export default function ProductsSwiper(props: Props) {
         <div className="swiper-wrapper">
           {props.products.map((product, index) => {
             return (
-              <div key={product?.id} className="swiper-slide overflow-hidden">
+              <div key={product?.id + (product?.handle || "") + product?.title} className="swiper-slide overflow-hidden">
                 <ProductCard product={product} />
               </div>
             );

@@ -3,17 +3,17 @@ import { useLoaderData } from '@remix-run/react';
 import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import Hero from './Hero';
-import type { App } from '../../api/type';
-import Benefits from './Benefits';
-import Testimonials from './Testimonials';
-import ShopTheGoal from './ShopTheGoal';
-import Contact from './Contact';
-import Promotion from './Promotion';
-import FeaturedCollections from './FeaturedCollections';
-import FAQ from './FAQ';
+import Hero from '../lib/homepage/Hero';
+import type { App } from '../api/type';
+import Benefits from '../lib/homepage/Benefits';
+import Testimonials from '../lib/homepage/Testimonials';
+import ShopTheGoal from '../lib/homepage/ShopTheGoal';
+import Contact from '../lib/homepage/Contact';
+import Promotion from '../lib/homepage/Promotion';
+import FeaturedCollections from '../lib/homepage/FeaturedCollections';
+import FAQ from '../lib/homepage/FAQ';
 import { UseShopStore } from '~/app/root';
-import Offers from './Offers';
+import Offers from '../lib/homepage/Offers';
 
 export type Shop = {
   name: string;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import FTicons from '../ft-lib/FTicon';
 import { Colors } from '../ft-lib/shared';
 import { UseShopStore } from '../root';
-import { ON_METAOBJECT } from 'app/routes/_index';
+import { ON_METAOBJECT } from '~/app/routes/_index';
 import MobileNavItem from './Header/MobileNavItem';
 import Offer from 'app/components/FtOffers';
 import { Link, useNavigation } from '@remix-run/react';
