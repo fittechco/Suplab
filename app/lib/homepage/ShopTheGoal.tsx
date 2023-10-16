@@ -43,6 +43,10 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
     };
   }, []);
 
+  if (fields.shop_the_goals == null) {
+    return null;
+  }
+
   return (
     <div
       key={section.type}

@@ -101,7 +101,9 @@ const Footer = (props: Props) => {
             {props.layout.footer.menu?.items.map((menu, index) => {
               return (
                 <div key={menu.title} className="menu flex flex-col gap-2">
-                  <div className="title font-bold flex justify-between w-full">
+                  <div
+                    onClick={() => toggleOpen(index)}
+                    className="title font-bold flex justify-between w-full">
                     <p className="uppercase">{menu.title}</p>
                     <button
                       onClick={() => toggleOpen(index)}
@@ -118,12 +120,12 @@ const Footer = (props: Props) => {
                     </button>
                   </div>
                   {openMenu === index && (
-                    <div className="links flex flex-col gap-2">
+                    <div className="flex flex-col gap-2">
                       {menu.items.map((item, itemIndex) => {
                         const itemRoute = new URL(item.url || '').pathname;
                         return (
-                          <Link key={itemRoute + itemIndex} to={itemRoute}>
-                            {item.title}
+                          <Link className='links' key={itemRoute + itemIndex} to={itemRoute}>
+                            <p>{item.title}</p>
                           </Link>
                         );
                       })}

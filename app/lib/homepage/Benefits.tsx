@@ -14,6 +14,10 @@ interface BenefitsSectionProps {
 const Benefits = ({ section }: BenefitsSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
 
+  if (fields.benefits == null) {
+    return null;
+  }
+
   return (
     <div
       key={section.type}

@@ -33,6 +33,10 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
       activeButton === buttonName ? Colors.primaryDark : 'transparent',
   });
 
+  if (fields.collection_one == null && fields.collection_two == null) {
+    return null;
+  }
+
   return (
     <div
       key={section.type}
@@ -50,22 +54,16 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
             </p>
           )}
           {fields.shop_button_text != null && (
-            <div
-              style={{
-                padding: '8px 0',
-              }}
-            >
               <Link
                 style={{
                   backgroundColor: Colors.primary,
                   color: Colors.textSecondary,
                 }}
                 to={`/collections/${activeButton === 'collection_one' ? fields.collection_one?.reference.handle : activeButton === "collection_two" && fields.collection_two?.reference.handle}`}
-                className="ft-text-main w-max btn md:px-4 md:py-2 px-4 py-1 rounded-full text-main text-center font-bold md:text-xl text-sm uppercase"
+                className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize shrink-0"
               >
                 {fields.shop_button_text.value}
               </Link>
-            </div>
           )}
         </div>
         <div className="flex">
