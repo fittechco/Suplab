@@ -20,12 +20,10 @@ export default async function handleRequest(
       "https://fonts.googleapis.com",
     ],
     fontSrc: [
-      "'self'",
       "https://fonts.gstatic.com"
     ],
     connectSrc: [
-      "'self'",
-      "https://suplab.myshopify.com/api/2023-07/graphql.json"
+      "https://suplab.myshopify.com"
     ]
   });
 
