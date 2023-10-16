@@ -16,14 +16,13 @@ export default async function handleRequest(
       "'self'",
       "'unsafe-inline'",
       'https://cdn.shopify.com',
-      'https://fonts.googleapis.com',
+      'https://cdn.jsdelivr.net/',
+      "https://fonts.googleapis.com",
     ],
-    defaultSrc: [
+    fontSrc: [
       "'self'",
-
-      'https://cdn.shopify.com',
-      'https://fonts.googleapis.com',
-    ],
+      "https://fonts.gstatic.com "
+    ]
   });
 
   const body = await renderToReadableStream(
@@ -46,7 +45,7 @@ export default async function handleRequest(
   }
 
   responseHeaders.set('Content-Type', 'text/html');
-  // responseHeaders.set('Content-Security-Policy', header);
+  responseHeaders.set('Content-Security-Policy', header);
 
   return new Response(body, {
     headers: responseHeaders,
