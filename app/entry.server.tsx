@@ -22,10 +22,6 @@ export default async function handleRequest(
     fontSrc: [
       "https://fonts.gstatic.com"
     ],
-    connectSrc: [
-      "https://suplab.myshopify.com",
-      "https://suplabstore.com"
-    ]
   });
 
   const body = await renderToReadableStream(
