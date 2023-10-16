@@ -21,7 +21,11 @@ export default async function handleRequest(
     ],
     fontSrc: [
       "'self'",
-      "https://fonts.gstatic.com "
+      "https://fonts.gstatic.com"
+    ],
+    connectSrc: [
+      "'self'",
+      "https://suplab.myshopify.com/api/2023-07/graphql.json"
     ]
   });
 
