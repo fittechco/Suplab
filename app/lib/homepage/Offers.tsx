@@ -11,6 +11,8 @@ import type { ProductQuery } from '~/storefrontapi.generated';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { UseShopStore } from '~/app/root';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 interface OffersSectionProps {
   section: App.HomePageTemplate.OffersSection;
@@ -91,9 +93,9 @@ const Offers = ({ section }: OffersSectionProps) => {
                     }}
                   >
                     {product?.images != null && (
-                      <img
+                      <LazyImage
                         className="object-fill rounded-3xl"
-                        src={product.images.nodes[0].url}
+                        src={resizeImage(product.images.nodes[0].url, 400)}
                       />
                     )}
                   </Link>
