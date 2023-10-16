@@ -14,7 +14,6 @@ interface TestimonialsSectionProps {
 
 const Testimonials = ({ section }: TestimonialsSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
-  const [currentSlide, setCurrentSlide] = useState(0);
   const swiperContainer = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -74,7 +73,6 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
             if (fields.testimonials != null && fields) {
               isLastSlide = index === fields.testimonials.references.nodes.length - 1;
             }
-
             return (
               <div
                 key={testimonial.id}
@@ -82,7 +80,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                   marginLeft: isFirstSlide ? 'auto' : '0',
                   marginRight: isLastSlide ? 'auto' : '0',
                   boxShadow:
-                    '0px 8.70968px 13.06452px 0px rgba(0, 0, 0, 0.16)',
+                    '0px 8px 13px 0px rgba(0, 0, 0, 0.16)',
                   aspectRatio: '1.5',
                 }}
                 className="swiper-slide"
@@ -90,7 +88,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                 <div
                   className="testimonialsSection__testimonial flex justify-center items-end w-fit rounded-2xl overflow-hidden h-72 md:h-80"
                 >
-                  <div className="lightgray 50% / cover no-repeat flex h-full w-full">
+                  <div className="lightgray 50% / cover no-repeat flex h-full w-full rounded-2xl overflow-hidden">
                     {testimonialFields.before_image != null && (
                       <LazyImage
                         style={{
@@ -151,8 +149,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
           })}
         </div>
         <div
-          className={`swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden ${currentSlide === 0 ? 'hidden' : 'flex'
-            }`}
+          className={`swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden flex`}
         >
           <button className="swiper-button-prev-icon"></button>
         </div>
