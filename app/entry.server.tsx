@@ -23,7 +23,8 @@ export default async function handleRequest(
       "https://fonts.gstatic.com"
     ],
     connectSrc: [
-      "https://suplab.myshopify.com"
+      "https://suplab.myshopify.com",
+      "https://suplabstore.com"
     ]
   });
 
