@@ -78,8 +78,6 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                 style={{
                   marginLeft: isFirstSlide ? 'auto' : '0',
                   marginRight: isLastSlide ? 'auto' : '0',
-                  boxShadow:
-                    '0px 8px 13px 0px rgba(0, 0, 0, 0.16)',
                 }}
                 className="swiper-slide rounded-2xl overflow-hidden">
                 <div

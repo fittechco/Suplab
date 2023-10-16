@@ -5,7 +5,7 @@ export default class StorefrontApi {
     const cache = await caches.open('hydrogen')
     const { storefront } = createStorefrontClient({
       cache,
-      publicStorefrontToken: 'a27f5c0f35281e7103b79896b9c21a04',
+      publicStorefrontToken: "967cc50208baf40e210a0d27ad61f85a",
       storeDomain: 'suplab.myshopify.com',
     });
     return storefront;

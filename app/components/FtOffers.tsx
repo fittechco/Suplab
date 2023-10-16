@@ -1,10 +1,9 @@
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import { Colors } from 'app/ft-lib/shared';
 import { useQuery } from 'react-query';
 import StorefrontApi from '../api/storefront';
-import { ON_METAOBJECT } from '../routes/_index';
 import type { App } from '../api/type';
 import Offers from '../lib/homepage/Offers';
+import { useEffect } from 'react';
 
 
 export default function Offer() {
@@ -13,6 +12,8 @@ export default function Offer() {
     const res = await storefront.query(OFFERS_QUERY);
     return res.metaobject as App.HomePageTemplate.OffersSection;
   });
+
+  useEffect(() => { }, [offers.data]);
 
   if (offers.data == null) {
     return null;
