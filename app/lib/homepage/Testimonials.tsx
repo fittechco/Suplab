@@ -98,7 +98,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                           width: testimonialFields.after_image != null ? '50%' : '100%',
                         }}
                         className="h-full w-full object-fill"
-                        src={resizeImage(testimonialFields.before_image.reference.image.url, 600)}
+                        src={resizeImage(testimonialFields.before_image.reference.image.url, 400)}
                       />
                     )}
                     {testimonialFields.after_image != null && (
@@ -108,7 +108,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                           borderLeft: '1px solid rgba(255, 255, 255, 0.40)',
                         }}
                         className="w-1/2 h-full object-fill"
-                        src={resizeImage(testimonialFields.after_image.reference.image.url, 600)}
+                        src={resizeImage(testimonialFields.after_image.reference.image.url, 400)}
                       />
                     )}
                   </div>

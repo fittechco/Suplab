@@ -53,12 +53,10 @@ export default function BottomDrawer(props: Props) {
       height: "100%",
       zIndex: 100,
       background: "rgba(250, 249, 246, 0.10)",
-      // background: "rgba(200, 200, 200, 0.40)",
       paddingTop: 90,
       opacity: animate ? 1 : 0,
       transition: "all 0.3s ease-in-out",
-      backdropFilter: "blur(2.5px)",
-    }} className='search-container md:px-5 md:container'>
+    }} className='search-container md:px-5 md:container backdrop-blur-sm'>
       <div
         ref={drawerRef}
         style={{
@@ -75,8 +73,8 @@ export default function BottomDrawer(props: Props) {
           transform: animate ? "translateY(0%)" : "translateY(100%)",
         }}
         className='search-wrapper flex flex-col gap-4 items-start pt-5 backdrop-blur '>
-          {props.children}
-        </div>
+        {props.children}
+      </div>
     </div >
   )
 }

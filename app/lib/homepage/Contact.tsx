@@ -53,7 +53,7 @@ const Contact = ({ section }: ContactSectionProps) => {
             style={{
               width: isMobile ? '100%' : '55%',
             }}
-            className="contactSection__content md:mb-12 mb-6 flex flex-col"
+            className="contactSection__content md:mb-12 mb-6 flex flex-col rounded-2xl overflow-hidden"
           >
             <div className="flex flex-col">
               {fields.email != null && (

@@ -21,8 +21,6 @@ export async function loader({ context }: LoaderArgs) {
     })
 }
 
-// https://suplab.myshopify.com/contact
-
 export default function Contact() {
     const { metaobject } = useLoaderData<typeof loader>()
     const contactSection = metaobject.metaobject as App.HomePageTemplate.ContactSection

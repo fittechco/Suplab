@@ -7,7 +7,6 @@ import { UseShopStore } from 'app/root';
 import { useEffect, useState } from 'react';
 import type { ProductQuery } from 'storefrontapi.generated';
 import ProductOptions from './ProductOptions';
-import { useCart } from '~/app/components/CartProvider';
 
 type Props = {
   selectedVariant: NonNullable<ProductQuery['product']>['variants']['nodes'][0];
@@ -19,7 +18,7 @@ export default function ProductForm(props: Props) {
   const { product, selectedVariant } = props;
   const [quantity, setQuantity] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const cart = useCart();
+  console.log(selectedVariant, 'selectedVariant');
   return (
     <div className="product-form flex flex-col gap-5 w-full">
       <span
@@ -50,7 +49,7 @@ export default function ProductForm(props: Props) {
         onChange={(value) => {
           setQuantity(value);
         }}
-        max={selectedVariant?.quantityAvailable ?? 0}
+        max={selectedVariant.quantityAvailable}
         value={quantity}
       />
       <div className="flex items-center w-full max-md:bottom-9 max-md:sticky">

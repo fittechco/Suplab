@@ -1,19 +1,21 @@
 import FTicons from 'app/ft-lib/FTicon';
-import {Colors} from 'app/ft-lib/shared';
-import React from 'react';
+import { Colors } from 'app/ft-lib/shared';
+import React, { useState } from 'react';
 
 type Props = {
   value: number;
   onChange: (value: number) => void;
   size?: 'sm' | 'md';
   isUpdating?: boolean;
-  max?: number;
+  max?: number | null;
 };
 
 export default function Quantity(props: Props) {
-  const {value, onChange} = props;
+  const { value, onChange } = props;
   const size = props.size === 'sm' ? 14 : 16;
   const sizeClass = props.size === 'sm' ? 'px-5 py-2.5' : 'px-6 py-3';
+  const [minusDisabled, setMinusDisabled] = useState(value === 1);
+  const [plusDisabled, setPlusDisabled] = useState(value === props.max);
   return (
     <div
       className="quantity w-fit flex items-center relative"
@@ -43,10 +45,19 @@ export default function Quantity(props: Props) {
         )}
       </div>
       <button
+        style={{
+          opacity: value === 1 ? 0.5 : 1,
+        }}
         type="submit"
+        disabled={minusDisabled}
         onClick={() => {
           if (value > 1) {
             onChange(value - 1);
+          }
+          if (value - 1 === 1) {
+            setMinusDisabled(true);
+          } else {
+            setMinusDisabled(false);
           }
         }}
         className={`${sizeClass} minus h-full flex items-center  cursor-pointer`}
@@ -72,9 +83,18 @@ export default function Quantity(props: Props) {
         {value}
       </div>
       <button
+        style={{
+          opacity: value === props.max ? 0.5 : 1,
+        }}
         type="submit"
+        disabled={plusDisabled}
         onClick={() => {
           if (props.max != null && value < props.max) {
+            if (value + 1 === props.max) {
+              setPlusDisabled(true);
+            } else {
+              setPlusDisabled(false);
+            }
             onChange(value + 1);
           } else if (props.max == null) {
             onChange(value + 1);
@@ -91,6 +111,6 @@ export default function Quantity(props: Props) {
           name="plus"
         />
       </button>
-    </div>
+    </div >
   );
 }

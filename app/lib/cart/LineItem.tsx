@@ -1,5 +1,4 @@
-import { Money, CartForm, Image, CartQueryData } from "@shopify/hydrogen";
-import type { Cart, CartLine, ComponentizableCartLine } from "@shopify/hydrogen/storefront-api-types";
+import { Money, CartForm, CartQueryData } from "@shopify/hydrogen";
 import { useState } from "react";
 import Quantity from "~/app/components/Quantity";
 import FTicons from "~/app/ft-lib/FTicon";
@@ -9,7 +8,7 @@ import { Colors } from "~/app/ft-lib/shared";
 
 export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines"]["nodes"][number] }) {
     const { lineItem } = props;
-    const [quantity, setQuantity] = useState(lineItem?.quantity || 1);
+    const [quantity, setQuantity] = useState(lineItem.quantity);
     if (lineItem == null) {
         return null;
     }
@@ -68,7 +67,8 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
                                     onChange={(value) => {
                                         setQuantity(value);
                                     }}
-                                    value={lineItem.quantity}
+                                    max={lineItem.quantity || null}
+                                    value={quantity}
                                     isUpdating={fetcher.state !== 'idle' ? true : false}
                                 />
                             </>
