@@ -47,13 +47,13 @@ const Contact = ({ section }: ContactSectionProps) => {
             position: 'absolute',
             backgroundColor: 'rgba(0,0,0,0.5)',
           }}
-          className="w-full h-full top-0 left-0 flex flex-col gap-5 md:gap-4 items-center justify-end container z-50"
+          className="w-full h-full top-0 left-0 flex flex-col rounded-2xl overflow-hidden gap-5 md:gap-4 items-center justify-end container z-50"
         >
           <div
             style={{
               width: isMobile ? '100%' : '55%',
             }}
-            className="contactSection__content md:mb-12 mb-6 flex flex-col rounded-2xl overflow-hidden"
+            className="contactSection__content md:mb-12 mb-6 flex flex-col "
           >
             <div className="flex flex-col">
               {fields.email != null && (
