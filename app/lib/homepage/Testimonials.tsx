@@ -76,8 +76,6 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
               <div
                 key={testimonial.id}
                 style={{
-                  marginLeft: isFirstSlide ? 'auto' : '0',
-                  marginRight: isLastSlide ? 'auto' : '0',
                 }}
                 className="swiper-slide rounded-2xl overflow-hidden">
                 <div
