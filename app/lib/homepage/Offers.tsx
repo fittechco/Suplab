@@ -49,6 +49,10 @@ const Offers = ({ section }: OffersSectionProps) => {
     };
   }, []);
 
+  if (fields.offers_collection == null) {
+    return null;
+  }
+
   return (
     <div
       key={section.type}

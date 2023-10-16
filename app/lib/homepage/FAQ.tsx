@@ -22,6 +22,10 @@ const FAQ = ({ section }: FAQSectionProps) => {
     setIsOpen(updatedIsOpen);
   };
 
+  if (fields.faqs == null) {
+    return null;
+  }
+
   return (
     <div
       key={section.type}
