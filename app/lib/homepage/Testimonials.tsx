@@ -80,11 +80,12 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                   marginRight: isLastSlide ? 'auto' : '0',
                   boxShadow:
                     '0px 8px 13px 0px rgba(0, 0, 0, 0.16)',
-                  aspectRatio: '1.5',
                 }}
-                className="swiper-slide rounded-2xl overflow-hidden"
-              >
+                className="swiper-slide rounded-2xl overflow-hidden">
                 <div
+                  style={{
+                    aspectRatio: '1/1',
+                  }}
                   className="testimonialsSection__testimonial flex justify-center items-end w-full h-72 md:h-80"
                 >
                   <div className="lightgray / cover no-repeat flex h-full w-full">
