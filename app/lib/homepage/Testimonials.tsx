@@ -44,7 +44,6 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
     };
   }, []);
 
-  console.log(section, 'section');
   return (
     <div
       key={section.type}
@@ -83,27 +82,24 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                     '0px 8px 13px 0px rgba(0, 0, 0, 0.16)',
                   aspectRatio: '1.5',
                 }}
-                className="swiper-slide"
+                className="swiper-slide rounded-2xl overflow-hidden"
               >
                 <div
-                  className="testimonialsSection__testimonial flex justify-center items-end w-fit rounded-2xl overflow-hidden h-72 md:h-80"
+                  className="testimonialsSection__testimonial flex justify-center items-end w-full h-72 md:h-80"
                 >
-                  <div className="lightgray 50% / cover no-repeat flex h-full w-full rounded-2xl overflow-hidden">
+                  <div className="lightgray / cover no-repeat flex h-full w-full">
                     {testimonialFields.before_image != null && (
                       <LazyImage
                         style={{
-                          height: '440',
                           width: testimonialFields.after_image != null ? '50%' : '100%',
                         }}
                         className="h-full w-full object-fill"
                         src={resizeImage(testimonialFields.before_image.reference.image.url, 400)}
                       />
                     )}
-                    {testimonialFields.after_image != null && (
+                    {testimonialFields.after_image?.value != null && (
                       <LazyImage
                         style={{
-                          height: '441.29px',
-                          borderLeft: '1px solid rgba(255, 255, 255, 0.40)',
                         }}
                         className="w-1/2 h-full object-fill"
                         src={resizeImage(testimonialFields.after_image.reference.image.url, 400)}
