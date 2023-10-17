@@ -27,6 +27,7 @@ export default async function handleRequest(
       "https://monorail-edge.shopifysvc.com/",
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
+      "https://suplabstore.com/",
       // add localhost for development,
       // this will be removed in production
       "http://localhost:8002/",
