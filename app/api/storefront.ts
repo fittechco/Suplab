@@ -9,7 +9,6 @@ export default class StorefrontApi {
       storeDomain: 'suplab.myshopify.com',
       storefrontId: 'gid://shopify/Storefront/Storefront',
       storefrontApiVersion: '2023-07',
-
     });
     return storefront;
   }

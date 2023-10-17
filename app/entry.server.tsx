@@ -20,8 +20,19 @@ export default async function handleRequest(
       "https://fonts.googleapis.com",
     ],
     fontSrc: [
+      "'self'",
       "https://fonts.gstatic.com"
     ],
+    connectSrc: [
+      "https://monorail-edge.shopifysvc.com/",
+      "https://www.google-analytics.com",
+      "https://suplab.myshopify.com/",
+      // add localhost for development,
+      // this will be removed in production
+      "http://localhost:8002/",
+      "ws://localhost:8002/",
+      "http://localhost:3000/",
+    ]
   });
 
   const body = await renderToReadableStream(
