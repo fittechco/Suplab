@@ -1,4 +1,4 @@
-import { useFetcher, useLocation, useNavigate, useSearchParams } from '@remix-run/react';
+import { useNavigation, useSearchParams } from '@remix-run/react';
 import {
   Select,
   SelectTrigger,
@@ -19,8 +19,8 @@ type Option = {
 };
 
 function Dropdown({ placeholder, options, param }: DropdownProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-
+  const [currentSearchParams, setSearchParams] = useSearchParams();
+  const navigation = useNavigation();
   // const navigate = useNavigate();
 
   // const {pathname, search} = useLocation();
@@ -29,11 +29,17 @@ function Dropdown({ placeholder, options, param }: DropdownProps) {
 
 
   const getOptionFromValue = (value: string | null) => {
-    if (!value) return null;
+    if (value == null) return null;
     return options.find((option) => option.value === value);
   };
 
   // const fetcher = useFetcher();
+
+  const defaultParams = new URLSearchParams(currentSearchParams);
+
+  const searchParams = navigation.location
+    ? new URLSearchParams(navigation.location.search)
+    : defaultParams;
 
   return (
     <Select

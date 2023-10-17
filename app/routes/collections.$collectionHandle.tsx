@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
 import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
 import { Slider } from '~/app/components/ui/slider';
@@ -80,8 +80,8 @@ function Collection() {
   const filtersData = data.availableFilters.filter(
     (filter: any) => filter.param !== 'Price',
   );
-  const minPrice = data.minPrice;
-  const maxPrice = data.maxPrice;
+  let minPrice = data.minPrice;
+  let maxPrice = data.maxPrice;
   const lastProductRef = useRef<HTMLDivElement | null>(null);
   const [products, setProducts] = useState<App.Shopify.Storefront.Product[]>(
     data.collection.products.nodes,
@@ -137,6 +137,27 @@ function Collection() {
   };
   if (data.collection === null) {
     return <div>Loading...</div>;
+  }
+
+  const [currentSearchParams, setSearchParams] = useSearchParams();
+  const navigation = useNavigation();
+  const { pathname, search } = useLocation();
+
+  const defaultParams = new URLSearchParams(currentSearchParams);
+
+  const searchParams = navigation.location
+    ? new URLSearchParams(navigation.location.search)
+    : defaultParams;
+
+
+
+  if (searchParams.has('price') === true) {
+    const priceParam = searchParams.get('price')
+    invariant(priceParam, 'Price param is required');
+    const price = JSON.parse(priceParam) as { price: { min: number; max: number } };
+    console.log(price, 'price');
+    maxPrice = price.price.max;
+    minPrice = price.price.min;
   }
 
   return (
