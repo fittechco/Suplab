@@ -19,6 +19,7 @@ export default function Search(props: Props) {
     SearchProductsQuery['products']['nodes']
   >(fetcher.data?.nodes || []);
   const [animate, setAnimate] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const [isRequesting, setIsRequesting] = useState(false);
   const [isEmpty, setIsEmpty] = useState<boolean>();
@@ -72,6 +73,11 @@ export default function Search(props: Props) {
       setIsRequesting(false);
     }
     // if fetcher data value doesnt change, we return
+    if (searchQuery === '') {
+      setSearchedProducts([]);
+      setIsEmpty(false);
+      return
+    }
     if (fetcher.data == null || _.isEqual(fetcher.data.nodes, prevFetcherData.current)) {
       return
     }
@@ -138,11 +144,7 @@ export default function Search(props: Props) {
               borderColor: Colors.secondaryLight,
             }}
             onChange={async (e) => {
-              if (e.target.value.length === 0) {
-                setIsEmpty(false);
-                setSearchedProducts([]);
-                return;
-              }
+              setSearchQuery(e.target.value);
               fetcher.load(`/search?q=${e.target.value}`)
             }}
             className="font-mainFont w-full placeholder:text-[#696968] h-12 focus:outline-none px-0 py-2 "
