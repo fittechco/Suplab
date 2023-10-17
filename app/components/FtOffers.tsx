@@ -13,8 +13,6 @@ export default function Offer() {
     return res.metaobject as App.HomePageTemplate.OffersSection;
   });
 
-  useEffect(() => { }, [offers.data]);
-
   if (offers.data == null) {
     return null;
   }
