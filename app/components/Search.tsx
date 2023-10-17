@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import { Link, useFetcher } from '@remix-run/react';
 import SearchController from 'app/ft-lib/ft-server/controllers/SearchController';
 import { Colors } from 'app/ft-lib/shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -6,6 +6,7 @@ import type { SearchProductsQuery } from 'storefrontapi.generated';
 import _ from 'lodash';
 import ProductCard from './ProductCard';
 import StorefrontApi from '../api/storefront';
+import { loader as searchLoader } from '../routes/search';
 
 type Props = {
   setShowSearch: (show: boolean) => void;
@@ -13,30 +14,21 @@ type Props = {
 };
 
 export default function Search(props: Props) {
+  const fetcher = useFetcher<typeof searchLoader>();
   const [searchedProducts, setSearchedProducts] = useState<
     SearchProductsQuery['products']['nodes']
-  >([]);
+  >(fetcher.data?.nodes || []);
   const [animate, setAnimate] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const [isRequesting, setIsRequesting] = useState(false);
   const [isEmpty, setIsEmpty] = useState<boolean>();
+  const prevFetcherData = useRef<SearchProductsQuery['products']['nodes']>([]);
   // implementing search with debounce and useMemo in order to avoid unnecessary re-renders and save the reference to the debounced function
   const handleSearchProducts = useMemo(() => {
-    return _.debounce(async (query: string) => {
-      if (query.length === 0) {
-        setIsEmpty(false);
-        setSearchedProducts([]);
-        setIsRequesting(false);
-        return;
-      }
-      const storefront = await StorefrontApi.storeFront();
-      const SC = new SearchController({ storefront });
-      const res = await SC.searchProducts({ query });
-      if (res.nodes.length === 0) {
-        setIsEmpty(true);
-      }
-      setSearchedProducts(res.nodes);
-    }, 100);
+    return _.debounce((query: string) => {
+
+      fetcher.load(`/search?q=${query}`)
+    }, 100, { leading: false, trailing: true });
   }, []);
 
   useEffect(() => {
@@ -73,6 +65,26 @@ export default function Search(props: Props) {
     };
   }, [props.showSearch]);
 
+  useEffect(() => {
+    if (fetcher.state != "idle") {
+      setIsRequesting(true);
+    } else {
+      setIsRequesting(false);
+    }
+    // if fetcher data value doesnt change, we return
+    if (_.isEqual(fetcher.data?.nodes, prevFetcherData.current)) {
+      return
+    }
+    // updating the previous fetcher data value
+    prevFetcherData.current = fetcher.data?.nodes || [];
+    if (fetcher.data == null || fetcher.data.nodes.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setSearchedProducts(fetcher.data.nodes);
+    }
+  }, [fetcher]);
+
+  console.log(fetcher.data, 'fetcher data');
   return (
     <div
       style={{
@@ -124,9 +136,13 @@ export default function Search(props: Props) {
               borderColor: Colors.secondaryLight,
             }}
             onChange={async (e) => {
-              setIsRequesting(true);
-              await handleSearchProducts(e.target.value);
-              setIsRequesting(false);
+              if (e.target.value.length === 0) {
+                setIsEmpty(false);
+                setSearchedProducts([]);
+                setIsRequesting(false);
+                return;
+              }
+              fetcher.load(`/search?q=${e.target.value}`)
             }}
             className="font-mainFont w-full placeholder:text-[#696968] h-12 focus:outline-none px-0 py-2 "
             type="text"
