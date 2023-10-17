@@ -6,6 +6,7 @@ import arrayToObject from '../../ft-lib/ArrayToObject';
 import benefitImage1 from '../../../public/florian-kurrasch-HyivyCRdz14-unsplash.png';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import { Colors } from '~/app/ft-lib/shared';
 
 interface BenefitsSectionProps {
   section: App.HomePageTemplate.BenefitsSection;
@@ -27,7 +28,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
       className="benefitSection w-full h-full !container mx-auto"
     >
       {fields.title != null && fields.benefits != null && (
-        <p className="ft-text-main md:text-3xl text-2xl">
+        <p className="section-heading ft-text-main md:text-3xl text-2xl">
           {fields.title.value}
         </p>
       )}
@@ -67,7 +68,11 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
                 >
                   <div className="benefit_content w-[55%] md:w-1/2 p-2 md:p-4">
                     {benefitFields.title && (
-                      <p className="benefit_title_text">
+                      <p
+                        style={{
+                          color: Colors.text
+                        }}
+                        className="benefit_title_text">
                         {benefitFields.title?.value}
                       </p>
                     )}

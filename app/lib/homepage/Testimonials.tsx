@@ -54,7 +54,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
       className="testimonialsSection w-full !container mx-auto"
     >
       {fields.title != null && fields.testimonials != null && (
-        <p className="ft-text-main md:text-3xl text-2xl mb-10">
+        <p className="section-heading ft-text-main md:text-3xl text-2xl mb-10">
           {fields.title.value}
         </p>
       )}

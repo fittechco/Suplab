@@ -37,7 +37,7 @@ const FAQ = ({ section }: FAQSectionProps) => {
     >
       <div className="faqSection__wrapper">
         {fields.title != null && (
-          <p className="ft-text-main md:text-3xl text-2xl">
+          <p className="section-heading ft-text-main md:text-3xl text-2xl">
             {fields.title.value}
           </p>
         )}

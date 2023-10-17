@@ -49,21 +49,21 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
       <div className="featuredCollectionsSection__buttons container mb-10">
         <div className="flex justify-between items-center">
           {fields.title != null && (
-            <p className="ft-text-main md:text-3xl text-2xl w-fit">
+            <p className="section-heading ft-text-main md:text-3xl text-2xl w-fit">
               {fields.title.value}
             </p>
           )}
           {fields.shop_button_text != null && (
-              <Link
-                style={{
-                  backgroundColor: Colors.primary,
-                  color: Colors.textSecondary,
-                }}
-                to={`/collections/${activeButton === 'collection_one' ? fields.collection_one?.reference.handle : activeButton === "collection_two" && fields.collection_two?.reference.handle}`}
-                className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize shrink-0"
-              >
-                {fields.shop_button_text.value}
-              </Link>
+            <Link
+              style={{
+                backgroundColor: Colors.primary,
+                color: Colors.textSecondary,
+              }}
+              to={`/collections/${activeButton === 'collection_one' ? fields.collection_one?.reference.handle : activeButton === "collection_two" && fields.collection_two?.reference.handle}`}
+              className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize shrink-0"
+            >
+              {fields.shop_button_text.value}
+            </Link>
           )}
         </div>
         <div className="flex">

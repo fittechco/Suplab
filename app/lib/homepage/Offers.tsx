@@ -25,8 +25,8 @@ const Offers = ({ section }: OffersSectionProps) => {
       return;
     }
     const swiper = new Swiper(swiperContainer.current, {
-      spaceBetween: 20,
-      slidesPerView: 1.05,
+      spaceBetween: 10,
+      slidesPerView: 1,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -34,7 +34,7 @@ const Offers = ({ section }: OffersSectionProps) => {
       breakpoints: {
         768: {
           spaceBetween: 20,
-          slidesPerView: 2.5,
+          slidesPerView: 3.5,
         },
       },
       modules: [Navigation],
@@ -62,7 +62,7 @@ const Offers = ({ section }: OffersSectionProps) => {
     >
       <div className="flex items-center justify-between mb-10">
         {fields.title != null && fields.offers != null && (
-          <p className="ft-text-main md:text-3xl text-2xl">
+          <p className="section-heading ft-text-main md:text-3xl text-2xl">
             {fields.title.value}
           </p>
         )}
@@ -86,7 +86,7 @@ const Offers = ({ section }: OffersSectionProps) => {
               (product: ProductQuery['product']) => {
                 return (
                   <Link
-                    className="swiper-slide cursor-pointer w-fit h-fit"
+                    className="swiper-slide cursor-pointer"
                     key={product?.id} to={`/products/${product?.handle}`}
                     onClick={() => {
                       UseShopStore.setState({
@@ -96,7 +96,7 @@ const Offers = ({ section }: OffersSectionProps) => {
                   >
                     {product?.images != null && (
                       <LazyImage
-                        className="object-fill rounded-3xl"
+                        className="object-fill rounded-3xl w-full"
                         src={resizeImage(product.images.nodes[0].url, 400)}
                       />
                     )}

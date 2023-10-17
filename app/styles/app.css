@@ -18,6 +18,10 @@ body {
   transition: all 0.7s ease;
 }
 
+.section-heading {
+  color: #4A4A49
+}
+
 .product-form form {
   width: 100%;
 }

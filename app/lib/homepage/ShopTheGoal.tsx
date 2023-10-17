@@ -22,7 +22,7 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
     }
     const swiper = new Swiper(swiperContainer.current, {
       spaceBetween: 20,
-      slidesPerView: 1.25,
+      slidesPerView: 1,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -57,13 +57,14 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
       className="shopTheGoalSection w-full container mx-auto"
     >
       {fields.title != null && fields.shop_the_goals != null && (
-        <p className="ft-text-main md:text-3xl text-2xl mb-10 text-center md:text-start">
+        <p
+          className="section-heading ft-text-main md:text-3xl text-2xl mb-10 text-center md:text-start">
           {fields.title.value}
         </p>
       )}
       <div
         ref={swiperContainer}
-        className="shopTheGoalSection__benefits relative swiper-container"
+        className="shopTheGoalSection__benefits relative swiper-container max-md:max-w-xs mx-auto"
       >
         <div className="swiper-wrapper flex">
           {fields.shop_the_goals && fields.shop_the_goals.references.nodes.map((shopTheGoal, index) => {
