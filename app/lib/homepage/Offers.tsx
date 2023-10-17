@@ -5,8 +5,6 @@ import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
 import { Colors } from 'app/ft-lib/shared';
 import { Navigation } from 'swiper/modules';
-import CollectionController from '~/app/ft-lib/ft-server/controllers/CollectionController';
-import { Product } from '@shopify/hydrogen/storefront-api-types';
 import type { ProductQuery } from '~/storefrontapi.generated';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';

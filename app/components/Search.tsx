@@ -72,14 +72,16 @@ export default function Search(props: Props) {
       setIsRequesting(false);
     }
     // if fetcher data value doesnt change, we return
-    if (_.isEqual(fetcher.data?.nodes, prevFetcherData.current)) {
+    if (fetcher.data == null || _.isEqual(fetcher.data.nodes, prevFetcherData.current)) {
       return
     }
     // updating the previous fetcher data value
     prevFetcherData.current = fetcher.data?.nodes || [];
-    if (fetcher.data == null || fetcher.data.nodes.length === 0) {
+    if (fetcher.data.nodes.length === 0) {
       setIsEmpty(true);
+      setSearchedProducts(fetcher.data.nodes);
     } else {
+      setIsEmpty(false);
       setSearchedProducts(fetcher.data.nodes);
     }
   }, [fetcher]);
@@ -139,7 +141,6 @@ export default function Search(props: Props) {
               if (e.target.value.length === 0) {
                 setIsEmpty(false);
                 setSearchedProducts([]);
-                setIsRequesting(false);
                 return;
               }
               fetcher.load(`/search?q=${e.target.value}`)
