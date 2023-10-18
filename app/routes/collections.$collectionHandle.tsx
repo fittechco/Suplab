@@ -155,7 +155,6 @@ function Collection() {
     const priceParam = searchParams.get('price')
     invariant(priceParam, 'Price param is required');
     const price = JSON.parse(priceParam) as { price: { min: number; max: number } };
-    console.log(price, 'price');
     maxPrice = price.price.max;
     minPrice = price.price.min;
   }

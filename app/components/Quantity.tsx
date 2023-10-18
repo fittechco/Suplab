@@ -1,6 +1,6 @@
 import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type Props = {
   value: number;
@@ -16,6 +16,22 @@ export default function Quantity(props: Props) {
   const sizeClass = props.size === 'sm' ? 'px-5 py-2.5' : 'px-6 py-3';
   const [minusDisabled, setMinusDisabled] = useState(value === 1);
   const [plusDisabled, setPlusDisabled] = useState(value === props.max);
+
+  useEffect(() => {
+    if (value === 1) {
+      setMinusDisabled(true);
+    } else {
+      setMinusDisabled(false);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (props.max != null && value === props.max) {
+      setPlusDisabled(true);
+    } else {
+      setPlusDisabled(false);
+    }
+  }, [value]);
   return (
     <div
       className="quantity w-fit flex items-center relative"
@@ -51,16 +67,12 @@ export default function Quantity(props: Props) {
         type="submit"
         disabled={minusDisabled}
         onClick={() => {
+          console.log(value);
           if (value > 1) {
             onChange(value - 1);
           }
-          if (value - 1 === 1) {
-            setMinusDisabled(true);
-          } else {
-            setMinusDisabled(false);
-          }
         }}
-        className={`${sizeClass} minus h-full flex items-center  cursor-pointer`}
+        className={`${sizeClass} minus h-full flex items-center cursor-pointer`}
       >
         <FTicons
           style={{
@@ -90,11 +102,6 @@ export default function Quantity(props: Props) {
         disabled={plusDisabled}
         onClick={() => {
           if (props.max != null && value < props.max) {
-            if (value + 1 === props.max) {
-              setPlusDisabled(true);
-            } else {
-              setPlusDisabled(false);
-            }
             onChange(value + 1);
           } else if (props.max == null) {
             onChange(value + 1);

@@ -33,6 +33,7 @@ export default async function handleRequest(
       "http://localhost:8002/",
       "ws://localhost:8002/",
       "http://localhost:3000/",
+      "https://judge.me/"
     ]
   });
 

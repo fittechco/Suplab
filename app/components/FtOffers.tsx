@@ -8,7 +8,6 @@ export default function Offer() {
   const offers = useQuery('offers', async () => {
     const storefront = await StorefrontApi.storeFront();
     const res = await storefront.query(OFFERS_QUERY);
-    console.log(res, 'res for offers');
     return res.metaobject as App.HomePageTemplate.OffersSection;
   });
 

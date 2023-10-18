@@ -51,7 +51,7 @@ const FAQ = ({ section }: FAQSectionProps) => {
             >
               <div
                 onClick={() => toggleOpen(index)}
-                className="flex items-center justify-between w-full">
+                className="flex items-center justify-between w-full cursor-pointer">
                 {faqFields.question != null && (
                   <p className="text-xl">{faqFields.question.value}</p>
                 )}

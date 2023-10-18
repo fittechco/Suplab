@@ -18,7 +18,6 @@ export default function ProductForm(props: Props) {
   const { product, selectedVariant } = props;
   const [quantity, setQuantity] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log(selectedVariant, 'selectedVariant');
   return (
     <div className="product-form flex flex-col gap-5 w-full">
       <span
@@ -81,24 +80,22 @@ export default function ProductForm(props: Props) {
               setIsSubmitting(false)
             }
             return (
-              <>
-                <CTAButton
-                  className='flex items-center justify-center'
-                  disabled={
-                    !selectedVariant.availableForSale ??
-                    fetcher.state !== 'idle'
-                  }
-                  fullWidth
-                >
-                  {fetcher.state !== 'idle' ? (
-                    <div className="lds-dual-ring lds-dual-ring-white !w-8 !h-8"></div>
-                  ) : selectedVariant?.availableForSale ? (
-                    'Add to cart'
-                  ) : (
-                    'Sold out'
-                  )}
-                </CTAButton>
-              </>
+              <CTAButton
+                className='flex items-center justify-center'
+                disabled={
+                  !selectedVariant.availableForSale ??
+                  fetcher.state !== 'idle'
+                }
+                fullWidth
+              >
+                {fetcher.state !== 'idle' ? (
+                  <div className="lds-dual-ring lds-dual-ring-white !w-8 !h-8"></div>
+                ) : selectedVariant?.availableForSale ? (
+                  'Add to cart'
+                ) : (
+                  'Sold out'
+                )}
+              </CTAButton>
             );
           }}
         </CartForm>

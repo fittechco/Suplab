@@ -92,7 +92,6 @@ export default function Search(props: Props) {
     }
   }, [fetcher]);
 
-  console.log(fetcher.data, 'fetcher data');
   return (
     <div
       style={{
