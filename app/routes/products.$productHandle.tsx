@@ -19,6 +19,9 @@ import resizeImage from '../ft-lib/resizeImages';
 import LazyImage from '../ft-lib/LazyImage';
 import { UseShopStore } from '../root';
 import { seoPayload } from '../ft-lib/seo.server';
+import ProductReviews from '../lib/productPage/ProductReviews';
+import JudgeMeService from '../ft-lib/apps/JudgeMe';
+import { Review } from 'schema-dts';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -54,6 +57,12 @@ export async function loader({ context, params, request }: LoaderArgs) {
     );
   }
 
+  const judgeMeApi = new JudgeMeService()
+  const externalId = product.id.split('/').pop();
+  invariant(externalId != null, 'externalId is required');
+  const reviews = judgeMeApi.getProductReviewWidget(externalId)
+  const widgetSettings = judgeMeApi.getWidgetSettings()
+
   const selectedVariant =
     product.selectedVariant ?? product?.variants?.nodes[0];
   // we will difer the fetching of the recommendations
@@ -67,9 +76,12 @@ export async function loader({ context, params, request }: LoaderArgs) {
 
   return defer({
     recommendedProducts,
+    widgetSettings,
     product,
+    reviews,
     selectedVariant,
     productMetafields,
+    seo,
     analytics: {
       pageType: 'product',
     }
@@ -77,7 +89,7 @@ export async function loader({ context, params, request }: LoaderArgs) {
 }
 
 const ProductPage = () => {
-  const { product, selectedVariant, recommendedProducts, productMetafields } = useLoaderData<typeof loader>();
+  const { product, reviews, widgetSettings, selectedVariant, recommendedProducts, productMetafields } = useLoaderData<typeof loader>();
   const swiperContainer = useRef<HTMLDivElement | null>(null);
   const thumbsSwiperRef = useRef<HTMLDivElement | null>(null);
   const [isTop, setIsTop] = useState(true);
@@ -159,6 +171,11 @@ const ProductPage = () => {
     return null;
   }
 
+  // we want to get the extenral id of the product which is the number in the id gid://shopify/Product/8850957861177
+  // and pass it to the review component
+  const externalId = product.id.split('/').pop();
+  console.log(externalId);
+
   return (
     <div
       style={{
@@ -192,6 +209,7 @@ const ProductPage = () => {
                       }}
                     >
                       <LazyImage
+                        alt='product image'
                         style={{
                           objectFit: 'cover',
                           height: '100%',
@@ -227,6 +245,7 @@ const ProductPage = () => {
                       }}
                     >
                       <LazyImage
+                        alt='product image'
                         style={{
                           objectFit: 'contain',
                           height: '100%',
@@ -287,6 +306,9 @@ const ProductPage = () => {
               }}
             </Await>
           </Suspense>
+        </div>
+        <div className='product-reviews'>
+          <ProductReviews widgetSettings={widgetSettings} product={product} reviewWidget={reviews} />
         </div>
         <div className='className="recommended-prducts relative"'>
           <Suspense fallback={
