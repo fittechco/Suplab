@@ -82,6 +82,7 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
                   >
                     {goalImage && (
                       <LazyImage
+                        alt="shop the goal image"
                         src={resizeImage(goalImage, 600)}
                         className="h-full w-full rounded-3xl object-cover"
                       />

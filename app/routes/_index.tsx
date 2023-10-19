@@ -14,6 +14,7 @@ import FeaturedCollections from '../lib/homepage/FeaturedCollections';
 import FAQ from '../lib/homepage/FAQ';
 import { UseShopStore } from '~/app/root';
 import Offers from '../lib/homepage/Offers';
+import { seoPayload } from '../ft-lib/seo.server';
 
 export type Shop = {
   name: string;
@@ -27,8 +28,10 @@ export async function loader({ context }: LoaderArgs) {
     },
   });
   const { metaobject } = storefront;
+  const seo = seoPayload.home()
   return json({
     metaobject,
+    seo
   });
 }
 

@@ -1,9 +1,9 @@
-import {useEffect, useState} from 'react';
-import type {App} from '../api/type';
+import { useEffect, useState } from 'react';
+import type { App } from '../api/type';
 // import CartController from 'server/controllers/CartController';
 
 type IProduct = Pick<
-  App.Shopify.Storefront.Product,
+  NonNullable<App.Shopify.Storefront.Product>,
   'id' | 'title' | 'description' | 'images'
 >;
 

@@ -44,6 +44,7 @@ export default function ProductCard(props: Props) {
         className="md:h-[260px] h-[200px] w-full max-md:h-[200px] max-md:mx-auto"
       >
         <LazyImage
+          alt='product image'
           style={{
             objectFit: 'cover',
             height: '100%',

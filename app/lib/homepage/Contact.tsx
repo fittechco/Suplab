@@ -39,6 +39,7 @@ const Contact = ({ section }: ContactSectionProps) => {
       >
         {backgroundImageSrc != null &&
           <LazyImage
+            alt="contact image"
             className="w-full h-full object-cover rounded-2xl"
             src={resizeImage(backgroundImageSrc, 800)}
           />}

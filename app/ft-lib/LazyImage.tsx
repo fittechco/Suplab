@@ -26,6 +26,7 @@ function Placeholder(props: {
 type Props = {
     src: string
     style?: React.CSSProperties
+    alt: string
     className?: string
 }
 
@@ -43,6 +44,7 @@ function LazyImage(props: Props) {
                     ...style,
                 }}
                 src={src}
+                alt={props.alt}
                 placeholder={<Placeholder style={style} />}
                 className={`lazy ${props.className} bg-transparent z-20 relative`}
             />

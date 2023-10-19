@@ -30,6 +30,7 @@ export default function Collections() {
                             className='collection-card__image w-full h-full shadow'>
                             {collection.image?.url ?
                                 <LazyImage
+                                    alt='collection image'
                                     style={{
                                         borderRadius: '12px',
                                         width: '100%',

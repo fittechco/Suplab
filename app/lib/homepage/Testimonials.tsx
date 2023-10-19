@@ -87,6 +87,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                   <div className="lightgray / cover no-repeat flex h-full w-full">
                     {testimonialFields.before_image != null && (
                       <LazyImage
+                        alt='testimonial image'
                         style={{
                           width: testimonialFields.after_image != null ? '50%' : '100%',
                         }}
@@ -96,6 +97,7 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
                     )}
                     {testimonialFields.after_image?.value != null && (
                       <LazyImage
+                        alt='testimonial image'
                         style={{
                         }}
                         className="w-1/2 h-full object-fill"

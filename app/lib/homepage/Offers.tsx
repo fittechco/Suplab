@@ -96,6 +96,7 @@ const Offers = ({ section }: OffersSectionProps) => {
                   >
                     {product?.images != null && (
                       <LazyImage
+                        alt="product image"
                         className="object-fill rounded-3xl w-full"
                         src={resizeImage(product.images.nodes[0].url, 400)}
                       />

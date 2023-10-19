@@ -48,6 +48,7 @@ export default function Contact() {
                     className="contact-location flex-1 ">
                     {fields.image?.reference.image.url &&
                         <LazyImage
+                            alt='contact image'
                             className='object-cover min-h-[420px]'
                             src={resizeImage(fields.image?.reference.image.url, 800)}
                         />}

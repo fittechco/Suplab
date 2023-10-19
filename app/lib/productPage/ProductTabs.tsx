@@ -102,10 +102,12 @@ export default function ProductTabs(props: Props) {
                             key={metafield.id}
                             className='product-tabs-value flex gap-3 h-full w-full'
                         >
-                            {image != null && <LazyImage
-                                className="product-tabs-image aspect-square h-96"
-                                src={resizeImage(image.url, 600)}
-                            />}
+                            {image != null &&
+                                <LazyImage
+                                    alt='product image'
+                                    className="product-tabs-image aspect-square h-96"
+                                    src={resizeImage(image.url, 600)}
+                                />}
                             {value != null && <p className=''>{value}</p>}
                         </div>
                     )

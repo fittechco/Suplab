@@ -1,6 +1,7 @@
 import SearchController from '../ft-lib/ft-server/controllers/SearchController';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import util from 'util';
+import JudgeMeService from '../ft-lib/apps/JudgeMe';
 
 const METAOBJECTQUERY = `#graphql
 metafield(handle: "offers") {
@@ -31,20 +32,9 @@ const LAYOUT_QUERY = `#graphql
 ` as const;
 
 async function storeFrontApiTest() {
-  await fetch('https://suplab.myshopify.com/contact', {
-    method: 'POST',
-    body: JSON.stringify({
-      "contact[email]": "testdev@gmail.com",
-      "contact[comment]": "test",
-      "contact[name]": "testdev",
-      "contact[phone]": "1234567890",
-    })
-  }).then(res => {
-    console.log(res);
-    return res.json()
-  })
-    .then(res => console.log(res))
-
+  const JA = new JudgeMeService()
+  // JA.getProductReviews("8598241116473").then(console.log)
+  JA.getWidgetSettings().then(console.log)
 }
 
 void storeFrontApiTest();
