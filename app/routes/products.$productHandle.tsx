@@ -307,9 +307,9 @@ const ProductPage = () => {
             </Await>
           </Suspense>
         </div>
-        <div className='product-reviews'>
+        {/* <div className='product-reviews'>
           <ProductReviews widgetSettings={widgetSettings} product={product} reviewWidget={reviews} />
-        </div>
+        </div> */}
         <div className='className="recommended-prducts relative"'>
           <Suspense fallback={
             <ProductsSwiper
