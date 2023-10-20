@@ -2,6 +2,8 @@ import { Link } from '@remix-run/react';
 import { useRef } from 'react';
 import { Colors } from '../../ft-lib/shared';
 import type { App } from '../../api/type';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 export default function SubMenuPopup(props: {
   items: App.Shopify.Item[];
@@ -73,14 +75,14 @@ export default function SubMenuPopup(props: {
           }}
           className="featured-collectio-1 relative card-shadow"
         >
-          <img
+          <LazyImage
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
             }}
-            src="https://cdn.shopify.com/s/files/1/0814/6046/1881/products/ed93ff84-6899-417d-bbc2-ca55e5b4157b.__CR0_0_970_600_PT0_SX970_V1.png?v=1694640158"
-          />
+            src={resizeImage("https://cdn.shopify.com/s/files/1/0814/6046/1881/products/ed93ff84-6899-417d-bbc2-ca55e5b4157b.__CR0_0_970_600_PT0_SX970_V1.png?v=1694640158", 300)}
+            alt={'featured-collection-1'} />
           <div
             style={{
               position: 'absolute',
@@ -97,22 +99,20 @@ export default function SubMenuPopup(props: {
             Featured Collection
           </div>
         </div>
+
         <div
-          style={{
-            width: 370,
-            height: 180,
-            borderRadius: 12,
-            overflow: 'hidden',
-          }}
+
           className="featured-collectio-1 relative card-shadow"
         >
-          <img
+          <LazyImage
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
+              width: 370,
+              height: 180,
+              borderRadius: 12,
+              overflow: 'hidden',
             }}
-            src="https://cdn.shopify.com/s/files/1/0814/6046/1881/files/61WjOJxw6CL._AC_SX679.jpg?v=1694899573"
+            src={resizeImage("https://cdn.shopify.com/s/files/1/0814/6046/1881/files/61WjOJxw6CL._AC_SX679.jpg?v=1694899573", 300)}
+            alt={'featured collection-2'}
           />
           <div
             style={{

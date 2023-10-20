@@ -1,5 +1,5 @@
-import { Await } from '@remix-run/react'
 import { Suspense } from 'react'
+import { Await } from '@remix-run/react'
 import { Review } from 'schema-dts'
 import { ReviewWidget } from '~/app/ft-lib/apps/JudgeMe'
 import { ProductQuery } from '~/storefrontapi.generated'
@@ -10,28 +10,42 @@ export default function ProductReviews(props: {
   widgetSettings: Promise<string>
 }) {
   const externalId = props.product?.id.split('/').pop() || ''
+  // const useReviews = useQuery('reviews', async () => {
+  //   const judgeMeApi = new JudgeMeService()
+  //   const reviews = await judgeMeApi.getProductReviews(externalId)
+  //   return reviews
+  // })
 
-  // Resolve the promises from the props using Promise.all
-  const extractWidgetsPromises = async () => {
-    const [reviewWidget, widgetSettings] = await Promise.all([
-      props.reviewWidget,
-      props.widgetSettings,
-    ]);
-    return { reviewWidget, widgetSettings };
-  }
+  // resolve the promises from the props
 
+  console.log(props.reviewWidget, 'useReviews');
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Await resolve={extractWidgetsPromises()}>
-        {({ reviewWidget, widgetSettings }) => {
-          return (
-            <div>
-              <div dangerouslySetInnerHTML={{ __html: reviewWidget.widget }} />
-              <div dangerouslySetInnerHTML={{ __html: widgetSettings }} />
-            </div>
-          )
-        }}
-      </Await>
-    </Suspense>
+    <div>
+      <Suspense fallback={<div>Loading</div>}>
+        <Await resolve={props.reviewWidget}>
+          {(reviewWidget) => {
+            return (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: reviewWidget.widget,
+                }}
+              />
+            )
+          }}
+        </Await>
+        <Await resolve={props.widgetSettings}>
+          {(widgetSettings) => {
+            return (
+              <div
+                dangerouslySetInnerHTML={{
+                  // in order to let the script pass the csp we need to give a nonce to the script
+                  __html: `${widgetSettings}`,
+                }}
+              />
+            )
+          }}
+        </Await>
+      </Suspense>
+    </div>
   )
 }

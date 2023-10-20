@@ -17,6 +17,8 @@ import { UseShopStore, queryClient } from 'app/root';
 import { useCart } from '~/app/components/CartProvider';
 import { Link } from '@remix-run/react';
 import { OFFERS_QUERY } from '~/app/components/FtOffers';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 type Props = {
   layout: {
@@ -128,10 +130,10 @@ function Header(props: Props) {
             className="header__logo mr-auto flex items-center"
           >
             {props.layout.shop?.brand?.logo?.image != null && (
-              <Image
-                data={props.layout.shop.brand?.logo!.image}
+              <LazyImage
+                alt='logo'
+                src={resizeImage(props.layout.shop.brand?.logo!.image.url, 300)}
                 className="w-24 md:w-32"
-                sizes='100px'
               />
             )}
           </Link>

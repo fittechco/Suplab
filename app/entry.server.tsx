@@ -34,6 +34,25 @@ export default async function handleRequest(
       "ws://localhost:8002/",
       "http://localhost:3000/",
       "https://judge.me/"
+    ],
+    scriptSrc: [
+      "'self'",
+      "'unsafe-inline'",
+      "'unsafe-eval'",
+      "https://cdn.jsdelivr.net/",
+      "https://cdn.shopify.com/",
+      "https://www.google-analytics.com",
+      "https://suplab.myshopify.com/",
+      "https://suplabstore.com/",
+      // add localhost for development,
+      // this will be removed in production
+      "http://localhost:8002/",
+      "ws://localhost:8002/",
+      "http://localhost:3000/",
+      "https://judge.me/",
+      // allow a hash for the judge.me script
+      // this will be removed in production
+      "'sha256-b9hcUr50t5f9qt3iHIOZ+Hjbwyd2DFT7hqqgBSyJCA0='"
     ]
   });
 
