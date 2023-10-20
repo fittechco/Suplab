@@ -15,6 +15,7 @@ import FAQ from '../lib/homepage/FAQ';
 import { UseShopStore } from '~/app/root';
 import Offers from '../lib/homepage/Offers';
 import { seoPayload } from '../ft-lib/seo.server';
+import Services from '../lib/about/Services';
 
 export type Shop = {
   name: string;
@@ -69,6 +70,8 @@ function HomePage() {
           return <ShopTheGoal section={section} key={section.type} />;
         } else if (section.type === 'offers_section') {
           return <Offers section={section} key={section.type} />;
+        } else if (section.type === 'services_section') {
+          return <Services section={section} key={section.type} />; 
         } else if (section.type === 'contact_section') {
           return <Contact section={section} key={section.type} />;
         } else if (section.type === 'faq_section') {

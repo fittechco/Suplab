@@ -275,6 +275,8 @@ function Collection() {
             show={showMobileFilters}
             setShow={setShowMobileFilters}
             filters={filtersData}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
           />,
           document.body,
         )}
