@@ -5,6 +5,7 @@ import { useLoaderData } from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
 import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
+import Accordion from '~/app/components/Accordion';
 
 interface FAQSectionProps {
   section: App.HomePageTemplate.FaqSection | App.AboutPageTemplate.FaqSection;
@@ -49,37 +50,12 @@ const FAQ = ({ section }: FAQSectionProps) => {
               className="faqSection__questions w-full flex items-start justify-start"
               key={faq.id}
             >
-              <div
-                onClick={() => toggleOpen(index)}
-                className="flex items-center justify-between w-full cursor-pointer">
-                {faqFields.question != null && (
-                  <p className="text-xl">{faqFields.question.value}</p>
-                )}
-                <button
-                  onClick={() => toggleOpen(index)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <FTicons
-                    name="plus"
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                    }}
-                    fill={Colors.secondary}
-                  />
-                </button>
-              </div>
-              <div
-                className={`faqSection__questions__question__answer w-full ${isOpen[index] ? 'open' : ''
-                  }`}
-              >
-                <p className="text-xl">{faqFields.answer?.value}</p>
-              </div>
-              <div className="faqDivider" />
+              {faqFields.question != null && (
+                <Accordion
+                  title={faqFields.question.value}
+                  details={faqFields.answer?.value || ""}
+                />
+              )}
             </div>
           );
         })}

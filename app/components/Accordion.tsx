@@ -22,7 +22,7 @@ function Accordion(props: Props) {
         borderColor: Colors.secondary,
         overflow: 'hidden',
       }}
-      className="product-description border-b-2 fade-border"
+      className="product-description "
     >
       <div
         onClick={() => {
@@ -30,11 +30,11 @@ function Accordion(props: Props) {
         }}
         className="flex justify-between items-center py-1 cursor-pointer"
       >
-        <h1 className="text-xl md:text-2xl font-bold uppercase">
+        <h1 className="text-lg md:text-xl font-bold capitalize">
           {props.title}
         </h1>
         <FTicons
-          className="md:w-6 md:h-6 w-5 h-5"
+          className="md:w-6 md:h-6 w-5 h-5 flex-shrink-0"
           fill={Colors.secondary}
           name={showAcordion === true ? 'minus' : 'plus'}
         />
@@ -59,12 +59,13 @@ function Accordion(props: Props) {
           style={{
             color: Colors.text,
           }}
-          className="text-sm font-secondaryFont font-medium"
+          className="text-sm md:text-base font-secondaryFont font-medium"
         >
           {props.details}
         </p>)
         }
       </div>
+      <div className="fadeBorder" />
     </div >
   );
 }

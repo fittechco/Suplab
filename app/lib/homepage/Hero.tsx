@@ -66,7 +66,7 @@ const Hero = ({ section }: HeroSectionProps) => {
                 color: Colors.textSecondary,
                 width: '80%',
               }}
-              className="subHeader text-base md:text-lg"
+              className="subHeader text-base md:text-lg max-w-xs"
             >
               {fields.sub_headline.value}
             </div>

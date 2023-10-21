@@ -211,7 +211,7 @@ input:focus {
   gap: 2px;
 }
 
-.faqDivider {
+.fadeBorder {
   height: 1px;
   width: 100%;
   background: linear-gradient(to left,
@@ -224,7 +224,6 @@ input:focus {
 .faqSection__questions__question__answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s ease;
 }
 
 .faqSection__questions__question__answer.open {
