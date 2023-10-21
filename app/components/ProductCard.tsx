@@ -82,8 +82,6 @@ export default function ProductCard(props: Props) {
         )}
       </div>
       <div
-        style={{
-        }}
         className="flex flex-col p-1">
         <h3
           style={{
