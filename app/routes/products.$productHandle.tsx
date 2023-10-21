@@ -171,11 +171,6 @@ const ProductPage = () => {
     return null;
   }
 
-  // we want to get the extenral id of the product which is the number in the id gid://shopify/Product/8850957861177
-  // and pass it to the review component
-  const externalId = product.id.split('/').pop();
-  console.log(externalId);
-
   return (
     <div
       style={{

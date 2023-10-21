@@ -5,6 +5,8 @@ import React from 'react';
 import type { ProductQuery } from 'storefrontapi.generated';
 import resizeImage from '../ft-lib/resizeImages';
 import LazyImage from '../ft-lib/LazyImage';
+import invariant from 'tiny-invariant';
+import ProductSkeleton from '../lib/skeleton/ProductSkeleton';
 
 type Props = {
   product: ProductQuery['product'];
@@ -18,9 +20,20 @@ type Props = {
 
 export default function ProductCard(props: Props) {
   const { product } = props;
+  let isDiscounted = false;
   if (product == null) {
-    return null;
+    return ProductSkeleton;
   }
+  console.log(product);
+  if (product.variants.nodes.length > 0) {
+    const productFirstVariant = product.variants.nodes[0];
+    if (productFirstVariant.compareAtPrice != null && productFirstVariant.price != null) {
+      isDiscounted = productFirstVariant.compareAtPrice.amount > productFirstVariant.price.amount;
+    }
+    console.log(isDiscounted, productFirstVariant.compareAtPrice, productFirstVariant.price);
+  }
+
+
   return (
     <Link
       relative="path"
@@ -41,7 +54,7 @@ export default function ProductCard(props: Props) {
           borderRadius: 12,
           overflow: 'hidden',
         }}
-        className="md:h-[260px] h-[200px] w-full max-md:h-[200px] max-md:mx-auto"
+        className="md:h-[260px] h-[200px] w-full max-md:h-[200px] max-md:mx-auto relative"
       >
         <LazyImage
           alt='product image'
@@ -56,6 +69,17 @@ export default function ProductCard(props: Props) {
           className=""
           src={resizeImage(product.images.nodes[0].url, 1000)}
         />
+        {isDiscounted === true && (
+          <div
+            style={{
+              backgroundColor: Colors.primary,
+              color: Colors.offWhite,
+              borderRadius: 9999,
+            }}
+            className="discount-badge text-sm absolute top-0 left-0 m-2 px-2 py-1.5 z-50">
+            Sale
+          </div>
+        )}
       </div>
       <div
         style={{
@@ -69,18 +93,30 @@ export default function ProductCard(props: Props) {
           className="text-base font-bold uppercase">
           {product.title}
         </h3>
-        <Money
-          style={{
-            color: Colors.secondary,
-          }}
-          className="font-mainFont font-bold text-base"
-          data={product.priceRange.minVariantPrice}
-          // data={{
-          //   amount: '100',
-          //   currencyCode: 'USD',
-          // }}
-          withoutTrailingZeros
-        />
+        <div className='money flex gap-3'>
+          <Money
+            style={{
+              color: Colors.secondary,
+            }}
+            className="font-mainFont font-bold text-base"
+            data={product.priceRange.minVariantPrice}
+            withoutTrailingZeros
+          />
+          {(isDiscounted && product.variants.nodes[0].compareAtPrice != null) && (
+            <Money
+              style={{
+                color: Colors.secondaryDark,
+              }}
+              className="font-mainFont font-bold text-base line-through opacity-50"
+              data={product.variants.nodes[0].compareAtPrice}
+              // data={{
+              //   amount: '100',
+              //   currencyCode: 'USD',
+              // }}
+              withoutTrailingZeros
+            />
+          )}
+        </div>
       </div>
     </Link>
   );

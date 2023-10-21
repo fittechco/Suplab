@@ -18,7 +18,6 @@ export default function ProductReviews(props: {
 
   // resolve the promises from the props
 
-  console.log(props.reviewWidget, 'useReviews');
   return (
     <div>
       <Suspense fallback={<div>Loading</div>}>

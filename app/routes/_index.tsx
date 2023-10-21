@@ -71,7 +71,7 @@ function HomePage() {
         } else if (section.type === 'offers_section') {
           return <Offers section={section} key={section.type} />;
         } else if (section.type === 'services_section') {
-          return <Services section={section} key={section.type} />; 
+          return <Services section={section} key={section.type} />;
         } else if (section.type === 'contact_section') {
           return <Contact section={section} key={section.type} />;
         } else if (section.type === 'faq_section') {
@@ -138,6 +138,26 @@ fragment Metaobject on Metaobject {
                 currencyCode
               }
               }
+                variants(first: 1) {
+                  nodes {
+                    quantityAvailable
+                    id
+                    title
+                    availableForSale
+                    price {
+                      currencyCode
+                      amount
+                    }
+                    compareAtPrice {
+                      currencyCode
+                      amount
+                    }
+                    selectedOptions {
+                      name
+                      value
+                    }
+                  }
+                }
             images(first: 20) {
               nodes {
                 url
