@@ -9,6 +9,8 @@ type Props = {
   show: boolean;
   setShow: (show: boolean) => void;
   filters: { param: string; options: { label: string; value: string }[] }[];
+  minPrice: number;
+  maxPrice: number;
 };
 
 export default function MobileFiltersMenu(props: Props) {
@@ -69,8 +71,10 @@ export default function MobileFiltersMenu(props: Props) {
               Price
             </h4>
             <div className="filtersWrapper flex justify-between">
-              <Slider className="min-w-[250px]" />
+              <span className="text-sm">Min: ${props.minPrice}</span>
+              <span className="text-sm">Max: ${props.maxPrice}</span>
             </div>
+              <Slider className="min-w-[250px]" />
           </div>
 
           <HorizontalRule classNames="" />

@@ -31,6 +31,7 @@ export namespace App {
       | 'testimonials_section'
       | 'shop_the_goal_section'
       | 'offers_section'
+      | 'services_section'
       | 'contact_section'
       | 'faq_section';
 
@@ -230,6 +231,38 @@ export namespace App {
       >;
     };
 
+    export type ServicesSection = {
+      type: 'services_section';
+      fields: Array<
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+            key: 'title';
+          }>
+        | Shopify.MetaobectsDef.List_Metaobject_Reference<{
+            key: 'services';
+            references: {
+              nodes: Array<{
+                id: string;
+                type: 'service';
+                fields: Array<
+                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                      key: 'title' | 'button_text' | 'button_url';
+                    }>
+                  | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                  | Shopify.MetaobectsDef.FileReference<{
+                      key: 'image';
+                      reference: {
+                        image: {
+                          url: string;
+                        };
+                      };
+                    }>
+                >;
+              }>;
+            };
+          }>
+      >;
+    };
+
     export type ContactSection = {
       type: 'contact_section';
       fields: Array<
@@ -284,6 +317,7 @@ export namespace App {
       | TestimonialsSection
       | ShopTheGoalSection
       | OffersSection
+      | ServicesSection
       | ContactSection
       | FaqSection
     >;
