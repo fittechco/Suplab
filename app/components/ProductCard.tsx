@@ -22,7 +22,7 @@ export default function ProductCard(props: Props) {
   const { product } = props;
   let isDiscounted = false;
   if (product == null) {
-    return ProductSkeleton;
+    return <ProductSkeleton />;
   }
   console.log(product);
   if (product.variants.nodes.length > 0) {

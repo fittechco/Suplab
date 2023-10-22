@@ -898,6 +898,28 @@ export type MetaobjectFragment = Pick<
                       'amount' | 'currencyCode'
                     >;
                   };
+                  variants: {
+                    nodes: Array<
+                      Pick<
+                        StorefrontAPI.ProductVariant,
+                        | 'quantityAvailable'
+                        | 'id'
+                        | 'title'
+                        | 'availableForSale'
+                      > & {
+                        price: Pick<
+                          StorefrontAPI.MoneyV2,
+                          'currencyCode' | 'amount'
+                        >;
+                        compareAtPrice?: StorefrontAPI.Maybe<
+                          Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+                        >;
+                        selectedOptions: Array<
+                          Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                        >;
+                      }
+                    >;
+                  };
                   images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
                   featuredImage?: StorefrontAPI.Maybe<
                     Pick<StorefrontAPI.Image, 'url'>
