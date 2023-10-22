@@ -865,6 +865,36 @@ export type ShopFragment = Pick<
   }>;
 };
 
+export type SitemapsQueryVariables = StorefrontAPI.Exact<{
+  urlLimits?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type SitemapsQuery = {
+  products: {
+    nodes: Array<
+      Pick<
+        StorefrontAPI.Product,
+        'updatedAt' | 'handle' | 'onlineStoreUrl' | 'title'
+      > & {
+        featuredImage?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Image, 'url' | 'altText'>
+        >;
+      }
+    >;
+  };
+  collections: {
+    nodes: Array<
+      Pick<StorefrontAPI.Collection, 'updatedAt' | 'handle' | 'onlineStoreUrl'>
+    >;
+  };
+  pages: {
+    nodes: Array<
+      Pick<StorefrontAPI.Page, 'updatedAt' | 'handle' | 'onlineStoreUrl'>
+    >;
+  };
+};
+
 export type MetaobjectFragment = Pick<
   StorefrontAPI.Metaobject,
   'type' | 'handle'
@@ -1217,6 +1247,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  query ShopLayout {\n    shop {\n      ...Shop\n    }\n  }\n\n  fragment Shop on Shop {\n    id\n    name\n    description\n    primaryDomain {\n      url\n    }\n    brand {\n      logo {\n        image {\n          url\n        }\n      }\n    }\n  }\n': {
     return: ShopLayoutQuery;
     variables: ShopLayoutQueryVariables;
+  };
+  '#graphql\n  query sitemaps($urlLimits: Int, $language: LanguageCode)\n  @inContext(language: $language) {\n    products(\n      first: $urlLimits\n      query: "published_status:\'online_store:visible\'"\n    ) {\n      nodes {\n        updatedAt\n        handle\n        onlineStoreUrl\n        title\n        featuredImage {\n          url\n          altText\n        }\n      }\n    }\n    collections(\n      first: $urlLimits\n      query: "published_status:\'online_store:visible\'"\n    ) {\n      nodes {\n        updatedAt\n        handle\n        onlineStoreUrl\n      }\n    }\n    pages(first: $urlLimits, query: "published_status:\'published\'") {\n      nodes {\n        updatedAt\n        handle\n        onlineStoreUrl\n      }\n    }\n  }\n': {
+    return: SitemapsQuery;
+    variables: SitemapsQueryVariables;
   };
   '#graphql\n    query ContactMetaobject {\n        metaobject(handle: { handle: "contact-section", type: "contact_section" }) {\n            type\n            fields {\n                key\n                value\n                type\n                references(first: 20) {\n                    nodes {\n                        ... on Metaobject {\n                            type\n                            fields {\n                                key\n                                value\n                                type\n                                reference {\n                                    ... on MediaImage {\n                                        image {\n                                            url\n                                        }\n                                    }\n                                }\n                            }\n                        }\n                    }\n                }\n                reference {\n                    ... on MediaImage {\n                        image {\n                            url\n                        }\n                    }\n                    ... on Collection {\n                        handle\n                        title\n                        products(first: 20) {\n                            nodes {\n                                title\n                                handle\n                                description\n                                priceRange {\n                                    minVariantPrice {\n                                        amount\n                                        currencyCode\n                                    }\n                                }\n                                images(first: 20) {\n                                    nodes {\n                                        url\n                                    }\n                                }\n                                featuredImage {\n                                    url\n                                }\n                            }\n                        }\n                    }\n                }\n            }\n        }\n    }\n': {
     return: ContactMetaobjectQuery;

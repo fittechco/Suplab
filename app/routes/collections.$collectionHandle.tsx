@@ -14,6 +14,7 @@ import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
 import type { App } from '../api/type';
 import StorefrontApi from '../api/storefront';
+import { seoPayload } from '../ft-lib/seo.server';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const collectionHandle = params.collectionHandle;
@@ -54,11 +55,18 @@ export async function loader({ context, params, request }: LoaderArgs) {
     filters: dynamicFilters,
     cursor: null,
   });
+
+  const seo = seoPayload.collection({
+    collection: collection,
+    url: request.url,
+  })
+
   return json({
     collection,
     availableFilters: availableDynamicFilters,
     maxPrice,
     minPrice,
+    seo
   });
 }
 

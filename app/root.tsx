@@ -34,6 +34,7 @@ import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
 import { usePageAnalytics } from './utils';
 import CTAButton from './components/CTAButton';
+import { seoPayload } from './ft-lib/seo.server';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -85,7 +86,7 @@ export const links: LinksFunction = () => {
     },
   ];
 }
-export async function loader({ context }: LoaderArgs) {
+export async function loader({ context, request }: LoaderArgs) {
   const { storefront, session } = context;
   const customerAccessToken = await session.get('customerAccessToken');
   const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;
@@ -112,9 +113,15 @@ export async function loader({ context }: LoaderArgs) {
     cache: storefront.CacheLong(),
   });
 
+  const seo = seoPayload.root({
+    shop: layout.shop,
+    url: request.url,
+  })
+
   return defer(
     {
       shop: layout,
+      seo,
       footer: await footerPromise,
       header: await headerPromise,
       analytics: {

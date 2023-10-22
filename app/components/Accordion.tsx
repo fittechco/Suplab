@@ -22,7 +22,7 @@ function Accordion(props: Props) {
         borderColor: Colors.secondary,
         overflow: 'hidden',
       }}
-      className="product-description "
+      className="product-description w-full"
     >
       <div
         onClick={() => {
