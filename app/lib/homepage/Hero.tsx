@@ -49,7 +49,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           className="heroHeader w-full flex flex-col gap-5 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0"
         >
           {fields.headline != null && (
-            <div
+            <h1
               style={{
                 color: Colors.textSecondary,
                 width: '90%',
@@ -58,7 +58,7 @@ const Hero = ({ section }: HeroSectionProps) => {
               className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
             >
               {fields.headline.value}
-            </div>
+            </h1>
           )}
           {fields.sub_headline != null && (
             <div
