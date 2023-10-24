@@ -67,7 +67,6 @@ export default function Quantity(props: Props) {
         type="submit"
         disabled={minusDisabled}
         onClick={() => {
-          console.log(value);
           if (value > 1) {
             onChange(value - 1);
           }

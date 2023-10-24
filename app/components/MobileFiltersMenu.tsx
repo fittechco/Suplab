@@ -1,7 +1,7 @@
 import { cn } from '~/app/lib/utils';
 import BottomDrawer from './BottomDrawer';
 import MobileFilterOption from './MobileFilterOption';
-import { Slider } from './ui/slider';
+import { PriceSlider } from './ui/PriceSlider';
 import { useSearchParams } from '@remix-run/react';
 import { Fragment } from 'react';
 
@@ -74,7 +74,7 @@ export default function MobileFiltersMenu(props: Props) {
               <span className="text-sm">Min: ${props.minPrice}</span>
               <span className="text-sm">Max: ${props.maxPrice}</span>
             </div>
-              <Slider className="min-w-[250px]" />
+            <PriceSlider className="min-w-[250px]" />
           </div>
 
           <HorizontalRule classNames="" />

@@ -69,10 +69,8 @@ export default class JudgeMeService {
     }) {
         const { path, method, body, params } = args;
         const searchParams = new URLSearchParams(params);
-        console.log(searchParams.toString());
         const shopDomain = "suplab.myshopify.com"
         const privateToken = "m8uogR0l9FtGK62wm5KJxpIvp00"
-        console.log(`https://judge.me/api/v1/${path}?api_token=${privateToken}&shop_domain=${shopDomain}&${searchParams.toString()}`);
         const res = await fetch(`https://judge.me/api/v1/${path}?api_token=${privateToken}&shop_domain=${shopDomain}&${searchParams.toString()}`, {
             method,
             headers: {

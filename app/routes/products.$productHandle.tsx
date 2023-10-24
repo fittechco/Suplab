@@ -188,12 +188,12 @@ const ProductPage = () => {
         >
           <div
             ref={thumbsSwiperRef}
-            className="swiper-container h-full w-[20%] aspect-square max-md:px-5  overflow-hidden relative mr-2 max-md:hidden"
+            className="swiper-container thumbs h-full w-[20%] aspect-square max-md:px-5  overflow-hidden relative mr-2 max-md:hidden"
           >
-            <div className="swiper-wrapper">
+            <div className="swiper-wrapper thumbs">
               {product.images.nodes.map((image, index) => {
                 return (
-                  <div key={image.url} className="swiper-slide cursor-pointer">
+                  <div key={image.url} className="swiper-slide thumbs cursor-pointer">
                     <div
                       className="max-md:card-shadow"
                       style={{
@@ -249,6 +249,7 @@ const ProductPage = () => {
                           margin: 'auto',
                           borderRadius: '24px',
                         }}
+                        zoom
                         className=""
                         src={resizeImage(image.url, 1000)} />
                     </div>

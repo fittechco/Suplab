@@ -5,7 +5,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from './ui/select';
+} from './ui/Select';
 
 type DropdownProps = {
   placeholder: string;

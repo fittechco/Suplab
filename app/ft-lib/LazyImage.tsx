@@ -2,6 +2,7 @@ import { UseShopStore } from "../root";
 import logoImage from "../../public/suplabLogo.png"
 import { Colors } from "./shared";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 function Placeholder(props: {
     style?: React.CSSProperties
@@ -28,6 +29,7 @@ type Props = {
     style?: React.CSSProperties
     alt: string
     className?: string
+    zoom?: boolean
 }
 
 function LazyImage(props: Props) {
@@ -39,15 +41,34 @@ function LazyImage(props: Props) {
     }
     return (
         <div className='relative h-full w-full flex items-center justify-center'>
-            <LazyLoadImage
-                style={{
-                    ...style,
-                }}
-                src={src}
-                alt={props.alt}
-                placeholder={<Placeholder style={style} />}
-                className={`lazy ${props.className} bg-transparent z-20 relative`}
-            />
+            {
+                props.zoom === true ?
+                    (
+                        <TransformWrapper>
+                            <TransformComponent>
+                                <LazyLoadImage
+                                    style={{
+                                        ...style,
+                                    }}
+                                    src={src}
+                                    alt={props.alt}
+                                    placeholder={<Placeholder style={style} />}
+                                    className={`lazy ${props.className} bg-transparent z-20 relative`}
+                                />
+                            </TransformComponent>
+                        </TransformWrapper>
+                    ) : (
+                        <LazyLoadImage
+                            style={{
+                                ...style,
+                            }}
+                            src={src}
+                            alt={props.alt}
+                            placeholder={<Placeholder style={style} />}
+                            className={`lazy ${props.className} bg-transparent z-20 relative`}
+                        />
+                    )
+            }
         </div>
     );
 }

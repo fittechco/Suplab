@@ -24,13 +24,11 @@ export default function ProductCard(props: Props) {
   if (product == null) {
     return <ProductSkeleton />;
   }
-  console.log(product);
   if (product.variants.nodes.length > 0) {
     const productFirstVariant = product.variants.nodes[0];
     if (productFirstVariant.compareAtPrice != null && productFirstVariant.price != null) {
       isDiscounted = productFirstVariant.compareAtPrice.amount > productFirstVariant.price.amount;
     }
-    console.log(isDiscounted, productFirstVariant.compareAtPrice, productFirstVariant.price);
   }
 
 

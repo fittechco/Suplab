@@ -1,13 +1,14 @@
 import * as React from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
-
+import _ from "lodash"
 import { cn } from '~/app/lib/utils';
 import { useLocation, useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
+import { useMemo, useRef } from 'react';
 
 const sliderThumbClasses =
   'block h-[20px] w-[10px] ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-50 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300  rounded-md border border-[#696968] bg-[#2C2C2B]';
 
-const Slider = React.forwardRef<
+const PriceSlider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
 >(({ className, ...props }, ref) => {
@@ -15,14 +16,15 @@ const Slider = React.forwardRef<
   const navigation = useNavigation();
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
-
   const defaultParams = new URLSearchParams(currentSearchParams);
+  const maxPrice = useRef(props.max);
+  const minPrice = useRef(props.min);
 
   const searchParams = navigation.location
     ? new URLSearchParams(navigation.location.search)
     : defaultParams;
 
-
+  console.log(props.max);
 
   return (
     <SliderPrimitive.Root
@@ -31,14 +33,13 @@ const Slider = React.forwardRef<
         'relative flex w-full touch-none select-none items-center',
         className,
       )}
-      {...props}
       defaultValue={[
         parseInt(searchParams.get('min') ?? '0'),
-        parseInt(searchParams.get('max') ?? '100'),
+        props.max ?? parseInt(searchParams.get('max') ?? '100'),
       ]}
+      max={maxPrice.current}
+      min={minPrice.current}
       step={1}
-      min={0}
-      max={100}
       onValueChange={(value) => {
         const [min, max] = value;
         // Format the values as an object
@@ -46,17 +47,6 @@ const Slider = React.forwardRef<
         const linkValue = JSON.stringify(priceFilter)
         const linkParams = new URLSearchParams(search);
         linkParams.set('price', linkValue);
-        // setSearchParams(
-        //   (prev) => {
-        //     //set price filter
-        //     prev.set('price', JSON.stringify(priceFilter));
-        //     return prev;
-        //   },
-        //   {
-        //     replace: true,
-        //   },
-        // );
-        // Update the search params
         navigate(`${pathname}?${linkParams.toString()}`, {
           preventScrollReset: true,
         });
@@ -81,6 +71,6 @@ const Slider = React.forwardRef<
     </SliderPrimitive.Root>
   );
 });
-Slider.displayName = SliderPrimitive.Root.displayName;
+PriceSlider.displayName = SliderPrimitive.Root.displayName;
 
-export { Slider };
+export { PriceSlider };

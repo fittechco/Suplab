@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
 import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
-import { Slider } from '~/app/components/ui/slider';
+import { PriceSlider } from '~/app/components/ui/PriceSlider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
@@ -22,8 +22,9 @@ export async function loader({ context, params, request }: LoaderArgs) {
   const PC = new ProductController({ storefront: context.storefront });
 
   const searchParams = new URL(request.url).searchParams;
+
   let minPrice = 0;
-  let maxPrice = 1000;
+  let maxPrice = 100;
 
   if (searchParams.has('price')) {
     const priceParam = JSON.parse(searchParams.get('price')!) as { price: { min: number; max: number } };
@@ -61,6 +62,15 @@ export async function loader({ context, params, request }: LoaderArgs) {
     url: request.url,
   })
 
+  // set the max price to the max price of the collection
+  maxPrice = collection.products.nodes.reduce((acc, node) => {
+    return Math.max(acc, parseFloat(node.priceRange.maxVariantPrice.amount));
+  }, 0);
+
+  minPrice = collection.products.nodes.reduce((acc, node) => {
+    return Math.min(acc, parseFloat(node.priceRange.minVariantPrice.amount));
+  }, maxPrice);
+
   return json({
     collection,
     availableFilters: availableDynamicFilters,
@@ -90,6 +100,8 @@ function Collection() {
   );
   let minPrice = data.minPrice;
   let maxPrice = data.maxPrice;
+
+  console.log(maxPrice, "maxPrice")
   const lastProductRef = useRef<HTMLDivElement | null>(null);
   const [products, setProducts] = useState<App.Shopify.Storefront.Product[]>(
     data.collection.products.nodes,
@@ -232,13 +244,15 @@ function Collection() {
               <span className="text-sm">Min: ${minPrice}</span>
               <span className="text-sm">Max: ${maxPrice}</span>
             </div>
-            <Slider className="min-w-[250px]" />
+            <PriceSlider min={minPrice} max={maxPrice} className="min-w-[250px]" />
           </div>
         </div>
         <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9">
           {products.map((product, index) => {
             if (product == null) {
               return null;
+
+
             }
             return (
               <div
