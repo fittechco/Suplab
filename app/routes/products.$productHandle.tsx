@@ -21,7 +21,7 @@ import { UseShopStore } from '../root';
 import { seoPayload } from '../ft-lib/seo.server';
 import ProductReviews from '../lib/productPage/ProductReviews';
 import JudgeMeService from '../ft-lib/apps/JudgeMe';
-import { Review } from 'schema-dts';
+import ReactImageMagnify from 'react-image-magnify';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -200,6 +200,7 @@ const ProductPage = () => {
                         width: '100%',
                         height: '100%',
                         borderRadius: '24px',
+                        overflow: 'hidden',
                         background: Colors.bg,
                       }}
                     >
@@ -239,7 +240,7 @@ const ProductPage = () => {
                         background: Colors.bg,
                       }}
                     >
-                      <LazyImage
+                      {/* <LazyImage
                         alt='product image'
                         style={{
                           objectFit: 'contain',
@@ -251,7 +252,36 @@ const ProductPage = () => {
                         }}
                         zoom
                         className=""
-                        src={resizeImage(image.url, 1000)} />
+                        src={resizeImage(image.url, 1000)} /> */}
+                      <ReactImageMagnify
+                        {...{
+                          smallImage: {
+                            alt: `${product.title}-image`,
+                            isFluidWidth: true,
+                            src: resizeImage(image.url, 1000),
+                          },
+                          largeImage: {
+                            src: resizeImage(image.url, 1800),
+                            width: 2200,
+                            height: 2400,
+                          },
+                          imageStyle: {
+                            objectFit: 'contain',
+                            height: '100%',
+                            width: '100%',
+                            maxWidth: '100%',
+                            margin: 'auto',
+                            borderRadius: '24px',
+                          },
+                          enlargedImageStyle: {
+                            maxWidth: "initial",
+                          },
+                          className: "product-image-root",
+                          imageClassName: "hello-img",
+                          enlargedImageContainerClassName: "magnify-enlarged-img-container",
+                          enlargedImageClassName: "magnify-enlarged-img",
+                          enlargedImagePortalId: "enlargedImagePortal"
+                        }} />
                     </div>
                   </div>
                 );
@@ -266,6 +296,14 @@ const ProductPage = () => {
             position: 'relative',
           }}
           className='box space-y-4  px-5 py-5 mobile-white-box md:w-[40%] rounded-t-3xl'>
+          <div
+            style={{
+              zIndex: 9999,
+              position: 'absolute',
+              top: '0',
+              // left: '100%',
+            }}
+            id='enlargedImagePortal'></div>
           <ProductForm
             isTop={isTop}
             selectedVariant={selectedVariant}
@@ -326,7 +364,7 @@ const ProductPage = () => {
         </div>
       </div>
 
-    </div>
+    </div >
   );
 };
 

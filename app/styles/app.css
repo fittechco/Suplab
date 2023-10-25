@@ -682,3 +682,8 @@ img {
     opacity: 0.5;
   }
 }
+
+.product-image-root {
+  height: 100% !important;
+  width: 100% !important;
+}
