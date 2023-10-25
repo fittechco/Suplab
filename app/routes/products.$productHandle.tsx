@@ -174,7 +174,7 @@ const ProductPage = () => {
   return (
     <div
       style={{
-        marginTop: '40px',
+        // marginTop: '40px',
       }}
       className="Product-container space-y-5 w-full mx-auto"
     >
