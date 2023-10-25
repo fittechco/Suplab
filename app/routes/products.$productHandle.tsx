@@ -267,7 +267,6 @@ const ProductPage = () => {
                           },
                           imageStyle: {
                             objectFit: 'contain',
-                            height: '100%',
                             width: '100%',
                             maxWidth: '100%',
                             margin: 'auto',
@@ -277,7 +276,7 @@ const ProductPage = () => {
                             maxWidth: "initial",
                           },
                           className: "product-image-root",
-                          imageClassName: "hello-img",
+                          imageClassName: "product-image",
                           enlargedImageContainerClassName: "magnify-enlarged-img-container",
                           enlargedImageClassName: "magnify-enlarged-img",
                           enlargedImagePortalId: "enlargedImagePortal"
