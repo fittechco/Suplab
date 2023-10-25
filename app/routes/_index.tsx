@@ -27,7 +27,8 @@ export async function loader({ context }: LoaderArgs) {
       maxAge: 60 * 60 * 24,
       staleWhileRevalidate: 60 * 60,
       // 60 * 60 * 24 is 24 hours in seconds
-      // one hour is 
+      // one hour is 60 * 60 
+
     },
   });
   const { metaobject } = storefront;
@@ -92,6 +93,17 @@ function HomePage() {
 
 export default HomePage;
 
+// collection ref fragment
+export const COLLECTION_REF = `#graphql
+fragment CollectionRef on Collection {
+  handle
+  title
+  image{
+    url
+  }
+}
+`
+
 export const ON_METAOBJECT = `#graphql
 fragment Metaobject on Metaobject {
   type
@@ -102,6 +114,9 @@ fragment Metaobject on Metaobject {
     type
     references(first: 20) {
       nodes {
+        ... on Collection {
+          ...CollectionRef
+        }
         ... on Metaobject {
           id
           type
@@ -127,8 +142,7 @@ fragment Metaobject on Metaobject {
         }
       }
       ... on Collection {
-        handle
-        title
+        ...CollectionRef
         products(first: 20) {
           nodes {
             title
@@ -174,6 +188,7 @@ fragment Metaobject on Metaobject {
     }
   }
 }
+${COLLECTION_REF}
 `;
 
 const SHOPQUERY = `#graphqls

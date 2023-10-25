@@ -1,29 +1,38 @@
 import { Link } from "@remix-run/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import FTicons from "../ft-lib/FTicon";
 
 type Props = {
   setShow: (show: boolean) => void
   show: boolean
   children: React.ReactNode
+  headerTitle?: string
+  closeIcon?: boolean
 }
 
 export default function BottomDrawer(props: Props) {
   const [animate, setAnimate] = useState(false)
   const drawerRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    // if the user click outside the search container, close the search
-    const closeOnAnimationEnd = () => {
-      if (drawerRef.current != null) {
-        drawerRef.current.ontransitionend = () => {
-          props.setShow(false)
-        }
+  const closeOnAnimationEnd = () => {
+    if (drawerRef.current != null) {
+      drawerRef.current.ontransitionend = () => {
+        props.setShow(false)
       }
     }
+  }
+
+  const closeDrawer = () => {
+    closeOnAnimationEnd()
+    setAnimate(false)
+  }
+
+  useEffect(() => {
+    // if the user click outside the search container, close the search
+
     const handleClickOutside = (event: MouseEvent) => {
       if (drawerRef.current && !drawerRef.current.contains(event.target as Node)) {
-        closeOnAnimationEnd()
-        setAnimate(false)
+        closeDrawer()
         document.removeEventListener("mousedown", handleClickOutside);
       }
     }
@@ -72,7 +81,14 @@ export default function BottomDrawer(props: Props) {
           transition: "all 0.2s ease-in-out",
           transform: animate ? "translateY(0%)" : "translateY(100%)",
         }}
-        className='search-wrapper flex flex-col gap-4 items-start pt-5 backdrop-blur '>
+        className='search-wrapper flex flex-col items-start pt-5 backdrop-blur '>
+        <div className="drawer-header container flex justify-between items-center w-full">
+          {props.headerTitle != null && <h2 className="drawer-title text-[#4A4A49] text-bold text-2xl">
+            {props.headerTitle}
+          </h2>}
+          {props.closeIcon != null &&
+            <div className="drawer-close-icon" onClick={() => closeDrawer()}><FTicons name="close" className="close-icon" /></div>
+          }        </div>
         {props.children}
       </div>
     </div >

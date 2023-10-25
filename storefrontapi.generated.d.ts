@@ -895,6 +895,11 @@ export type SitemapsQuery = {
   };
 };
 
+export type CollectionRefFragment = Pick<
+  StorefrontAPI.Collection,
+  'handle' | 'title'
+> & {image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>};
+
 export type MetaobjectFragment = Pick<
   StorefrontAPI.Metaobject,
   'type' | 'handle'
@@ -903,15 +908,23 @@ export type MetaobjectFragment = Pick<
     Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
       references?: StorefrontAPI.Maybe<{
         nodes: Array<
-          Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
-            fields: Array<
-              Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
-                reference?: StorefrontAPI.Maybe<{
-                  image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
-                }>;
-              }
-            >;
-          }
+          | (Pick<StorefrontAPI.Collection, 'handle' | 'title'> & {
+              image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
+            })
+          | (Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
+              fields: Array<
+                Pick<
+                  StorefrontAPI.MetaobjectField,
+                  'key' | 'value' | 'type'
+                > & {
+                  reference?: StorefrontAPI.Maybe<{
+                    image?: StorefrontAPI.Maybe<
+                      Pick<StorefrontAPI.Image, 'url'>
+                    >;
+                  }>;
+                }
+              >;
+            })
         >;
       }>;
       reference?: StorefrontAPI.Maybe<
@@ -957,6 +970,7 @@ export type MetaobjectFragment = Pick<
                 }
               >;
             };
+            image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
           })
         | {image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>}
       >;

@@ -2,7 +2,7 @@ import type { CSSProperties, MouseEventHandler } from 'react';
 
 export default function FTicons({
   name,
-  handle,
+  onClick,
   className,
   style,
   fill,
@@ -39,7 +39,7 @@ export default function FTicons({
   | 'tiktok'
   | 'minus'
   | 'image';
-  handle?: MouseEventHandler | undefined;
+  onClick?: MouseEventHandler | undefined;
   className?: string;
   style?: CSSProperties;
   fill?: string;
@@ -296,7 +296,7 @@ export default function FTicons({
         <svg
           style={style}
           className={`${className}`}
-          onMouseEnter={handle}
+          onMouseEnter={onClick}
           width="40"
           height="40"
           viewBox="0 0 40 40"
@@ -312,6 +312,11 @@ export default function FTicons({
     case 'close':
       return (
         <svg
+          onClick={(e) => {
+            if (onClick != null) {
+              onClick(e)
+            };
+          }}
           width="16"
           height="16"
           viewBox="0 0 16 16"

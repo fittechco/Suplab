@@ -334,6 +334,10 @@ class ProductService {
         filters: args.filters,
         cursor: args.cursor
       },
+      cache: {
+        maxAge: 60 * 60 * 24,
+        staleWhileRevalidate: 60 * 60
+      }
     });
     invariant(data.collection != null, 'Collection not found');
     return data.collection;

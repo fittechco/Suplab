@@ -19,9 +19,8 @@ export default function MobileNavItem(props: MobileNavItemProps) {
   const hasSubItems = props.menu.items != null && props.menu.items?.length > 0;
   const itemColor = isShowingSub ? Colors.offBlack : Colors.secondary;
   const handleItemClick = () => {
-    setIsShowingSub(!isShowingSub);
-    if (hasSubItems === false) {
-      props.setIsOpen(false);
+    if (hasSubItems === true) {
+      setIsShowingSub(!isShowingSub);
     }
 
   };
@@ -104,13 +103,14 @@ export default function MobileNavItem(props: MobileNavItemProps) {
         ) : (
           <Link
             routeLoader
+            onClick={() => props.setIsOpen(false)}
             style={{
               textDecoration: 'none',
               color: itemColor,
               transition: 'all 0.3s ease',
               textTransform: 'uppercase',
             }}
-            className="navMenu__title text-base  ft-text-main"
+            className="navMenu__title text-base  ft-text-main w-full"
             // todo - create a Link component that handles this
             to={new URL(props.menu.url).pathname}
           >

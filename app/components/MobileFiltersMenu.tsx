@@ -4,6 +4,7 @@ import MobileFilterOption from './MobileFilterOption';
 import { PriceSlider } from './ui/PriceSlider';
 import { useSearchParams } from '@remix-run/react';
 import { Fragment } from 'react';
+import FTicons from '../ft-lib/FTicon';
 
 type Props = {
   show: boolean;
@@ -45,13 +46,12 @@ export default function MobileFiltersMenu(props: Props) {
   });
 
   return (
-    <BottomDrawer show={props.show} setShow={props.setShow}>
+    <BottomDrawer
+      closeIcon
+      headerTitle='Filters'
+      show={props.show} setShow={props.setShow}>
       <div className="filtersContainer h-full w-full px-[5%] flex flex-col gap-4 uppercase">
         <div className='filter-header flex flex-col w-full gap-4'>
-          <h2 className="filtersTitle text-[#4A4A49] text-bold text-2xl">
-            Filters
-          </h2>
-
           {searchedParams.length > 0 && <div
             className="selectedFiltersContainer grid grid-cols-3 gap-5 mt-6 sticky top-0"
             style={{

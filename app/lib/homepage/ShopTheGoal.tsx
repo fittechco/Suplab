@@ -7,6 +7,7 @@ import { Navigation } from 'swiper/modules';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
 import { Colors } from '~/app/ft-lib/shared';
+import { Link } from '@remix-run/react';
 
 interface ShopTheGoalSectionProps {
   section: App.HomePageTemplate.ShopTheGoalSection;
@@ -43,9 +44,11 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
     };
   }, []);
 
-  if (fields.shop_the_goals == null) {
+  console.log(fields.shop_the_goal_collections?.references.nodes[0], "fields.shop_the_goal_collections");
+  if (fields.shop_the_goal_collections == null) {
     return null;
   }
+
 
   return (
     <div
@@ -56,7 +59,7 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
       }}
       className="shopTheGoalSection w-full container mx-auto"
     >
-      {fields.title != null && fields.shop_the_goals != null && (
+      {fields.title != null && fields.shop_the_goal_collections != null && (
         <p
           className="section-heading ft-text-main md:text-3xl text-2xl mb-10 text-center md:text-start">
           {fields.title.value}
@@ -67,9 +70,9 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
         className="shopTheGoalSection__benefits relative swiper-container max-md:max-w-xs mx-auto"
       >
         <div className="swiper-wrapper flex">
-          {fields.shop_the_goals && fields.shop_the_goals.references.nodes.map((shopTheGoal, index) => {
-            const goalFields = arrayToObject({ array: shopTheGoal.fields });
-            const goalImage = goalFields.goal_image?.reference?.image?.url;
+          {fields.shop_the_goal_collections && fields.shop_the_goal_collections.references.nodes.map((shopTheGoal, index) => {
+            const goalFields = shopTheGoal
+
             return (
               <div key={shopTheGoal.id} className="swiper-slide">
                 <div className="shopTheGoalSection__shopTheGoal flex flex-col justify-center items-center rounded-3xl">
@@ -80,14 +83,14 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
                     }}
                     className="flex justify-center items-end mb-3 rounded-3xl cover no-repeat w-full h-[360px]"
                   >
-                    {goalImage && (
+                    {goalFields.image?.url != null && (
                       <LazyImage
                         alt="shop the goal image"
-                        src={resizeImage(goalImage, 600)}
+                        src={resizeImage(goalFields.image.url, 600)}
                         className="h-full w-full rounded-3xl object-cover"
                       />
                     )}
-                    {goalFields.goal_title && (
+                    {goalFields.title && (
                       <div className="absolute flex w-full rounded-xl mb-6 z-50">
                         <div
                           style={{
@@ -104,14 +107,15 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
                             }}
                             className="flex justify-center items-start gap-3 md:text-2xl text-xl ft-text-main text-center"
                           >
-                            {goalFields.goal_title.value}
+                            {goalFields.title}
                           </h3>
                         </div>
                       </div>
                     )}
                   </div>
-                  {goalFields.button_text && (
-                    <button
+                  {fields.button_text && (
+                    <Link
+                      to={`/collections/${goalFields.handle}`}
                       style={{
                         padding: '7.072px 16.502px',
                         background: 'var(--Main-Color, #93C147)',
@@ -133,9 +137,9 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
                           textTransform: 'uppercase',
                         }}
                       >
-                        {goalFields.button_text.value}
+                        {fields.button_text.value}
                       </p>
-                    </button>
+                    </Link>
                   )}
                 </div>
               </div>
