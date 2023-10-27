@@ -38,7 +38,7 @@ export default function Collections() {
                                     }}
                                     src={resizeImage(collection.image?.url, 600)} /> : (
                                     <FTicons
-                                        name='image'
+                                        icon='image'
                                         className='w-full h-full'
                                     />
                                 )

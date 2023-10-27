@@ -321,12 +321,9 @@ input:focus {
   backdrop-filter: none;
 }
 
-.swiper-button-prev,
-.swiper-button-next {
+.swiper-button {
   display: flex;
-  width: 39px !important;
-  height: 39px !important;
-  padding: 9px 12px 9px 13px !important;
+  padding: 8px;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;

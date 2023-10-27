@@ -32,16 +32,16 @@ export default function SubMenuPopup(props: {
               key={subItem.title}
               className="nav-menu-Item-container space-y-2 flex flex-col justify-start items-start"
             >
-              <div
+              <Link
                 style={{
                   color: Colors.secondary,
                   fontWeight: 600,
                   fontSize: '15px',
                 }}
                 className="nav-menu__sub_item  ft-text-main"
-              >
+                to={subPathname}>
                 {subItem.title}
-              </div>
+              </Link>
               <div className="nav-submenus-container flex flex-col space-y-2">
                 {subItem.items?.map((subSubItem) => {
                   // todo - fix this

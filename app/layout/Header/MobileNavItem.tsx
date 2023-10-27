@@ -130,7 +130,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
             }}
             className="navMenu__icon"
             fill={Colors.secondary}
-            name="chev-down"
+            icon="chev-down"
           />
         )}
       </div>

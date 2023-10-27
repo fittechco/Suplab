@@ -36,7 +36,7 @@ function Accordion(props: Props) {
         <FTicons
           className="md:w-6 md:h-6 w-5 h-5 flex-shrink-0"
           fill={Colors.secondary}
-          name={showAcordion === true ? 'minus' : 'plus'}
+          icon={showAcordion === true ? 'minus' : 'plus'}
         />
       </div>
       <div
@@ -59,7 +59,7 @@ function Accordion(props: Props) {
           style={{
             color: Colors.text,
           }}
-          className="text-sm md:text-base font-secondaryFont font-medium"
+          className="text-sm md:text-base font-secondaryFont font-medium whitespace-pre-line"
         >
           {props.details}
         </p>)

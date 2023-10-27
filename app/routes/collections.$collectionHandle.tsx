@@ -169,8 +169,6 @@ function Collection() {
     ? new URLSearchParams(navigation.location.search)
     : defaultParams;
 
-
-
   if (searchParams.has('price') === true) {
     const priceParam = searchParams.get('price')
     invariant(priceParam, 'Price param is required');

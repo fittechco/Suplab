@@ -76,7 +76,7 @@ export default function MobileNav(props: Props) {
                   width: 16,
                   height: 16,
                 }}
-                name="close"
+                icon="close"
               />
             </div>
           </div>
@@ -156,14 +156,14 @@ export default function MobileNav(props: Props) {
                   width: '24px',
                   height: '24px',
                 }}
-                name="instagram"
+                icon="instagram"
               />
               <FTicons
                 style={{
                   width: '24px',
                   height: '24px',
                 }}
-                name="tiktok"
+                icon="tiktok"
               />
             </div>
           </div>

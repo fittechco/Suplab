@@ -100,7 +100,11 @@ export default function ProductForm(props: Props) {
           }}
         </CartForm>
       </div>
-      <Accordion title="Shipping Info" details={'Shipping info goes here'} />
+      <Accordion
+        title="Shipping Info"
+        details={`Shipping is same day inside Beirut and 
+        Outside Beirut shipping takes 2-3 days.
+        100$ and above free delivery`} />
     </div>
   );
 }

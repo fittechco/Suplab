@@ -79,7 +79,7 @@ export default function Quantity(props: Props) {
             height: size,
           }}
           fill={Colors.offWhite}
-          name="minus"
+          icon="minus"
         />
       </button>
 
@@ -114,7 +114,7 @@ export default function Quantity(props: Props) {
             height: size,
           }}
           fill={Colors.offWhite}
-          name="plus"
+          icon="plus"
         />
       </button>
     </div >

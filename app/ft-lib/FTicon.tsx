@@ -1,13 +1,13 @@
 import type { CSSProperties, MouseEventHandler } from 'react';
 
 export default function FTicons({
-  name,
+  icon,
   onClick,
   className,
   style,
   fill,
 }: {
-  name:
+  icon:
   | 'lecture'
   | 'search'
   | 'revenue'
@@ -33,6 +33,8 @@ export default function FTicons({
   | 'indexLine'
   | 'cart'
   | 'chev-down'
+  | 'chev-left'
+  | 'chev-right'
   | 'bag'
   | 'instagram'
   | 'facebook'
@@ -44,7 +46,7 @@ export default function FTicons({
   style?: CSSProperties;
   fill?: string;
 }) {
-  switch (name) {
+  switch (icon) {
     case 'image':
       return (
         <svg
@@ -160,6 +162,38 @@ export default function FTicons({
           <path
             d="M14.3519 4.136C14.1644 3.94853 13.9101 3.84321 13.6449 3.84321C13.3798 3.84321 13.1255 3.94853 12.9379 4.136L7.98793 9.086L3.03793 4.136C2.84933 3.95384 2.59672 3.85305 2.33453 3.85533C2.07233 3.8576 1.82152 3.96277 1.63611 4.14818C1.4507 4.33359 1.34553 4.5844 1.34325 4.8466C1.34098 5.1088 1.44177 5.3614 1.62393 5.55L7.28093 11.207C7.46846 11.3945 7.72276 11.4998 7.98793 11.4998C8.25309 11.4998 8.5074 11.3945 8.69493 11.207L14.3519 5.55C14.5394 5.36247 14.6447 5.10816 14.6447 4.843C14.6447 4.57784 14.5394 4.32353 14.3519 4.136Z"
             fill="#202020"
+          />
+        </svg>
+      );
+    case 'chev-left':
+      return (
+        <svg
+          fill={fill}
+          viewBox="0 0 16 16"
+          height="1em"
+          width="1em"
+          style={style}
+          className={className}
+        >
+          <path
+            fillRule="evenodd"
+            d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"
+          />
+        </svg>
+      );
+    case 'chev-right':
+      return (
+        <svg
+          fill={fill}
+          viewBox="0 0 16 16"
+          height="1em"
+          width="1em"
+          style={style}
+          className={className}
+        >
+          <path
+            fillRule="evenodd"
+            d="M4.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L10.293 8 4.646 2.354a.5.5 0 010-.708z"
           />
         </svg>
       );

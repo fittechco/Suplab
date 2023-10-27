@@ -77,6 +77,8 @@ export default async function handleRequest(
 
   responseHeaders.set('Content-Type', 'text/html');
   responseHeaders.set('Content-Security-Policy', header);
+  // Access-Control-Allow-Origin: to the domaun of the app
+  responseHeaders.set('Access-Control-Allow-Origin', 'https://suplabstore.com');
 
   return new Response(body, {
     headers: responseHeaders,

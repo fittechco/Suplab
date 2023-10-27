@@ -87,7 +87,7 @@ export default function BottomDrawer(props: Props) {
             {props.headerTitle}
           </h2>}
           {props.closeIcon != null &&
-            <div className="drawer-close-icon" onClick={() => closeDrawer()}><FTicons name="close" className="close-icon" /></div>
+            <div className="drawer-close-icon" onClick={() => closeDrawer()}><FTicons icon="close" className="close-icon" /></div>
           }        </div>
         {props.children}
       </div>

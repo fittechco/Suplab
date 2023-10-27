@@ -7,6 +7,7 @@ import { Navigation } from 'swiper/modules';
 import { Colors } from 'app/ft-lib/shared';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import FTicons from '~/app/ft-lib/FTicon';
 
 interface TestimonialsSectionProps {
   section: App.HomePageTemplate.TestimonialsSection;
@@ -14,7 +15,9 @@ interface TestimonialsSectionProps {
 
 const Testimonials = ({ section }: TestimonialsSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
-  const swiperContainer = useRef<HTMLDivElement | null>(null);
+  const swiperContainer = useRef<HTMLDivElement & {
+    swiper?: Swiper
+  } | null>(null);
 
   useEffect(() => {
     if (swiperContainer.current == null) {
@@ -27,6 +30,27 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
+      injectStyles: [
+        `
+        .swiper-button-next,
+          .swiper-button-prev {
+            background-color: white;
+            padding: 8px 16px;
+            border-radius: 100%;
+            border: 2px solid black;
+            color: red;
+          }
+          .swiper-pagination-bullet{
+            width: 40px;
+            height: 40px;
+            background-color: red;
+          }
+          .swiper-button-next::after,
+          .swiper-button-prev::after {
+            content: "";
+          }
+        `
+      ],
       breakpoints: {
         768: {
           spaceBetween: 20,
@@ -36,6 +60,8 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
       modules: [Navigation],
 
     });
+
+    console.log(swiperContainer.current.swiper, "swiperContainer.current.swiper");
 
     return () => {
       if (swiper != null) {
@@ -67,7 +93,6 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
             const testimonialFields = arrayToObject({
               array: testimonial.fields,
             });
-            const isFirstSlide = index === 0;
             let isLastSlide = null
             if (fields.testimonials != null && fields) {
               isLastSlide = index === fields.testimonials.references.nodes.length - 1;
@@ -144,14 +169,16 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
           })}
         </div>
         <div
-          className={`swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden flex`}
+          onClick={() => swiperContainer.current?.swiper?.slidePrev()}
+          className={`swiper-button absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden flex z-10`}
         >
-          <button className="swiper-button-prev-icon"></button>
+          <FTicons icon='chev-left' className='w-8 h-8' />
         </div>
         <div
-          className={`swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden `}
+          onClick={() => swiperContainer.current?.swiper?.slideNext()}
+          className={`swiper-button absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden z-10 `}
         >
-          <button className="swiper-button-next-icon"></button>
+          <FTicons icon='chev-right' className='w-8 h-8' />
         </div>
       </div>
     </div>

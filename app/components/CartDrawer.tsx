@@ -51,7 +51,7 @@ const CartForm = (props: {
               className="cart-header-close"
             >
               <FTicons
-                name="close"
+                icon="close"
                 style={{
                   width: 20,
                   height: 20,

@@ -80,7 +80,7 @@ const Footer = (props: Props) => {
                   width: 32,
                   height: 32,
                 }}
-                name="instagram"
+                icon="instagram"
               />
             </Link>
             <Link to={`https://www.tiktok.com/@suplabnutrition`} target='_blank'>
@@ -91,7 +91,7 @@ const Footer = (props: Props) => {
                   width: 32,
                   height: 32,
                 }}
-                name="tiktok"
+                icon="tiktok"
               />
             </Link>
           </div>
@@ -110,7 +110,7 @@ const Footer = (props: Props) => {
                       className="open-menu-button"
                     >
                       <FTicons
-                        name={openMenu === index ? 'minus' : 'plus'}
+                        icon={openMenu === index ? 'minus' : 'plus'}
                         style={{
                           width: '24px',
                           height: '24px',

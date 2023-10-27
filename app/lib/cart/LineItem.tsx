@@ -114,7 +114,7 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
                                         )}
                                     </div>
                                     <FTicons
-                                        name="trash"
+                                        icon="trash"
                                         fill={Colors.secondary}
                                         style={{
                                             width: 20,

@@ -199,7 +199,7 @@ function Header(props: Props) {
                 }}
                 fill={Colors.secondary}
                 className="transition-all ease-out duration-300"
-                name="search"
+                icon="search"
               />
             </button>
             <div className="icons_item cursor-pointer">
@@ -215,7 +215,7 @@ function Header(props: Props) {
                     width: '24px',
                     height: '24px',
                   }}
-                  name="bag"
+                  icon="bag"
                 />
                 <span
                   style={{
@@ -250,7 +250,7 @@ function Header(props: Props) {
                   width: '24px',
                   height: '24px',
                 }}
-                name="nav"
+                icon="nav"
               />
             </button>
           </div>

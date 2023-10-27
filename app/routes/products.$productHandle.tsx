@@ -240,19 +240,6 @@ const ProductPage = () => {
                         background: Colors.bg,
                       }}
                     >
-                      {/* <LazyImage
-                        alt='product image'
-                        style={{
-                          objectFit: 'contain',
-                          height: '100%',
-                          width: '100%',
-                          maxWidth: '100%',
-                          margin: 'auto',
-                          borderRadius: '24px',
-                        }}
-                        zoom
-                        className=""
-                        src={resizeImage(image.url, 1000)} /> */}
                       <ReactImageMagnify
                         {...{
                           smallImage: {
