@@ -143,7 +143,7 @@ fragment Metaobject on Metaobject {
       }
       ... on Collection {
         ...CollectionRef
-        products(first: 20) {
+        products(first: 10) {
           nodes {
             title
             handle

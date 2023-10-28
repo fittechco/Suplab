@@ -5,7 +5,6 @@ import Swiper from 'swiper';
 import 'swiper/css/scrollbar';
 import { Scrollbar, Mousewheel, FreeMode } from 'swiper/modules';
 import _ from 'lodash';
-import ProductSkeleton from '../lib/skeleton/ProductSkeleton';
 import ProductSwiperSkeleton from '../lib/skeleton/ProductSwiperSkeleton';
 type Props = {
   products: ProductQuery['product'][] | null;
@@ -50,13 +49,13 @@ export default function ProductsSwiper(props: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full overflow-hidden">
       {props.title && (
         <h3 className="ft-text-main text-2xl  container">{props.title}</h3>
       )}
       <div
         ref={swiperContainer}
-        className="swiper-container overflow-hidden container"
+        className="swiper-container container"
       >
         <div className="swiper-wrapper">
           {props.products.map((product, index) => {

@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { UseShopStore } from '~/app/root';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import FTSwiper from '~/app/ft-lib/Swiper';
 
 interface OffersSectionProps {
   section: App.HomePageTemplate.OffersSection;
@@ -18,34 +19,6 @@ interface OffersSectionProps {
 
 const Offers = ({ section }: OffersSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
-  const swiperContainer = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (swiperContainer.current == null) {
-      return;
-    }
-    const swiper = new Swiper(swiperContainer.current, {
-      spaceBetween: 10,
-      slidesPerView: 1,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      breakpoints: {
-        768: {
-          spaceBetween: 20,
-          slidesPerView: 3.5,
-        },
-      },
-      modules: [Navigation],
-    });
-
-    return () => {
-      if (swiper != null) {
-        swiper.destroy();
-      }
-    };
-  }, []);
 
   if (fields.offers_collection == null) {
     return null;
@@ -80,35 +53,43 @@ const Offers = ({ section }: OffersSectionProps) => {
         )}
       </div>
       <div className="offersSection__offers relative">
-        <div ref={swiperContainer} className="swiper-container">
-          <div className="swiper-wrapper">
-            {fields?.offers_collection?.reference.products?.nodes?.map(
-              (product: ProductQuery['product']) => {
-                return (
-                  <Link
-                    className="swiper-slide cursor-pointer"
-                    key={product?.id} to={`/products/${product?.handle}`}
-                    onClick={() => {
-                      UseShopStore.setState({
-
-                      })
-                    }}
-                  >
-                    {product?.images != null && (
-                      <LazyImage
-                        alt="product image"
-                        className="object-fill rounded-3xl w-full"
-                        src={resizeImage(product.images.nodes[0].url, 400)}
-                      />
-                    )}
-                  </Link>
-                );
+        <FTSwiper
+          navigation
+          options={{
+            spaceBetween: 10,
+            slidesPerView: 1,
+            breakpoints: {
+              768: {
+                spaceBetween: 20,
+                slidesPerView: 3.5,
               },
-            )}
-          </div>
-          <div className="swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/1.5 md:hidden flex"></div>
-          <div className="swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/1.5 md:hidden flex"></div>
-        </div>
+            },
+          }}
+        >
+          {fields?.offers_collection?.reference.products?.nodes?.map(
+            (product: ProductQuery['product']) => {
+              return (
+                <Link
+                  className="swiper-slide cursor-pointer"
+                  key={product?.id} to={`/products/${product?.handle}`}
+                  onClick={() => {
+                    UseShopStore.setState({
+
+                    })
+                  }}
+                >
+                  {product?.images != null && (
+                    <LazyImage
+                      alt="product image"
+                      className="object-fill rounded-3xl w-full"
+                      src={resizeImage(product.images.nodes[0].url, 400)}
+                    />
+                  )}
+                </Link>
+              );
+            },
+          )}
+        </FTSwiper>
       </div>
     </div>
   );
