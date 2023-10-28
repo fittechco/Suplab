@@ -33,6 +33,8 @@ export default async function handleRequest(
       "http://localhost:8002/",
       "ws://localhost:8002/",
       "http://localhost:3000/",
+      "http://172.20.10.5:3000/",
+      "https://cold-islands-find.loca.lt",
       "https://judge.me/"
     ],
     scriptSrc: [
@@ -44,6 +46,8 @@ export default async function handleRequest(
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
       "https://suplabstore.com/",
+      "https://cold-islands-find.loca.lt",
+
       // add localhost for development,
       // this will be removed in production
       "http://localhost:8002/",
@@ -77,9 +81,7 @@ export default async function handleRequest(
 
   responseHeaders.set('Content-Type', 'text/html');
   responseHeaders.set('Content-Security-Policy', header);
-  // Access-Control-Allow-Origin: to the domaun of the app
-  responseHeaders.set('Access-Control-Allow-Origin', 'https://suplabstore.com');
-
+  responseHeaders.set('Access-Control-Allow-Headers', '*');
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,

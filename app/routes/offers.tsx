@@ -1,42 +1,26 @@
-import arrayToObject from 'app/ft-lib/ArrayToObject';
-import { useQuery } from 'react-query';
+import { LoaderArgs } from '@shopify/remix-oxygen'
+import React from 'react'
 import StorefrontApi from '../api/storefront';
-import type { App } from '../api/type';
-import Offers from '../lib/homepage/Offers';
-import { useFetcher } from '@remix-run/react';
-import { loader as offersLoader } from '~/app/routes/offers';
-import { useEffect } from 'react';
+import { App } from '../api/type';
 
-export default function Offer() {
-  const fetcher = useFetcher<typeof offersLoader>();
-
-  useEffect(() => {
-    if (fetcher.state === 'idle' && !fetcher.data) {
-      fetcher.load("/offers")
-    }
-  }, [])
-
-
-  console.log(fetcher, "fetcher");
-
-  if (fetcher.data == null) {
-    return null;
-  }
-
-  const fields = arrayToObject({ array: fetcher.data.fields });
-
-  if (fields.offers?.references == null) {
-    return <div>Loading ...</div>;
-  }
-
-  console.log(fetcher.data, "fetcher.data");
-
-  return (
-    <div className="offers-container w-full space-y-4">
-      <Offers section={fetcher.data} />
-    </div>
-  );
+export async function loader({ context }: LoaderArgs) {
+    const res = await context.storefront.query(OFFERS_QUERY, {
+        cache: {
+            maxAge: 60 * 60 * 24,
+            staleWhileRevalidate: 60 * 60,
+        }
+    });
+    console.log(res, "res");
+    return res.metaobject as App.HomePageTemplate.OffersSection;
 }
+
+function offers() {
+    return (
+        <div>offers</div>
+    )
+}
+
+export default offers
 
 export const OFFERS_QUERY = `#graphql
 query Offers {

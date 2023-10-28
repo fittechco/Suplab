@@ -6,7 +6,7 @@ import MobileNav from '../MobileNav';
 import SubMenuPopup from './SubMenuPopup';
 import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
-import StorefrontApi from 'app/api/storefront';
+import { loader as offersLoader } from '~/app/routes/offers';
 import type {
   FooterQuery,
   HeaderQuery,
@@ -15,7 +15,7 @@ import type {
 import Search from 'app/components/Search';
 import { UseShopStore, queryClient } from 'app/root';
 import { useCart } from '~/app/components/CartProvider';
-import { Link } from '@remix-run/react';
+import { Link, useFetcher } from '@remix-run/react';
 import { OFFERS_QUERY } from '~/app/components/FtOffers';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
@@ -37,12 +37,13 @@ function Header(props: Props) {
   const [showSub, setShowSub] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const cart = useCart();
-  queryClient.prefetchQuery('offers', async () => {
-    const storefront = await StorefrontApi.storeFront();
-    const res = await storefront.query(OFFERS_QUERY);
-    return res.metaobject;
-  });
+  const fetcher = useFetcher<typeof offersLoader>();
 
+  useEffect(() => {
+    if (fetcher.state === 'idle' && !fetcher.data) {
+      fetcher.load("/offers")
+    }
+  }, [])
   useEffect(() => {
     let lastScrollY = window.scrollY;
     const updateScrollDirection = () => {
