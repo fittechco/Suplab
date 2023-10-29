@@ -57,6 +57,9 @@ export async function loader({ context, params, request }: LoaderArgs) {
   );
 
   const { collection } = await context.storefront.query(COLLECTION_QUERY, {
+    cache: {
+      maxAge: 60 * 60 * 24,
+    },
     variables: {
       handle: collectionHandle,
       filters: dynamicFilters,
