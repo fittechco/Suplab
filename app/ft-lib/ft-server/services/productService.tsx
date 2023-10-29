@@ -2,7 +2,7 @@ import { LoaderArgs } from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
 import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 import { COLLECTIONFRAGMENT } from './collectionService';
-import { Storefront, I18nBase } from '@shopify/hydrogen';
+import { type Storefront, type I18nBase } from '@shopify/hydrogen';
 
 // the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
@@ -279,9 +279,24 @@ class ProductService {
     invariant(data.product != null, 'Product not found');
     return data.product;
   }
-  async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
+  async getFilteredProducts(args: {
+    handle: string; filters: ProductFilter[],
+    variables: {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+      endCursor: string,
+      startCursor: string
+    }
+  }) {
     const query = `#graphql
-      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {
+      query GetFilteredProducts(
+        $handle: String!
+        $filters: [ProductFilter!] 
+        $first: Int
+        $last: Int
+        $startCursor: String
+        $endCursor: String
+        ) {
         collection(handle: $handle) {
           ...Collection
           id
@@ -291,11 +306,17 @@ class ProductService {
             url
           }
           description
-          products(first: 10, filters: $filters, after: $cursor) {
+          products(
+            first: 10,
+             filters: $filters,
+             before: $startCursor,
+             after: $endCursor
+             ) {
             pageInfo {
               hasNextPage
               hasPreviousPage
               endCursor
+              startCursor
             }
             nodes {
               ...ProductFragment
@@ -332,7 +353,7 @@ class ProductService {
       variables: {
         handle: args.handle,
         filters: args.filters,
-        cursor: args.cursor
+        ...args.variables
       },
       cache: {
         maxAge: 60 * 60 * 24,

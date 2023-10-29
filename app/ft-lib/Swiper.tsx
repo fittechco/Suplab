@@ -4,7 +4,7 @@ import Swiper from 'swiper';
 import 'swiper/css/scrollbar';
 import { Navigation } from 'swiper/modules';
 import FTicons from './FTicon';
-import { SwiperOptions } from 'swiper/types/swiper-options';
+import type { SwiperOptions } from 'swiper/types/swiper-options';
 type Props = {
     children?: React.ReactNode;
     options?: SwiperOptions | undefined
@@ -26,7 +26,7 @@ export default function FTSwiper(props: Props) {
 
             modules: [Navigation],
             on: {
-                activeIndexChange: function (swiper) {
+                activeIndexChange(swiper) {
                     if (swiper?.slides.length == null) {
                         return;
                     }
@@ -45,8 +45,6 @@ export default function FTSwiper(props: Props) {
             },
             ...props.options
         });
-        console.log(swiperContainer.current.swiper, "swiperContainer.current.swiper");
-
         return () => {
             if (swiper != null) {
                 swiper.destroy();

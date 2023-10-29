@@ -4,7 +4,7 @@ import StorefrontApi from '../api/storefront';
 import type { App } from '../api/type';
 import Offers from '../lib/homepage/Offers';
 import { useFetcher } from '@remix-run/react';
-import { loader as offersLoader } from '~/app/routes/offers';
+import type { loader as offersLoader } from '~/app/routes/offers';
 import { useEffect } from 'react';
 
 export default function Offer() {
@@ -14,10 +14,7 @@ export default function Offer() {
     if (fetcher.state === 'idle' && !fetcher.data) {
       fetcher.load("/offers")
     }
-  }, [])
-
-
-  console.log(fetcher, "fetcher");
+  }, [fetcher])
 
   if (fetcher.data == null) {
     return null;
@@ -29,7 +26,6 @@ export default function Offer() {
     return <div>Loading ...</div>;
   }
 
-  console.log(fetcher.data, "fetcher.data");
 
   return (
     <div className="offers-container w-full space-y-4">

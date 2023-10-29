@@ -1,23 +1,22 @@
-import { LoaderArgs } from '@shopify/remix-oxygen'
+import type { LoaderArgs } from '@shopify/remix-oxygen'
 import React from 'react'
 import StorefrontApi from '../api/storefront';
-import { App } from '../api/type';
+import type { App } from '../api/type';
 
 export async function loader({ context }: LoaderArgs) {
-    const res = await context.storefront.query(OFFERS_QUERY, {
-        cache: {
-            maxAge: 60 * 60 * 24,
-            staleWhileRevalidate: 60 * 60,
-        }
-    });
-    console.log(res, "res");
-    return res.metaobject as App.HomePageTemplate.OffersSection;
+  const res = await context.storefront.query(OFFERS_QUERY, {
+    cache: {
+      maxAge: 60 * 60 * 24,
+      staleWhileRevalidate: 60 * 60,
+    }
+  });
+  return res.metaobject as App.HomePageTemplate.OffersSection;
 }
 
 function offers() {
-    return (
-        <div>offers</div>
-    )
+  return (
+    <div>offers</div>
+  )
 }
 
 export default offers

@@ -89,7 +89,7 @@ export default function ProductForm(props: Props) {
                 fullWidth
               >
                 {fetcher.state !== 'idle' ? (
-                  <div className="lds-dual-ring lds-dual-ring-white !w-8 !h-8"></div>
+                  <div className="lds-dual-ring lds-dual-ring-white !w-8 !h-8" />
                 ) : selectedVariant?.availableForSale ? (
                   'Add to cart'
                 ) : (

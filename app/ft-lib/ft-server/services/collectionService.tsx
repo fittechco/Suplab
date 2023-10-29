@@ -1,4 +1,4 @@
-import { I18nBase, Storefront } from '@shopify/hydrogen';
+import { type I18nBase, type Storefront } from '@shopify/hydrogen';
 import { PRODUCTFRAGMENT } from './productService';
 
 export const COLLECTIONFRAGMENT = `#graphql

@@ -1,4 +1,4 @@
-import { Storefront, I18nBase } from "@shopify/hydrogen";
+import { type Storefront, type I18nBase } from "@shopify/hydrogen";
 import CollectionService from "../services/collectionService";
 
 class CollectionController {

@@ -62,7 +62,7 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
                     boxShadow:
                       '0px 8.70968px 13.06452px 0px rgba(0, 0, 0, 0.16)',
                   }}
-                  className="flex justify-center items-end mb-3 rounded-3xl cover no-repeat w-full h-[360px]"
+                  className="flex justify-center items-end mb-3 rounded-3xl cover no-repeat w-full h-[400px]"
                 >
                   {goalFields.image?.url != null && (
                     <LazyImage

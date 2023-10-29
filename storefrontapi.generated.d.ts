@@ -524,7 +524,8 @@ export type GetFilteredProductsQueryVariables = StorefrontAPI.Exact<{
   filters?: StorefrontAPI.InputMaybe<
     Array<StorefrontAPI.ProductFilter> | StorefrontAPI.ProductFilter
   >;
-  cursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
+  startCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
+  endCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
 }>;
 
 export type GetFilteredProductsQuery = {
@@ -539,7 +540,7 @@ export type GetFilteredProductsQuery = {
       products: {
         pageInfo: Pick<
           StorefrontAPI.PageInfo,
-          'hasNextPage' | 'hasPreviousPage' | 'endCursor'
+          'hasNextPage' | 'hasPreviousPage' | 'endCursor' | 'startCursor'
         >;
         nodes: Array<
           Pick<
@@ -1022,6 +1023,88 @@ export type AboutMetaobjectFragment = Pick<StorefrontAPI.Metaobject, 'type'> & {
   >;
 };
 
+export type GetCollectionQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String'];
+  filters?: StorefrontAPI.InputMaybe<
+    Array<StorefrontAPI.ProductFilter> | StorefrontAPI.ProductFilter
+  >;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
+  startCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
+  endCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
+}>;
+
+export type GetCollectionQuery = {
+  collection?: StorefrontAPI.Maybe<
+    Pick<
+      StorefrontAPI.Collection,
+      'id' | 'handle' | 'title' | 'description'
+    > & {
+      image?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.Image, 'url' | 'id' | 'width' | 'height' | 'altText'>
+      >;
+      products: {
+        pageInfo: Pick<
+          StorefrontAPI.PageInfo,
+          'hasNextPage' | 'hasPreviousPage' | 'endCursor' | 'startCursor'
+        >;
+        nodes: Array<
+          Pick<
+            StorefrontAPI.Product,
+            | 'availableForSale'
+            | 'productType'
+            | 'vendor'
+            | 'id'
+            | 'title'
+            | 'handle'
+            | 'description'
+          > & {
+            priceRange: {
+              minVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+              maxVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+            };
+            variants: {
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.ProductVariant,
+                  'quantityAvailable' | 'id' | 'title' | 'availableForSale'
+                > & {
+                  selectedOptions: Array<
+                    Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                  >;
+                  price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+                  compareAtPrice?: StorefrontAPI.Maybe<
+                    Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+                  >;
+                }
+              >;
+            };
+            seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
+            images: {
+              nodes: Array<
+                Pick<
+                  StorefrontAPI.Image,
+                  'url' | 'height' | 'width' | 'altText'
+                >
+              >;
+            };
+            options: Array<
+              Pick<StorefrontAPI.ProductOption, 'name' | 'values'>
+            >;
+          }
+        >;
+      };
+      seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
+    }
+  >;
+};
+
 export type ContactMetaobjectQueryVariables = StorefrontAPI.Exact<{
   [key: string]: never;
 }>;
@@ -1226,7 +1309,7 @@ interface GeneratedQueryTypes {
     return: ProductMetafieldsQuery;
     variables: ProductMetafieldsQueryVariables;
   };
-  '#graphql\n      query GetFilteredProducts($handle: String!, $filters: [ProductFilter!], $cursor: String) {\n        collection(handle: $handle) {\n          ...Collection\n          id\n          handle\n          title\n          image {\n            url\n          }\n          description\n          products(first: 10, filters: $filters, after: $cursor) {\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            nodes {\n              ...ProductFragment\n              priceRange {\n                minVariantPrice {\n                  amount\n                  currencyCode\n                }\n                maxVariantPrice {\n                  amount\n                  currencyCode\n                }\n              }\n              availableForSale\n              productType\n              vendor\n              variants(first: 10) {\n                nodes {\n                  selectedOptions {\n                    name\n                    value\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n      #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
+  '#graphql\n      query GetFilteredProducts(\n        $handle: String!\n        $filters: [ProductFilter!] \n        $startCursor: String\n        $endCursor: String\n        ) {\n        collection(handle: $handle) {\n          ...Collection\n          id\n          handle\n          title\n          image {\n            url\n          }\n          description\n          products(\n            first: 10,\n             filters: $filters,\n             before: $startCursor,\n             after: $endCursor\n             ) {\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n              startCursor\n            }\n            nodes {\n              ...ProductFragment\n              priceRange {\n                minVariantPrice {\n                  amount\n                  currencyCode\n                }\n                maxVariantPrice {\n                  amount\n                  currencyCode\n                }\n              }\n              availableForSale\n              productType\n              vendor\n              variants(first: 10) {\n                nodes {\n                  selectedOptions {\n                    name\n                    value\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n      #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
     return: GetFilteredProductsQuery;
     variables: GetFilteredProductsQueryVariables;
   };
@@ -1265,6 +1348,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  query sitemaps($urlLimits: Int, $language: LanguageCode)\n  @inContext(language: $language) {\n    products(\n      first: $urlLimits\n      query: "published_status:\'online_store:visible\'"\n    ) {\n      nodes {\n        updatedAt\n        handle\n        onlineStoreUrl\n        title\n        featuredImage {\n          url\n          altText\n        }\n      }\n    }\n    collections(\n      first: $urlLimits\n      query: "published_status:\'online_store:visible\'"\n    ) {\n      nodes {\n        updatedAt\n        handle\n        onlineStoreUrl\n      }\n    }\n    pages(first: $urlLimits, query: "published_status:\'published\'") {\n      nodes {\n        updatedAt\n        handle\n        onlineStoreUrl\n      }\n    }\n  }\n': {
     return: SitemapsQuery;
     variables: SitemapsQueryVariables;
+  };
+  '#graphql\n  query GetCollection(\n    $handle: String!\n    $filters: [ProductFilter!] \n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) {\n    collection(handle: $handle) {\n      ...Collection\n      id\n      handle\n      title\n      image {\n        url\n      }\n      description\n      products(\n        first: $first,\n        last: $last,\n        filters: $filters,\n        before: $startCursor,\n        after: $endCursor\n      ) {\n        pageInfo {\n          hasNextPage\n          hasPreviousPage\n          endCursor\n          startCursor\n        }\n        nodes {\n          ...ProductFragment\n          priceRange {\n            minVariantPrice {\n              amount\n              currencyCode\n            }\n            maxVariantPrice {\n              amount\n              currencyCode\n            }\n          }\n          availableForSale\n          productType\n          vendor\n          variants(first: 10) {\n            nodes {\n              selectedOptions {\n                name\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n  #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n\n  #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n': {
+    return: GetCollectionQuery;
+    variables: GetCollectionQueryVariables;
   };
   '#graphql\n    query ContactMetaobject {\n        metaobject(handle: { handle: "contact-section", type: "contact_section" }) {\n            type\n            fields {\n                key\n                value\n                type\n                references(first: 20) {\n                    nodes {\n                        ... on Metaobject {\n                            type\n                            fields {\n                                key\n                                value\n                                type\n                                reference {\n                                    ... on MediaImage {\n                                        image {\n                                            url\n                                        }\n                                    }\n                                }\n                            }\n                        }\n                    }\n                }\n                reference {\n                    ... on MediaImage {\n                        image {\n                            url\n                        }\n                    }\n                    ... on Collection {\n                        handle\n                        title\n                        products(first: 20) {\n                            nodes {\n                                title\n                                handle\n                                description\n                                priceRange {\n                                    minVariantPrice {\n                                        amount\n                                        currencyCode\n                                    }\n                                }\n                                images(first: 20) {\n                                    nodes {\n                                        url\n                                    }\n                                }\n                                featuredImage {\n                                    url\n                                }\n                            }\n                        }\n                    }\n                }\n            }\n        }\n    }\n': {
     return: ContactMetaobjectQuery;

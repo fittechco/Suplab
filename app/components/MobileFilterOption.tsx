@@ -3,7 +3,7 @@ import { Colors } from '../ft-lib/shared';
 import { Link, useSearchParams, useLocation } from '@remix-run/react';
 
 type Props = {
-  param: string;
+  param: string | null;
   label: string;
   value: string;
   isSelected: boolean;
@@ -22,6 +22,10 @@ export default function MobileFilterOption({
 
   const linkParams = new URLSearchParams(search);
 
+  if (param === null) {
+    return null;
+  }
+
   if (hasX === true) {
     linkParams.delete(param)
   } else {
@@ -31,7 +35,9 @@ export default function MobileFilterOption({
   return (
     <div className="gridItemWrapper w-full flex items-center justify-center">
       <Link
-        className="filterOption p-2 font-bold text-xs min-w-[106px] md:py-3 md:text-lg w-full rounded-full text-center whitespace-nowrap cursor-pointer border-none outline-transparent uppercase flex items-center justify-center"
+        className="filterOption p-2 font-bold text-[11px]  md:py-3 md:text-lg
+         w-full rounded-full text-center whitespace-nowrap cursor-pointer
+          border-none outline-transparent uppercase flex items-center justify-center "
         style={{
           backgroundColor: isSelected
             ? Colors.primary
@@ -41,7 +47,7 @@ export default function MobileFilterOption({
         to={`${pathname}?${linkParams.toString()}`}
         preventScrollReset
       >
-        <span className="leading-normal w-fit flex items-center justify-center gap-1 whitespace-pre-wrap">
+        <span className="leading-normal flex items-center w-full justify-center gap-1 whitespace-pre-wrap">
           {label} {hasX && <XIcon strokeColor={Colors.textSecondary} />}
         </span>
       </Link>

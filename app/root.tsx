@@ -1,6 +1,6 @@
 
 import { Seo, useNonce } from '@shopify/hydrogen';
-import { defer, LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
+import { defer, type LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -176,8 +176,8 @@ export default function App() {
   // checking if the app navigation is not idle
   useEffect(() => {
     if (navigation.state === 'loading') {
-      if (navigation.location.search != "" && navigation.location.state == null) {
-        return UseShopStore.setState({ routesLoader: false });
+      if (navigation.location.search != "") {
+        return
       }
       UseShopStore.setState({ routesLoader: true });
     } else {

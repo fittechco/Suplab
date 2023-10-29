@@ -24,8 +24,6 @@ const PriceSlider = React.forwardRef<
     ? new URLSearchParams(navigation.location.search)
     : defaultParams;
 
-  console.log(props.max);
-
   return (
     <SliderPrimitive.Root
       ref={ref}

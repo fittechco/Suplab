@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
 import { type LoaderArgs, json } from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
 import { PriceSlider } from '~/app/components/ui/PriceSlider';
@@ -15,12 +15,18 @@ import resizeImage from '../ft-lib/resizeImages';
 import type { App } from '../api/type';
 import StorefrontApi from '../api/storefront';
 import { seoPayload } from '../ft-lib/seo.server';
+import _ from 'lodash';
+import { Pagination, getPaginationVariables } from '@shopify/hydrogen';
+import { COLLECTIONFRAGMENT } from '../ft-lib/ft-server/services/collectionService';
+import { PRODUCTFRAGMENT } from '../ft-lib/ft-server/services/productService';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
   const PC = new ProductController({ storefront: context.storefront });
-
+  const paginationVariables = getPaginationVariables(request, {
+    pageBy: 10,
+  });
   const searchParams = new URL(request.url).searchParams;
 
   let minPrice = 0;
@@ -34,9 +40,8 @@ export async function loader({ context, params, request }: LoaderArgs) {
   }
 
   const dynamicFilters: any = [];
-
   searchParams.forEach((value, param) => {
-    if (param === 'cursor') {
+    if (param === 'cursor' || param === 'direction') {
       return;
     }
     const parsedValue = JSON.parse(value) as string;
@@ -51,14 +56,18 @@ export async function loader({ context, params, request }: LoaderArgs) {
     availableFilters.products.filters,
   );
 
-  const collection = await PC.getFilteredProducts({
-    handle: collectionHandle,
-    filters: dynamicFilters,
-    cursor: null,
+  const { collection } = await context.storefront.query(COLLECTION_QUERY, {
+    variables: {
+      handle: collectionHandle,
+      filters: dynamicFilters,
+      ...paginationVariables,
+    }
   });
 
+  invariant(collection, 'Collection not found');
+
   const seo = seoPayload.collection({
-    collection: collection,
+    collection,
     url: request.url,
   })
 
@@ -95,62 +104,19 @@ const extractAvailableFilters = (filters: any) => {
 function Collection() {
   const data = useLoaderData<typeof loader>();
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
+  const [currentSearchParams, setSearchParams] = useSearchParams();
+  const navigation = useNavigation();
+  const defaultParams = new URLSearchParams(currentSearchParams);
   const filtersData = data.availableFilters.filter(
     (filter: any) => filter.param !== 'Price',
   );
   let minPrice = data.minPrice;
   let maxPrice = data.maxPrice;
 
-  console.log(maxPrice, "maxPrice")
-  const lastProductRef = useRef<HTMLDivElement | null>(null);
-  const [products, setProducts] = useState<App.Shopify.Storefront.Product[]>(
-    data.collection.products.nodes,
-  );
-  const [hasNextPage, setHasNextPage] = useState<boolean>(
-    data.collection.products.pageInfo.hasNextPage,
-  );
-  const [cursor, setCursor] = useState<string | null>(
-    data.collection.products.pageInfo.endCursor || null,
-  );
+  const searchParams = navigation.location
+    ? new URLSearchParams(navigation.location.search)
+    : defaultParams;
 
-  useEffect(() => {
-    if (lastProductRef.current == null) {
-      return;
-    }
-    const observer = new IntersectionObserver(async (entries) => {
-      if (
-        entries[0].isIntersecting === true &&
-        hasNextPage === true &&
-        cursor != null
-      ) {
-        const storefront = await StorefrontApi.storeFront()
-        const PC = new ProductController({ storefront });
-        const productsAfterCursor = await PC.getFilteredProducts(
-          {
-            handle: data.collection.handle,
-            filters: [],
-            cursor,
-          },
-        );
-        setHasNextPage(productsAfterCursor.products.pageInfo.hasNextPage);
-        setCursor(productsAfterCursor.products.pageInfo.endCursor ?? null);
-        setProducts([...products, ...productsAfterCursor.products.nodes]);
-      }
-    });
-    observer.observe(lastProductRef.current);
-  }, [
-    cursor,
-    data.collection.handle,
-    data.collection.products,
-    hasNextPage,
-    products,
-  ]);
-
-  useEffect(() => {
-    setProducts(data.collection.products.nodes);
-    setHasNextPage(data.collection.products.pageInfo.hasNextPage);
-    setCursor(data.collection.products.pageInfo.endCursor ?? null);
-  }, [data.collection.products]);
 
   const toggleFiltersMenu = () => {
     setShowMobileFilters((prev) => !prev);
@@ -158,16 +124,6 @@ function Collection() {
   if (data.collection === null) {
     return <div>Loading...</div>;
   }
-
-  const [currentSearchParams, setSearchParams] = useSearchParams();
-  const navigation = useNavigation();
-  const { pathname, search } = useLocation();
-
-  const defaultParams = new URLSearchParams(currentSearchParams);
-
-  const searchParams = navigation.location
-    ? new URLSearchParams(navigation.location.search)
-    : defaultParams;
 
   if (searchParams.has('price') === true) {
     const priceParam = searchParams.get('price')
@@ -245,39 +201,44 @@ function Collection() {
             <PriceSlider min={minPrice} max={maxPrice} className="min-w-[250px]" />
           </div>
         </div>
-        <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9">
-          {products.map((product, index) => {
-            if (product == null) {
-              return null;
-
-
-            }
+        {/* <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9"> */}
+        <Pagination connection={data.collection.products}>
+          {({ nodes, NextLink, isLoading }) => {
             return (
-              <div
-                ref={(ref) => {
-                  if (data.collection.products.nodes.length === index + 1) {
-                    lastProductRef.current = ref;
-                  }
-                }}
-                key={product.id}
-                className=""
-              >
-                <ProductCard product={product} />
-              </div>
-            );
-          })}
-        </div>
-        {hasNextPage === true && (
-          <div
-            style={{
-              color: Colors.textSecondary,
-              width: '80%',
-            }}
-            className="loading-more loader ft-text-main text-2xl"
-          >
-            Loading
-          </div>
-        )}
+              <>
+                <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9">
+                  {nodes.map((product, index) => {
+                    if (product == null) {
+                      return null;
+                    }
+                    return (
+                      <div
+                        key={product.id}
+                        className=""
+                      >
+                        <ProductCard product={product} />
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="flex items-center justify-center mt-6">
+                  <NextLink
+                    style={{
+                      background: Colors.primary,
+                      borderRadius: '9999px',
+                      color: Colors.textSecondary,
+                    }}
+                    className="text-2xl md:text-2xl text-center px-3.5 py-1.5 rounded-lg ft-text-main max-md:w-full w-80 flex items-center justify-center">
+                    {isLoading === true ? (
+                      <div className="lds-dual-ring lds-dual-ring-white !w-8 !h-8" />
+                    )
+                      : 'Load more'}
+                  </NextLink>
+                </div>
+              </>
+            )
+          }}
+        </Pagination>
         <div
           className="mobileFilterMenuTrigger h-[50px] w-[50px] bg-main sticky bottom-3 left-5 z-50 my-3 flex lg:hidden items-center justify-center rounded-full shadow-md cursor-pointer hover:scale-105 transition-all"
           style={{
@@ -305,3 +266,66 @@ function Collection() {
 }
 
 export default Collection;
+
+
+const COLLECTION_QUERY = `#graphql
+  query GetCollection(
+    $handle: String!
+    $filters: [ProductFilter!] 
+    $first: Int
+    $last: Int
+    $startCursor: String
+    $endCursor: String
+  ) {
+    collection(handle: $handle) {
+      ...Collection
+      id
+      handle
+      title
+      image {
+        url
+      }
+      description
+      products(
+        first: $first,
+        last: $last,
+        filters: $filters,
+        before: $startCursor,
+        after: $endCursor
+      ) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        nodes {
+          ...ProductFragment
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          availableForSale
+          productType
+          vendor
+          variants(first: 10) {
+            nodes {
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ${COLLECTIONFRAGMENT}
+  ${PRODUCTFRAGMENT}
+`;

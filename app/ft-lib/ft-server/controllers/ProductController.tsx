@@ -1,6 +1,6 @@
 import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 import ProductService from '../services/productService'
-import { Storefront, I18nBase } from '@shopify/hydrogen';
+import { type Storefront, type I18nBase } from '@shopify/hydrogen';
 
 class ProductController {
   storefront: Storefront<I18nBase>;
@@ -66,11 +66,20 @@ class ProductController {
     return metafields;
   }
 
-  async getFilteredProducts(args: { handle: string; filters: ProductFilter[], cursor: string | null }) {
+  async getFilteredProducts(args: {
+    handle: string;
+    filters: ProductFilter[],
+    variables: {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+      endCursor: string,
+      startCursor: string
+    }
+  }) {
     try {
-      const { handle } = args;
+      const { handle, variables } = args;
       const PS = new ProductService({ storefront: this.storefront });
-      const filteredProducts = await PS.getFilteredProducts({ handle, filters: args.filters, cursor: args.cursor });
+      const filteredProducts = await PS.getFilteredProducts({ handle, filters: args.filters, variables });
       return filteredProducts;
     } catch (error) {
       console.error(error);

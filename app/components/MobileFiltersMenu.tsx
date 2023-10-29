@@ -4,7 +4,6 @@ import MobileFilterOption from './MobileFilterOption';
 import { PriceSlider } from './ui/PriceSlider';
 import { useSearchParams } from '@remix-run/react';
 import { Fragment } from 'react';
-import FTicons from '../ft-lib/FTicon';
 
 type Props = {
   show: boolean;
@@ -20,16 +19,21 @@ export default function MobileFiltersMenu(props: Props) {
   const filters = props.filters;
 
   const searchedParamsWithoutMinMax = Array.from(searchParams.entries())
-    .filter(([key]) => key !== 'min' && key !== 'max')
+    .filter(([key]) => key !== 'min' && key !== 'max' && key)
 
   const searchedParams = searchedParamsWithoutMinMax.map((param) => {
     const [key, value] = param;
+    // check if key is in filters
+    if (!filters.find((filter) => filter.param === key)) {
+      return null;
+    }
     const labels = filters.map((filter) => {
+      // console.log();
       if (filter.param === key) {
         const option = filter.options.find((option) => option.value === value);
         return option?.label;
       }
-      return '';
+      return null;
     });
     const label = labels.filter(Boolean).join(', ');
 
@@ -64,7 +68,7 @@ export default function MobileFiltersMenu(props: Props) {
 
         {searchedParams.length > 0 && <HorizontalRule />}
 
-        <div className='filters flex flex-col gap-4 overflow-y-auto h-full'>
+        <div className='filters flex flex-col gap-4 pb-4 overflow-y-auto h-full'>
 
           <div className="filtersGroup flex flex-col gap-3">
             <h4 className="filtersTitle text-[#4A4A49] text-bold text-lg">
@@ -86,7 +90,7 @@ export default function MobileFiltersMenu(props: Props) {
                   {filter.param}
                 </h4>
                 <div
-                  className="filtersWrapper grid grid-cols-3 gap-5"
+                  className="filtersWrapper grid grid-cols-3 gap-3"
                   style={{
                     rowGap: '0.75rem',
                   }}
