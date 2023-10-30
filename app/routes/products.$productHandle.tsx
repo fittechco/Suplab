@@ -182,9 +182,8 @@ const ProductPage = () => {
         <div
           style={{
             zIndex: 1,
-            height: "70dvh"
           }}
-          className="product-image-container md:max-w-3xl w-full transition-all ease-in-out duration-300 md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0"
+          className="product-image-container h-[63vh] md:[h-80vh] md:max-w-3xl w-full transition-all ease-in-out duration-300 md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0"
         >
           <div
             ref={thumbsSwiperRef}
@@ -225,7 +224,7 @@ const ProductPage = () => {
           </div>
           <div
             ref={swiperContainer}
-            className="swiper-container max-md:h-[70vh] aspect-square  w-full max-md:px-5  md:w-[80%] overflow-hidden relative"
+            className="swiper-container h-full aspect-square  w-full max-md:px-5  md:w-[80%] overflow-hidden relative"
           >
             <div className="swiper-wrapper">
               {product.images.nodes.map((image, index) => {

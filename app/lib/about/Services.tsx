@@ -36,22 +36,21 @@ const Services = ({ section }: ServicesSectionProps) => {
             <div
               key={service.id}
               style={{
-                borderRadius: '24px',
                 boxShadow: '0px 6px 9px 0px rgba(0, 0, 0, 0.16)',
               }}
-              className="flex w-full mds:w-[410px] h-[520px] overflow-hidden md:flex-row justify-start items-end relative"
+              className="flex rounded-3xl w-full mds:w-[410px] h-[520px] overflow-hidden md:flex-row justify-start items-end relative"
             >
               {serviceFields.image != null && (
                  <LazyImage
                  style={{
                   objectPosition: serviceFields.image_position?.value,
                  }}
-                  className="w-full h-full object-cover"
-                  src={resizeImage(serviceFields.image.reference.image.url, 600)}
+                  className="w-full h-full object-cover rounded-3xl"
+                  src={resizeImage(serviceFields.image.reference.image.url, 1200)}
                   alt={serviceFields.title?.value || 'service image'}
                 />
               )}
-              <div className="absolute bg-black/40 w-full h-full flex flex-col
+              <div className="absolute bg-black/40 w-full h-full flex flex-col rounded-3xl
                gap-3 md:gap-5 justify-end z-20 md:justify-end container pb-8 mb:pb-0">
                 {serviceFields.title != null && (
                   <div

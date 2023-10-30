@@ -29,6 +29,7 @@ type Props = {
     style?: React.CSSProperties
     alt: string
     className?: string
+    containerClassName?: string
     zoom?: boolean
 }
 
@@ -40,7 +41,7 @@ function LazyImage(props: Props) {
         // border: `1px solid ${Colors.bg}`,
     }
     return (
-        <div className=' h-full w-full flex items-center justify-center'>
+        <div className={`${props.containerClassName} h-full w-full flex items-center justify-center`}>
             <LazyLoadImage
                 style={{
                     ...style,

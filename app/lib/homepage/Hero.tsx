@@ -4,6 +4,8 @@ import { Colors } from '../../ft-lib/shared';
 import type { App } from '../../api/type';
 import { Image } from '@shopify/hydrogen';
 import Link from '~/app/components/Link';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 interface HeroSectionProps {
   section: App.HomePageTemplate.HeroSection;
@@ -12,19 +14,21 @@ interface HeroSectionProps {
 const Hero = ({ section }: HeroSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
   const isMobile = window.innerWidth <= 768;
-  const [image, setImage] = React.useState<string | null>(null);
 
-  const backgroundImageSrc = isMobile
-    ? fields.mobile_image?.reference.image.url
-    : fields.desktop_image?.reference.image.url;
+  
+  const mobileUrl = fields.mobile_image?.reference.image.url
+  const desktopUrl = fields.desktop_image?.reference.image.url
 
+  if(mobileUrl == null || desktopUrl == null) {
+    return null
+  }
+  
   return (
     <div
       key={section.type}
       style={{
-        height: "85dvh",
       }}
-      className="hero-section-container w-full !container mx-auto transition-all ease-in-out duration-300"
+      className="hero-section-container w-full h-[70vh] md:h-[80vh] !container mx-auto transition-all ease-in-out duration-300"
     >
       <div
         style={{
@@ -36,26 +40,37 @@ const Hero = ({ section }: HeroSectionProps) => {
         }}
         className="flex md:flex-row justify-start items-end relative"
       >
-        <Image
-          sizes='100%, 800px'
-          className="w-full h-full object-cover"
-          src={backgroundImageSrc}
-          alt=""
+        <LazyImage
+        style={{
+          borderRadius: '24px',
+
+        }}
+          className="desktop-image w-full h-full object-cover max-sm:hidden"
+          containerClassName='desktop-image-conatiner max-sm:hidden'
+          src={resizeImage(desktopUrl, 1200)}
+          alt={fields.desktop_image?.key || 'hero image'}
+        />
+        <LazyImage
+        style={{
+          borderRadius: '24px',
+        }}
+          className="mobile-image w-full h-full object-cover md:hidden "
+          containerClassName='mobile-image-conatiner md:hidden'
+          src={resizeImage(mobileUrl, 1200)}
+          alt={fields.mobile_image?.key || 'hero image'}
         />
         <div
           style={{
             position: 'absolute',
           }}
-          className="heroHeader w-full flex flex-col gap-5 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0"
+          className="heroHeader w-full flex flex-col gap-5 md:gap-4 z-20 justify-end md:justify-center container mb-8 mb:mb-0"
         >
           {fields.headline != null && (
             <h1
               style={{
                 color: Colors.textSecondary,
-                width: '90%',
-                fontSize: '34px',
               }}
-              className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
+              className="header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase"
             >
               {fields.headline.value}
             </h1>
