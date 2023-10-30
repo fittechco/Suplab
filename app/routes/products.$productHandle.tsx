@@ -183,7 +183,7 @@ const ProductPage = () => {
           style={{
             zIndex: 1,
           }}
-          className="product-image-container h-[63vh] md:[h-80vh] md:max-w-3xl w-full transition-all ease-in-out duration-300 md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0"
+          className="product-image-container h-[63vh] md:h-[80vh] md:max-w-3xl w-full transition-all ease-in-out duration-300 md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0"
         >
           <div
             ref={thumbsSwiperRef}

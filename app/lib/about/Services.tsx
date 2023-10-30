@@ -51,7 +51,7 @@ const Services = ({ section }: ServicesSectionProps) => {
                 />
               )}
               <div className="absolute bg-black/40 w-full h-full flex flex-col rounded-3xl
-               gap-3 md:gap-5 justify-end z-20 md:justify-end container pb-8 mb:pb-0">
+               gap-3 justify-end z-20 md:justify-end container pb-8 mb:pb-0">
                 {serviceFields.title != null && (
                   <div
                     style={{
