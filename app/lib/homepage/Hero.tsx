@@ -22,7 +22,7 @@ const Hero = ({ section }: HeroSectionProps) => {
     <div
       key={section.type}
       style={{
-        height: '680px',
+        height: "85dvh",
       }}
       className="hero-section-container w-full !container mx-auto"
     >

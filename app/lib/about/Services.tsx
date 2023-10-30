@@ -1,16 +1,19 @@
 import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
-import {Colors} from '../../ft-lib/shared';
-import type {App} from '../../api/type';
-import {Link} from '@remix-run/react';
+import { Colors } from '../../ft-lib/shared';
+import type { App } from '../../api/type';
+import { Link } from '@remix-run/react';
+import LazyImage from '~/app/ft-lib/LazyImage';
+import resizeImage from '~/app/ft-lib/resizeImages';
 
 interface ServicesSectionProps {
   section: App.AboutPageTemplate.ServicesSection;
 }
 
-const Services = ({section}: ServicesSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+const Services = ({ section }: ServicesSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
 
+  
   return (
     <div
       key={section.type}
@@ -26,7 +29,9 @@ const Services = ({section}: ServicesSectionProps) => {
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {fields.services?.references.nodes.map((service, index) => {
-          const serviceFields = arrayToObject({array: service.fields});
+          const serviceFields = arrayToObject({ array: service.fields });
+              console.log( serviceFields.image_position, 'serviceFields.image_position');
+
           return (
             <div
               key={service.id}
@@ -37,19 +42,24 @@ const Services = ({section}: ServicesSectionProps) => {
               className="flex w-full mds:w-[410px] h-[520px] overflow-hidden md:flex-row justify-start items-end relative"
             >
               {serviceFields.image != null && (
-                <img
+                 <LazyImage
+                 style={{
+                  objectPosition: serviceFields.image_position?.value,
+                 }}
                   className="w-full h-full object-cover"
-                  src={serviceFields.image.reference.image.url}
-                  alt=""
+                  src={resizeImage(serviceFields.image.reference.image.url, 600)}
+                  alt={serviceFields.title?.value || 'service image'}
                 />
               )}
-              <div className="absolute w-full flex flex-col gap-5 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0">
+              <div className="absolute bg-black/40 w-full h-full flex flex-col
+               gap-3 md:gap-5 justify-end z-20 md:justify-end container pb-8 mb:pb-0">
                 {serviceFields.title != null && (
                   <div
                     style={{
                       color: Colors.textSecondary,
                       width: '90%',
                       fontSize: '34px',
+                      letterSpacing: '0.02em',
                     }}
                     className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
                   >
@@ -60,7 +70,7 @@ const Services = ({section}: ServicesSectionProps) => {
                   <div
                     style={{
                       color: Colors.textSecondary,
-                      width: '80%',
+                      width: '100%',
                     }}
                     className="subHeader text-base md:text-lg"
                   >
@@ -74,9 +84,8 @@ const Services = ({section}: ServicesSectionProps) => {
                     style={{
                       backgroundColor: Colors.primary,
                       color: Colors.textSecondary,
-                    }}
-                    onClick={() => {
-                      window.location.href = '/shop';
+                      letterSpacing: '0.02em',
+
                     }}
                     className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
                   >

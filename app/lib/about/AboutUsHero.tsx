@@ -18,7 +18,11 @@ const AboutUsHero = ({ section }: AboutUsHeroSectionProps) => {
   
   return (
     <div
-    className="hero-section-container w-full md:h-[550px] h-[500px] !container mx-auto"
+    style={{
+      height: "85dvh",
+
+    }}
+    className="hero-section-container w-full !container mx-auto"
     >
         <div style={{
             borderRadius: "24px",

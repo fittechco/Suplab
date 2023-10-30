@@ -6,7 +6,7 @@ import type {
   ProductQuery,
   ShopLayoutQuery,
 } from 'storefrontapi.generated';
-import { Except } from 'type-fest';
+import type { Except } from 'type-fest';
 
 export namespace App {
   export namespace HomePageTemplate {
@@ -406,6 +406,9 @@ export namespace App {
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
           key: 'title';
         }>
+        | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+          key: 'button_text';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
           key: 'services';
           references: {
@@ -415,6 +418,10 @@ export namespace App {
               fields: Array<
                 | Shopify.MetaobectsDef.Single_Line_Text_Field<{
                   key: 'title' | 'button_text' | 'button_url';
+                }>
+            | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+              key: "image_position",
+              value: "left" | "center"| "right"  
                 }>
                 | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
                 | Shopify.MetaobectsDef.FileReference<{
@@ -584,11 +591,12 @@ export namespace App {
       export type Single_Line_Text_Field<
         V extends {
           key: string;
+          value?: string
         },
       > = {
         key: V['key'];
         type: 'single_line_text_field';
-        value: string;
+        value: V["value"] extends string ? V["value"] : string ;
       };
 
       export type Multi_Line_Text_Field<V extends string> = {
