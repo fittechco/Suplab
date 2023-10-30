@@ -24,7 +24,7 @@ const Hero = ({ section }: HeroSectionProps) => {
       style={{
         height: "85dvh",
       }}
-      className="hero-section-container w-full !container mx-auto"
+      className="hero-section-container w-full !container mx-auto transition-all ease-in-out duration-300"
     >
       <div
         style={{

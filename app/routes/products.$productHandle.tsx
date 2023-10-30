@@ -182,9 +182,9 @@ const ProductPage = () => {
         <div
           style={{
             zIndex: 1,
-            maxHeight: 'calc(100vh - 100px)',
+            height: "70dvh"
           }}
-          className="product-image-container md:max-w-3xl w-full md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0"
+          className="product-image-container md:max-w-3xl w-full transition-all ease-in-out duration-300 md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0"
         >
           <div
             ref={thumbsSwiperRef}
