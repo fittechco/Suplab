@@ -16,7 +16,7 @@ import type { App } from '../api/type';
 import StorefrontApi from '../api/storefront';
 import { seoPayload } from '../ft-lib/seo.server';
 import _ from 'lodash';
-import { Pagination, getPaginationVariables } from '@shopify/hydrogen';
+import { AnalyticsPageType, Pagination, getPaginationVariables } from '@shopify/hydrogen';
 import { COLLECTIONFRAGMENT } from '../ft-lib/ft-server/services/collectionService';
 import { PRODUCTFRAGMENT } from '../ft-lib/ft-server/services/productService';
 
@@ -88,7 +88,12 @@ export async function loader({ context, params, request }: LoaderArgs) {
     availableFilters: availableDynamicFilters,
     maxPrice,
     minPrice,
-    seo
+    seo,
+    analytics: {
+      pageType: AnalyticsPageType.collection,
+      collectionHandle,
+      resourceId: collection.id,
+    },
   });
 }
 

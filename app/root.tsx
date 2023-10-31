@@ -1,5 +1,5 @@
 
-import { Seo, useNonce } from '@shopify/hydrogen';
+import { Seo, ShopifySalesChannel, useNonce } from '@shopify/hydrogen';
 import { defer, type LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
@@ -35,6 +35,7 @@ import RoutesLoader from './components/RoutesLoader';
 import { usePageAnalytics } from './utils';
 import CTAButton from './components/CTAButton';
 import { seoPayload } from './ft-lib/seo.server';
+import { useAnalytics } from './ft-lib/hooks/useAnalytics';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -126,6 +127,7 @@ export async function loader({ context, request }: LoaderArgs) {
       header: await headerPromise,
       analytics: {
         shopId: layout.shop.id,
+        shopifySalesChannel: ShopifySalesChannel.hydrogen,
       },
       isLoggedIn,
       publicStoreDomain,
@@ -155,15 +157,8 @@ export default function App() {
   const data = useLoaderData<typeof loader>();
   const location = useLocation();
   const lastLocationKey = useRef('');
-  const pageAnalytics = usePageAnalytics();
 
-  useEffect(() => {
-    // Filter out useEffect running twice
-    if (lastLocationKey.current === location.key) return;
-
-    lastLocationKey.current = location.key;
-    // This hook is where you can send a page view event to Shopify and other third-party analytics
-  }, [location, pageAnalytics]);
+  useAnalytics(true);
 
   useEffect(() => {
     UseShopStore.setState({

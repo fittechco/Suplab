@@ -1,4 +1,4 @@
-import { Money, CartForm } from '@shopify/hydrogen';
+import { Money, CartForm, type ShopifyAnalyticsProduct } from '@shopify/hydrogen';
 import Accordion from 'app/components/Accordion';
 import CTAButton from 'app/components/CTAButton';
 import Quantity from 'app/components/Quantity';
@@ -7,17 +7,26 @@ import { UseShopStore } from 'app/root';
 import { useEffect, useState } from 'react';
 import type { ProductQuery } from 'storefrontapi.generated';
 import ProductOptions from './ProductOptions';
+import AddToCartButton from '~/app/components/AddToCartButton';
 
 type Props = {
   selectedVariant: NonNullable<ProductQuery['product']>['variants']['nodes'][0];
   product: NonNullable<ProductQuery['product']>;
   isTop?: boolean;
+  analytics: {
+    products: ShopifyAnalyticsProduct[];
+    totalValue: number;
+  };
 };
 
 export default function ProductForm(props: Props) {
-  const { product, selectedVariant } = props;
+  const { product, selectedVariant, analytics } = props;
   const [quantity, setQuantity] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const productAnalytics: ShopifyAnalyticsProduct = {
+    ...analytics.products[0],
+    quantity: 1,
+  };
+
   return (
     <div className="product-form flex flex-col gap-5 w-full">
       <span
@@ -52,53 +61,26 @@ export default function ProductForm(props: Props) {
         value={quantity}
       />
       <div className="flex items-center w-full max-md:bottom-9 max-md:sticky">
-        <CartForm
-          route="/cart"
-          inputs={{
-            lines: [
-              {
-                merchandiseId: selectedVariant.id,
-                quantity,
-                attributes: selectedVariant.selectedOptions.map((option) => {
-                  return {
-                    key: option.name,
-                    value: option.value,
-                  };
-                }),
-              },
-            ],
+        <AddToCartButton
+          analytics={{
+            products: [productAnalytics],
+            totalValue: analytics.totalValue,
           }}
-          action={CartForm.ACTIONS.LinesAdd}
-        >
-          {(fetcher) => {
-
-            if (fetcher.state !== 'idle') {
-              setIsSubmitting(true)
-            }
-            if (fetcher.state === "idle" && isSubmitting === true) {
-              UseShopStore.setState({ showCart: true })
-              setIsSubmitting(false)
-            }
-            return (
-              <CTAButton
-                className='flex items-center justify-center'
-                disabled={
-                  !selectedVariant.availableForSale ??
-                  fetcher.state !== 'idle'
-                }
-                fullWidth
-              >
-                {fetcher.state !== 'idle' ? (
-                  <div className="lds-dual-ring lds-dual-ring-white !w-8 !h-8" />
-                ) : selectedVariant?.availableForSale ? (
-                  'Add to cart'
-                ) : (
-                  'Sold out'
-                )}
-              </CTAButton>
-            );
-          }}
-        </CartForm>
+          selectedVariant={selectedVariant}
+          className="w-full"
+          lines={[
+            {
+              merchandiseId: selectedVariant.id,
+              quantity,
+              attributes: selectedVariant.selectedOptions.map((option) => {
+                return {
+                  key: option.name,
+                  value: option.value,
+                };
+              }),
+            },
+          ]}
+        />
       </div>
       <Accordion
         title="Shipping Info"

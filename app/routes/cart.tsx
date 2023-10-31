@@ -34,7 +34,14 @@ export async function action({ request, context }: ActionArgs) {
 
   // The Cart ID might change after each mutation, so update it each time.
   const headers = cart.setCartId(result.cart.id);
-  return json(result, { status: 200, headers });
+  return json(
+    {
+      ...result,
+      analytics: {
+        cartId: result.cart.id,
+      }
+    }
+    , { status: 200, headers });
 }
 
 export async function loader({ context }: LoaderArgs) {

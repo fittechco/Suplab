@@ -22,6 +22,7 @@ import { seoPayload } from '../ft-lib/seo.server';
 import ProductReviews from '../lib/productPage/ProductReviews';
 import JudgeMeService from '../ft-lib/apps/JudgeMe';
 import ReactImageMagnify from 'react-image-magnify';
+import { AnalyticsPageType, type ShopifyAnalyticsProduct } from '@shopify/hydrogen';
 
 export async function loader({ context, params, request }: LoaderArgs) {
   const productHandle = params.productHandle;
@@ -50,9 +51,11 @@ export async function loader({ context, params, request }: LoaderArgs) {
     for (const option of firstVariant.selectedOptions) {
       searchParams.set(option.name, option.value);
     }
-
+    console.log(
+      `/products/${product.handle}?${searchParams.toString()}`,
+    );
     throw redirect(
-      `/products/${product!.handle}?${searchParams.toString()}`,
+      `/products/${product.handle}?${searchParams.toString()}`,
       302, // Make sure to use a 302, because the first variant is subject to change
     );
   }
@@ -67,6 +70,15 @@ export async function loader({ context, params, request }: LoaderArgs) {
     product.selectedVariant ?? product?.variants?.nodes[0];
   // we will difer the fetching of the recommendations
   // to the client side
+
+  const productAnalytics: ShopifyAnalyticsProduct = {
+    productGid: product.id,
+    variantGid: selectedVariant.id,
+    name: product.title,
+    variantName: selectedVariant.title,
+    brand: product.vendor,
+    price: selectedVariant.price.amount,
+  };
 
   const seo = seoPayload.product({
     product,
@@ -83,13 +95,16 @@ export async function loader({ context, params, request }: LoaderArgs) {
     productMetafields,
     seo,
     analytics: {
-      pageType: 'product',
-    }
+      pageType: AnalyticsPageType.product,
+      resourceId: product.id,
+      products: [productAnalytics],
+      totalValue: parseFloat(selectedVariant.price.amount),
+    },
   })
 }
 
 const ProductPage = () => {
-  const { product, reviews, widgetSettings, selectedVariant, recommendedProducts, productMetafields } = useLoaderData<typeof loader>();
+  const { product, reviews, widgetSettings, selectedVariant, recommendedProducts, productMetafields, analytics } = useLoaderData<typeof loader>();
   const swiperContainer = useRef<HTMLDivElement | null>(null);
   const thumbsSwiperRef = useRef<HTMLDivElement | null>(null);
   const [isTop, setIsTop] = useState(true);
@@ -105,6 +120,10 @@ const ProductPage = () => {
     };
   }, []);
 
+  const productAnalytics: ShopifyAnalyticsProduct = {
+    ...analytics.products[0],
+    quantity: 1,
+  };
 
   useEffect(() => {
     if (swiperContainer.current == null) {
@@ -290,6 +309,10 @@ const ProductPage = () => {
             }}
             id='enlargedImagePortal'></div>
           <ProductForm
+            analytics={{
+              products: [productAnalytics],
+              totalValue: parseFloat(selectedVariant.price.amount),
+            }}
             isTop={isTop}
             selectedVariant={selectedVariant}
             product={product}

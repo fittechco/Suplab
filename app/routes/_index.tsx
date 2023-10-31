@@ -16,6 +16,7 @@ import { UseShopStore } from '~/app/root';
 import Offers from '../lib/homepage/Offers';
 import { seoPayload } from '../ft-lib/seo.server';
 import Services from '../lib/about/Services';
+import { AnalyticsPageType } from '@shopify/hydrogen';
 
 export type Shop = {
   name: string;
@@ -35,7 +36,10 @@ export async function loader({ context }: LoaderArgs) {
   const seo = seoPayload.home()
   return json({
     metaobject,
-    seo
+    seo,
+    analytics: {
+      pageType: AnalyticsPageType.home,
+    },
   });
 }
 
