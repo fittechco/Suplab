@@ -1,6 +1,6 @@
 
 import { Seo, ShopifySalesChannel, useNonce } from '@shopify/hydrogen';
-import { defer, type LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
+import { defer, type SerializeFrom, type LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -87,6 +87,11 @@ export const links: LinksFunction = () => {
     },
   ];
 }
+export const useRootLoaderData = () => {
+  const [root] = useMatches();
+  return root?.data as SerializeFrom<typeof loader>;
+};
+
 export async function loader({ context, request }: LoaderArgs) {
   const { storefront, session } = context;
   const customerAccessToken = await session.get('customerAccessToken');
@@ -125,6 +130,7 @@ export async function loader({ context, request }: LoaderArgs) {
       seo,
       footer: await footerPromise,
       header: await headerPromise,
+      selectedLocale: storefront.i18n,
       analytics: {
         shopId: layout.shop.id,
         shopifySalesChannel: ShopifySalesChannel.hydrogen,

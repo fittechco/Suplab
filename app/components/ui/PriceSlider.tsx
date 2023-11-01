@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import _ from "lodash"
-import { cn } from '~/app/lib/utils';
+import { cn } from '~/app/lib/tailwindUtils';
 import { useLocation, useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
 import { useMemo, useRef } from 'react';
 
