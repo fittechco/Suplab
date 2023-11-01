@@ -53,13 +53,13 @@ export default function ProductForm(props: Props) {
         selectedVariant={selectedVariant}
         options={product.options}
       />
-      <Quantity
+      {/* <Quantity
         onChange={(value) => {
           setQuantity(value);
         }}
         max={selectedVariant.quantityAvailable}
         value={quantity}
-      />
+      /> */}
       <div className="flex items-center w-full max-md:bottom-9 max-md:sticky">
         <AddToCartButton
           analytics={{

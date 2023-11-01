@@ -1,17 +1,28 @@
-import { Money, CartForm, CartQueryData } from "@shopify/hydrogen";
-import { useState } from "react";
+import { Money, CartForm, type CartQueryData, useOptimisticData, OptimisticInput } from "@shopify/hydrogen";
+import { useEffect, useState } from "react";
 import Quantity from "~/app/components/Quantity";
 import FTicons from "~/app/ft-lib/FTicon";
 import LazyImage from "~/app/ft-lib/LazyImage";
 import resizeImage from "~/app/ft-lib/resizeImages";
 import { Colors } from "~/app/ft-lib/shared";
 
+type OptimisticData = {
+    action?: "add" | "remove" | "update";
+    quantity?: number;
+};
+
 export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines"]["nodes"][number] }) {
     const { lineItem } = props;
     const [quantity, setQuantity] = useState(lineItem.quantity);
+    const optimisticData = useOptimisticData<OptimisticData>(lineItem?.id);
+    useEffect(() => {
+        console.log(optimisticData, "optimisticData");
+    }, [optimisticData])
+
     if (lineItem == null) {
         return null;
     }
+
     return (
         <div
             style={{
@@ -21,8 +32,9 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
                 borderRadius: 12,
                 background: 'rgba(250, 249, 246, 0.90)',
                 border: '0.5px solid #93C147',
+                display: optimisticData?.action === 'remove' ? 'none' : 'flex',
             }}
-            className="cart-item flex justify-between gap-3 p-3 flex-shrink-0"
+            className="cart-item justify-between gap-3 p-3 flex-shrink-0"
         >
             <div className="cart-item-details flex flex-col justify-between">
                 <div className="cart-item-title">
@@ -60,19 +72,28 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
                         }}
                         action={CartForm.ACTIONS.LinesUpdate}
                     >
-                        {(fetcher) => (
-                            <>
-                                <Quantity
-                                    size="sm"
-                                    onChange={(value) => {
-                                        setQuantity(value);
-                                    }}
-                                    max={lineItem.quantity || null}
-                                    value={quantity}
-                                    isUpdating={fetcher.state !== 'idle' ? true : false}
-                                />
-                            </>
-                        )}
+                        {(fetcher) => {
+                            console.log(lineItem.merchandise, "lineItem.merchandise.quantityAvailable");
+                            return (
+                                <>
+                                    <OptimisticInput
+                                        id={lineItem.id}
+                                        data={{ quantity }}
+                                    />
+                                    <Quantity
+                                        size="sm"
+                                        onChange={(value) => {
+                                            setQuantity(value);
+
+                                        }}
+                                        max={lineItem.merchandise.quantityAvailable}
+                                        value={optimisticData?.quantity || lineItem.quantity}
+                                        isUpdating={false}
+                                    />
+                                </>
+                            )
+                        }
+                        }
                     </CartForm>
                     <CartForm
                         route="/cart"
@@ -122,6 +143,8 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
                                             cursor: 'pointer',
                                         }}
                                     />
+                                    <OptimisticInput id={lineItem.id} data={{ action: 'remove' }} />
+
                                 </>
                             </button>
                         )}

@@ -48,6 +48,7 @@ export async function loader({ context }: LoaderArgs) {
   const { cart } = context;
   const CC = new CollectionController({ storefront: context.storefront });
   const cartProductsRecommendations = CC.getCollectionByHandle({ handle: "all" })
+
   return defer({
     cart: await cart.get(),
     cartProductsRecommendations

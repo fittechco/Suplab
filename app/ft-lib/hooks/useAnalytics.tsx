@@ -26,10 +26,19 @@ export function useAnalytics(hasUserConsent: boolean) {
         lastLocationKey.current = location.key;
 
         const payload: ShopifyPageViewPayload = {
+            shopId: '',
+            currency: "USD",
+            hasUserConsent: true,
             ...getClientBrowserParameters(),
             ...pageAnalytics,
-        } as any;
+        };
 
+        console.log(
+            {
+                eventName: AnalyticsEventName.PAGE_VIEW,
+                payload
+            }
+        );
         sendShopifyAnalytics({
             eventName: AnalyticsEventName.PAGE_VIEW,
             payload,

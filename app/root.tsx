@@ -161,8 +161,6 @@ export default function App() {
   const nonce = useNonce();
   const navigation = useNavigation();
   const data = useLoaderData<typeof loader>();
-  const location = useLocation();
-  const lastLocationKey = useRef('');
 
   useAnalytics(true);
 

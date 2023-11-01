@@ -90,7 +90,6 @@ export default {
 
       return response;
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(error);
       // const errorResponse = () => new Response('An unexpected error occurred', { status: 500 });
       // return errorResponse();
@@ -190,6 +189,7 @@ const CART_QUERY_FRAGMENT = `#graphql
           ...Money
         }
         requiresShipping
+        quantityAvailable
         title
         image {
           id

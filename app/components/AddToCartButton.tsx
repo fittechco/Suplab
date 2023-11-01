@@ -6,6 +6,8 @@ import CTAButton from './CTAButton';
 import type { ProductQuery } from '~/storefrontapi.generated';
 import { type FetcherWithComponents } from '@remix-run/react';
 import { usePageAnalytics } from '../utils';
+import type { loader as cartLoader } from '~/app/routes/cart';
+import { type SerializeFrom } from '@shopify/remix-oxygen';
 
 type Props = {
   lines: CartLineInput[];
@@ -20,7 +22,6 @@ type Props = {
 
 export default function AddToCartButton(props: Props) {
   const { selectedVariant, analytics } = props;
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <CartForm
@@ -30,17 +31,15 @@ export default function AddToCartButton(props: Props) {
       }}
       action={CartForm.ACTIONS.LinesAdd}
     >
-      {(fetcher) => {
+      {(fetcher: FetcherWithComponents<SerializeFrom<typeof cartLoader>>) => {
 
-        if (fetcher.state !== 'idle') {
-          setIsSubmitting(true)
-        }
-        if (fetcher.state === "idle" && isSubmitting === true) {
-          UseShopStore.setState({ showCart: true })
-          setIsSubmitting(false)
-        }
         return (
           <AddToCartAnalytics fetcher={fetcher}>
+            <input
+              type="hidden"
+              name="analytics"
+              value={JSON.stringify(analytics)}
+            />
             <CTAButton
               className='flex items-center justify-center'
               disabled={
@@ -68,12 +67,22 @@ function AddToCartAnalytics({
   fetcher,
   children,
 }: {
-  fetcher: FetcherWithComponents<any>;
+  fetcher: FetcherWithComponents<SerializeFrom<typeof cartLoader>>
   children: React.ReactNode;
 }): JSX.Element {
   const fetcherData = fetcher.data;
   const formData = fetcher.formData;
   const pageAnalytics = usePageAnalytics();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => {
+    if (fetcher.state !== 'idle' && isSubmitting === false) {
+      setIsSubmitting(true)
+    }
+    if (fetcher.state === 'idle' && isSubmitting === true) {
+      setIsSubmitting(false)
+      UseShopStore.setState({ showCart: true })
+    }
+  }, [fetcher, isSubmitting])
 
   useEffect(() => {
     if (formData) {
@@ -93,15 +102,16 @@ function AddToCartAnalytics({
 
       if (Object.keys(cartData).length && fetcherData) {
         const addToCartPayload: ShopifyAddToCartPayload = {
-          currency: fetcherData.cart.currency.code,
-          shopId: fetcherData.cart.shop.id,
+          shopId: '',
+          currency: 'USD',
+          hasUserConsent: true,
           ...getClientBrowserParameters(),
           ...pageAnalytics,
           ...cartData,
-          cartId: fetcherData.cart.id,
-          hasUserConsent: true,
+          cartId: fetcherData.cart?.id || "",
         };
 
+        console.log(addToCartPayload, "addToCartPayload");
         sendShopifyAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,
