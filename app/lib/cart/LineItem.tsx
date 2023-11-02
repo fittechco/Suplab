@@ -15,9 +15,6 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
     const { lineItem } = props;
     const [quantity, setQuantity] = useState(lineItem.quantity);
     const optimisticData = useOptimisticData<OptimisticData>(lineItem?.id);
-    useEffect(() => {
-        console.log(optimisticData, "optimisticData");
-    }, [optimisticData])
 
     if (lineItem == null) {
         return null;
@@ -73,7 +70,6 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
                         action={CartForm.ACTIONS.LinesUpdate}
                     >
                         {(fetcher) => {
-                            console.log(lineItem.merchandise, "lineItem.merchandise.quantityAvailable");
                             return (
                                 <>
                                     <OptimisticInput

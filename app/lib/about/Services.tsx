@@ -13,7 +13,7 @@ interface ServicesSectionProps {
 const Services = ({ section }: ServicesSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
 
-  
+
   return (
     <div
       key={section.type}
@@ -30,7 +30,6 @@ const Services = ({ section }: ServicesSectionProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {fields.services?.references.nodes.map((service, index) => {
           const serviceFields = arrayToObject({ array: service.fields });
-              console.log( serviceFields.image_position, 'serviceFields.image_position');
 
           return (
             <div
@@ -41,10 +40,10 @@ const Services = ({ section }: ServicesSectionProps) => {
               className="flex rounded-3xl w-full mds:w-[410px] h-[520px] overflow-hidden md:flex-row justify-start items-end relative"
             >
               {serviceFields.image != null && (
-                 <LazyImage
-                 style={{
-                  objectPosition: serviceFields.image_position?.value,
-                 }}
+                <LazyImage
+                  style={{
+                    objectPosition: serviceFields.image_position?.value,
+                  }}
                   className="w-full h-full object-cover rounded-3xl"
                   src={resizeImage(serviceFields.image.reference.image.url, 1200)}
                   alt={serviceFields.title?.value || 'service image'}

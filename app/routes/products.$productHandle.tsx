@@ -51,9 +51,6 @@ export async function loader({ context, params, request }: LoaderArgs) {
     for (const option of firstVariant.selectedOptions) {
       searchParams.set(option.name, option.value);
     }
-    console.log(
-      `/products/${product.handle}?${searchParams.toString()}`,
-    );
     throw redirect(
       `/products/${product.handle}?${searchParams.toString()}`,
       302, // Make sure to use a 302, because the first variant is subject to change

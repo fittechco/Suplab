@@ -111,7 +111,6 @@ function AddToCartAnalytics({
           cartId: fetcherData.cart?.id || "",
         };
 
-        console.log(addToCartPayload, "addToCartPayload");
         sendShopifyAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,

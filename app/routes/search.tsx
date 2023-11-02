@@ -1,4 +1,4 @@
-import { LoaderArgs } from "@shopify/remix-oxygen";
+import type { LoaderArgs } from "@shopify/remix-oxygen";
 import SearchController from "../ft-lib/ft-server/controllers/SearchController";
 import invariant from "tiny-invariant";
 

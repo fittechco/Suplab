@@ -94,7 +94,7 @@ export type GetAllCollectionsQuery = {
 };
 
 export type GetCollectionByIdQueryVariables = StorefrontAPI.Exact<{
-  id: StorefrontAPI.Scalars['ID'];
+  id: StorefrontAPI.Scalars['ID']['input'];
 }>;
 
 export type GetCollectionByIdQuery = {
@@ -106,7 +106,7 @@ export type GetCollectionByIdQuery = {
 };
 
 export type GetCollectionByHandleQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String'];
+  handle: StorefrontAPI.Scalars['String']['input'];
 }>;
 
 export type GetCollectionByHandleQuery = {
@@ -253,7 +253,7 @@ export type AllProductsQuery = {
 };
 
 export type ProductQueryVariables = StorefrontAPI.Exact<{
-  id: StorefrontAPI.Scalars['ID'];
+  id: StorefrontAPI.Scalars['ID']['input'];
   selectedOptions:
     | Array<StorefrontAPI.SelectedOptionInput>
     | StorefrontAPI.SelectedOptionInput;
@@ -321,7 +321,7 @@ export type ProductQuery = {
 };
 
 export type ProductByCollectionQueryVariables = StorefrontAPI.Exact<{
-  collectionId: StorefrontAPI.Scalars['ID'];
+  collectionId: StorefrontAPI.Scalars['ID']['input'];
 }>;
 
 export type ProductByCollectionQuery = {
@@ -372,7 +372,7 @@ export type ProductByCollectionQuery = {
 };
 
 export type ProductsByTagQueryVariables = StorefrontAPI.Exact<{
-  tag: StorefrontAPI.Scalars['String'];
+  tag: StorefrontAPI.Scalars['String']['input'];
 }>;
 
 export type ProductsByTagQuery = {
@@ -421,7 +421,7 @@ export type ProductsByTagQuery = {
 };
 
 export type ProductByHandleQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String'];
+  handle: StorefrontAPI.Scalars['String']['input'];
   selectedOptions:
     | Array<StorefrontAPI.SelectedOptionInput>
     | StorefrontAPI.SelectedOptionInput;
@@ -489,7 +489,7 @@ export type ProductByHandleQuery = {
 };
 
 export type ProductMetafieldsQueryVariables = StorefrontAPI.Exact<{
-  productId: StorefrontAPI.Scalars['ID'];
+  productId: StorefrontAPI.Scalars['ID']['input'];
 }>;
 
 export type ProductMetafieldsQuery = {
@@ -520,14 +520,18 @@ export type ProductMetafieldsQuery = {
 };
 
 export type GetFilteredProductsQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String'];
+  handle: StorefrontAPI.Scalars['String']['input'];
   filters?: StorefrontAPI.InputMaybe<
     Array<StorefrontAPI.ProductFilter> | StorefrontAPI.ProductFilter
   >;
-  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
-  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
-  startCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
-  endCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  startCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  endCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
 }>;
 
 export type GetFilteredProductsQuery = {
@@ -602,7 +606,7 @@ export type GetFilteredProductsQuery = {
 };
 
 export type GetAvailableFiltersQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String'];
+  handle: StorefrontAPI.Scalars['String']['input'];
 }>;
 
 export type GetAvailableFiltersQuery = {
@@ -625,7 +629,7 @@ export type GetAvailableFiltersQuery = {
 };
 
 export type ProductRecommendationsQueryVariables = StorefrontAPI.Exact<{
-  productId: StorefrontAPI.Scalars['ID'];
+  productId: StorefrontAPI.Scalars['ID']['input'];
 }>;
 
 export type ProductRecommendationsQuery = {
@@ -674,8 +678,8 @@ export type ProductRecommendationsQuery = {
 };
 
 export type SearchWithFiltersQueryVariables = StorefrontAPI.Exact<{
-  query: StorefrontAPI.Scalars['String'];
-  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
+  query: StorefrontAPI.Scalars['String']['input'];
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
   productFilters?: StorefrontAPI.InputMaybe<
     Array<StorefrontAPI.ProductFilter> | StorefrontAPI.ProductFilter
   >;
@@ -690,7 +694,7 @@ export type SearchWithFiltersQuery = {
 };
 
 export type SearchProductsQueryVariables = StorefrontAPI.Exact<{
-  query: StorefrontAPI.Scalars['String'];
+  query: StorefrontAPI.Scalars['String']['input'];
 }>;
 
 export type SearchProductsQuery = {
@@ -817,7 +821,7 @@ export type HeaderQuery = {
 
 export type FooterQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
-  footerMenuHandle: StorefrontAPI.Scalars['String'];
+  footerMenuHandle: StorefrontAPI.Scalars['String']['input'];
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
 }>;
 
@@ -869,7 +873,7 @@ export type ShopFragment = Pick<
 };
 
 export type SitemapsQueryVariables = StorefrontAPI.Exact<{
-  urlLimits?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
+  urlLimits?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
 }>;
 
@@ -1026,14 +1030,18 @@ export type AboutMetaobjectFragment = Pick<StorefrontAPI.Metaobject, 'type'> & {
 };
 
 export type GetCollectionQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String'];
+  handle: StorefrontAPI.Scalars['String']['input'];
   filters?: StorefrontAPI.InputMaybe<
     Array<StorefrontAPI.ProductFilter> | StorefrontAPI.ProductFilter
   >;
-  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
-  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']>;
-  startCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
-  endCursor?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']>;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  startCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  endCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
 }>;
 
 export type GetCollectionQuery = {
@@ -1183,7 +1191,11 @@ export type CartLineFragment = Pick<
   };
   merchandise: Pick<
     StorefrontAPI.ProductVariant,
-    'id' | 'availableForSale' | 'requiresShipping' | 'title'
+    | 'id'
+    | 'availableForSale'
+    | 'requiresShipping'
+    | 'quantityAvailable'
+    | 'title'
   > & {
     compareAtPrice?: StorefrontAPI.Maybe<
       Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
@@ -1230,7 +1242,11 @@ export type CartApiQueryFragment = Pick<
         };
         merchandise: Pick<
           StorefrontAPI.ProductVariant,
-          'id' | 'availableForSale' | 'requiresShipping' | 'title'
+          | 'id'
+          | 'availableForSale'
+          | 'requiresShipping'
+          | 'quantityAvailable'
+          | 'title'
         > & {
           compareAtPrice?: StorefrontAPI.Maybe<
             Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
