@@ -30,10 +30,15 @@ export function useAnalytics(hasUserConsent: boolean) {
             ...pageAnalytics,
         };
 
-        console.log(payload, "payload");
         sendShopifyAnalytics({
             eventName: AnalyticsEventName.PAGE_VIEW,
             payload,
-        });
+        }).then(res => {
+            console.log(res, "res")
+            return
+        }).catch(err => {
+            console.log(err, "err")
+            return
+        })
     }, [location, pageAnalytics]);
 }
