@@ -33,7 +33,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --ignore-engines
 
       - name: Build and Publish to Oxygen
         id: deploy
