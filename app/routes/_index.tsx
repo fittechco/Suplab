@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import { type LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from '../lib/homepage/Hero';
@@ -22,7 +22,7 @@ export type Shop = {
   name: string;
 };
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({ context }: LoaderFunctionArgs) {
   const storefront = await context.storefront.query(SHOPQUERY, {
     cache: {
       maxAge: 60 * 60 * 24,

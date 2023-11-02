@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
-import { defer, redirect, type LoaderArgs } from '@shopify/remix-oxygen';
+import { defer, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import ProductController from 'app/ft-lib/ft-server/controllers/ProductController';
 import invariant from 'tiny-invariant';
 import { Await, useLoaderData, useNavigation } from '@remix-run/react';
@@ -24,7 +24,7 @@ import JudgeMeService from '../ft-lib/apps/JudgeMe';
 import ReactImageMagnify from 'react-image-magnify';
 import { AnalyticsPageType, type ShopifyAnalyticsProduct } from '@shopify/hydrogen';
 
-export async function loader({ context, params, request }: LoaderArgs) {
+export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const productHandle = params.productHandle;
   const searchParams = new URL(request.url).searchParams; // get the search params from the urll;
   const selectedOptions: { name: string; value: string }[] = [];

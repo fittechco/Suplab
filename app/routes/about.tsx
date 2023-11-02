@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import { type LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
 import type { App } from '../api/type';
 import AboutUsHero from '../lib/about/AboutUsHero';
 import Features from '../lib/about/Features';
@@ -12,7 +12,7 @@ export type Shop = {
   name: string;
 };
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({ context }: LoaderFunctionArgs) {
   const storefront = await context.storefront.query(SHOPQUERY);
   const { metaobject } = storefront;
   return json({

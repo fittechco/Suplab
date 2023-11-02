@@ -5,9 +5,9 @@ import { UseShopStore } from '../root';
 import CTAButton from './CTAButton';
 import type { ProductQuery } from '~/storefrontapi.generated';
 import { type FetcherWithComponents } from '@remix-run/react';
-import { usePageAnalytics } from '../utils';
 import type { loader as cartLoader } from '~/app/routes/cart';
 import { type SerializeFrom } from '@shopify/remix-oxygen';
+import { usePageAnalytics } from '../ft-lib/hooks/usePageAnalytics';
 
 type Props = {
   lines: CartLineInput[];
@@ -72,7 +72,7 @@ function AddToCartAnalytics({
 }): JSX.Element {
   const fetcherData = fetcher.data;
   const formData = fetcher.formData;
-  const pageAnalytics = usePageAnalytics();
+  const pageAnalytics = usePageAnalytics({ hasUserConsent: true });
   const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (fetcher.state !== 'idle' && isSubmitting === false) {
@@ -102,9 +102,6 @@ function AddToCartAnalytics({
 
       if (Object.keys(cartData).length && fetcherData) {
         const addToCartPayload: ShopifyAddToCartPayload = {
-          shopId: '',
-          currency: 'USD',
-          hasUserConsent: true,
           ...getClientBrowserParameters(),
           ...pageAnalytics,
           ...cartData,

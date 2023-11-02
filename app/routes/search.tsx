@@ -1,8 +1,8 @@
-import type { LoaderArgs } from "@shopify/remix-oxygen";
+import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import SearchController from "../ft-lib/ft-server/controllers/SearchController";
 import invariant from "tiny-invariant";
 
-export async function loader({ context, params, request }: LoaderArgs) {
+export async function loader({ context, params, request }: LoaderFunctionArgs) {
     const SC = new SearchController({ storefront: context.storefront });
     // getting the search value from the url
     const searchParams = new URL(request.url).searchParams;

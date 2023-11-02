@@ -1,6 +1,6 @@
 
 import { Seo, ShopifySalesChannel, useNonce } from '@shopify/hydrogen';
-import { defer, type SerializeFrom, type LinksFunction, type LoaderArgs } from '@shopify/remix-oxygen';
+import { defer, type SerializeFrom, type LinksFunction, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -14,11 +14,9 @@ import {
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
   useNavigation,
-  useLocation,
   useNavigate,
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
-import type { HydrogenSession } from '../server';
 import appStyles from './styles/app.css';
 import tailwindCss from './styles/tailwind.css';
 import Layout from './layout/Layout';
@@ -32,10 +30,10 @@ import 'swiper/css/pagination';
 import { CartProvider } from './components/CartProvider';
 import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
-import { usePageAnalytics } from './utils';
 import CTAButton from './components/CTAButton';
 import { seoPayload } from './ft-lib/seo.server';
 import { useAnalytics } from './ft-lib/hooks/useAnalytics';
+import { type HydrogenSession } from './lib/session.server'; 1
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -92,7 +90,7 @@ export const useRootLoaderData = () => {
   return root?.data as SerializeFrom<typeof loader>;
 };
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
   const { storefront, session } = context;
   const customerAccessToken = await session.get('customerAccessToken');
   const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;

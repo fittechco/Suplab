@@ -1,6 +1,6 @@
 import { Await, Link, useLoaderData } from '@remix-run/react';
 import { CartForm, Money, type CartQueryData } from '@shopify/hydrogen';
-import type { ActionArgs, LoaderArgs } from '@shopify/remix-oxygen';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { defer, json } from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
 import LineItem from '../lib/cart/LineItem';
@@ -10,7 +10,7 @@ import CollectionController from '../ft-lib/ft-server/controllers/CollectionCont
 import { Suspense } from 'react';
 import ProductsSwiper from '../components/ProductsSwiper';
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
   const { cart } = context;
 
   const formData = await request.formData();
@@ -44,7 +44,7 @@ export async function action({ request, context }: ActionArgs) {
     , { status: 200, headers });
 }
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({ context }: LoaderFunctionArgs) {
   const { cart } = context;
   const CC = new CollectionController({ storefront: context.storefront });
   const cartProductsRecommendations = CC.getCollectionByHandle({ handle: "all" })

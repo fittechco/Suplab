@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFetcher, useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
-import { type LoaderArgs, json } from '@shopify/remix-oxygen';
+import { type LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
 import ProductCard from 'app/components/ProductCard';
 import { PriceSlider } from '~/app/components/ui/PriceSlider';
 import Dropdown from '~/app/components/Dropdown';
@@ -20,7 +20,7 @@ import { AnalyticsPageType, Pagination, getPaginationVariables } from '@shopify/
 import { COLLECTIONFRAGMENT } from '../ft-lib/ft-server/services/collectionService';
 import { PRODUCTFRAGMENT } from '../ft-lib/ft-server/services/productService';
 
-export async function loader({ context, params, request }: LoaderArgs) {
+export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
   const PC = new ProductController({ storefront: context.storefront });

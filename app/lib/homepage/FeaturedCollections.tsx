@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LoaderArgs, json } from '@shopify/remix-oxygen';
+import { LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
 import type { App } from '../../api/type';
 import { useLoaderData } from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';

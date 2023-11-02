@@ -18,11 +18,6 @@ export default function MobileProductDetails(props: Props) {
       }}
       className="box md:hidden space-y-4 shadow-lg px-5 py-5 white-background-blur rounded-t-3xl"
     >
-      <ProductForm
-        isTop={props.isTop}
-        selectedVariant={selectedVariant}
-        product={product}
-      />
     </div>
   );
 }

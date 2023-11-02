@@ -1,4 +1,4 @@
-import { LoaderArgs } from '@shopify/remix-oxygen';
+import { LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
 import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 import { COLLECTIONFRAGMENT } from './collectionService';

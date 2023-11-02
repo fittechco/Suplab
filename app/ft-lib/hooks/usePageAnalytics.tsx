@@ -11,7 +11,13 @@ export function usePageAnalytics({ hasUserConsent }: { hasUserConsent: boolean }
         const data: Record<string, unknown> = {};
 
         matches.forEach((event) => {
-            const eventData = event?.data;
+            const eventData = event?.data as {
+                analytics?: Record<string, unknown>;
+                selectedLocale?: {
+                    currency: string;
+                    language: string;
+                };
+            }
             if (eventData) {
                 eventData['analytics'] && Object.assign(data, eventData['analytics']);
 

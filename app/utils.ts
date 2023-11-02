@@ -372,22 +372,3 @@ export function getVariantUrl({
 
   return path + (searchString ? '?' + searchParams.toString() : '');
 }
-
-export function usePageAnalytics() {
-  const matches = useMatches();
-
-  const analyticsFromMatches = useMemo(() => {
-    const data: Record<string, unknown> = {};
-
-    matches.forEach((event) => {
-      const eventData = event?.data;
-      if (eventData) {
-        eventData['analytics'] && Object.assign(data, eventData['analytics']);
-      }
-    });
-
-    return data;
-  }, [matches]);
-
-  return analyticsFromMatches;
-}

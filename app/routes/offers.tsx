@@ -1,9 +1,9 @@
-import type { LoaderArgs } from '@shopify/remix-oxygen'
+import type { LoaderFunctionArgs } from '@shopify/remix-oxygen'
 import React from 'react'
 import StorefrontApi from '../api/storefront';
 import type { App } from '../api/type';
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({ context }: LoaderFunctionArgs) {
   const res = await context.storefront.query(OFFERS_QUERY, {
     cache: {
       maxAge: 60 * 60 * 24,

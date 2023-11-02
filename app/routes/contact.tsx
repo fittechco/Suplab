@@ -1,4 +1,4 @@
-import { json, type LoaderArgs } from '@shopify/remix-oxygen'
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen'
 import React, { useEffect, useState } from 'react'
 import { ON_METAOBJECT } from './about'
 import { Form, useLoaderData } from '@remix-run/react'
@@ -9,7 +9,7 @@ import arrayToObject from '../ft-lib/ArrayToObject'
 import { Colors } from '../ft-lib/shared'
 import CTAButton from '../components/CTAButton'
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({ context }: LoaderFunctionArgs) {
     const metaobject = await context.storefront.query(CONTACTQUERY, {
         cache: {
             maxAge: 60 * 60 * 24,

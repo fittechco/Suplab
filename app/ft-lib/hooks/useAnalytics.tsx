@@ -7,7 +7,7 @@ import {
     useShopifyCookies,
 } from '@shopify/hydrogen';
 import { useEffect, useRef } from 'react';
-import { usePageAnalytics } from '~/app/utils';
+import { usePageAnalytics } from './usePageAnalytics';
 
 
 export function useAnalytics(hasUserConsent: boolean) {
@@ -15,7 +15,7 @@ export function useAnalytics(hasUserConsent: boolean) {
 
     const location = useLocation();
     const lastLocationKey = useRef<string>('');
-    const pageAnalytics = usePageAnalytics();
+    const pageAnalytics = usePageAnalytics({ hasUserConsent: true });
 
     // Page view analytics
     // We want useEffect to execute only when location changes
@@ -26,13 +26,11 @@ export function useAnalytics(hasUserConsent: boolean) {
         lastLocationKey.current = location.key;
 
         const payload: ShopifyPageViewPayload = {
-            shopId: '',
-            currency: "USD",
-            hasUserConsent: true,
             ...getClientBrowserParameters(),
             ...pageAnalytics,
         };
 
+        console.log(payload, "payload");
         sendShopifyAnalytics({
             eventName: AnalyticsEventName.PAGE_VIEW,
             payload,
