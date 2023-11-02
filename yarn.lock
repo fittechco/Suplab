@@ -3464,7 +3464,7 @@
     eslint-plugin-react-hooks "^4.6.0"
     eslint-plugin-testing-library "^5.10.2"
 
-"@remix-run/react@^2.2.0":
+"@remix-run/react@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@remix-run/react/-/react-2.2.0.tgz#81995d76e64fb7a2bab254841d533844db7f2d1b"
   integrity sha512-1nD5ihI0A1wUpFr9Eo9bquEtqjhjvg1OwFF7qDXXHgQ4Zh13y3MKO5dRmHf+Os999o0vqVJ+xSnVPN+Vbco3uA==
