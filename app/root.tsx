@@ -1,5 +1,5 @@
 
-import { Seo, ShopifySalesChannel, useNonce } from '@shopify/hydrogen';
+import { Script, Seo, ShopifySalesChannel, useNonce } from '@shopify/hydrogen';
 import { defer, type SerializeFrom, type LinksFunction, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import {
   Links,
@@ -193,6 +193,15 @@ export default function App() {
       </head>
       <QueryClientProvider client={queryClient}>
         <body>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC" />
+          <script dangerouslySetInnerHTML={{
+            __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-BXXRW595RC');
+      `}} />
           <CartProvider>
             <Layout
               layout={{

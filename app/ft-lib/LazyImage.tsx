@@ -1,8 +1,6 @@
-import { UseShopStore } from "../root";
 import logoImage from "../../public/suplabLogo.png"
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import ReactImageMagnify from 'react-image-magnify';
-import resizeImage from "./resizeImages";
+import { UseShopStore } from "../root";
 
 function Placeholder(props: {
     style?: React.CSSProperties

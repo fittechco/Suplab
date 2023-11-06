@@ -111,7 +111,13 @@ function AddToCartAnalytics({
         sendShopifyAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,
-        });
+        }).then(res => {
+          console.log(res, "res")
+          return
+        }).catch(err => {
+          console.log(err, "err")
+          return
+        })
       }
     }
   }, [fetcherData, formData, pageAnalytics]);
