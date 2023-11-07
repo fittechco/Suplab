@@ -24,6 +24,7 @@ export default async function handleRequest(
       "https://fonts.gstatic.com"
     ],
     connectSrc: [
+      "'self'",
       "https://monorail-edge.shopifysvc.com/",
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
@@ -58,7 +59,8 @@ export default async function handleRequest(
       "https://judge.me/",
       // allow a hash for the judge.me script
       // this will be removed in production
-      "'sha256-b9hcUr50t5f9qt3iHIOZ+Hjbwyd2DFT7hqqgBSyJCA0='"
+      "'sha256-b9hcUr50t5f9qt3iHIOZ+Hjbwyd2DFT7hqqgBSyJCA0='",
+      "'nonce-Njg1Mjk1ZGYtNmUzOS00MTNiLWJmM2ItM2Q5NGFiYWYwNDVj'"
     ]
   });
 

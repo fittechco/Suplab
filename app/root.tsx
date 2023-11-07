@@ -33,7 +33,8 @@ import RoutesLoader from './components/RoutesLoader';
 import CTAButton from './components/CTAButton';
 import { seoPayload } from './ft-lib/seo.server';
 import { useAnalytics } from './ft-lib/hooks/useAnalytics';
-import { type HydrogenSession } from './lib/session.server'; 1
+import { type HydrogenSession } from './lib/session.server';
+import * as gtag from "~/app/ft-lib/google-utils";
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -122,12 +123,15 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     url: request.url,
   })
 
+  console.log(context.env.GA_TRACKING_ID, "context.env.GA_TRACKING_ID");
+
   return defer(
     {
       shop: layout,
       seo,
       footer: await footerPromise,
       header: await headerPromise,
+      gaTrackingId: context.env.GA_TRACKING_ID,
       selectedLocale: storefront.i18n,
       analytics: {
         shopId: layout.shop.id,
@@ -182,6 +186,12 @@ export default function App() {
     }
   }, [navigation]);
 
+  useEffect(() => {
+    if (data.gaTrackingId?.length) {
+      gtag.pageview(location.pathname, data.gaTrackingId);
+    }
+  }, [data.gaTrackingId]);
+
   return (
     <html lang="en">
       <head>
@@ -191,18 +201,24 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC" />
-      <script dangerouslySetInnerHTML={{
-        __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
 
-        gtag('config', 'G-BXXRW595RC');
-      `}} />
       <QueryClientProvider client={queryClient}>
         <body>
+          {process.env.NODE_ENV === "development" || !data.gaTrackingId ? null : (
+            <>
+              <Script async src={`https://www.googletagmanager.com/gtag/js?id=${data.gaTrackingId}`} />
+              <Script
+                nonce='nonce-Njg1Mjk1ZGYtNmUzOS00MTNiLWJmM2ItM2Q5NGFiYWYwNDVj'
+                dangerouslySetInnerHTML={{
+                  __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
 
+                  gtag('config', '${data.gaTrackingId}');
+                `}} />
+            </>
+          )}
           <CartProvider>
             <Layout
               layout={{
