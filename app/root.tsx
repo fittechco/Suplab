@@ -191,17 +191,18 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <QueryClientProvider client={queryClient}>
-        <body>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC" />
-          <script dangerouslySetInnerHTML={{
-            __html: `
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC" />
+      <script dangerouslySetInnerHTML={{
+        __html: `
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
         gtag('config', 'G-BXXRW595RC');
       `}} />
+      <QueryClientProvider client={queryClient}>
+        <body>
+
           <CartProvider>
             <Layout
               layout={{
