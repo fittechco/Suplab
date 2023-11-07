@@ -28,6 +28,7 @@ export default async function handleRequest(
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
       "https://suplabstore.com/",
+      "https://www.googletagmanager.com",
       // add localhost for development,
       // this will be removed in production
       "http://localhost:8002/",
@@ -47,6 +48,7 @@ export default async function handleRequest(
       "https://suplab.myshopify.com/",
       "https://suplabstore.com/",
       "https://cold-islands-find.loca.lt",
+      "https://www.googletagmanager.com",
 
       // add localhost for development,
       // this will be removed in production
@@ -68,7 +70,6 @@ export default async function handleRequest(
       nonce,
       signal: request.signal,
       onError(error) {
-        // eslint-disable-next-line no-console
         console.error(error);
         responseStatusCode = 500;
       },
