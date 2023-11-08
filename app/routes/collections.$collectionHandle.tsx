@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { useFetcher, useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
+import { useState } from 'react';
+import { useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
 import { type LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
-import ProductCard from 'app/components/ProductCard';
 import { PriceSlider } from '~/app/components/ui/PriceSlider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
@@ -12,13 +11,11 @@ import { Colors } from '../ft-lib/shared';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
-import type { App } from '../api/type';
-import StorefrontApi from '../api/storefront';
 import { seoPayload } from '../ft-lib/seo.server';
-import _ from 'lodash';
-import { AnalyticsPageType, Pagination, getPaginationVariables } from '@shopify/hydrogen';
+import { AnalyticsPageType, getPaginationVariables } from '@shopify/hydrogen';
 import { COLLECTIONFRAGMENT } from '../ft-lib/ft-server/services/collectionService';
 import { PRODUCTFRAGMENT } from '../ft-lib/ft-server/services/productService';
+import ProductsGrid from '../components/ProductsGrid';
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const collectionHandle = params.collectionHandle;
@@ -209,44 +206,7 @@ function Collection() {
             <PriceSlider min={minPrice} max={maxPrice} className="min-w-[250px]" />
           </div>
         </div>
-        {/* <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9"> */}
-        <Pagination connection={data.collection.products}>
-          {({ nodes, NextLink, isLoading }) => {
-            return (
-              <>
-                <div className="productsGrid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9">
-                  {nodes.map((product, index) => {
-                    if (product == null) {
-                      return null;
-                    }
-                    return (
-                      <div
-                        key={product.id}
-                        className=""
-                      >
-                        <ProductCard product={product} />
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="flex items-center justify-center mt-6">
-                  <NextLink
-                    style={{
-                      background: Colors.primary,
-                      borderRadius: '9999px',
-                      color: Colors.textSecondary,
-                    }}
-                    className="text-2xl md:text-2xl text-center px-3.5 py-1.5 rounded-lg ft-text-main max-md:w-full w-80 flex items-center justify-center">
-                    {isLoading === true ? (
-                      <div className="lds-dual-ring lds-dual-ring-white !w-8 !h-8" />
-                    )
-                      : 'Load more'}
-                  </NextLink>
-                </div>
-              </>
-            )
-          }}
-        </Pagination>
+        <ProductsGrid collection={data.collection} />
         <div
           className="mobileFilterMenuTrigger h-[50px] w-[50px] bg-main sticky bottom-3 left-5 z-50 my-3 flex lg:hidden items-center justify-center rounded-full shadow-md cursor-pointer hover:scale-105 transition-all"
           style={{

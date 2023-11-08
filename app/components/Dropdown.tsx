@@ -21,20 +21,12 @@ type Option = {
 function Dropdown({ placeholder, options, param }: DropdownProps) {
   const [currentSearchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
-  // const navigate = useNavigate();
-
-  // const {pathname, search} = useLocation();
-
-  // const linkParams = new URLSearchParams(search);
 
 
   const getOptionFromValue = (value: string | null) => {
     if (value == null) return null;
     return options.find((option) => option.value === value);
   };
-
-  // const fetcher = useFetcher();
-
   const defaultParams = new URLSearchParams(currentSearchParams);
 
   const searchParams = navigation.location
@@ -44,10 +36,6 @@ function Dropdown({ placeholder, options, param }: DropdownProps) {
   return (
     <Select
       onValueChange={(value) => {
-        // const linkParams = new URLSearchParams(search);
-        // linkParams.set(param, value);
-        // const url = `${pathname}?${linkParams.toString()}`;
-        // fetcher.load(url);
         setSearchParams(
           (prev) => {
             prev.set(param, value);

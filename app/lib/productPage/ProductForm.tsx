@@ -21,7 +21,6 @@ type Props = {
 
 export default function ProductForm(props: Props) {
   const { product, selectedVariant, analytics } = props;
-  const [quantity, setQuantity] = useState(1);
   const productAnalytics: ShopifyAnalyticsProduct = {
     ...analytics.products[0],
     quantity: 1,
@@ -53,13 +52,6 @@ export default function ProductForm(props: Props) {
         selectedVariant={selectedVariant}
         options={product.options}
       />
-      {/* <Quantity
-        onChange={(value) => {
-          setQuantity(value);
-        }}
-        max={selectedVariant.quantityAvailable}
-        value={quantity}
-      /> */}
       <div className="flex items-center w-full max-md:bottom-9 max-md:sticky">
         <AddToCartButton
           analytics={{
@@ -71,7 +63,6 @@ export default function ProductForm(props: Props) {
           lines={[
             {
               merchandiseId: selectedVariant.id,
-              quantity,
               attributes: selectedVariant.selectedOptions.map((option) => {
                 return {
                   key: option.name,

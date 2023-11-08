@@ -2,72 +2,83 @@ import { cn } from '~/app/lib/tailwindUtils';
 import BottomDrawer from './BottomDrawer';
 import MobileFilterOption from './MobileFilterOption';
 import { PriceSlider } from './ui/PriceSlider';
-import { useSearchParams } from '@remix-run/react';
+import { useNavigation, useSearchParams } from '@remix-run/react';
 import { Fragment } from 'react';
+
+type filters = { param: string; options: { label: string; value: string }[] }[];
 
 type Props = {
   show: boolean;
   setShow: (show: boolean) => void;
-  filters: { param: string; options: { label: string; value: string }[] }[];
+  filters: filters
   minPrice: number;
   maxPrice: number;
 };
 
-export default function MobileFiltersMenu(props: Props) {
+const SearchedParams = (props: {
+  filters: filters
+}) => {
   const [searchParams] = useSearchParams();
-
-  const filters = props.filters;
-
+  const { filters } = props;
   const searchedParamsWithoutMinMax = Array.from(searchParams.entries())
     .filter(([key]) => key !== 'min' && key !== 'max' && key)
 
-  const searchedParams = searchedParamsWithoutMinMax.map((param) => {
-    const [key, value] = param;
-    // check if key is in filters
-    if (!filters.find((filter) => filter.param === key)) {
-      return null;
-    }
-    const labels = filters.map((filter) => {
-      // console.log();
-      if (filter.param === key) {
-        const option = filter.options.find((option) => option.value === value);
-        return option?.label;
-      }
-      return null;
-    });
-    const label = labels.filter(Boolean).join(', ');
+  return (
+    <>
+      <div className='filter-header flex flex-col w-full gap-4'>
+        <div
+          className="selectedFiltersContainer grid grid-cols-3 gap-5 mt-6 sticky top-0"
+          style={{
+            rowGap: '0.75rem',
+          }}
+        >
+          {searchedParamsWithoutMinMax.map((param) => {
+            const [key, value] = param;
+            // check if key is in filters
+            const keyExists = filters.some((filter) => filter.param === key);
+            if (keyExists === false) {
+              return null;
+            }
+            const labels = filters.map((filter) => {
+              if (filter.param === key) {
+                const option = filter.options.find((option) => option.value === value);
+                return option?.label;
+              }
+              return null;
+            });
+            const label = labels.filter(Boolean).join(', ');
 
-    return (
-      <MobileFilterOption
-        key={key}
-        param={key}
-        label={label}
-        value={value}
-        isSelected={true}
-        hasX={true}
-      />
-    );
-  });
+            return (
+              <MobileFilterOption
+                key={key}
+                param={key}
+                label={label}
+                value={value}
+                isSelected={true}
+                hasX={true}
+              />
+            );
+          }
+          )}
+        </div>
+      </div>
+      <HorizontalRule />
+    </>
+  )
+};
 
+export default function MobileFiltersMenu(props: Props) {
+  const [currentSearchParams] = useSearchParams();
+  const filters = props.filters;
+  const navigation = useNavigation();
+  const searchParams = navigation.location ? new URLSearchParams(navigation.location.search) : currentSearchParams;
   return (
     <BottomDrawer
       closeIcon
       headerTitle='Filters'
       show={props.show} setShow={props.setShow}>
       <div className="filtersContainer h-full w-full px-[5%] flex flex-col gap-4 uppercase">
-        <div className='filter-header flex flex-col w-full gap-4'>
-          {searchedParams.length > 0 && <div
-            className="selectedFiltersContainer grid grid-cols-3 gap-5 mt-6 sticky top-0"
-            style={{
-              rowGap: '0.75rem',
-            }}
-          >
-            {searchedParams}
-          </div>}
-        </div>
-
-        {searchedParams.length > 0 && <HorizontalRule />}
-
+        <SearchedParams filters={filters} />
         <div className='filters flex flex-col gap-4 pb-4 overflow-y-auto h-full'>
 
           <div className="filtersGroup flex flex-col gap-3">
@@ -126,5 +137,5 @@ const HorizontalRule = ({ classNames }: { classNames?: string }) => (
       background:
         'linear-gradient(to left, transparent 0%, #4A4A49 50%, transparent 100%)',
     }}
-  ></div>
+  />
 );

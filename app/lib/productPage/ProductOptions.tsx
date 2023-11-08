@@ -34,7 +34,8 @@ export default function ProductOptions(props: Props) {
       return defaultParams;
     }
 
-    for (const { name, value } of props.selectedVariant.selectedOptions) {
+    for (const selectedOption of props.selectedVariant.selectedOptions) {
+      const { name, value } = selectedOption;
       if (currentSearchParams.has(name) === false) {
         defaultParams.set(name, value);
       }
