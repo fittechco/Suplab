@@ -206,7 +206,7 @@ export default function App() {
 
       <QueryClientProvider client={queryClient}>
         <body>
-          {process.env.NODE_ENV != "development" || data.gaTrackingId != null ? null : (
+          {process.env.NODE_ENV != "development" ? null : (
             <>
               <Script async src={`https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC`} />
               <Script
