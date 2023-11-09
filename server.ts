@@ -10,9 +10,6 @@ import {
 import {
   createRequestHandler,
   getStorefrontHeaders,
-  createCookieSessionStorage,
-  type SessionStorage,
-  type Session,
 } from '@shopify/remix-oxygen';
 import type {
   LanguageCode,

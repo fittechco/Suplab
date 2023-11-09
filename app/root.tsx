@@ -23,7 +23,7 @@ import Layout from './layout/Layout';
 import type { App } from './api/type';
 import { create } from 'zustand';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/pagination';
@@ -206,9 +206,9 @@ export default function App() {
 
       <QueryClientProvider client={queryClient}>
         <body>
-          {data.gaTrackingId != null ? null : (
+          {process.env.NODE_ENV != "development" || data.gaTrackingId != null ? null : (
             <>
-              <Script async src={`https://www.googletagmanager.com/gtag/js?id=${data.gaTrackingId}`} />
+              <Script async src={`https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC`} />
               <Script
                 nonce='nonce-Njg1Mjk1ZGYtNmUzOS00MTNiLWJmM2ItM2Q5NGFiYWYwNDVj'
                 dangerouslySetInnerHTML={{
@@ -217,7 +217,7 @@ export default function App() {
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
 
-                  gtag('config', '${data.gaTrackingId}');
+                  gtag('config', 'G-BXXRW595RC');
                 `}} />
             </>
           )}
