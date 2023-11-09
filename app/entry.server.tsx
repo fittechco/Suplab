@@ -31,7 +31,6 @@ export default async function handleRequest(
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
       "https://suplabstore.com/",
-      "'https://ssl.google-analytics.com",
       "https://www.googletagmanager.com",
       // add localhost for development,
       // this will be removed in production
@@ -46,9 +45,8 @@ export default async function handleRequest(
       "'self'",
       "'unsafe-inline'",
       "'unsafe-eval'",
-      'https://cdn.shopify.com',
+      "'https://cdn.shopify.com'",
       "https://cdn.jsdelivr.net/",
-      "https://cdn.shopify.com/",
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
       "https://suplabstore.com/",
