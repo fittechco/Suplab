@@ -192,6 +192,8 @@ export default function App() {
     }
   }, [data.gaTrackingId]);
 
+  console.log(data.gaTrackingId, "gaTrackingId");
+  console.log(process.env.NODE_ENV, "process.env.NODE_ENV");
   return (
     <html lang="en">
       <head>
@@ -204,7 +206,7 @@ export default function App() {
 
       <QueryClientProvider client={queryClient}>
         <body>
-          {process.env.NODE_ENV === "development" || !data.gaTrackingId ? null : (
+          {data.gaTrackingId != null ? null : (
             <>
               <Script async src={`https://www.googletagmanager.com/gtag/js?id=${data.gaTrackingId}`} />
               <Script
