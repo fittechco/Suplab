@@ -25,10 +25,13 @@ export default async function handleRequest(
     ],
     connectSrc: [
       "'self'",
+      "'unsafe-inline'",
+      "'cdn.shopify.com'",
       "https://monorail-edge.shopifysvc.com/",
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
       "https://suplabstore.com/",
+      "'https://ssl.google-analytics.com",
       "https://www.googletagmanager.com",
       // add localhost for development,
       // this will be removed in production
@@ -43,6 +46,7 @@ export default async function handleRequest(
       "'self'",
       "'unsafe-inline'",
       "'unsafe-eval'",
+      "'cdn.shopify.com'",
       "https://cdn.jsdelivr.net/",
       "https://cdn.shopify.com/",
       "https://www.google-analytics.com",
