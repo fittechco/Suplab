@@ -187,10 +187,8 @@ export default function App() {
   }, [navigation]);
 
   useEffect(() => {
-    if (data.gaTrackingId?.length) {
-      gtag.pageview(location.pathname, data.gaTrackingId);
-    }
-  }, [data.gaTrackingId]);
+    gtag.pageview(location.pathname, "G-BXXRW595RC");
+  }, []);
 
   console.log(data.gaTrackingId, "gaTrackingId");
   console.log(process.env.NODE_ENV, "process.env.NODE_ENV");
