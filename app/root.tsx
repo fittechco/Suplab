@@ -123,7 +123,6 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     url: request.url,
   })
 
-  console.log(context.env.GA_TRACKING_ID, "context.env.GA_TRACKING_ID");
 
   return defer(
     {
@@ -190,8 +189,6 @@ export default function App() {
     gtag.pageview(location.pathname, "G-BXXRW595RC");
   }, []);
 
-  console.log(data.gaTrackingId, "gaTrackingId");
-  console.log(process.env.NODE_ENV, "process.env.NODE_ENV");
   return (
     <html lang="en">
       <head>

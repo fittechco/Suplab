@@ -33,12 +33,6 @@ export function useAnalytics(hasUserConsent: boolean) {
         sendShopifyAnalytics({
             eventName: AnalyticsEventName.PAGE_VIEW,
             payload,
-        }).then(res => {
-            console.log(res, "res")
-            return
-        }).catch(err => {
-            console.log(err, "err")
-            return
         })
     }, [location, pageAnalytics]);
 }
