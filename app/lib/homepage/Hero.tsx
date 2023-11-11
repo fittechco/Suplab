@@ -56,7 +56,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           }}
           className="mobile-image w-full h-full object-cover md:hidden "
           containerClassName='mobile-image-conatiner md:hidden'
-          src={resizeImage(desktopUrl, 1200)}
+          src={resizeImage(mobileUrl, 1200)}
           alt={fields.mobile_image?.key || 'hero image'}
         />
         <div
@@ -65,7 +65,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           style={{
             position: 'absolute',
           }}
-          className="heroHeader w-full flex flex-col gap-5 md:gap-4 z-20 justify-end md:justify-center container mb-8 mb:mb-0"
+          className="heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 mb:mb-0"
         >
           {fields.headline != null && (
             <h1
