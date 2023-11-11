@@ -15,14 +15,14 @@ const Hero = ({ section }: HeroSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
   const isMobile = window.innerWidth <= 768;
 
-  
+
   const mobileUrl = fields.mobile_image?.reference.image.url
   const desktopUrl = fields.desktop_image?.reference.image.url
 
-  if(mobileUrl == null || desktopUrl == null) {
+  if (mobileUrl == null || desktopUrl == null) {
     return null
   }
-  
+
   return (
     <div
       key={section.type}
@@ -41,24 +41,26 @@ const Hero = ({ section }: HeroSectionProps) => {
         className="flex md:flex-row justify-start items-end relative"
       >
         <LazyImage
-        style={{
-          borderRadius: '24px',
+          style={{
+            borderRadius: '24px',
 
-        }}
+          }}
           className="desktop-image w-full h-full object-cover max-sm:hidden"
           containerClassName='desktop-image-conatiner max-sm:hidden'
           src={resizeImage(desktopUrl, 1200)}
           alt={fields.desktop_image?.key || 'hero image'}
         />
         <LazyImage
-        style={{
-          borderRadius: '24px',
-        }}
+          style={{
+            borderRadius: '24px',
+          }}
           className="mobile-image w-full h-full object-cover md:hidden "
           containerClassName='mobile-image-conatiner md:hidden'
-          src={resizeImage(mobileUrl, 1200)}
+          src={resizeImage(desktopUrl, 1200)}
           alt={fields.mobile_image?.key || 'hero image'}
         />
+        <div
+          className='layer bg-black opacity-[55%] absolute top-0 left-0 w-full h-full z-20'></div>
         <div
           style={{
             position: 'absolute',
