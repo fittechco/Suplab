@@ -60,7 +60,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           alt={fields.mobile_image?.key || 'hero image'}
         />
         <div
-          className='layer bg-black opacity-[55%] absolute top-0 left-0 w-full h-full z-20'></div>
+          className='layer bg-black opacity-[55%] absolute top-0 left-0 w-full h-full z-20 rounded-3xl' />
         <div
           style={{
             position: 'absolute',
