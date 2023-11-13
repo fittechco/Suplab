@@ -45,6 +45,8 @@ export default async function handleRequest(
       "'self'",
       "'unsafe-inline'",
       "'unsafe-eval'",
+      "*.hotjar.com",
+      "'nonce-rAnDoM'",
       "https://cdn.shopify.com/",
       "https://cdn.jsdelivr.net/",
       "https://www.google-analytics.com",
@@ -63,6 +65,17 @@ export default async function handleRequest(
       // this will be removed in production
       "'sha256-b9hcUr50t5f9qt3iHIOZ+Hjbwyd2DFT7hqqgBSyJCA0='",
       "'nonce-Njg1Mjk1ZGYtNmUzOS00MTNiLWJmM2ItM2Q5NGFiYWYwNDVj'"
+    ],
+    frameSrc: [
+      "'self'",
+      "https://www.youtube.com",
+      "https://www.youtube-nocookie.com",
+      "https://www.google.com",
+      "https://www.google.co.uk",
+      "https://www.googleadservices.com",
+      "https://www.googletagmanager.com",
+      "https://www.google-analytics.com",
+      "*.hotjar.com",
     ]
   });
 

@@ -6,19 +6,29 @@ import MobileNav from '../MobileNav';
 import SubMenuPopup from './SubMenuPopup';
 import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
-import { loader as offersLoader } from '~/app/routes/offers';
+import type { loader as offersLoader } from '~/app/routes/offers';
 import type {
   FooterQuery,
   HeaderQuery,
   ShopLayoutQuery,
 } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
-import { UseShopStore, queryClient } from 'app/root';
+import { UseShopStore } from 'app/root';
 import { useCart } from '~/app/components/CartProvider';
 import { Link, useFetcher } from '@remix-run/react';
-import { OFFERS_QUERY } from '~/app/components/FtOffers';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import type { loader as collectionLoader } from '~/app/routes/collections.$collectionHandle';
+
+const GetBestSellers = () => {
+  const fetcher = useFetcher<typeof collectionLoader>();
+  useEffect(() => {
+    if (fetcher.state === 'idle' && !fetcher.data) {
+      fetcher.load("/collections/best-sellers")
+    }
+  }, [fetcher]);
+  return fetcher.data
+}
 
 type Props = {
   layout: {
@@ -38,12 +48,14 @@ function Header(props: Props) {
   const [showSearch, setShowSearch] = useState(false);
   const cart = useCart();
   const fetcher = useFetcher<typeof offersLoader>();
+  const bestSellersCollection = GetBestSellers()
 
   useEffect(() => {
     if (fetcher.state === 'idle' && !fetcher.data) {
       fetcher.load("/offers")
     }
-  }, [])
+  }, [fetcher])
+
   useEffect(() => {
     let lastScrollY = window.scrollY;
     const updateScrollDirection = () => {
@@ -138,7 +150,7 @@ function Header(props: Props) {
               />
             )}
           </Link>
-          <div className="navmenusContainer flex   items-center justify-center  max-md:hidden h-full">
+          <div className="navmenusContainer flex   items-center justify-center  max-lg:hidden h-full">
             {props.layout.header.menu?.items.map((item) => {
               // todo: fix this
               const pathname = new URL(item.url || '').pathname;
@@ -243,7 +255,7 @@ function Header(props: Props) {
             </div>
             <button
               onClick={() => setIsOpen(true)}
-              className="icons_item md:hidden cursor-pointer"
+              className="icons_item lg:hidden cursor-pointer"
             >
               <FTicons
                 fill={Colors.secondary}
@@ -268,7 +280,7 @@ function Header(props: Props) {
             }
           }}
         >
-          <SubMenuPopup showSub={showSub} isTop={isTop} items={subItems} />
+          <SubMenuPopup bestSellers={bestSellersCollection || null} offers={fetcher.data || null} showSub={showSub} isTop={isTop} items={subItems} />
         </div>
       </div>
 

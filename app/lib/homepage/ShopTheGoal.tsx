@@ -45,17 +45,20 @@ const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
           breakpoints: {
             768: {
               spaceBetween: 20,
+              slidesPerView: 3,
+            },
+            1024: {
+              spaceBetween: 20,
               slidesPerView: 4,
             },
           },
         }}
-      // className="shopTheGoalSection__benefits relative swiper-container max-md:max-w-xs mx-auto"
       >
         {fields.shop_the_goal_collections && fields.shop_the_goal_collections.references.nodes.map((shopTheGoal, index) => {
           const goalFields = shopTheGoal
-
+          console.log(goalFields.id, "goalFields");
           return (
-            <div key={shopTheGoal.id} className="swiper-slide">
+            <div key={goalFields.id} className="swiper-slide">
               <div className="shopTheGoalSection__shopTheGoal flex flex-col justify-center items-center rounded-3xl">
                 <div
                   style={{

@@ -46,7 +46,7 @@ export default function MobileNav(props: Props) {
         margin: 0,
         transform: animate ? 'translateX(0%)' : 'translateX(-100%)',
       }}
-      className="mobileNav transition-all ease-in-out duration-500 md:hidden"
+      className="mobileNav transition-all ease-in-out duration-500 lg:hidden"
     >
       <div
         style={{
@@ -96,7 +96,6 @@ export default function MobileNav(props: Props) {
           </div>
 
           <div
-            style={{}}
             className={`offers-container overflow-hidden flex-shrink-0`}
           >
             <div
@@ -111,11 +110,9 @@ export default function MobileNav(props: Props) {
           </div>
         </div>
         <div
-          style={{}}
           className="footer-menus / flex flex-col gap-3 / px-5 text-base w-full"
         >
           {footer.menu?.items.map((menu, index) => {
-
             return (
               <Link
                 key={menu.id}

@@ -39,6 +39,10 @@ const Testimonials = ({ section }: TestimonialsSectionProps) => {
           breakpoints: {
             768: {
               spaceBetween: 20,
+              slidesPerView: 3,
+            },
+            1024: {
+              spaceBetween: 20,
               slidesPerView: 4,
             },
           },

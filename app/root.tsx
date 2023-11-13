@@ -32,9 +32,10 @@ import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
 import CTAButton from './components/CTAButton';
 import { seoPayload } from './ft-lib/seo.server';
-import { useAnalytics } from './ft-lib/hooks/useAnalytics';
+import { UseAnalytics } from './ft-lib/hooks/useAnalytics';
 import { type HydrogenSession } from './lib/session.server';
 import * as gtag from "~/app/ft-lib/google-utils";
+import Hotjar from '@hotjar/browser';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -54,7 +55,8 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
   return false;
 };
-
+const siteId = 3733122;
+const hotjarVersion = 6;
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: tailwindCss },
@@ -163,7 +165,7 @@ export default function App() {
   const navigation = useNavigation();
   const data = useLoaderData<typeof loader>();
 
-  useAnalytics(true);
+  UseAnalytics(true);
 
   useEffect(() => {
     UseShopStore.setState({
@@ -187,6 +189,9 @@ export default function App() {
 
   useEffect(() => {
     gtag.pageview(location.pathname, "G-BXXRW595RC");
+    Hotjar.init(siteId, hotjarVersion, {
+      nonce: 'rAnDoM'
+    });
   }, []);
 
   return (

@@ -4,14 +4,19 @@ import { Colors } from '../../ft-lib/shared';
 import type { App } from '../../api/type';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import arrayToObject from '~/app/ft-lib/ArrayToObject';
+import type { GetCollectionQuery } from '~/storefrontapi.generated';
 
 export default function SubMenuPopup(props: {
   items: App.Shopify.Item[];
   isTop: boolean;
   showSub: boolean;
+  offers: App.HomePageTemplate.OffersSection | null;
+  bestSellers: GetCollectionQuery | null;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const offerFields = arrayToObject({ array: props.offers?.fields || [] });
+  const offersImage = offerFields.offers_collection?.reference.image?.url;
   return (
     <div
       ref={containerRef}
@@ -23,14 +28,14 @@ export default function SubMenuPopup(props: {
       }}
       className="nav-menu__sub flex justify-between min-h-[30vh] origin-center ease-in-out gap-5 z-10 p-5"
     >
-      <div className="wrapper  transition-none h-full relative flex justify-center items-start  rounded-b-3xl  gap-16 ">
+      <div className="wrapper transition-none h-full relative flex flex-wrap justify-start items-start  rounded-b-3xl gap-5 w-1/2">
         {props.items.map((subItem, index) => {
           // todo - fix this
           const subPathname = new URL(subItem.url || '').pathname;
           return (
             <div
               key={subItem.title}
-              className="nav-menu-Item-container space-y-2 flex flex-col justify-start items-start"
+              className="nav-menu-Item-container space-y-2 flex flex-wrap flex-col justify-start items-start"
             >
               <Link
                 style={{
@@ -38,7 +43,7 @@ export default function SubMenuPopup(props: {
                   fontWeight: 600,
                   fontSize: '15px',
                 }}
-                className="nav-menu__sub_item  ft-text-main"
+                className="nav-menu__sub_item flex ft-text-main"
                 to={subPathname}>
                 {subItem.title}
               </Link>
@@ -65,71 +70,82 @@ export default function SubMenuPopup(props: {
           );
         })}
       </div>
-      <div className="header-featured-collections space-y-4">
-        <div
-          style={{
-            width: 370,
-            height: 180,
-            borderRadius: 12,
-            overflow: 'hidden',
-          }}
-          className="featured-collectio-1 relative card-shadow"
-        >
-          <LazyImage
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-            src={resizeImage("https://cdn.shopify.com/s/files/1/0814/6046/1881/products/ed93ff84-6899-417d-bbc2-ca55e5b4157b.__CR0_0_970_600_PT0_SX970_V1.png?v=1694640158", 300)}
-            alt={'featured-collection-1'} />
-          <div
-            style={{
-              position: 'absolute',
-              top: '0',
-              left: '0',
-              width: '100%',
-              height: '100%',
-              padding: '20px',
-              fontSize: '20px',
-              color: Colors.textSecondary,
-            }}
-            className="flex justify-start items-end ft-text-main"
-          >
-            Featured Collection
-          </div>
-        </div>
-
-        <div
-
-          className="featured-collectio-1 relative card-shadow"
-        >
-          <LazyImage
+      <div className="header-featured-collections flex flex-col items-end space-y-4 w-1/2">
+        {offersImage != null &&
+          <Link
+            to={"/collections/offers"}
             style={{
               width: 370,
               height: 180,
-              borderRadius: 12,
+              borderRadius: 24,
               overflow: 'hidden',
             }}
-            src={resizeImage("https://cdn.shopify.com/s/files/1/0814/6046/1881/files/61WjOJxw6CL._AC_SX679.jpg?v=1694899573", 300)}
-            alt={'featured collection-2'}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              top: '0',
-              left: '0',
-              width: '100%',
-              height: '100%',
-              padding: '20px',
-              fontSize: '20px',
-              color: Colors.textSecondary,
-            }}
-            className="flex justify-start items-end ft-text-main"
+            className="featured-collectio-1 relative  card-shadow block"
           >
-            Featured Collection
-          </div>
-        </div>
+            <LazyImage
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              src={resizeImage(offersImage, 400)}
+              alt={'featured-collection-1'} />
+            <div
+              style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                width: '100%',
+                height: '100%',
+                padding: '20px',
+                fontSize: '24px',
+                borderRadius: 24,
+                maxWidth: 370,
+                zIndex: 100,
+                color: Colors.textSecondary,
+              }}
+              className="flex justify-start items-end bg-black/40 ft-text-main"
+            >
+              Offers
+            </div>
+          </Link>
+        }
+
+        {props.bestSellers?.collection?.image &&
+          <Link
+            to={`/collections/${props.bestSellers?.collection?.handle}`}
+            className="featured-collectio-1 relative card-shadow block"
+          >
+            <LazyImage
+              style={{
+                width: 370,
+                height: 180,
+                borderRadius: 24,
+                overflow: 'hidden',
+                objectFit: 'cover',
+              }}
+              src={resizeImage(props.bestSellers?.collection?.image?.url, 400)}
+              alt={'featured collection-2'}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                height: '100%',
+                padding: '20px',
+                fontSize: '24px',
+                width: 370,
+                borderRadius: 24,
+                zIndex: 100,
+                color: Colors.textSecondary,
+              }}
+              className="flex justify-start items-end ft-text-main bg-black/40"
+            >
+              Best Sellers
+            </div>
+          </Link>
+        }
       </div>
     </div>
   );

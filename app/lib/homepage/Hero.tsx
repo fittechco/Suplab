@@ -47,7 +47,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           }}
           className="desktop-image w-full h-full object-cover max-sm:hidden"
           containerClassName='desktop-image-conatiner max-sm:hidden'
-          src={resizeImage(desktopUrl, 1200)}
+          src={resizeImage(desktopUrl, 1440)}
           alt={fields.desktop_image?.key || 'hero image'}
         />
         <LazyImage
@@ -56,7 +56,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           }}
           className="mobile-image w-full h-full object-cover md:hidden "
           containerClassName='mobile-image-conatiner md:hidden'
-          src={resizeImage(mobileUrl, 1200)}
+          src={resizeImage(mobileUrl, 600)}
           alt={fields.mobile_image?.key || 'hero image'}
         />
         <div

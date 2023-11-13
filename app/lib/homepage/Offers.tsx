@@ -1,23 +1,22 @@
-import { useEffect, useState, useRef } from 'react';
 import type { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
-import Swiper from 'swiper';
 import { Colors } from 'app/ft-lib/shared';
-import { Navigation } from 'swiper/modules';
 import type { ProductQuery } from '~/storefrontapi.generated';
-import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { UseShopStore } from '~/app/root';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
-import FTSwiper from '~/app/ft-lib/Swiper';
+import FTSwiper, { type FTSwiperOptions } from '~/app/ft-lib/Swiper';
+import { SwiperOptions } from 'swiper/types/swiper-options';
 
-interface OffersSectionProps {
-  section: App.HomePageTemplate.OffersSection;
+type Props = {
+  section: App.HomePageTemplate.OffersSection,
+  swiperOptions: FTSwiperOptions,
 }
 
-const Offers = ({ section }: OffersSectionProps) => {
+const Offers = (props: Props) => {
+  const { section, swiperOptions } = props;
   const fields = arrayToObject({ array: section.fields });
 
   if (fields.offers_collection == null) {
@@ -56,14 +55,8 @@ const Offers = ({ section }: OffersSectionProps) => {
         <FTSwiper
           navigation
           options={{
-            spaceBetween: 10,
-            slidesPerView: 1,
-            breakpoints: {
-              768: {
-                spaceBetween: 20,
-                slidesPerView: 3.5,
-              },
-            },
+            ...swiperOptions,
+
           }}
         >
           {fields?.offers_collection?.reference.products?.nodes?.map(

@@ -1,7 +1,4 @@
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import { useQuery } from 'react-query';
-import StorefrontApi from '../api/storefront';
-import type { App } from '../api/type';
 import Offers from '../lib/homepage/Offers';
 import { useFetcher } from '@remix-run/react';
 import type { loader as offersLoader } from '~/app/routes/offers';
@@ -29,7 +26,10 @@ export default function Offer() {
 
   return (
     <div className="offers-container w-full space-y-4">
-      <Offers section={fetcher.data} />
+      <Offers swiperOptions={{
+        spaceBetween: 10,
+        slidesPerView: 1.5,
+      }} section={fetcher.data} />
     </div>
   );
 }

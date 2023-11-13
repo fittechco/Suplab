@@ -76,7 +76,22 @@ function HomePage() {
         } else if (section.type === 'shop_the_goal_section') {
           return <ShopTheGoal section={section} key={section.type} />;
         } else if (section.type === 'offers_section') {
-          return <Offers section={section} key={section.type} />;
+          return <Offers
+            swiperOptions={{
+              spaceBetween: 10,
+              slidesPerView: 1.5,
+              breakpoints: {
+                768: {
+                  spaceBetween: 20,
+                  slidesPerView: 3,
+                },
+                1024: {
+                  spaceBetween: 20,
+                  slidesPerView: 4,
+                },
+              },
+            }}
+            section={section} key={section.type} />;
         } else if (section.type === 'services_section') {
           return <Services section={section} key={section.type} />;
         } else if (section.type === 'contact_section') {
@@ -102,6 +117,7 @@ export const COLLECTION_REF = `#graphql
 fragment CollectionRef on Collection {
   handle
   title
+  id
   image{
     url
   }
@@ -151,6 +167,7 @@ fragment Metaobject on Metaobject {
           nodes {
             title
             handle
+            id
             description
             priceRange{
               minVariantPrice{

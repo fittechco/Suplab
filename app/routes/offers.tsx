@@ -1,6 +1,4 @@
 import type { LoaderFunctionArgs } from '@shopify/remix-oxygen'
-import React from 'react'
-import StorefrontApi from '../api/storefront';
 import type { App } from '../api/type';
 
 export async function loader({ context }: LoaderFunctionArgs) {
@@ -59,6 +57,9 @@ query Offers {
       ... on Collection {
         handle
         title
+        image {
+          url
+        }
         products(first: 20) {
           nodes {
             title

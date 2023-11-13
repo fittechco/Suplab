@@ -22,7 +22,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   invariant(collectionHandle, 'Collection handle is required');
   const PC = new ProductController({ storefront: context.storefront });
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 10,
+    pageBy: 12,
   });
   const searchParams = new URL(request.url).searchParams;
 
@@ -154,7 +154,7 @@ function Collection() {
                 <LazyImage
                   alt='collection image'
                   className="w-full h-full object-cover"
-                  src={resizeImage(data.collection.image?.url, 800)}
+                  src={resizeImage(data.collection.image?.url, 1440)}
                 />
               )}
               <div className="heroHeader absolute w-full flex flex-col gap-0 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0">

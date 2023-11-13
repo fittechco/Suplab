@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react';
 import { usePageAnalytics } from './usePageAnalytics';
 
 
-export function useAnalytics(hasUserConsent: boolean) {
+export function UseAnalytics(hasUserConsent: boolean) {
     useShopifyCookies({ hasUserConsent });
 
     const location = useLocation();

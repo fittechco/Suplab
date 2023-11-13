@@ -5,9 +5,19 @@ import 'swiper/css/scrollbar';
 import { Navigation } from 'swiper/modules';
 import FTicons from './FTicon';
 import type { SwiperOptions } from 'swiper/types/swiper-options';
+import invariant from 'tiny-invariant';
+import type { Except } from 'type-fest';
+
+export type FTSwiperOptions = Except<SwiperOptions, 'breakpoints'> & {
+    breakpoints?: {
+        768: SwiperOptions,
+        1024: SwiperOptions,
+    }
+}
+
 type Props = {
     children?: React.ReactNode;
-    options?: SwiperOptions | undefined
+    options?: FTSwiperOptions
     navigation?: boolean
 };
 
@@ -50,8 +60,40 @@ export default function FTSwiper(props: Props) {
                 swiper.destroy();
             }
         };
-    }, []);
+    }, [props.options]);
+    const [breakPointSLidePerView, setBreakPointSLidePerView] = useState(props.options?.slidesPerView)
+    const swiperSlides = swiperContainer.current?.swiper?.slides.length ?? 0;
+    const slidesPerView = breakPointSLidePerView != "auto" ? breakPointSLidePerView : null;
+    useEffect(() => {
+        if (swiperContainer.current?.swiper == null) {
+            return;
+        }
+        if (slidesPerView == null) {
+            return;
+        }
+        // based on the screen size we need to use the breakpoints to set the slidesPerView 
+        const breakPointResize = () => {
+            if (window.innerWidth > 1024) {
+                setBreakPointSLidePerView(props.options?.breakpoints?.[1024]?.slidesPerView || props.options?.slidesPerView)
+                console.log("1024");
+            }
+            else if (window.innerWidth > 768 && window.innerWidth < 1024) {
+                setBreakPointSLidePerView(props.options?.breakpoints?.[768]?.slidesPerView || props.options?.slidesPerView)
+                console.log("768");
+            } else {
+                setBreakPointSLidePerView(props.options?.slidesPerView)
+            }
+        }
+        window.addEventListener('resize', breakPointResize);
+        breakPointResize();
+        return () => {
+            window.removeEventListener('resize', breakPointResize);
+        }
 
+    }, [props.options?.breakpoints, props.options?.slidesPerView, slidesPerView]);
+
+    invariant(slidesPerView != null, 'slidesPerView is null');
+    console.log(slidesPerView, "slidesPerView");
 
     return (
         <div
@@ -65,7 +107,10 @@ export default function FTSwiper(props: Props) {
             {props.navigation === true && (
                 <>
                     <div
-                        style={{ opacity: 0.5 }}
+                        style={{
+                            opacity: 0.5,
+                            display: swiperSlides <= slidesPerView ? 'none' : 'block'
+                        }}
                         ref={prevElRef}
                         onClick={() => swiperContainer.current?.swiper?.slidePrev()}
                         className={`swiper-button absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden z-10`}
@@ -74,6 +119,9 @@ export default function FTSwiper(props: Props) {
                     </div>
                     <div
                         ref={nextElRef}
+                        style={{
+                            display: swiperSlides <= slidesPerView ? 'none' : 'block'
+                        }}
                         onClick={() => swiperContainer.current?.swiper?.slideNext()}
                         className={`swiper-button absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden z-10 `}
                     >
