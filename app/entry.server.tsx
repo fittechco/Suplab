@@ -32,6 +32,7 @@ export default async function handleRequest(
       "https://suplabstore.com/",
       "https://cdn.shopify.com/",
       "https://www.googletagmanager.com",
+      "https://in.hotjar.com/",
       // add localhost for development,
       // this will be removed in production
       "http://localhost:8002/",
