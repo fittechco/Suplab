@@ -28,6 +28,19 @@ export async function action({ request, context }: ActionFunctionArgs) {
     case CartForm.ACTIONS.LinesRemove:
       result = await cart.removeLines(inputs.lineIds);
       break;
+    case CartForm.ACTIONS.DiscountCodesUpdate:
+      const formDiscountCode = inputs.discountCode;
+
+      // User inputted discount code
+      const discountCodes = (
+        formDiscountCode ? [formDiscountCode] : []
+      ) as string[];
+
+      // Combine discount codes already applied on cart
+      discountCodes.push(...inputs.discountCodes);
+
+      result = await cart.updateDiscountCodes(discountCodes);
+      break;
     default:
       invariant(false, `${action} cart action is not defined`);
   }

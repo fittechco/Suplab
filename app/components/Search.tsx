@@ -1,12 +1,10 @@
-import { Link, useFetcher } from '@remix-run/react';
-import SearchController from 'app/ft-lib/ft-server/controllers/SearchController';
+import { useFetcher } from '@remix-run/react';
 import { Colors } from 'app/ft-lib/shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { SearchProductsQuery } from 'storefrontapi.generated';
 import _ from 'lodash';
 import ProductCard from './ProductCard';
-import StorefrontApi from '../api/storefront';
-import { loader as searchLoader } from '../routes/search';
+import type { loader as searchLoader } from '../routes/search';
 
 type Props = {
   setShowSearch: (show: boolean) => void;

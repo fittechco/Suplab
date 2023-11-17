@@ -1,16 +1,20 @@
 
-import { Money } from '@shopify/hydrogen';
+import { CartForm, Money } from '@shopify/hydrogen';
 import { useCart } from './CartProvider';
 import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { UseShopStore } from 'app/root';
 import CTAButton from './CTAButton';
-import { Link, useNavigate } from '@remix-run/react';
+import { type FetcherWithComponents, Link, useNavigate } from '@remix-run/react';
 import LineItem from '../lib/cart/LineItem';
+import clsx from 'clsx';
+import { getInputStyleClasses } from '../utils';
+import type {
+  Cart as CartType,
+} from '@shopify/hydrogen/storefront-api-types';
 
-
-const CartForm = (props: {
+const CartDetails = (props: {
   animate: boolean
   closeCart: () => void
 }) => {
@@ -88,6 +92,7 @@ const CartForm = (props: {
                   }`}
               </div>
             </div>
+            <CartDiscounts discountCodes={cart.discountCodes} />
             <div className="check-out">
               <Link to={cart.checkoutUrl} className="w-full">
                 <CTAButton
@@ -162,7 +167,7 @@ export default function CartDrawer() {
           // transform: showCart ? 'translateX(0%)' : 'translateX(100%)',
         }}
         className="cart-slider backdrop-blur max-md:hidden">
-        <CartForm
+        <CartDetails
           animate={showCart}
           closeCart={() => {
             UseShopStore.setState({ showCart: false });
@@ -180,7 +185,7 @@ export default function CartDrawer() {
           transition: 'all 0.2s ease-in-out',
         }}
         className="cart-slider backdrop-blur md:hidden">
-        <CartForm
+        <CartDetails
           animate={showCart}
           closeCart={() => {
             UseShopStore.setState({ showCart: false });
@@ -189,4 +194,139 @@ export default function CartDrawer() {
       </div>
     </div>
   );
+}
+
+
+function CartDiscounts({
+  discountCodes,
+}: {
+  discountCodes: CartType['discountCodes'];
+}) {
+  const codes: string[] =
+    discountCodes
+      ?.filter((discount) => discount.applicable)
+      ?.map(({ code }) => code) || [];
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
+  return (
+    <>
+      {/* Have existing discount, display it with a remove option */}
+      <dl className={codes && codes.length !== 0 ? 'grid' : 'hidden'}>
+        <div className="flex items-center justify-between font-medium">
+          <div className='text-base'>Discount(s)</div>
+          <div className="flex items-center justify-between space-x-3">
+            <UpdateDiscountForm
+              setLoading={
+                (loading) => setDeleteLoading(loading)
+              }
+            >
+              <button className='flex items-center justify-center'>
+                {deleteLoading ?
+                  <div
+                    style={{
+                      color: Colors.secondary,
+                    }}
+                    className="spinner right-6 bottom-4"
+                  >
+                    <div className="lds-dual-ring "></div>
+                  </div>
+                  : <FTicons
+                    icon="close"
+                    style={{
+                      width: 14,
+                      height: 14,
+                      cursor: 'pointer',
+                    }}
+                  />}
+              </button>
+            </UpdateDiscountForm>
+            <div className='text-base font-bold capitalize'>{codes?.join(', ')}</div>
+          </div>
+        </div>
+      </dl>
+
+      {/* Show an input to apply a discount */}
+      <UpdateDiscountForm
+        setLoading={(loading) => setSubmitLoading(loading)}
+        discountCodes={codes}>
+        <div
+          className={clsx(
+            'flex',
+            'items-center gap-4 justify-between text-copy',
+          )}
+        >
+          <input
+            className={getInputStyleClasses()}
+            type="text"
+            name="discountCode"
+            placeholder="Discount code"
+          />
+          <button
+            style={{
+              color: Colors.text,
+            }}
+            className="flex justify-end hover:underline font-medium whitespace-nowrap">
+            {submitLoading ?
+              <div
+                style={{
+                  color: Colors.secondary,
+                }}
+                className="spinner right-6 bottom-4"
+              >
+                <div className="lds-dual-ring "></div>
+              </div>
+              :
+              "Apply Discount"
+            }
+          </button>
+        </div>
+      </UpdateDiscountForm>
+    </>
+  );
+}
+
+function UpdateDiscountForm({
+  discountCodes,
+  children,
+  setLoading
+}: {
+  discountCodes?: string[];
+  children: React.ReactNode;
+  setLoading: (loading: boolean) => void;
+}) {
+  return (
+    <CartForm
+      route="/cart"
+      action={CartForm.ACTIONS.DiscountCodesUpdate}
+      inputs={{
+        discountCodes: discountCodes || [],
+      }}>
+      {(fetcher) => {
+
+        return (
+          <>
+            <UpdateDiscountFormLoader
+              setLoading={setLoading}
+              fetcher={fetcher}
+            />
+            {children}
+          </>
+        )
+      }}
+    </CartForm>
+  );
+}
+
+const UpdateDiscountFormLoader = (params: {
+  setLoading: (loading: boolean) => void
+  fetcher: FetcherWithComponents<any>
+}) => {
+  useEffect(() => {
+    if (params.fetcher.state !== 'idle') {
+      params.setLoading(true)
+    } else {
+      params.setLoading(false)
+    }
+  }, [params])
+  return null
 }
