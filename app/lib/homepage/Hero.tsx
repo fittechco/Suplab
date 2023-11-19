@@ -65,7 +65,7 @@ const Hero = ({ section }: HeroSectionProps) => {
           style={{
             position: 'absolute',
           }}
-          className="heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 md:mb-0"
+          className="heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8"
         >
           {fields.headline != null && (
             <h1
