@@ -75,11 +75,9 @@ export default function FTSwiper(props: Props) {
         const breakPointResize = () => {
             if (window.innerWidth > 1024) {
                 setBreakPointSLidePerView(props.options?.breakpoints?.[1024]?.slidesPerView || props.options?.slidesPerView)
-                console.log("1024");
             }
             else if (window.innerWidth > 768 && window.innerWidth < 1024) {
                 setBreakPointSLidePerView(props.options?.breakpoints?.[768]?.slidesPerView || props.options?.slidesPerView)
-                console.log("768");
             } else {
                 setBreakPointSLidePerView(props.options?.slidesPerView)
             }
@@ -93,7 +91,6 @@ export default function FTSwiper(props: Props) {
     }, [props.options?.breakpoints, props.options?.slidesPerView, slidesPerView]);
 
     invariant(slidesPerView != null, 'slidesPerView is null');
-    console.log(slidesPerView, "slidesPerView");
 
     return (
         <div
