@@ -26,6 +26,7 @@ export default async function handleRequest(
     connectSrc: [
       "'self'",
       "'unsafe-inline'",
+      "wss://ws.hotjar.com",
       "https://monorail-edge.shopifysvc.com/",
       "https://www.google-analytics.com",
       "https://suplab.myshopify.com/",
