@@ -1,10 +1,6 @@
-import { Money, CartForm, type ShopifyAnalyticsProduct } from '@shopify/hydrogen';
+import { Money, type ShopifyAnalyticsProduct } from '@shopify/hydrogen';
 import Accordion from 'app/components/Accordion';
-import CTAButton from 'app/components/CTAButton';
-import Quantity from 'app/components/Quantity';
 import { Colors } from 'app/ft-lib/shared';
-import { UseShopStore } from 'app/root';
-import { useEffect, useState } from 'react';
 import type { ProductQuery } from 'storefrontapi.generated';
 import ProductOptions from './ProductOptions';
 import AddToCartButton from '~/app/components/AddToCartButton';

@@ -210,7 +210,7 @@ export default function App() {
             <>
               <Script async src={`https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC`} />
               <Script
-                nonce='nonce-Njg1Mjk1ZGYtNmUzOS00MTNiLWJmM2ItM2Q5NGFiYWYwNDVj'
+                nonce='Njg1Mjk1ZGYtNmUzOS00MTNiLWJmM2ItM2Q5NGFiYWYwNDVj'
                 dangerouslySetInnerHTML={{
                   __html: `
                   window.dataLayer = window.dataLayer || [];
