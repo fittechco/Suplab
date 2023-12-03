@@ -65,7 +65,7 @@ function home(): SeoConfig<WebPage> {
     return {
         title: 'Home',
         titleTemplate: '%s | Suplab',
-        description: 'The best place to buy supplements',
+        description: 'The best place to buy safe and authentic supplements online. Delivery All Over Lebanon',
         robots: {
             noIndex: false,
             noFollow: false,
