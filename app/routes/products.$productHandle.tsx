@@ -23,6 +23,9 @@ import ProductReviews from '../lib/productPage/ProductReviews';
 import JudgeMeService from '../ft-lib/apps/JudgeMe';
 import ReactImageMagnify from 'react-image-magnify';
 import { AnalyticsPageType, type ShopifyAnalyticsProduct } from '@shopify/hydrogen';
+import { routeHeaders } from '../ft-lib/cache';
+
+export const headers = routeHeaders;
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const productHandle = params.productHandle;

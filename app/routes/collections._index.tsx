@@ -1,12 +1,16 @@
 import React from 'react'
 import CTAButton from '../components/CTAButton'
-import { LoaderFunctionArgs, json } from '@shopify/remix-oxygen'
+import type { LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { json } from '@shopify/remix-oxygen'
 import CollectionController from '../ft-lib/ft-server/controllers/CollectionController'
 import { useLoaderData, useNavigate, useNavigation } from '@remix-run/react';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
 import { Colors } from '../ft-lib/shared';
 import FTicons from '../ft-lib/FTicon';
+import { routeHeaders } from '../ft-lib/cache';
+
+export const headers = routeHeaders;
 
 export async function loader({ context }: LoaderFunctionArgs) {
     const CC = new CollectionController({ storefront: context.storefront });

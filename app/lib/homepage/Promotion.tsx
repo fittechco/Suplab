@@ -11,7 +11,6 @@ interface PromotionSectionProps {
 
 const Promotion = ({ section }: PromotionSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
-  const isMobile = window.innerWidth <= 768;
 
   const swiperContainer = useRef<HTMLDivElement | null>(null);
 
@@ -68,16 +67,18 @@ const Promotion = ({ section }: PromotionSectionProps) => {
         >
           {fields.promotions?.references.nodes.map((promotion, index) => {
             const promotionFields = arrayToObject({ array: promotion.fields });
-            const imageUrl = isMobile
-              ? promotionFields.mobile_image?.reference.image.url
-              : promotionFields.desktop_image?.reference.image.url;
             return (
               <div key={promotion.id} className="swiper-slide w-full h-full">
-                <img
-                  src={imageUrl}
+                {promotionFields.mobile_image != null && <img
+                  src={promotionFields.mobile_image?.reference.image.url}
                   alt="img"
-                  className="w-full h-full rounded-xl object-cover"
-                />
+                  className="w-full h-full rounded-xl object-cover md:hidden"
+                />}
+                {promotionFields.desktop_image != null && <img
+                  src={promotionFields.desktop_image?.reference.image.url}
+                  alt="img"
+                  className="w-full h-full rounded-xl object-cover max-md:hidden"
+                />}
               </div>
             );
           })}

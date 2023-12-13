@@ -14,12 +14,8 @@ interface ContactSectionProps {
 
 const Contact = ({ section }: ContactSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
-  const isMobile = window.innerWidth <= 768;
   const [image, setImage] = React.useState<string | null>(null);
 
-  const backgroundImageSrc = isMobile
-    ? fields.image?.reference.image.url
-    : fields.image?.reference.image.url;
   return (
     <div
       key={section.type}
@@ -37,11 +33,11 @@ const Contact = ({ section }: ContactSectionProps) => {
         }}
         className="flex md:flex-row w-full h-full justify-center items-center relative rounded-2xl overflow-hidden"
       >
-        {backgroundImageSrc != null &&
+        {fields.image?.reference.image.url != null &&
           <LazyImage
             alt="contact image"
             className="w-full h-full object-cover rounded-2xl"
-            src={resizeImage(backgroundImageSrc, 800)}
+            src={resizeImage(fields.image?.reference.image.url, 800)}
           />}
         <div
           style={{
@@ -51,10 +47,7 @@ const Contact = ({ section }: ContactSectionProps) => {
           className="w-full h-full top-0 left-0 flex flex-col rounded-2xl overflow-hidden gap-5 md:gap-4 items-center justify-end container z-50"
         >
           <div
-            style={{
-              width: isMobile ? '100%' : '55%',
-            }}
-            className="contactSection__content md:mb-12 mb-6 flex flex-col "
+            className="contactSection__content w-full md:w-[55%] md:mb-12 mb-6 flex flex-col "
           >
             <div className="flex flex-col">
               {fields.email != null && (

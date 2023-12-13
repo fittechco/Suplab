@@ -7,10 +7,13 @@ import Features from '../lib/about/Features';
 import Services from '../lib/about/Services';
 import Contact from '../lib/homepage/Contact';
 import FAQ from '../lib/homepage/FAQ';
+import { routeHeaders } from '../ft-lib/cache';
 
 export type Shop = {
   name: string;
 };
+
+export const headers = routeHeaders;
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const storefront = await context.storefront.query(SHOPQUERY);
@@ -23,15 +26,8 @@ export async function loader({ context }: LoaderFunctionArgs) {
 function AboutPage() {
   const { metaobject }: { metaobject: App.AboutPageTemplate.Template } =
     useLoaderData();
-  const [sections, setSections] = useState<App.AboutPageTemplate.Sections>([]);
-
-  useEffect(() => {
-    metaobject.fields.forEach((field) => {
-      if (field.key === 'sections') {
-        setSections(field.references.nodes);
-      }
-    });
-  }, [metaobject.fields]);
+  const fieldSection = metaobject.fields.find((field) => field.key === 'sections')
+  const sections: App.AboutPageTemplate.Sections = fieldSection?.key === "sections" ? fieldSection.references.nodes : []
 
   return (
     <div className="h-full w-full space-y-6">

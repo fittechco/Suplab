@@ -31,13 +31,15 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
 
           const imageUrl = featureFields.image?.reference?.image?.url;
 
-          const paddingStyle = 
-          window.innerWidth < 768 ? { paddingLeft: '0px' } :
-          isEven
-            ? { paddingLeft: '40px' }
-            : { paddingRight: '40px' };
+          // const paddingStyle =
+          //   window.innerWidth < 768 ? { paddingLeft: '0px' } :
+          //     isEven
+          //       ? { paddingLeft: '40px' }
+          //       : { paddingRight: '40px' };
+          const paddingStyle = `md:pl-0 ${isEven ? "pl-10" : "pr-10"}`
 
-          const flexDirection = window.innerWidth < 768 ? 'column' : isEven ? 'row' : 'row-reverse';
+          // const flexDirection = window.innerWidth < 768 ? 'column' : isEven ? 'row' : 'row-reverse';
+          const flexDirection = `md:flex-col ${isEven ? "flex-row" : "flex-row-reverse"}`
 
           return (
             <div
@@ -45,8 +47,7 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
               key={feature.id}
             >
               <div
-                className="w-[100%] flex items-center content-center relative"
-                style={{ flexDirection }}
+                className={`${flexDirection} w-[100%] flex items-center content-center relative`}
               >
                 {imageUrl && (
                   <div className="w-full h-[195px] md:w-1/2 md:h-full">
@@ -59,8 +60,7 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
                 )}
 
                 <div
-                  className="w-[90%] md:w-full h-full absolute flex md:top-0 top-[25%] items-center justify-end md:justify-end md:items-start"
-                  style={{ flexDirection, ...paddingStyle }}
+                  className={`${flexDirection}  ${paddingStyle} w-[90%] md:w-full h-full absolute flex md:top-0 top-[25%] items-center justify-end md:justify-end md:items-start`}
                 >
                   <div className="feature_content w-full md:w-1/2 p-2 md:p-4">
                     {featureFields.title && (

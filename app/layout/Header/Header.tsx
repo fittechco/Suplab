@@ -144,7 +144,9 @@ function Header(props: Props) {
           >
             {props.layout.shop?.brand?.logo?.image != null && (
               <LazyImage
-                alt='logo'
+                alt='store-logo'
+                width={96}
+                height={128}
                 src={resizeImage(props.layout.shop.brand?.logo!.image.url, 300)}
                 className="w-24 md:w-32"
               />

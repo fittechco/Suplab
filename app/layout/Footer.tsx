@@ -8,6 +8,7 @@ import type {
 import { Image } from '@shopify/hydrogen';
 import FTicons from '../ft-lib/FTicon';
 import { useState, useEffect } from 'react';
+import LazyImage from '../ft-lib/LazyImage';
 
 type Props = {
   layout: {
@@ -64,10 +65,12 @@ const Footer = (props: Props) => {
             className="header__logo mr-auto flex items-center p-3"
           >
             {props.layout.shop?.brand?.logo?.image != null && (
-              <Image
-                data={props.layout.shop.brand?.logo!.image}
+              <LazyImage
+                src={props.layout.shop.brand?.logo.image.url}
                 className="w-28 md:w-36"
-                sizes="150px"
+                width={96}
+                height={128}
+                alt='footer-store-logo'
               />
             )}
           </Link>

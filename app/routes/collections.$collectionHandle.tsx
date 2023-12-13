@@ -16,6 +16,9 @@ import { AnalyticsPageType, getPaginationVariables } from '@shopify/hydrogen';
 import { COLLECTIONFRAGMENT } from '../ft-lib/ft-server/services/collectionService';
 import { PRODUCTFRAGMENT } from '../ft-lib/ft-server/services/productService';
 import ProductsGrid from '../components/ProductsGrid';
+import { routeHeaders } from '../ft-lib/cache';
+
+export const headers = routeHeaders;
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const collectionHandle = params.collectionHandle;

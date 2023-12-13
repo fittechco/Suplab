@@ -29,6 +29,8 @@ type Props = {
     className?: string
     containerClassName?: string
     zoom?: boolean
+    width?: number
+    height?: number
 }
 
 function LazyImage(props: Props) {
@@ -46,6 +48,8 @@ function LazyImage(props: Props) {
                 }}
                 src={src}
                 alt={props.alt}
+                width={props.width}
+                height={props.height}
                 placeholder={<Placeholder style={style} />}
                 className={`lazy ${props.className} bg-transparent z-20 relative`}
             />
