@@ -50,7 +50,7 @@ function Accordion(props: Props) {
         {props.image != null && (
           <div className='flex justify-center w-full'>
             <LazyImage
-              alt='product image'
+              alt={props.title}
               className='max-w-full max-h-full w-full aspect-square'
               src={resizeImage(props.image.url, 600)}
             />

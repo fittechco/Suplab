@@ -20,6 +20,7 @@ export default function ProductSkeleton() {
                 <div className="placeholder-image flex justify-center items-center h-full w-full">
                     <img
                         src={logoImage}
+                        alt="Suplab Store Supplements"
                         className="object-contain w-20 h-20"
                     />
                 </div>

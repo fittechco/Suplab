@@ -89,7 +89,8 @@ export default function SubMenuPopup(props: {
                 objectFit: 'cover',
               }}
               src={resizeImage(offersImage, 400)}
-              alt={'featured-collection-1'} />
+              alt={offerFields.offers_collection?.reference.title || 'Supplements Offers'}
+               />
             <div
               style={{
                 position: 'absolute',
@@ -125,7 +126,7 @@ export default function SubMenuPopup(props: {
                 objectFit: 'cover',
               }}
               src={resizeImage(props.bestSellers?.collection?.image?.url, 400)}
-              alt={'featured collection-2'}
+              alt={props.bestSellers?.collection?.title}
             />
             <div
               style={{

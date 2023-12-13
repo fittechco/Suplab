@@ -155,7 +155,7 @@ function Collection() {
             >
               {data.collection.image != null && (
                 <LazyImage
-                  alt='collection image'
+                  alt={data.collection.title}
                   className="w-full h-full object-cover"
                   src={resizeImage(data.collection.image?.url, 1440)}
                 />

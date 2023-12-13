@@ -71,12 +71,12 @@ const Promotion = ({ section }: PromotionSectionProps) => {
               <div key={promotion.id} className="swiper-slide w-full h-full">
                 {promotionFields.mobile_image != null && <img
                   src={promotionFields.mobile_image?.reference.image.url}
-                  alt="img"
+                  alt="Suplab Store Supplements Promotion"
                   className="w-full h-full rounded-xl object-cover md:hidden"
                 />}
                 {promotionFields.desktop_image != null && <img
                   src={promotionFields.desktop_image?.reference.image.url}
-                  alt="img"
+                  alt="Suplab Store Supplements Promotion"
                   className="w-full h-full rounded-xl object-cover max-md:hidden"
                 />}
               </div>

@@ -24,8 +24,8 @@ const AboutUsHero = ({ section }: AboutUsHeroSectionProps) => {
         boxShadow: "0px 6px 9px 0px rgba(0, 0, 0, 0.16)",
       }}
         className='flex w-full h-full overflow-hidden md:flex-row justify-start items-end relative'>
-        {fields.mobile_image && <img className='w-full h-full object-cover md:hidden' src={fields.mobile_image?.reference.image.url} alt="" />}
-        {fields.desktop_image && <img className='w-full h-full object-cover max-md:hidden' src={fields.desktop_image?.reference.image.url} alt="" />}
+        {fields.mobile_image && <img className='w-full h-full object-cover md:hidden' src={fields.mobile_image?.reference.image.url} alt="Suplab Store Supplements" />}
+        {fields.desktop_image && <img className='w-full h-full object-cover max-md:hidden' src={fields.desktop_image?.reference.image.url} alt="Suplab Store Supplements" />}
         <div
           className="heroHeader absolute w-full flex flex-col gap-5 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0">
           {fields.headline != null && (

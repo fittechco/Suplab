@@ -144,7 +144,7 @@ function Header(props: Props) {
           >
             {props.layout.shop?.brand?.logo?.image != null && (
               <LazyImage
-                alt='store-logo'
+                alt="Suplab Supplements Store"
                 width={96}
                 height={128}
                 src={resizeImage(props.layout.shop.brand?.logo!.image.url, 300)}

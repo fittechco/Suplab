@@ -70,7 +70,7 @@ const Footer = (props: Props) => {
                 className="w-28 md:w-36"
                 width={96}
                 height={128}
-                alt='footer-store-logo'
+                alt="Suplab Supplements Store"
               />
             )}
           </Link>

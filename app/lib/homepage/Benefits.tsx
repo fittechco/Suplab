@@ -55,7 +55,7 @@ const Benefits = ({ section }: BenefitsSectionProps) => {
                 {imageUrl && (
                   <div className="w-[70%] aspect-[2/1.5] md:w-1/2 md:h-[420px]">
                     <LazyImage
-                      alt="benefit image"
+                      alt={benefitFields.title?.value || 'Suplab Supplements'}
                       src={resizeImage(imageUrl, 600)}
                       className="w-full h-full rounded-2xl object-cover"
                     />

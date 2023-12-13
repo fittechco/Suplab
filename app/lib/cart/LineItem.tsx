@@ -158,7 +158,7 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
             >
                 {lineItem.merchandise.image != null && (
                     <LazyImage
-                        alt='product image'
+                        alt={lineItem.merchandise.title}
                         className="object-cover h-full"
                         src={resizeImage(lineItem.merchandise.image.url, 300)}
                     />

@@ -35,7 +35,7 @@ const Contact = ({ section }: ContactSectionProps) => {
       >
         {fields.image?.reference.image.url != null &&
           <LazyImage
-            alt="contact image"
+            alt="Suplab Supplements Store Contact Us"
             className="w-full h-full object-cover rounded-2xl"
             src={resizeImage(fields.image?.reference.image.url, 800)}
           />}

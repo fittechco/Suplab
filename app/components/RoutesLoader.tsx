@@ -15,7 +15,7 @@ function RoutesLoader() {
             }}
             className="loader-container fixed top-0 left-0 w-full h-full">
             <div className="loader">
-                <img src={Storelogo} alt="Store Logo" className="store-logo" />
+                <img src={Storelogo} alt="Suplab Store Logo" className="store-logo" />
             </div>
         </div>
     );
