@@ -13,8 +13,6 @@ interface HeroSectionProps {
 
 const Hero = ({ section }: HeroSectionProps) => {
   const fields = arrayToObject({ array: section.fields });
-  const isMobile = window.innerWidth <= 768;
-
 
   const mobileUrl = fields.mobile_image?.reference.image.url
   const desktopUrl = fields.desktop_image?.reference.image.url
