@@ -56,8 +56,6 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
           fields.shop_the_goal_list.references.nodes.map(
             (shopTheGoal, index) => {
               const goalFields = arrayToObject({array: shopTheGoal.fields});
-              console.log(goalFields);
-              fields
               return (
                 <div key={fields.title?.key} className="swiper-slide">
                   <div className="shopTheGoalSection__shopTheGoal flex flex-col justify-center items-center rounded-3xl">
