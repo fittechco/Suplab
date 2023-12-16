@@ -31,7 +31,7 @@ function root({
 }): SeoConfig<Organization> {
   return {
     title: shop?.name,
-    titleTemplate: '%s | Suplab',
+    titleTemplate: '%s | Suplab Supplements Store Lebanon',
     description: truncate(shop?.description ?? ''),
     handle: '@shopify',
     url,
