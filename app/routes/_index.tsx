@@ -51,6 +51,7 @@ function HomePage() {
     useLoaderData();
   const fieldSection = metaobject.fields.find((field) => field.key === 'sections')
   const sections: App.HomePageTemplate.Sections = fieldSection?.key === "sections" ? fieldSection.references.nodes : []
+  console.log(sections);
 
   return (
     <div className="h-full w-full space-y-6">
