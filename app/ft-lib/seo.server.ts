@@ -64,8 +64,8 @@ function root({
 // i want to return the collections in the home page but i don't know how to do it
 function home(): SeoConfig<WebPage> {
   return {
-    title: 'Home',
-    titleTemplate: '%s | Suplab',
+    title: 'Suplab',
+    titleTemplate: '%s | Supplements Store Lebanon',
     description:
       'The best place to buy safe and authentic supplements online. Delivery All Over Lebanon',
     robots: {
@@ -77,7 +77,7 @@ function home(): SeoConfig<WebPage> {
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Home page',
+      name: 'Suplab | Supplements Store Lebanon',
     },
   };
 }
