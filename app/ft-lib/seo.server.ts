@@ -67,7 +67,7 @@ function home(): SeoConfig<WebPage> {
     title: 'Suplab',
     titleTemplate: '%s | Supplements Store Lebanon',
     description:
-      'The best place to buy safe and authentic supplements online. Delivery All Over Lebanon',
+      'Suplab is a supplements store in Lebanon, we sell supplements for bodybuilding, weight loss, and general health. We have a wide range of products from the best brands in the world. We offer free delivery all over Lebanon.',
     robots: {
       noIndex: false,
       noFollow: false,
@@ -262,7 +262,7 @@ function collection({
     description: truncate(
       collection?.seo?.description ?? collection?.description ?? '',
     ),
-    titleTemplate: '%s | Collection',
+    titleTemplate: `%s | ${collection.title}`,
     media: {
       type: 'image',
       url: collection?.image?.url,
