@@ -71,15 +71,15 @@ function HomePage() {
           return <Offers
             swiperOptions={{
               spaceBetween: 10,
-              slidesPerView: 1.5,
+              slidesPerView: 1.1,
               breakpoints: {
                 768: {
                   spaceBetween: 20,
-                  slidesPerView: 3,
+                  slidesPerView: 2.5,
                 },
                 1024: {
                   spaceBetween: 20,
-                  slidesPerView: 4,
+                  slidesPerView: 3,
                 },
               },
             }}

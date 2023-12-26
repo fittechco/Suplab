@@ -31,7 +31,7 @@ export default function Quantity(props: Props) {
     } else {
       setPlusDisabled(false);
     }
-  }, [value]);
+  }, [props.max, value]);
   return (
     <div
       className="quantity w-fit flex items-center relative"

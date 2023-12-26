@@ -4,7 +4,7 @@ import { useCart } from './CartProvider';
 import FTicons from 'app/ft-lib/FTicon';
 import { Colors } from 'app/ft-lib/shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { UseShopStore } from 'app/root';
+import { UseShopStore } from '../root';
 import CTAButton from './CTAButton';
 import { type FetcherWithComponents, Link, useNavigate } from '@remix-run/react';
 import LineItem from '../lib/cart/LineItem';
@@ -114,7 +114,7 @@ const CartDetails = (props: {
 };
 
 export default function CartDrawer() {
-  const showCart = UseShopStore((state) => state.showCart);
+  const showCart = UseShopStore((state: { showCart: any; }) => state.showCart);
   const handleClickOutside = useCallback(
     () => {
       UseShopStore.setState({ showCart: false });

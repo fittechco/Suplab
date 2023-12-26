@@ -349,7 +349,7 @@ export default function FTicons({
           onClick={(e) => {
             if (onClick != null) {
               onClick(e)
-            };
+            }
           }}
           width="16"
           height="16"

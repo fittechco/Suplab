@@ -13,7 +13,7 @@ import type {
   ShopLayoutQuery,
 } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
-import { UseShopStore } from 'app/root';
+import { UseShopStore } from '~/app/root';
 import { useCart } from '~/app/components/CartProvider';
 import { Link, useFetcher } from '@remix-run/react';
 import LazyImage from '~/app/ft-lib/LazyImage';
