@@ -173,7 +173,7 @@ const Footer = (props: Props) => {
             marginBottom: '8px',
           }}
         >
-          © 2023 | Suplab Supplements Store Lebanon | All Rights Reserved
+          © {new Date().getFullYear()} | Suplab Supplements Store Lebanon | All Rights Reserved
         </p>
         <Link
           to={"https://almoe.co/"}
