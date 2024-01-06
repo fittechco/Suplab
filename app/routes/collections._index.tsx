@@ -25,7 +25,11 @@ export default function Collections() {
         <div className='collection-container grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 gap-5 container'>
             {collections.nodes.map((collection) => {
                 return (
-                    <div className='collection-card relative flex  h-72 w-full' key={collection.id}>
+                    <div
+                        style={{
+                            borderRadius: '12px',
+                        }}
+                        className='collection-card relative flex  h-72 w-full' key={collection.id}>
                         <div
                             style={{
                                 backgroundColor: Colors.secondary,
@@ -51,6 +55,7 @@ export default function Collections() {
                         <div
                             style={{
                                 zIndex: 99,
+                                borderRadius: '12px',
                             }}
                             className='collection-card__content space-y-3 absolute top-0 left-0 w-full h-full flex flex-col justify-end items-start bg-black/40 p-3'>
                             {collection.title &&

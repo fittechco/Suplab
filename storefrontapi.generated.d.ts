@@ -904,7 +904,7 @@ export type SitemapsQuery = {
 
 export type CollectionRefFragment = Pick<
   StorefrontAPI.Collection,
-  'handle' | 'title'
+  'handle' | 'title' | 'id'
 > & {image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>};
 
 export type MetaobjectFragment = Pick<
@@ -915,7 +915,7 @@ export type MetaobjectFragment = Pick<
     Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
       references?: StorefrontAPI.Maybe<{
         nodes: Array<
-          | (Pick<StorefrontAPI.Collection, 'handle' | 'title'> & {
+          | (Pick<StorefrontAPI.Collection, 'handle' | 'title' | 'id'> & {
               image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
             })
           | (Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
@@ -935,12 +935,12 @@ export type MetaobjectFragment = Pick<
         >;
       }>;
       reference?: StorefrontAPI.Maybe<
-        | (Pick<StorefrontAPI.Collection, 'handle' | 'title'> & {
+        | (Pick<StorefrontAPI.Collection, 'handle' | 'title' | 'id'> & {
             products: {
               nodes: Array<
                 Pick<
                   StorefrontAPI.Product,
-                  'title' | 'handle' | 'description'
+                  'title' | 'handle' | 'id' | 'description'
                 > & {
                   priceRange: {
                     minVariantPrice: Pick<
@@ -1172,6 +1172,64 @@ export type ContactMetaobjectQuery = {
   >;
 };
 
+export type GetOffersQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type GetOffersQuery = {
+  metaobject?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'type' | 'handle'> & {
+      fields: Array<
+        Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
+          references?: StorefrontAPI.Maybe<{
+            nodes: Array<
+              Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
+                fields: Array<
+                  Pick<
+                    StorefrontAPI.MetaobjectField,
+                    'key' | 'value' | 'type'
+                  > & {
+                    reference?: StorefrontAPI.Maybe<{
+                      image?: StorefrontAPI.Maybe<
+                        Pick<StorefrontAPI.Image, 'url'>
+                      >;
+                    }>;
+                  }
+                >;
+              }
+            >;
+          }>;
+          reference?: StorefrontAPI.Maybe<
+            | (Pick<StorefrontAPI.Collection, 'handle' | 'title'> & {
+                image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
+                products: {
+                  nodes: Array<
+                    Pick<
+                      StorefrontAPI.Product,
+                      'title' | 'handle' | 'description'
+                    > & {
+                      priceRange: {
+                        minVariantPrice: Pick<
+                          StorefrontAPI.MoneyV2,
+                          'amount' | 'currencyCode'
+                        >;
+                      };
+                      images: {nodes: Array<Pick<StorefrontAPI.Image, 'url'>>};
+                      featuredImage?: StorefrontAPI.Maybe<
+                        Pick<StorefrontAPI.Image, 'url'>
+                      >;
+                    }
+                  >;
+                };
+              })
+            | {image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>}
+          >;
+        }
+      >;
+    }
+  >;
+};
+
 export type MoneyFragment = Pick<
   StorefrontAPI.MoneyV2,
   'currencyCode' | 'amount'
@@ -1374,6 +1432,10 @@ interface GeneratedQueryTypes {
   '#graphql\n    query ContactMetaobject {\n        metaobject(handle: { handle: "contact-section", type: "contact_section" }) {\n            type\n            fields {\n                key\n                value\n                type\n                references(first: 20) {\n                    nodes {\n                        ... on Metaobject {\n                            type\n                            fields {\n                                key\n                                value\n                                type\n                                reference {\n                                    ... on MediaImage {\n                                        image {\n                                            url\n                                        }\n                                    }\n                                }\n                            }\n                        }\n                    }\n                }\n                reference {\n                    ... on MediaImage {\n                        image {\n                            url\n                        }\n                    }\n                    ... on Collection {\n                        handle\n                        title\n                        products(first: 20) {\n                            nodes {\n                                title\n                                handle\n                                description\n                                priceRange {\n                                    minVariantPrice {\n                                        amount\n                                        currencyCode\n                                    }\n                                }\n                                images(first: 20) {\n                                    nodes {\n                                        url\n                                    }\n                                }\n                                featuredImage {\n                                    url\n                                }\n                            }\n                        }\n                    }\n                }\n            }\n        }\n    }\n': {
     return: ContactMetaobjectQuery;
     variables: ContactMetaobjectQueryVariables;
+  };
+  '#graphql\nquery GetOffers {\n    metaobject(handle: {handle:"offers", type:"offers_section"}) {\n      type\n  handle\n  fields {\n    key\n    value\n    type\n    references(first: 20) {\n      nodes {\n        ... on Metaobject {\n          id\n          type\n          fields {\n            key\n            value\n            type\n            reference{\n              ... on MediaImage {\n                image {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    reference {\n      ... on MediaImage {\n        image {\n          url\n        }\n      }\n      ... on Collection {\n        handle\n        title\n        image {\n          url\n        }\n        products(first: 20) {\n          nodes {\n            title\n            handle\n            description\n            priceRange{\n              minVariantPrice{\n                amount\n                currencyCode\n              }\n              }\n            images(first: 20) {\n              nodes {\n                url\n              }\n            }\n            featuredImage {\n              url\n            }\n          }\n        }\n      }\n    }\n  }\n    }\n  }\n': {
+    return: GetOffersQuery;
+    variables: GetOffersQueryVariables;
   };
 }
 

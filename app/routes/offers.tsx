@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from '@shopify/remix-oxygen'
 import type { App } from '../api/type';
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const res = await context.storefront.query(OFFERS_QUERY, {
+  const res = await context.storefront.query(GET_OFFERS_QUERY, {
     cache: {
       maxAge: 60 * 60 * 24,
       staleWhileRevalidate: 60 * 60,
@@ -19,8 +19,8 @@ function offers() {
 
 export default offers
 
-export const OFFERS_QUERY = `#graphql
-query Offers {
+export const GET_OFFERS_QUERY = `#graphql
+query GetOffers {
     metaobject(handle: {handle:"offers", type:"offers_section"}) {
       type
   handle
