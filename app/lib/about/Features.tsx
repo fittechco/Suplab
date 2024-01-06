@@ -36,10 +36,10 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
           //     isEven
           //       ? { paddingLeft: '40px' }
           //       : { paddingRight: '40px' };
-          const paddingStyle = `md:pl-0 ${isEven ? "pl-10" : "pr-10"}`
+          const paddingStyle = `pl-0 ${isEven ? "md:pl-10" : "md:pr-10"}`
 
           // const flexDirection = window.innerWidth < 768 ? 'column' : isEven ? 'row' : 'row-reverse';
-          const flexDirection = `md:flex-col ${isEven ? "flex-row" : "flex-row-reverse"}`
+          const flexDirection = `flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"}`
 
           return (
             <div
