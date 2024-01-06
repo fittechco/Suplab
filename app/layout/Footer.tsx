@@ -176,7 +176,7 @@ const Footer = (props: Props) => {
           © 2023 | Suplab Supplements Store Lebanon | All Rights Reserved
         </p>
         <Link
-          to={"https://fittech.solutions/"}
+          to={"https://almoe.co/"}
           target="_blank"
           style={{
             color: Colors.secondaryDark,
@@ -189,7 +189,7 @@ const Footer = (props: Props) => {
             textTransform: 'uppercase',
           }}
         >
-          Developed By FitTech
+          Developed By Almoe
         </Link>
       </div>
     </div>
