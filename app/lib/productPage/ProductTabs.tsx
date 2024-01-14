@@ -33,10 +33,16 @@ export default function ProductTabs(props: Props) {
     if (metafields == null) {
         return null
     }
+    const isDescriptionEmpty = product?.description == null || product?.description === ""
+    const isMetafieldsEmpty = metafields.find(metafield => metafield != null) == null
+    const isEmptyTabs = isMetafieldsEmpty === true && isDescriptionEmpty === true
+    if (isEmptyTabs) {
+        return null
+    }
     return (
         <div className='product-tabs md:container space-y-5'>
             <div className='mobile-accordions flex flex-col gap-5 md:hidden'>
-                <Accordion title={"Description"} details={product?.description || ""} />
+                {isDescriptionEmpty === false && <Accordion title={"Description"} details={product?.description} />}
                 {metafields.map((metafield, index) => {
                     if (metafield == null) {
                         return null
@@ -58,9 +64,9 @@ export default function ProductTabs(props: Props) {
                 })}
             </div>
             <div className='product-tabs-titles flex justify-center gap-5 max-md:hidden'>
-                <TabHeading title="description" isSelected={selectedTabIndex === metafields.length} setSelectedTabIndex={() => {
+                {product?.description != "" && <TabHeading title="description" isSelected={selectedTabIndex === metafields.length} setSelectedTabIndex={() => {
                     setSelectedTabIndex(metafields.length)
-                }} />
+                }} />}
                 {metafields.map((metafield, index) => {
                     const isSelected = index === selectedTabIndex
                     if (metafield == null) {

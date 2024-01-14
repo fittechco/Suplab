@@ -11,6 +11,7 @@ export const PRODUCTFRAGMENT = `#graphql
     title
     vendor
     handle
+    productType
     description
     seo {
       description

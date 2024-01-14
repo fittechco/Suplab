@@ -22,6 +22,7 @@ export default function ProductForm(props: Props) {
     quantity: 1,
   };
 
+  const isOffer = product.productType.toLocaleLowerCase() === "offer"
   return (
     <div className="product-form flex flex-col gap-5 w-full">
       <span
@@ -44,10 +45,13 @@ export default function ProductForm(props: Props) {
           />
         </div>
       </div>
-      <ProductOptions
-        selectedVariant={selectedVariant}
-        options={product.options}
-      />
+
+      {isOffer === false &&
+        <ProductOptions
+          selectedVariant={selectedVariant}
+          options={product.options}
+        />
+      }
       <div className="flex items-center w-full max-md:bottom-9 max-md:sticky">
         <AddToCartButton
           analytics={{

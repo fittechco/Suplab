@@ -65,16 +65,11 @@ const Offers = (props: Props) => {
                 <Link
                   className="swiper-slide cursor-pointer"
                   key={product?.id} to={`/products/${product?.handle}`}
-                  onClick={() => {
-                    UseShopStore.setState({
-
-                    })
-                  }}
                 >
                   {product?.images != null && (
                     <LazyImage
                       alt="product image"
-                      className="object-fill rounded-3xl w-full"
+                      className="rounded-3xl w-full aspect-[1.2] object-cover"
                       src={resizeImage(product.images.nodes[0].url, 400)}
                     />
                   )}

@@ -36,6 +36,7 @@ import { UseAnalytics } from './ft-lib/hooks/useAnalytics';
 import { type HydrogenSession } from './lib/session.server';
 import * as gtag from "~/app/ft-lib/google-utils";
 import Hotjar from '@hotjar/browser';
+import { ExternalScripts } from './ft-lib/ExternalScripts';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -164,6 +165,7 @@ export default function App() {
   const nonce = useNonce();
   const navigation = useNavigation();
   const data = useLoaderData<typeof loader>();
+  const gTrackId = "G-BXXRW595RC"
 
   UseAnalytics(true);
 
@@ -188,10 +190,7 @@ export default function App() {
   }, [navigation]);
 
   useEffect(() => {
-    gtag.pageview(location.pathname, "G-BXXRW595RC");
-    Hotjar.init(siteId, hotjarVersion, {
-      nonce: 'rAnDoM'
-    });
+    gtag.pageview(location.pathname, gTrackId);
   }, []);
 
   return (
@@ -202,15 +201,33 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
+        {process.env.NODE_ENV == 'development' ? null : (
+          <>
+            <Script
+              nonce={nonce}
+              dangerouslySetInnerHTML={{
+                __html: `
+                (function(h,o,t,j,a,r){
+                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                  h._hjSettings={hjid:3812341,hjsv:6};
+                  a=o.getElementsByTagName('head')[0];
+                  r=o.createElement('script');r.async=1;
+                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                  a.appendChild(r);
+              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                `,
+              }} />
+            <script id='g-tag-manajer' nonce={nonce} /></>
+        )}
       </head>
 
       <QueryClientProvider client={queryClient}>
         <body>
           {process.env.NODE_ENV == "development" ? null : (
             <>
-              <Script async src={`https://www.googletagmanager.com/gtag/js?id=G-BXXRW595RC`} />
+              <Script async src={`https://www.googletagmanager.com/gtag/js?id=${gTrackId}`} />
               <Script
-                nonce='Njg1Mjk1ZGYtNmUzOS00MTNiLWJmM2ItM2Q5NGFiYWYwNDVj'
+                nonce={nonce}
                 dangerouslySetInnerHTML={{
                   __html: `
                   window.dataLayer = window.dataLayer || [];

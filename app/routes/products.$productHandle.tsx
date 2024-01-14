@@ -107,6 +107,9 @@ const ProductPage = () => {
   const { product, reviews, widgetSettings, selectedVariant, recommendedProducts, productMetafields, analytics } = useLoaderData<typeof loader>();
   const swiperContainer = useRef<HTMLDivElement | null>(null);
   const thumbsSwiperRef = useRef<HTMLDivElement | null>(null);
+  const swiperPagination = useRef<HTMLDivElement | null>(null);
+  const swiperButtonPrev = useRef<HTMLDivElement | null>(null);
+  const swiperButtonNext = useRef<HTMLDivElement | null>(null);
   const [isTop, setIsTop] = useState(true);
   const navigation = useNavigation();
   const [thumbsSwiper, setThumbsSwiper] = useState<Swiper | null>(null);
@@ -139,7 +142,7 @@ const ProductPage = () => {
       },
       pagination: {
         clickable: true,
-        el: '.swiper-pagination',
+        el: swiperPagination.current,
         bulletActiveClass: 'swiper-pagination-bullet-active-product-page',
         renderBullet(index, className) {
           return `<span class="${className} !opacity-50"></span>`;
@@ -167,8 +170,8 @@ const ProductPage = () => {
       freeMode: true,
       watchSlidesProgress: true,
       navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: swiperButtonNext.current,
+        prevEl: swiperButtonPrev.current,
       },
     });
     setThumbsSwiper(swiper);
@@ -189,7 +192,6 @@ const ProductPage = () => {
   if (product == null) {
     return null;
   }
-
   return (
     <div
       style={{
@@ -238,8 +240,12 @@ const ProductPage = () => {
                 );
               })}
             </div>
-            <div className="swiper-button-prev swiper-button-prev-vertical" />
-            <div className="swiper-button-next swiper-button-next-vertical" />
+            <div
+              ref={swiperButtonPrev}
+              className="swiper-button-prev swiper-button-prev-vertical" />
+            <div
+              ref={swiperButtonNext}
+              className="swiper-button-next swiper-button-next-vertical" />
           </div>
           <div
             ref={swiperContainer}
@@ -291,7 +297,9 @@ const ProductPage = () => {
                 );
               })}
             </div>
-            <div className="swiper-pagination" />
+            <div
+              ref={swiperPagination}
+              className="swiper-pagination" />
           </div>
         </div>
         <div
