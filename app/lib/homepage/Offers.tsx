@@ -70,7 +70,7 @@ const Offers = (props: Props) => {
                     <LazyImage
                       alt="product image"
                       className="rounded-3xl w-full aspect-[1.2] object-cover"
-                      src={resizeImage(product.images.nodes[0].url, 400)}
+                      src={resizeImage(product.images.nodes[0].url, 500)}
                     />
                   )}
                 </Link>
