@@ -23,12 +23,12 @@ jobs:
           check-latest: true
 
       - name: Cache node modules
-        id: cache-npm
+        id: cache-yarn
         uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: ~/.yarn
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -36,14 +36,14 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --ignore-engines
 
       - name: Build and Publish to Oxygen
         id: deploy
         uses: shopify/oxygenctl-action@v4
         with:
           oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000005860 }}
-          build_command: "npm run build"
+          build_command: "yarn build"
 
       # Create GitHub Deployment
       - name: Create GitHub Deployment
