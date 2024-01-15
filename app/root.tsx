@@ -275,7 +275,7 @@ export function ErrorBoundary() {
   }
   const navigate = useNavigate();
   console.log(error, "errorMessage");
-  // the return type from the loader and its being wrapped in Awaited in order to remove the promise type
+  // the return type from the loader and its being wrapped in Awaited in order to remove the promise typee
   const data = root.data as Awaited<ReturnType<typeof loader>>["data"];
 
   return (
