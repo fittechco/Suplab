@@ -1,24 +1,18 @@
-
-import { CartForm, Money } from '@shopify/hydrogen';
-import { useCart } from './CartProvider';
+import {CartForm, Money} from '@shopify/hydrogen';
+import {useCart} from './CartProvider';
 import FTicons from 'app/ft-lib/FTicon';
-import { Colors } from 'app/ft-lib/shared';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { UseShopStore } from '../root';
+import {Colors} from 'app/ft-lib/shared';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {UseShopStore, useRootLoaderData} from '../root';
 import CTAButton from './CTAButton';
-import { type FetcherWithComponents, Link, useNavigate } from '@remix-run/react';
+import {type FetcherWithComponents, Link, useNavigate} from '@remix-run/react';
 import LineItem from '../lib/cart/LineItem';
 import clsx from 'clsx';
-import { getInputStyleClasses } from '../utils';
-import type {
-  Cart as CartType,
-} from '@shopify/hydrogen/storefront-api-types';
+import {getInputStyleClasses} from '../utils';
+import type {Cart as CartType} from '@shopify/hydrogen/storefront-api-types';
 
-const CartDetails = (props: {
-  animate: boolean
-  closeCart: () => void
-}) => {
-  const { closeCart } = props;
+const CartDetails = (props: {animate: boolean; closeCart: () => void}) => {
+  const {closeCart} = props;
   const cart = useCart();
   const navigate = useNavigate();
 
@@ -27,11 +21,15 @@ const CartDetails = (props: {
     cart.lines.nodes.length === 0 ||
     cart.lines.nodes.length === null;
 
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
   return (
     <div className="cart-wrapper flex flex-col py-3 md:py-5 space-y-3 md:space-y-5 h-full">
       {cart == null || isLinesEmpty === true ? (
         <div className="h-full uppercase flex flex-col gap-3 md:gap-5 justify-center items-center font-bold text-2xl">
-          your cart is empty
+          {isArabic ? 'سلة التسوق الخاصة بك فارغة' : 'Your Bag is Empty'}
           <CTAButton
             onClick={() => {
               closeCart();
@@ -39,7 +37,7 @@ const CartDetails = (props: {
             }}
             className="md:text-xl"
           >
-            Continue Shopping
+            {isArabic ? 'تابع التسوق' : 'Continue Shopping'}
           </CTAButton>
         </div>
       ) : (
@@ -88,8 +86,9 @@ const CartDetails = (props: {
                 }}
                 className="border-l text-lg font-medium pl-1"
               >
-                {`${cart.lines.nodes.length} ${cart.lines.nodes.length > 1 ? 'items' : 'item'
-                  }`}
+                {`${cart.lines.nodes.length} ${
+                  cart.lines.nodes.length > 1 ? 'items' : 'item'
+                }`}
               </div>
             </div>
             <CartDiscounts discountCodes={cart.discountCodes} />
@@ -110,17 +109,14 @@ const CartDetails = (props: {
         </>
       )}
     </div>
-  )
+  );
 };
 
 export default function CartDrawer() {
-  const showCart = UseShopStore((state: { showCart: any; }) => state.showCart);
-  const handleClickOutside = useCallback(
-    () => {
-      UseShopStore.setState({ showCart: false });
-    },
-    [],);
-
+  const showCart = UseShopStore((state: {showCart: any}) => state.showCart);
+  const handleClickOutside = useCallback(() => {
+    UseShopStore.setState({showCart: false});
+  }, []);
 
   return (
     <div
@@ -135,24 +131,29 @@ export default function CartDrawer() {
         transition: 'all 0.3s ease-in-out',
       }}
       className={`cart-container 
-        ${showCart === true ? 'md:translate-x-0 translate-y-0' : 'md:translate-x-full md:translate-y-0 translate-x-0 translate-y-full'}
+        ${
+          showCart === true
+            ? 'md:translate-x-0 translate-y-0'
+            : 'md:translate-x-full md:translate-y-0 translate-x-0 translate-y-full'
+        }
         flex justify-end items-end md:items-center`}
     >
-      <div style={{
-        position: 'fixed',
-        top: '0',
-        right: '0',
-        width: '100%',
-        height: '100%',
-        background: 'rgba(250, 249, 246, 0.10)',
-        zIndex: showCart === true ? 10 : -1,
-        opacity: showCart ? 1 : 0,
-        transition: showCart ? 'all 0.3s ease-in-out' : 'none',
-        transitionDelay: showCart ? '0.3s' : '0s',
-      }}
-        className='backdrop-blur-sm'
+      <div
+        style={{
+          position: 'fixed',
+          top: '0',
+          right: '0',
+          width: '100%',
+          height: '100%',
+          background: 'rgba(250, 249, 246, 0.10)',
+          zIndex: showCart === true ? 10 : -1,
+          opacity: showCart ? 1 : 0,
+          transition: showCart ? 'all 0.3s ease-in-out' : 'none',
+          transitionDelay: showCart ? '0.3s' : '0s',
+        }}
+        className="backdrop-blur-sm"
         onClick={() => {
-          handleClickOutside()
+          handleClickOutside();
         }}
       ></div>
       <div
@@ -166,17 +167,18 @@ export default function CartDrawer() {
           transition: 'all 0.2s ease-in-out',
           // transform: showCart ? 'translateX(0%)' : 'translateX(100%)',
         }}
-        className="cart-slider backdrop-blur max-md:hidden">
+        className="cart-slider backdrop-blur max-md:hidden"
+      >
         <CartDetails
           animate={showCart}
           closeCart={() => {
-            UseShopStore.setState({ showCart: false });
+            UseShopStore.setState({showCart: false});
           }}
         />
       </div>
       <div
         style={{
-          width: "100%",
+          width: '100%',
           height: '90%',
           zIndex: 20,
           background: 'rgba(250, 249, 246, 0.90)',
@@ -184,18 +186,18 @@ export default function CartDrawer() {
           border: '0.5px solid #93C147',
           transition: 'all 0.2s ease-in-out',
         }}
-        className="cart-slider backdrop-blur md:hidden">
+        className="cart-slider backdrop-blur md:hidden"
+      >
         <CartDetails
           animate={showCart}
           closeCart={() => {
-            UseShopStore.setState({ showCart: false });
+            UseShopStore.setState({showCart: false});
           }}
         />
       </div>
     </div>
   );
 }
-
 
 function CartDiscounts({
   discountCodes,
@@ -205,23 +207,21 @@ function CartDiscounts({
   const codes: string[] =
     discountCodes
       ?.filter((discount) => discount.applicable)
-      ?.map(({ code }) => code) || [];
-  const [deleteLoading, setDeleteLoading] = useState(false)
-  const [submitLoading, setSubmitLoading] = useState(false)
+      ?.map(({code}) => code) || [];
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   return (
     <>
       {/* Have existing discount, display it with a remove option */}
       <dl className={codes && codes.length !== 0 ? 'grid' : 'hidden'}>
         <div className="flex items-center justify-between font-medium">
-          <div className='text-base'>Discount(s)</div>
+          <div className="text-base">Discount(s)</div>
           <div className="flex items-center justify-between space-x-3">
             <UpdateDiscountForm
-              setLoading={
-                (loading) => setDeleteLoading(loading)
-              }
+              setLoading={(loading) => setDeleteLoading(loading)}
             >
-              <button className='flex items-center justify-center'>
-                {deleteLoading ?
+              <button className="flex items-center justify-center">
+                {deleteLoading ? (
                   <div
                     style={{
                       color: Colors.secondary,
@@ -230,17 +230,21 @@ function CartDiscounts({
                   >
                     <div className="lds-dual-ring "></div>
                   </div>
-                  : <FTicons
+                ) : (
+                  <FTicons
                     icon="close"
                     style={{
                       width: 14,
                       height: 14,
                       cursor: 'pointer',
                     }}
-                  />}
+                  />
+                )}
               </button>
             </UpdateDiscountForm>
-            <div className='text-base font-bold capitalize'>{codes?.join(', ')}</div>
+            <div className="text-base font-bold capitalize">
+              {codes?.join(', ')}
+            </div>
           </div>
         </div>
       </dl>
@@ -248,7 +252,8 @@ function CartDiscounts({
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm
         setLoading={(loading) => setSubmitLoading(loading)}
-        discountCodes={codes}>
+        discountCodes={codes}
+      >
         <div
           className={clsx(
             'flex',
@@ -265,8 +270,9 @@ function CartDiscounts({
             style={{
               color: Colors.text,
             }}
-            className="flex justify-end hover:underline font-medium whitespace-nowrap">
-            {submitLoading ?
+            className="flex justify-end hover:underline font-medium whitespace-nowrap"
+          >
+            {submitLoading ? (
               <div
                 style={{
                   color: Colors.secondary,
@@ -275,9 +281,9 @@ function CartDiscounts({
               >
                 <div className="lds-dual-ring "></div>
               </div>
-              :
-              "Apply Discount"
-            }
+            ) : (
+              'Apply Discount'
+            )}
           </button>
         </div>
       </UpdateDiscountForm>
@@ -288,7 +294,7 @@ function CartDiscounts({
 function UpdateDiscountForm({
   discountCodes,
   children,
-  setLoading
+  setLoading,
 }: {
   discountCodes?: string[];
   children: React.ReactNode;
@@ -300,9 +306,9 @@ function UpdateDiscountForm({
       action={CartForm.ACTIONS.DiscountCodesUpdate}
       inputs={{
         discountCodes: discountCodes || [],
-      }}>
+      }}
+    >
       {(fetcher) => {
-
         return (
           <>
             <UpdateDiscountFormLoader
@@ -311,22 +317,22 @@ function UpdateDiscountForm({
             />
             {children}
           </>
-        )
+        );
       }}
     </CartForm>
   );
 }
 
 const UpdateDiscountFormLoader = (params: {
-  setLoading: (loading: boolean) => void
-  fetcher: FetcherWithComponents<any>
+  setLoading: (loading: boolean) => void;
+  fetcher: FetcherWithComponents<any>;
 }) => {
   useEffect(() => {
     if (params.fetcher.state !== 'idle') {
-      params.setLoading(true)
+      params.setLoading(true);
     } else {
-      params.setLoading(false)
+      params.setLoading(false);
     }
-  }, [params])
-  return null
-}
+  }, [params]);
+  return null;
+};
