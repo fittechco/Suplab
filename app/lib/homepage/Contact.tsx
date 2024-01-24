@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
-import type { App } from '../../api/type';
-import { Link, useLoaderData } from '@remix-run/react';
+import React, {useEffect, useState} from 'react';
+import {LoaderFunctionArgs, json} from '@shopify/remix-oxygen';
+import type {App} from '../../api/type';
+import {Link, useLoaderData} from '@remix-run/react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
-import { Colors } from 'app/ft-lib/shared';
+import {Colors} from 'app/ft-lib/shared';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import {useRootLoaderData} from '~/app/root';
 
 interface ContactSectionProps {
   section: App.HomePageTemplate.ContactSection;
 }
 
-
-const Contact = ({ section }: ContactSectionProps) => {
-  const fields = arrayToObject({ array: section.fields });
+const Contact = ({section}: ContactSectionProps) => {
+  const fields = arrayToObject({array: section.fields});
   const [image, setImage] = React.useState<string | null>(null);
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   return (
     <div
@@ -33,12 +37,13 @@ const Contact = ({ section }: ContactSectionProps) => {
         }}
         className="flex md:flex-row w-full h-full justify-center items-center relative rounded-2xl overflow-hidden"
       >
-        {fields.image?.reference.image.url != null &&
+        {fields.image?.reference.image.url != null && (
           <LazyImage
             alt="Suplab Supplements Store Contact Us"
             className="w-full h-full object-cover rounded-2xl"
             src={resizeImage(fields.image?.reference.image.url, 800)}
-          />}
+          />
+        )}
         <div
           style={{
             position: 'absolute',
@@ -46,16 +51,16 @@ const Contact = ({ section }: ContactSectionProps) => {
           }}
           className="w-full h-full top-0 left-0 flex flex-col rounded-2xl overflow-hidden gap-5 md:gap-4 items-center justify-end container z-50"
         >
-          <div
-            className="contactSection__content w-full md:w-[55%] md:mb-12 mb-6 flex flex-col "
-          >
+          <div className="contactSection__content w-full md:w-[55%] md:mb-12 mb-6 flex flex-col ">
             <div className="flex flex-col">
               {fields.email != null && (
                 <div
                   style={{
                     color: Colors.textSecondary,
                   }}
-                  className="flex mb-6 items-end"
+                  className={`flex mb-6 items-end ${
+                    isArabic ? 'arFlexDirection' : 'enFlexDirection'
+                  }`}
                 >
                   <p
                     style={{
@@ -65,9 +70,11 @@ const Contact = ({ section }: ContactSectionProps) => {
                       lineHeight: 'normal',
                       textTransform: 'uppercase',
                     }}
-                    className="md:text-3xl text-xl"
+                    className={`md:text-3xl text-xl ${
+                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                    }`}
                   >
-                    Email:
+                    {isArabic ? ':البريد الإلكتروني' : 'Email:'}
                   </p>
                   <p
                     style={{
@@ -87,7 +94,9 @@ const Contact = ({ section }: ContactSectionProps) => {
                   style={{
                     color: Colors.textSecondary,
                   }}
-                  className="flex mb-6 items-end"
+                  className={`flex mb-6 items-end ${
+                    isArabic ? 'arFlexDirection' : 'enFlexDirection'
+                  }`}
                 >
                   <p
                     style={{
@@ -98,9 +107,11 @@ const Contact = ({ section }: ContactSectionProps) => {
                       letterSpacing: '0.68px',
                       textTransform: 'uppercase',
                     }}
-                    className="md:text-3xl text-xl"
+                    className={`md:text-3xl text-xl ${
+                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                    }`}
                   >
-                    Phone:
+                    {isArabic ? ':رقم الهاتف' : 'Phone:'}
                   </p>
                   <p
                     style={{
@@ -120,13 +131,12 @@ const Contact = ({ section }: ContactSectionProps) => {
               {fields.contact_button_text != null && (
                 <Link
                   to={`${fields.contact_url?.value}`}
-                  target='_blank'
+                  target="_blank"
                   style={{
                     backgroundColor: Colors.primary,
                     color: Colors.textSecondary,
                     cursor: 'pointer',
                   }}
-
                   className="w-full btn px-4 py-2 rounded-full text-main text-center w- font-bold text-xl capitalize mb-6"
                 >
                   <p
@@ -147,7 +157,7 @@ const Contact = ({ section }: ContactSectionProps) => {
               {fields.location_button_text != null && (
                 <Link
                   to={`${fields.location_url?.value}`}
-                  target='_blank'
+                  target="_blank"
                   style={{
                     backgroundColor: Colors.secondary,
                     color: Colors.textSecondary,

@@ -1,34 +1,36 @@
-import { Image } from '@shopify/hydrogen';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { App } from '../../api/type';
-import { createPortal } from 'react-dom';
+import {Image} from '@shopify/hydrogen';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import type {App} from '../../api/type';
+import {createPortal} from 'react-dom';
 import MobileNav from '../MobileNav';
 import SubMenuPopup from './SubMenuPopup';
 import FTicons from 'app/ft-lib/FTicon';
-import { Colors } from 'app/ft-lib/shared';
-import type { loader as offersLoader } from '~/app/routes/offers';
+import {Colors} from 'app/ft-lib/shared';
+import type {loader as offersLoader} from '~/app/routes/($locale).offers';
 import type {
   FooterQuery,
   HeaderQuery,
   ShopLayoutQuery,
 } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
-import { UseShopStore } from '~/app/root';
-import { useCart } from '~/app/components/CartProvider';
-import { Link, useFetcher } from '@remix-run/react';
+import {UseShopStore, useRootLoaderData} from '~/app/root';
+import {useCart} from '~/app/components/CartProvider';
+import {Link, useFetcher, useParams} from '@remix-run/react';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
-import type { loader as collectionLoader } from '~/app/routes/collections.$collectionHandle';
+import type {loader as collectionLoader} from '~/app/routes/($locale).collections.$collectionHandle';
+import {CountrySelector} from '~/app/components/CountrySelector';
+import {RemixLink} from '~/app/components/RemixLink';
 
 const GetBestSellers = () => {
   const fetcher = useFetcher<typeof collectionLoader>();
   useEffect(() => {
     if (fetcher.state === 'idle' && !fetcher.data) {
-      fetcher.load("/collections/best-sellers")
+      fetcher.load('/collections/best-sellers');
     }
   }, [fetcher]);
-  return fetcher.data
-}
+  return fetcher.data;
+};
 
 type Props = {
   layout: {
@@ -48,13 +50,21 @@ function Header(props: Props) {
   const [showSearch, setShowSearch] = useState(false);
   const cart = useCart();
   const fetcher = useFetcher<typeof offersLoader>();
-  const bestSellersCollection = GetBestSellers()
+  const bestSellersCollection = GetBestSellers();
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
+  const ar = isArabic ? 'ar' : '';
 
   useEffect(() => {
     if (fetcher.state === 'idle' && !fetcher.data) {
-      fetcher.load("/offers")
+      fetcher.load('/offers');
     }
-  }, [fetcher])
+  }, [fetcher]);
+
+  console.log('layout', props.layout.header.menu?.items);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -132,15 +142,19 @@ function Header(props: Props) {
           style={{
             height: 80,
           }}
-          className=" flex items-center max-md:justify-between  py-2 px-5 sm:px-6"
+          className={`flex items-center max-md:justify-between py-2 px-5 sm:px-6 ${
+            isArabic ? 'arFlexDirection' : 'enFlexDirection'
+          }`}
         >
           <Link
-            to={'/'}
+            to={ar}
             style={{
               color: Colors.secondary,
               fontWeight: 700,
             }}
-            className="header__logo mr-auto flex items-center"
+            className={`header__logo flex items-center ${
+              isArabic ? 'arFlexDirection ml-auto' : 'enFlexDirection mr-auto'
+            }`}
           >
             {props.layout.shop?.brand?.logo?.image != null && (
               <LazyImage
@@ -152,10 +166,14 @@ function Header(props: Props) {
               />
             )}
           </Link>
-          <div className="navmenusContainer flex   items-center justify-center  max-lg:hidden h-full">
+          <div
+            className={`navmenusContainer flex items-center justify-center max-lg:hidden h-full ${
+              isArabic ? 'arFlexDirection' : 'enFlexDirection'
+            }`}
+          >
             {props.layout.header.menu?.items.map((item) => {
-              // todo: fix this
               const pathname = new URL(item.url || '').pathname;
+              console.log('item url', pathname);
               const hasChildren = item.items?.length > 0;
               return (
                 <div
@@ -194,14 +212,17 @@ function Header(props: Props) {
                     >
                       {item.title}
                     </Link>
-                  )
-                  }
-
+                  )}
                 </div>
               );
             })}
           </div>
-          <div className="icons flex gap-3 items-center justify-end ml-auto">
+          <div
+            className={`icons flex gap-3 items-center justify-end ${
+              isArabic ? 'arFlexDirection mr-auto' : 'enFlexDirection ml-auto'
+            }`}
+          >
+            <CountrySelector />
             <button
               onClick={() => setShowSearch(true)}
               className="icons_item cursor-pointer"
@@ -220,7 +241,7 @@ function Header(props: Props) {
             <div className="icons_item cursor-pointer">
               <button
                 onClick={() => {
-                  UseShopStore.setState({ showCart: true });
+                  UseShopStore.setState({showCart: true});
                 }}
                 className="cursor-pointer flex items-center justify-center relative"
               >
@@ -282,7 +303,13 @@ function Header(props: Props) {
             }
           }}
         >
-          <SubMenuPopup bestSellers={bestSellersCollection || null} offers={fetcher.data || null} showSub={showSub} isTop={isTop} items={subItems} />
+          <SubMenuPopup
+            bestSellers={bestSellersCollection || null}
+            offers={fetcher.data || null}
+            showSub={showSub}
+            isTop={isTop}
+            items={subItems}
+          />
         </div>
       </div>
 

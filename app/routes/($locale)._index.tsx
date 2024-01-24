@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
+import React, {useEffect, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+  json,
+  redirect,
+} from '@shopify/remix-oxygen';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Hero from '../lib/homepage/Hero';
-import type { App } from '../api/type';
+import type {App} from '../api/type';
 import Benefits from '../lib/homepage/Benefits';
 import Testimonials from '../lib/homepage/Testimonials';
 import ShopTheGoal from '../lib/homepage/ShopTheGoal';
@@ -12,12 +17,12 @@ import Contact from '../lib/homepage/Contact';
 import Promotion from '../lib/homepage/Promotion';
 import FeaturedCollections from '../lib/homepage/FeaturedCollections';
 import FAQ from '../lib/homepage/FAQ';
-import { UseShopStore } from '~/app/root';
+import {UseShopStore} from '~/app/root';
 import Offers from '../lib/homepage/Offers';
-import { seoPayload } from '../ft-lib/seo.server';
+import {seoPayload} from '../ft-lib/seo.server';
 import Services from '../lib/about/Services';
-import { AnalyticsPageType } from '@shopify/hydrogen';
-import { routeHeaders } from '../ft-lib/cache';
+import {AnalyticsPageType} from '@shopify/hydrogen';
+import {routeHeaders} from '../ft-lib/cache';
 
 export type Shop = {
   name: string;
@@ -25,18 +30,39 @@ export type Shop = {
 
 export const headers = routeHeaders;
 
-export async function loader({ context }: LoaderFunctionArgs) {
+export async function action({request}: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const language = formData.get('language');
+
+  if (language === 'EN') {
+    return redirect('/', 302);
+  } else if (language === 'AR') {
+    return redirect('/ar', 302);
+  }
+}
+
+export async function loader({context, params}: LoaderFunctionArgs) {
+  const {language} = context.storefront.i18n;
+
+  if (
+    params.locale &&
+    params.locale.toLowerCase() !== `${language}`.toLowerCase()
+  ) {
+    // If the locale URL param is defined, yet we still are on `EN`
+    // the the locale param must be invalid, send to the 404 page
+    throw new Response(null, {status: 404});
+  }
+
   const storefront = await context.storefront.query(SHOPQUERY, {
     cache: {
       maxAge: 60 * 60 * 24,
       staleWhileRevalidate: 60 * 60,
       // 60 * 60 * 24 is 24 hours in seconds
-      // one hour is 60 * 60 
-
+      // one hour is 60 * 60
     },
   });
-  const { metaobject } = storefront;
-  const seo = seoPayload.home()
+  const {metaobject} = storefront;
+  const seo = seoPayload.home();
   return json({
     metaobject,
     seo,
@@ -47,10 +73,13 @@ export async function loader({ context }: LoaderFunctionArgs) {
 }
 
 function HomePage() {
-  const { metaobject }: { metaobject: App.HomePageTemplate.Template } =
+  const {metaobject}: {metaobject: App.HomePageTemplate.Template} =
     useLoaderData();
-  const fieldSection = metaobject.fields.find((field) => field.key === 'sections')
-  const sections: App.HomePageTemplate.Sections = fieldSection?.key === "sections" ? fieldSection.references.nodes : []
+  const fieldSection = metaobject.fields.find(
+    (field) => field.key === 'sections',
+  );
+  const sections: App.HomePageTemplate.Sections =
+    fieldSection?.key === 'sections' ? fieldSection.references.nodes : [];
 
   return (
     <div className="h-full w-full space-y-6">
@@ -68,22 +97,26 @@ function HomePage() {
         } else if (section.type === 'shop_the_goal_section') {
           return <ShopTheGoal section={section} key={section.type} />;
         } else if (section.type === 'offers_section') {
-          return <Offers
-            swiperOptions={{
-              spaceBetween: 10,
-              slidesPerView: 1.1,
-              breakpoints: {
-                768: {
-                  spaceBetween: 20,
-                  slidesPerView: 2.5,
+          return (
+            <Offers
+              swiperOptions={{
+                spaceBetween: 10,
+                slidesPerView: 1.1,
+                breakpoints: {
+                  768: {
+                    spaceBetween: 20,
+                    slidesPerView: 2.5,
+                  },
+                  1024: {
+                    spaceBetween: 20,
+                    slidesPerView: 3,
+                  },
                 },
-                1024: {
-                  spaceBetween: 20,
-                  slidesPerView: 3,
-                },
-              },
-            }}
-            section={section} key={section.type} />;
+              }}
+              section={section}
+              key={section.type}
+            />
+          );
         } else if (section.type === 'services_section') {
           return <Services section={section} key={section.type} />;
         } else if (section.type === 'contact_section') {
@@ -114,7 +147,7 @@ fragment CollectionRef on Collection {
     url
   }
 }
-`
+`;
 
 export const ON_METAOBJECT = `#graphql
 fragment Metaobject on Metaobject {
@@ -205,22 +238,23 @@ ${COLLECTION_REF}
 `;
 
 const SHOPQUERY = `#graphqls
-query ShopName {
-  metaobject(handle: {handle: "homepage", type: "page"}) {
-    fields {
-      type
-      key
-      value
-      references(first: 20) {
-        nodes {
-          ... on Metaobject {
-           ...Metaobject
+  query ShopName ($country: CountryCode, $language: LanguageCode) 
+    @inContext(country: $country, language: $language){
+    metaobject(handle: {handle: "homepage", type: "page"}) {
+      fields {
+        type
+        key
+        value
+        references(first: 20) {
+          nodes {
+            ... on Metaobject {
+            ...Metaobject
+            }
+            __typename
           }
-          __typename
         }
       }
     }
   }
-}
 ${ON_METAOBJECT}
 `;

@@ -15,7 +15,7 @@ import type {
   LanguageCode,
   CountryCode,
 } from '@shopify/hydrogen/storefront-api-types';
-import { HydrogenSession } from './app/lib/session.server';
+import {HydrogenSession} from './app/lib/session.server';
 
 /**
  * Export a fetch handler in module format.
@@ -43,7 +43,7 @@ export default {
       /**
        * Create Hydrogen's Storefront client.
        */
-      const { storefront } = createStorefrontClient({
+      const {storefront} = createStorefrontClient({
         cache,
         waitUntil,
         i18n: getLocaleFromRequest(request),
@@ -77,7 +77,7 @@ export default {
           storefront,
           cart,
           env,
-          waitUntil
+          waitUntil,
         }),
       });
 
@@ -89,7 +89,7 @@ export default {
          * If the redirect doesn't exist, then `storefrontRedirect`
          * will pass through the 404 response.
          */
-        return storefrontRedirect({ request, response, storefront });
+        return storefrontRedirect({request, response, storefront});
       }
 
       return response;
@@ -97,7 +97,7 @@ export default {
       console.error(error);
       // const errorResponse = () => new Response('An unexpected error occurred', { status: 500 });
       // return errorResponse();
-      return new Response('An unexpected error occurred', { status: 500 });
+      return new Response('An unexpected error occurred', {status: 500});
     }
   },
 };
@@ -218,7 +218,9 @@ function getLocaleFromRequest(request: Request): I18nLocale {
   let language: LanguageCode = 'EN';
   let country: CountryCode = 'US';
 
-  if (/^[A-Z]{2}-[A-Z]{2}$/i.test(firstPathPart)) {
+  if (/^(AR|EN)$/i.test(firstPathPart)) {
+    // Match for AR-EG or EN-US
+    // if (/^(AR|EN)$/i.test(firstPathPart)) { // Match for AR-EG or EN-US
     pathPrefix = '/' + firstPathPart;
     [language, country] = firstPathPart.split('-') as [
       LanguageCode,
@@ -226,5 +228,39 @@ function getLocaleFromRequest(request: Request): I18nLocale {
     ];
   }
 
-  return { language, country, pathPrefix };
+  return {language, country, pathPrefix};
 }
+
+// export function getLocaleFromRequest(request: Request): Locale {
+//   // Get the user request URL
+//   const url = new URL(request.url);
+
+//   // Match the URL host
+//   switch (url.host) {
+//     case 'suplabstore.com':
+//       // This regex matches `/fr/` paths in the request
+//       if (/^\/ar($|\/)/.test(url.pathname)) {
+//         return {
+//           label: 'العربية',
+//           currency: 'USD',
+//           language: 'AR',
+//           country: 'AR',
+//         };
+//       } else {
+//         return {
+//           label: 'United States (USD $)',
+//           currency: 'USD',
+//           language: 'EN',
+//           country: 'US',
+//         };
+//       }
+//       break;
+//     default:
+//       return {
+//         label: 'United States (USD $)',
+//         currency: 'USD',
+//         language: 'EN',
+//         country: 'US',
+//       };
+//   }
+// }

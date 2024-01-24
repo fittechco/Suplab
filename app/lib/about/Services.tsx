@@ -1,18 +1,22 @@
 import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
-import { Colors } from '../../ft-lib/shared';
-import type { App } from '../../api/type';
-import { Link } from '@remix-run/react';
+import {Colors} from '../../ft-lib/shared';
+import type {App} from '../../api/type';
+import {Link} from '@remix-run/react';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import {useRootLoaderData} from '~/app/root';
 
 interface ServicesSectionProps {
   section: App.AboutPageTemplate.ServicesSection;
 }
 
-const Services = ({ section }: ServicesSectionProps) => {
-  const fields = arrayToObject({ array: section.fields });
+const Services = ({section}: ServicesSectionProps) => {
+  const fields = arrayToObject({array: section.fields});
 
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   return (
     <div
@@ -23,13 +27,17 @@ const Services = ({ section }: ServicesSectionProps) => {
       className="servicesSection w-full !container mx-auto"
     >
       {fields.title != null && (
-        <p className="ft-text-main md:text-3xl text-2xl mb-7">
+        <p
+          className={`ft-text-main md:text-3xl text-2xl mb-7 ${
+            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+          }`}
+        >
           {fields.title.value}
         </p>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {fields.services?.references.nodes.map((service, index) => {
-          const serviceFields = arrayToObject({ array: service.fields });
+          const serviceFields = arrayToObject({array: service.fields});
 
           return (
             <div
@@ -45,12 +53,19 @@ const Services = ({ section }: ServicesSectionProps) => {
                     objectPosition: serviceFields.image_position?.value,
                   }}
                   className="w-full h-full object-cover rounded-3xl"
-                  src={resizeImage(serviceFields.image.reference.image.url, 1200)}
+                  src={resizeImage(
+                    serviceFields.image.reference.image.url,
+                    1200,
+                  )}
                   alt={serviceFields.title?.value || 'service image'}
                 />
               )}
-              <div className="absolute bg-black/40 w-full h-full flex flex-col rounded-3xl
-               gap-3 justify-end z-20 md:justify-end container pb-8 mb:pb-0">
+              <div
+                className={`absolute bg-black/40 w-full h-full flex flex-col rounded-3xl
+               gap-3 justify-end z-20 md:justify-end container pb-8 mb:pb-0 ${
+                 isArabic ? 'arAlignItems' : 'enAlignItems'
+               }`}
+              >
                 {serviceFields.title != null && (
                   <div
                     style={{
@@ -59,7 +74,9 @@ const Services = ({ section }: ServicesSectionProps) => {
                       fontSize: '34px',
                       letterSpacing: '0.02em',
                     }}
-                    className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
+                    className={`header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase ${
+                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                    }`}
                   >
                     {serviceFields.title.value}
                   </div>
@@ -70,7 +87,9 @@ const Services = ({ section }: ServicesSectionProps) => {
                       color: Colors.textSecondary,
                       width: '100%',
                     }}
-                    className="subHeader text-base md:text-lg"
+                    className={`subHeader text-base md:text-lg ${
+                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                    }`}
                   >
                     {serviceFields.description.value}
                   </div>
@@ -78,12 +97,11 @@ const Services = ({ section }: ServicesSectionProps) => {
                 {serviceFields.button_text != null && (
                   <Link
                     to={`${serviceFields.button_url?.value}`}
-                    target='_blank'
+                    target="_blank"
                     style={{
                       backgroundColor: Colors.primary,
                       color: Colors.textSecondary,
                       letterSpacing: '0.02em',
-
                     }}
                     className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
                   >

@@ -1,31 +1,36 @@
 import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
-import { Colors } from '../../ft-lib/shared';
-import type { App } from '../../api/type';
-import { Image } from '@shopify/hydrogen';
+import {Colors} from '../../ft-lib/shared';
+import type {App} from '../../api/type';
+import {Image} from '@shopify/hydrogen';
 import Link from '~/app/components/Link';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
+import {UseShopStore, useRootLoaderData} from '~/app/root';
+import {useParams} from '@remix-run/react';
 
 interface HeroSectionProps {
   section: App.HomePageTemplate.HeroSection;
 }
 
-const Hero = ({ section }: HeroSectionProps) => {
-  const fields = arrayToObject({ array: section.fields });
+const Hero = ({section}: HeroSectionProps) => {
+  const fields = arrayToObject({array: section.fields});
 
-  const mobileUrl = fields.mobile_image?.reference.image.url
-  const desktopUrl = fields.desktop_image?.reference.image.url
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
+  const mobileUrl = fields.mobile_image?.reference.image.url;
+  const desktopUrl = fields.desktop_image?.reference.image.url;
 
   if (mobileUrl == null || desktopUrl == null) {
-    return null
+    return null;
   }
 
   return (
     <div
       key={section.type}
-      style={{
-      }}
+      style={{}}
       className="hero-section-container w-full h-[70vh] md:h-[80vh] !container mx-auto transition-all ease-in-out duration-300"
     >
       <div
@@ -41,36 +46,38 @@ const Hero = ({ section }: HeroSectionProps) => {
         <LazyImage
           style={{
             borderRadius: '24px',
-
           }}
-          className="desktop-image w-full h-full object-cover max-sm:hidden"
-          containerClassName='desktop-image-conatiner max-sm:hidden'
+          className={`desktop-image w-full h-full object-cover max-sm:hidden `}
+          containerClassName="desktop-image-conatiner max-sm:hidden"
           src={resizeImage(desktopUrl, 1440)}
-          alt='Suplab Store'
+          alt="Suplab Store"
         />
         <LazyImage
           style={{
             borderRadius: '24px',
           }}
           className="mobile-image w-full h-full object-cover md:hidden "
-          containerClassName='mobile-image-conatiner md:hidden'
+          containerClassName="mobile-image-conatiner md:hidden"
           src={resizeImage(mobileUrl, 600)}
-          alt='Suplab Store'
+          alt="Suplab Store"
         />
-        <div
-          className='layer bg-black opacity-[55%] absolute top-0 left-0 w-full h-full z-20 rounded-3xl' />
+        <div className="layer bg-black opacity-[55%] absolute top-0 left-0 w-full h-full z-20 rounded-3xl" />
         <div
           style={{
             position: 'absolute',
           }}
-          className="heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8"
+          className={`heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 ${
+            isArabic ? 'arAlignItems' : 'enAlignItems'
+          }`}
         >
           {fields.headline != null && (
             <h1
               style={{
                 color: Colors.textSecondary,
               }}
-              className="header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase"
+              className={`header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase ${
+                isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+              }`}
             >
               {fields.headline.value}
             </h1>
@@ -81,7 +88,9 @@ const Hero = ({ section }: HeroSectionProps) => {
                 color: Colors.textSecondary,
                 width: '80%',
               }}
-              className="subHeader text-base md:text-lg max-w-xs"
+              className={`subHeader text-base md:text-lg max-w-xs items-start ${
+                isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+              }`}
             >
               {fields.sub_headline.value}
             </div>
@@ -92,7 +101,7 @@ const Hero = ({ section }: HeroSectionProps) => {
                 backgroundColor: Colors.primary,
                 color: Colors.textSecondary,
               }}
-              to={"/collections/all"}
+              to={'/collections/all'}
               className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
             >
               {fields.button_text.value}

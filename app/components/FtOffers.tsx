@@ -1,7 +1,7 @@
 import arrayToObject from 'app/ft-lib/ArrayToObject';
 import Offers from '../lib/homepage/Offers';
 import { useFetcher } from '@remix-run/react';
-import type { loader as offersLoader } from '~/app/routes/offers';
+import type { loader as offersLoader } from '~/app/routes/($locale).offers';
 import { useEffect } from 'react';
 
 export default function Offer() {

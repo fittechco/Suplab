@@ -9,6 +9,7 @@ import resizeImage from '~/app/ft-lib/resizeImages';
 import {Colors} from '~/app/ft-lib/shared';
 import {Link} from '@remix-run/react';
 import FTSwiper from '~/app/ft-lib/Swiper';
+import {useRootLoaderData} from '~/app/root';
 
 interface ShopTheGoalSectionProps {
   section: App.HomePageTemplate.ShopTheGoalSection;
@@ -16,6 +17,10 @@ interface ShopTheGoalSectionProps {
 
 const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
   const fields = arrayToObject({array: section.fields});
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   if (fields.shop_the_goal_collections == null) {
     return null;
@@ -31,7 +36,11 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
       className="shopTheGoalSection w-full container mx-auto"
     >
       {fields.title != null && fields.shop_the_goal_collections != null && (
-        <p className="section-heading ft-text-main md:text-3xl text-2xl mb-10 text-center md:text-start">
+        <p
+          className={`section-heading ft-text-main md:text-3xl text-2xl mb-10 text-center ${
+            isArabic ? 'md:text-end' : 'md:text-start'
+          }`}
+        >
           {fields.title.value}
         </p>
       )}
@@ -69,7 +78,8 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
                       {goalFields.goal_image != null && (
                         <LazyImage
                           alt={
-                            'Supplemnents for ' + goalFields.goal_image?.reference.image.url
+                            'Supplemnents for ' +
+                            goalFields.goal_image?.reference.image.url
                           }
                           src={resizeImage(
                             goalFields.goal_image.reference.image.url,
@@ -103,7 +113,7 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
                     </div>
                     {fields.button_text && (
                       <Link
-                        to={`/collections/${goalFields.url_handle?.value}`}
+                        to={`collections/${goalFields.url_handle?.value}`}
                         style={{
                           padding: '7.072px 16.502px',
                           background: 'var(--Main-Color, #93C147)',

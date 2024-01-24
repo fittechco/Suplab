@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import type { ProductQuery } from 'storefrontapi.generated';
+import {useEffect, useRef, useState} from 'react';
+import type {ProductQuery} from 'storefrontapi.generated';
 import ProductCard from './ProductCard';
 import Swiper from 'swiper';
 import 'swiper/css/scrollbar';
-import { Scrollbar, Mousewheel, FreeMode } from 'swiper/modules';
+import {Scrollbar, Mousewheel, FreeMode} from 'swiper/modules';
 import _ from 'lodash';
 import ProductSwiperSkeleton from '../lib/skeleton/ProductSwiperSkeleton';
+import {useRootLoaderData} from '../root';
 type Props = {
   products: ProductQuery['product'][] | null;
   title?: string;
@@ -13,6 +14,10 @@ type Props = {
 
 export default function ProductsSwiper(props: Props) {
   const swiperContainer = useRef<HTMLDivElement | null>(null);
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   useEffect(() => {
     if (swiperContainer.current == null) {
@@ -43,24 +48,32 @@ export default function ProductsSwiper(props: Props) {
   }, [props.products]);
 
   if (props.products == null) {
-    return (
-      <ProductSwiperSkeleton title={props.title} />
-    )
+    return <ProductSwiperSkeleton title={props.title} />;
   }
 
   return (
     <div className="space-y-4 w-full overflow-hidden">
       {props.title && (
-        <h3 className="ft-text-main text-2xl  container">{props.title}</h3>
+        <div
+          className={`flex ${isArabic ? 'arFlexDirection' : 'enFlexDirection'}`}
+        >
+          <h3
+            className={`ft-text-main text-2xl container ${
+              isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+            }`}
+          >
+            {props.title}
+          </h3>
+        </div>
       )}
-      <div
-        ref={swiperContainer}
-        className="swiper-container container"
-      >
+      <div ref={swiperContainer} className="swiper-container container">
         <div className="swiper-wrapper">
           {props.products.map((product, index) => {
             return (
-              <div key={product?.id + (product?.handle || "") + product?.title} className="swiper-slide overflow-hidden">
+              <div
+                key={product?.id + (product?.handle || '') + product?.title}
+                className="swiper-slide overflow-hidden"
+              >
                 <ProductCard product={product} />
               </div>
             );

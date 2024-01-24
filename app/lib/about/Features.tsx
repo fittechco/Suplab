@@ -1,14 +1,19 @@
 import React from 'react';
 import arrayToObject from '../../ft-lib/ArrayToObject';
-import { Colors } from '../../ft-lib/shared';
-import type { App } from '../../api/type';
+import {Colors} from '../../ft-lib/shared';
+import type {App} from '../../api/type';
+import {useRootLoaderData} from '~/app/root';
 
 interface FeaturesHeroSectionProps {
   section: App.AboutPageTemplate.FeaturesSection;
 }
 
-const Features = ({ section }: FeaturesHeroSectionProps) => {
-  const fields = arrayToObject({ array: section.fields });
+const Features = ({section}: FeaturesHeroSectionProps) => {
+  const fields = arrayToObject({array: section.fields});
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   return (
     <div
@@ -27,7 +32,7 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
       <div className="featureSection__features">
         {fields.features?.references.nodes.map((feature, index) => {
           const isEven = index % 2 === 0;
-          const featureFields = arrayToObject({ array: feature.fields });
+          const featureFields = arrayToObject({array: feature.fields});
 
           const imageUrl = featureFields.image?.reference?.image?.url;
 
@@ -36,10 +41,12 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
           //     isEven
           //       ? { paddingLeft: '40px' }
           //       : { paddingRight: '40px' };
-          const paddingStyle = `pl-0 ${isEven ? "md:pl-10" : "md:pr-10"}`
+          const paddingStyle = `pl-0 ${isEven ? 'md:pl-10' : 'md:pr-10'}`;
 
           // const flexDirection = window.innerWidth < 768 ? 'column' : isEven ? 'row' : 'row-reverse';
-          const flexDirection = `flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"}`
+          const flexDirection = `flex-col ${
+            isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+          }`;
 
           return (
             <div
@@ -64,12 +71,20 @@ const Features = ({ section }: FeaturesHeroSectionProps) => {
                 >
                   <div className="feature_content w-full md:w-1/2 p-2 md:p-4">
                     {featureFields.title && (
-                      <p className="feature_title_text">
+                      <p
+                        className={`feature_title_text ${
+                          isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                        }`}
+                      >
                         {featureFields.title?.value}
                       </p>
                     )}
                     {featureFields.description && (
-                      <p className="feature_description_text">
+                      <p
+                        className={`feature_description_text ${
+                          isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                        }`}
+                      >
                         {featureFields.description?.value}
                       </p>
                     )}

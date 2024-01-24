@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { SearchProductsQuery } from 'storefrontapi.generated';
 import _ from 'lodash';
 import ProductCard from './ProductCard';
-import type { loader as searchLoader } from '../routes/search';
+import type { loader as searchLoader } from '../routes/($locale).search';
 
 type Props = {
   setShowSearch: (show: boolean) => void;

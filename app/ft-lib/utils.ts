@@ -1,19 +1,14 @@
 import {useLocation, useMatches} from '@remix-run/react';
-import type {
-  SelectedOption,
-  MoneyV2,
-} from '@shopify/hydrogen/storefront-api-types';
-import {useMemo} from 'react';
-
+import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
+import {useRootLoaderData} from '~/app/root';
+import {countries} from './data/countries';
 import type {
   ChildMenuItemFragment,
   MenuFragment,
   ParentMenuItemFragment,
 } from 'storefrontapi.generated';
-import {countries} from '~/app/ft-lib/data/countries';
-import {useRootLoaderData} from '~/app/root';
-import {type I18nLocale} from './lib/types';
-import type {Locale} from './ft-lib/type';
+import type { I18nLocale } from '../lib/types';
+
 
 type EnhancedMenuItemProps = {
   to: string;
@@ -41,21 +36,6 @@ export function missingClass(string?: string, prefix?: string) {
   const regex = new RegExp(` ?${prefix}`, 'g');
   return string.match(regex) === null;
 }
-
-// export function formatText(input?: string | React.ReactNode) {
-//   if (!input) {
-//     return;
-//   }
-
-//   if (typeof input !== 'string') {
-//     return input;
-//   }
-
-//   return typographicBase(input, {locale: 'en-us'}).replace(
-//     /\s([^\s<]+)\s*$/g,
-//     '\u00A0$1',
-//   );
-// }
 
 export function getExcerpt(text: string) {
   const regex = /<p.*>(.*?)<\/p>/;
@@ -286,12 +266,12 @@ export function getLocaleFromRequest(request: Request): I18nLocale {
   const firstPathPart =
     '/' + url.pathname.substring(1).split('/')[0].toLowerCase();
 
-  if (firstPathPart === '/ar') {
-    return {
-      ...countries['/ar'],
-      pathPrefix: '/ar',
-    };
-  }
+    if (firstPathPart === '/ar') {
+      return {
+        ...countries['/ar'],
+        pathPrefix: '/ar',
+      };
+    }
 
   return countries[firstPathPart]
     ? {
@@ -361,6 +341,13 @@ export function useIsHomePath() {
   return strippedPathname === '/';
 }
 
+export function parseAsCurrency(value: number, locale: I18nLocale) {
+  return new Intl.NumberFormat(locale.language + '-' + locale.country, {
+    style: 'currency',
+    currency: locale.currency,
+  }).format(value);
+}
+
 /**
  * Validates that a url is local
  * @param url
@@ -379,47 +366,4 @@ export function isLocalPath(url: string) {
   }
 
   return false;
-}
-
-export function useVariantUrl(
-  handle: string,
-  selectedOptions: SelectedOption[],
-) {
-  const {pathname} = useLocation();
-
-  return useMemo(() => {
-    return getVariantUrl({
-      handle,
-      pathname,
-      searchParams: new URLSearchParams(),
-      selectedOptions,
-    });
-  }, [handle, selectedOptions, pathname]);
-}
-
-export function getVariantUrl({
-  handle,
-  pathname,
-  searchParams,
-  selectedOptions,
-}: {
-  handle: string;
-  pathname: string;
-  searchParams: URLSearchParams;
-  selectedOptions: SelectedOption[];
-}) {
-  const match = /(\/[a-zA-Z]{2}-[a-zA-Z]{2}\/)/g.exec(pathname);
-  const isLocalePathname = match && match.length > 0;
-
-  const path = isLocalePathname
-    ? `${match![0]}products/${handle}`
-    : `/products/${handle}`;
-
-  selectedOptions.forEach((option) => {
-    searchParams.set(option.name, option.value);
-  });
-
-  const searchString = searchParams.toString();
-
-  return path + (searchString ? '?' + searchParams.toString() : '');
 }

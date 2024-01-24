@@ -1,5 +1,5 @@
-import { type I18nBase, type Storefront } from '@shopify/hydrogen';
-import { PRODUCTFRAGMENT } from './productService';
+import {type I18nBase, type Storefront} from '@shopify/hydrogen';
+import {PRODUCTFRAGMENT} from './productService';
 
 export const COLLECTIONFRAGMENT = `#graphql
     fragment Collection on Collection {
@@ -19,22 +19,21 @@ export const COLLECTIONFRAGMENT = `#graphql
             altText
         }
     }
-`
+`;
 
 class CollectionService {
+  storefront: Storefront<I18nBase>;
+  // CollectionService should be initialized with a StorefrontApi instance from the loader
+  constructor(props: {storefront: Storefront<I18nBase>}) {
+    this.storefront = props.storefront;
+  }
 
-    storefront: Storefront<I18nBase>;
-    // CollectionService should be initialized with a StorefrontApi instance from the loader
-    constructor(props: {
-        storefront: Storefront<I18nBase>
-    }) {
-        this.storefront = props.storefront;
-    }
-
-
-    async getAllCollections() {
-        const query = `#graphql
-        query GetAllCollections {
+  async getAllCollections() {
+    const query = `#graphql
+        query GetAllCollections (
+            $country: CountryCode
+            $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
             collections(first: 50) {
               nodes {
                 id
@@ -50,15 +49,17 @@ class CollectionService {
             }
           }
         `;
-        const { collections } = await this.storefront.query(query);
-        return collections;
-    }
+    const {collections} = await this.storefront.query(query);
+    return collections;
+  }
 
-    async getCollectionById(
-        id: string,
-    ) {
-        const query = `#graphql
-        query GetCollectionById ($id: ID!) {
+  async getCollectionById(id: string) {
+    const query = `#graphql
+        query GetCollectionById (
+          $id: ID! 
+          $country: CountryCode
+          $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
             collection(id: $id) {
                 id
                 products(first: 10) {
@@ -69,18 +70,20 @@ class CollectionService {
             }
         }
         `;
-        const variables = { id };
-        const { collection } = await this.storefront.query(query, {
-            variables,
-        });
-        return collection;
-    }
+    const variables = {id};
+    const {collection} = await this.storefront.query(query, {
+      variables,
+    });
+    return collection;
+  }
 
-    async getCollectionByHandle(
-        handle: string,
-    ) {
-        const query = `#graphql
-        query GetCollectionByHandle ($handle: String!) {
+  async getCollectionByHandle(handle: string) {
+    const query = `#graphql
+        query GetCollectionByHandle (
+          $handle: String! 
+          $country: CountryCode
+          $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
             collectionByHandle(handle: $handle) {
                 ...Collection
                 products(first: 10) {
@@ -93,12 +96,12 @@ class CollectionService {
         ${COLLECTIONFRAGMENT}
         ${PRODUCTFRAGMENT}
         `;
-        const variables = { handle };
-        const { collectionByHandle } = await this.storefront.query(query, {
-            variables,
-        });
-        return collectionByHandle;
-    }
+    const variables = {handle};
+    const {collectionByHandle} = await this.storefront.query(query, {
+      variables,
+    });
+    return collectionByHandle;
+  }
 }
 
 export default CollectionService;

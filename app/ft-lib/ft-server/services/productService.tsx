@@ -1,8 +1,8 @@
-import { LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
-import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
-import { COLLECTIONFRAGMENT } from './collectionService';
-import { type Storefront, type I18nBase } from '@shopify/hydrogen';
+import type {ProductFilter} from '@shopify/hydrogen/storefront-api-types';
+import {COLLECTIONFRAGMENT} from './collectionService';
+import {type Storefront, type I18nBase} from '@shopify/hydrogen';
 
 // the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
@@ -65,9 +65,7 @@ export const PRODUCTFRAGMENT = `#graphql
 class ProductService {
   storefront: Storefront<I18nBase>;
   // CollectionService should be initialized with a StorefrontApi instance from the loader
-  constructor(props: {
-    storefront: Storefront<I18nBase>
-  }) {
+  constructor(props: {storefront: Storefront<I18nBase>}) {
     this.storefront = props.storefront;
   }
 
@@ -88,10 +86,15 @@ class ProductService {
 
   async getProduct(args: {
     id: string;
-    selectedOptions: { name: string; value: string }[];
+    selectedOptions: {name: string; value: string}[];
   }) {
     const query = `#graphql
-      query Product($id: ID!, $selectedOptions: [SelectedOptionInput!]!) {
+      query Product(
+        $id: ID!
+        $selectedOptions: [SelectedOptionInput!]!
+        $country: CountryCode
+        $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
         product(id: $id) {
           ...ProductFragment
           selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
@@ -142,9 +145,13 @@ class ProductService {
     return data.product;
   }
 
-  async getProductsByCollection(args: { collectionId: string }) {
+  async getProductsByCollection(args: {collectionId: string}) {
     const query = `#graphql
-      query ProductByCollection($collectionId: ID!) {
+      query ProductByCollection(
+        $collectionId: ID! 
+        $country: CountryCode
+        $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
         collection(id: $collectionId) {
           products(first: 10) {
            nodes{
@@ -164,9 +171,13 @@ class ProductService {
     return data.collection.products.nodes.map((edge: any) => edge.node);
   }
 
-  async getProductsByTag(args: { tag: string }) {
+  async getProductsByTag(args: {tag: string}) {
     const query = `#graphql
-      query ProductsByTag ($tag: String!){
+      query ProductsByTag (
+        $tag: String! 
+        $country: CountryCode
+        $language: LanguageCode
+        ) @inContext(country: $country, language: $language){
         products(first: 10, query: "tag: $tag") {
             nodes {
               ...ProductFragment
@@ -185,10 +196,15 @@ class ProductService {
 
   async getProductByHandle(args: {
     handle: string;
-    selectedOptions: { name: string; value: string }[];
+    selectedOptions: {name: string; value: string}[];
   }) {
     const query = `#graphql
-      query ProductByHandle($handle: String!, $selectedOptions: [SelectedOptionInput!]!) {
+      query ProductByHandle(
+        $handle: String!
+        $selectedOptions: [SelectedOptionInput!]! 
+        $country: CountryCode
+        $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
         productByHandle(handle: $handle) {
           ...ProductFragment
           selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
@@ -239,9 +255,13 @@ class ProductService {
     return data.productByHandle;
   }
 
-  async getProductMetafields(args: { productId: string }) {
+  async getProductMetafields(args: {productId: string}) {
     const query = `#graphql
-      query ProductMetafields($productId: ID!) {
+      query ProductMetafields(
+        $productId: ID! 
+        $country: CountryCode
+        $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
         product(id: $productId) {
           description
           metafields(
@@ -281,13 +301,14 @@ class ProductService {
     return data.product;
   }
   async getFilteredProducts(args: {
-    handle: string; filters: ProductFilter[],
+    handle: string;
+    filters: ProductFilter[];
     variables: {
-      hasPreviousPage: boolean,
-      hasNextPage: boolean,
-      endCursor: string,
-      startCursor: string
-    }
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+      endCursor: string;
+      startCursor: string;
+    };
   }) {
     const query = `#graphql
       query GetFilteredProducts(
@@ -297,7 +318,9 @@ class ProductService {
         $last: Int
         $startCursor: String
         $endCursor: String
-        ) {
+        $country: CountryCode
+        $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
         collection(handle: $handle) {
           ...Collection
           id
@@ -354,20 +377,24 @@ class ProductService {
       variables: {
         handle: args.handle,
         filters: args.filters,
-        ...args.variables
+        ...args.variables,
       },
       cache: {
         maxAge: 60 * 60 * 24,
-        staleWhileRevalidate: 60 * 60
-      }
+        staleWhileRevalidate: 60 * 60,
+      },
     });
     invariant(data.collection != null, 'Collection not found');
     return data.collection;
   }
 
-  async getAvailableFilters(args: { handle: string }) {
+  async getAvailableFilters(args: {handle: string}) {
     const query = `#graphql
-    query GetAvailableFilters($handle: String!) {
+    query GetAvailableFilters(
+      $handle: String! 
+      $country: CountryCode
+      $language: LanguageCode
+      ) @inContext(country: $country, language: $language) {
       collection(handle: $handle) {
         handle
         products(first: 10) {
@@ -396,13 +423,17 @@ class ProductService {
     return data.collection;
   }
 
-  async getProductRecommendations(args: { productId: string }) {
+  async getProductRecommendations(args: {productId: string}) {
     const query = `#graphql
-      query ProductRecommendations($productId: ID!) {
-        productRecommendations(productId: $productId) {
-            ...ProductFragment 
+      query ProductRecommendations(
+        $productId: ID! 
+        $country: CountryCode
+        $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
+          productRecommendations(productId: $productId) {
+              ...ProductFragment 
+          }
         }
-      }
       ${PRODUCTFRAGMENT}
     `;
 

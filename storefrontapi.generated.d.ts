@@ -795,23 +795,54 @@ export type MenuFragment = Pick<StorefrontAPI.Menu, 'id'> & {
   >;
 };
 
-export type HeaderQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
+export type HeaderQueryVariables = StorefrontAPI.Exact<{
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  headerMenuHandle: StorefrontAPI.Scalars['String']['input'];
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
 
+// export type HeaderQuery = {
+//   menu?: StorefrontAPI.Maybe<
+//     Pick<StorefrontAPI.Menu, 'title' | 'id' | 'handle'> & {
+//       items: Array<
+//         Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
+//           items: Array<
+//             Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
+//               items: Array<
+//                 Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
+//                   items: Array<
+//                     Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'>
+//                   >;
+//                 }
+//               >;
+//             }
+//           >;
+//         }
+//       >;
+//     }
+//   >;
+// };
 export type HeaderQuery = {
+  shop: Pick<StorefrontAPI.Shop, 'id' | 'name' | 'description'> & {
+    primaryDomain: Pick<StorefrontAPI.Domain, 'url'>;
+    brand?: StorefrontAPI.Maybe<{
+      logo?: StorefrontAPI.Maybe<{
+        image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
+      }>;
+    }>;
+  };
   menu?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Menu, 'title' | 'id' | 'handle'> & {
+    Pick<StorefrontAPI.Menu, 'id'> & {
       items: Array<
-        Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
+        Pick<
+          StorefrontAPI.MenuItem,
+          'id' | 'resourceId' | 'tags' | 'title' | 'type' | 'url'
+        > & {
           items: Array<
-            Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
-              items: Array<
-                Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'> & {
-                  items: Array<
-                    Pick<StorefrontAPI.MenuItem, 'id' | 'title' | 'url'>
-                  >;
-                }
-              >;
-            }
+            Pick<
+              StorefrontAPI.MenuItem,
+              'id' | 'resourceId' | 'tags' | 'title' | 'type' | 'url'
+            >
           >;
         }
       >;
@@ -1409,7 +1440,7 @@ interface GeneratedQueryTypes {
     return: MobileLayoutQuery;
     variables: MobileLayoutQueryVariables;
   };
-  '#graphql\n query Header {\n  menu(handle: "main-menu") {\n    title\n    id\n    handle\n    items{\n      id\n      title\n      url\n      items {\n        id\n        title\n        url\n        items {\n          id\n          title\n          url\n          items {\n            id\n            title\n            url\n          }\n        }\n      }\n    }\n  }\n}\n': {
+  '#graphql\n query Header (\n    $country: CountryCode\n  $headerMenuHandle: String!\n  $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n  menu(handle: $headerMenuHandle) {\n    title\n    id\n    handle\n    items{\n      id\n      title\n      url\n      items {\n        id\n        title\n        url\n        items {\n          id\n          title\n          url\n          items {\n            id\n            title\n            url\n          }\n        }\n      }\n    }\n  }\n}\n': {
     return: HeaderQuery;
     variables: HeaderQueryVariables;
   };

@@ -1,9 +1,11 @@
-import { Money, type ShopifyAnalyticsProduct } from '@shopify/hydrogen';
+import {Money, type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import Accordion from 'app/components/Accordion';
-import { Colors } from 'app/ft-lib/shared';
-import type { ProductQuery } from 'storefrontapi.generated';
+import {Colors} from 'app/ft-lib/shared';
+import type {ProductQuery} from 'storefrontapi.generated';
 import ProductOptions from './ProductOptions';
 import AddToCartButton from '~/app/components/AddToCartButton';
+import {ShopPayButton} from '@shopify/hydrogen-react';
+import {useRootLoaderData} from '~/app/root';
 
 type Props = {
   selectedVariant: NonNullable<ProductQuery['product']>['variants']['nodes'][0];
@@ -16,15 +18,23 @@ type Props = {
 };
 
 export default function ProductForm(props: Props) {
-  const { product, selectedVariant, analytics } = props;
+  const {product, selectedVariant, analytics} = props;
   const productAnalytics: ShopifyAnalyticsProduct = {
     ...analytics.products[0],
     quantity: 1,
   };
 
-  const isOffer = product.productType.toLocaleLowerCase() === "offer"
+  const isOffer = product.productType.toLocaleLowerCase() === 'offer';
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
   return (
-    <div className="product-form flex flex-col gap-5 w-full">
+    <div
+      className={`product-form flex flex-col gap-5 w-full ${
+        isArabic ? 'arAlignItems' : 'enAlignItems'
+      }`}
+    >
       <span
         style={{
           backgroundColor: Colors.secondaryLight,
@@ -38,21 +48,33 @@ export default function ProductForm(props: Props) {
         <div className="product-title">
           <h1 className="text-2xl md:text-4xl font-bold">{product.title}</h1>
         </div>
-        <div className="product-price">
+        <div
+          className={`product-price ${
+            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+          }`}
+        >
           <Money
             data={product.priceRange.minVariantPrice}
             className="text-xl md:text-2xl font-bold"
           />
         </div>
       </div>
+      {/* <<<<<<< Updated upstream */}
 
-      {isOffer === false &&
+      {isOffer === false && (
         <ProductOptions
           selectedVariant={selectedVariant}
           options={product.options}
         />
-      }
-      <div className="flex items-center w-full max-md:bottom-9 max-md:sticky">
+      )}
+      {/* <div className="flex items-center w-full max-md:bottom-9 max-md:sticky"> */}
+      {/* ======= */}
+      <ProductOptions
+        selectedVariant={selectedVariant}
+        options={product.options}
+      />
+      <div className="flex flex-col items-center w-full max-md:bottom-9 max-md:sticky">
+        {/* >>>>>>> Stashed changes */}
         <AddToCartButton
           analytics={{
             products: [productAnalytics],
@@ -72,12 +94,29 @@ export default function ProductForm(props: Props) {
             },
           ]}
         />
+        <div className="w-full mt-2 rounded-3xl overflow-hidden">
+          <ShopPayButton
+            width="100%"
+            variantIds={[selectedVariant.id]}
+            storeDomain="https://suplab.myshopify.com"
+          />
+        </div>
       </div>
-      <Accordion
-        title="Shipping Info"
-        details={`Shipping is same day inside Beirut and 
+      {isArabic ? (
+        <Accordion
+          title="معلومات الشحن"
+          details={`الشحن في نفس اليوم داخل بيروت و
+          .الشحن خارج بيروت يستغرق 2-3 أيام
+          100 دولار فما فوق التوصيل مجاني`}
+        />
+      ) : (
+        <Accordion
+          title="Shipping Info"
+          details={`Shipping is same day inside Beirut and 
         Outside Beirut shipping takes 2-3 days.
-        100$ and above free delivery`} />
+        100$ and above free delivery`}
+        />
+      )}
     </div>
   );
 }

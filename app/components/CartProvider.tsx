@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react';
 import type { Cart } from '@shopify/hydrogen/storefront-api-types';
-import type { loader as cartLoader } from 'app/routes/cart';
+import type { loader as cartLoader } from '~/app/routes/($locale).cart';
 import { createContext, useContext, useEffect } from 'react';
 
 const CartContext = createContext<Cart | undefined>(undefined);

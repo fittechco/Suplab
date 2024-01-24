@@ -13,6 +13,7 @@ type Props = {
     header: HeaderQuery;
     footer: FooterQuery;
   };
+  // key?: string;
 };
 
 const Layout = (props: Props) => {

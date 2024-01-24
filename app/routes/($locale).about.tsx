@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
-import type { App } from '../api/type';
+import {useEffect, useState} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import {
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+  json,
+  redirect,
+} from '@shopify/remix-oxygen';
+import type {App} from '../api/type';
 import AboutUsHero from '../lib/about/AboutUsHero';
 import Features from '../lib/about/Features';
 import Services from '../lib/about/Services';
 import Contact from '../lib/homepage/Contact';
 import FAQ from '../lib/homepage/FAQ';
-import { routeHeaders } from '../ft-lib/cache';
+import {routeHeaders} from '../ft-lib/cache';
 
 export type Shop = {
   name: string;
@@ -15,19 +20,35 @@ export type Shop = {
 
 export const headers = routeHeaders;
 
-export async function loader({ context }: LoaderFunctionArgs) {
-  const storefront = await context.storefront.query(SHOPQUERY);
-  const { metaobject } = storefront;
+export async function action({request}: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const language = formData.get('language');
+
+  if (language === 'EN') {
+    return redirect('/about', 302);
+  } else if (language === 'AR') {
+    return redirect('/ar/about', 302);
+  }
+}
+
+export async function loader({context, params}: LoaderFunctionArgs) {
+  const storefront = await context.storefront.query(ABOUTQUERY);
+  const {language} = context.storefront.i18n;
+
+  const {metaobject} = storefront;
   return json({
     metaobject,
   });
 }
 
 function AboutPage() {
-  const { metaobject }: { metaobject: App.AboutPageTemplate.Template } =
+  const {metaobject}: {metaobject: App.AboutPageTemplate.Template} =
     useLoaderData();
-  const fieldSection = metaobject.fields.find((field) => field.key === 'sections')
-  const sections: App.AboutPageTemplate.Sections = fieldSection?.key === "sections" ? fieldSection.references.nodes : []
+  const fieldSection = metaobject.fields.find(
+    (field) => field.key === 'sections',
+  );
+  const sections: App.AboutPageTemplate.Sections =
+    fieldSection?.key === 'sections' ? fieldSection.references.nodes : [];
 
   return (
     <div className="h-full w-full space-y-6">
@@ -118,8 +139,9 @@ fragment AboutMetaobject on Metaobject {
 }
 `;
 
-const SHOPQUERY = `#graphqls
-query AboutShopName {
+const ABOUTQUERY = `#graphqls
+query AboutShopName ($country: CountryCode, $language: LanguageCode) 
+    @inContext(country: $country, language: $language) {
   metaobject(handle: {handle: "aboutpage", type: "page"}) {
     fields {
       type

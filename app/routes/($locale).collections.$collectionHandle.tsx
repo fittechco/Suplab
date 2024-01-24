@@ -1,29 +1,55 @@
-import { useState } from 'react';
-import { useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
-import { type LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
-import { PriceSlider } from '~/app/components/ui/PriceSlider';
+import {useState} from 'react';
+import {
+  useLoaderData,
+  useLocation,
+  useNavigation,
+  useSearchParams,
+} from '@remix-run/react';
+import {
+  type LoaderFunctionArgs,
+  json,
+  type ActionFunctionArgs,
+  redirect,
+} from '@shopify/remix-oxygen';
+import {PriceSlider} from '~/app/components/ui/PriceSlider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
-import { createPortal } from 'react-dom';
-import { Colors } from '../ft-lib/shared';
+import {createPortal} from 'react-dom';
+import {Colors} from '../ft-lib/shared';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
-import { seoPayload } from '../ft-lib/seo.server';
-import { AnalyticsPageType, getPaginationVariables } from '@shopify/hydrogen';
-import { COLLECTIONFRAGMENT } from '../ft-lib/ft-server/services/collectionService';
-import { PRODUCTFRAGMENT } from '../ft-lib/ft-server/services/productService';
+import {seoPayload} from '../ft-lib/seo.server';
+import {AnalyticsPageType, getPaginationVariables} from '@shopify/hydrogen';
+import {COLLECTIONFRAGMENT} from '../ft-lib/ft-server/services/collectionService';
+import {PRODUCTFRAGMENT} from '../ft-lib/ft-server/services/productService';
 import ProductsGrid from '../components/ProductsGrid';
-import { routeHeaders } from '../ft-lib/cache';
+import {routeHeaders} from '../ft-lib/cache';
+import {useRootLoaderData} from '../root';
 
 export const headers = routeHeaders;
 
-export async function loader({ context, params, request }: LoaderFunctionArgs) {
+export async function action({request}: ActionFunctionArgs) {
+  // Read form data
+  const formData = await request.formData();
+  const language = formData.get('language');
+  // const country = formData.get('country');
+  // const search = formData.get('search');
+
+  // Redirect to the appropriate locale path with preserved path (note we are in the about route)
+  if (language === 'EN') {
+    return redirect('/collections', 302);
+  } else if (language === 'AR') {
+    return redirect('/ar/collections', 302);
+  }
+}
+
+export async function loader({context, params, request}: LoaderFunctionArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
-  const PC = new ProductController({ storefront: context.storefront });
+  const PC = new ProductController({storefront: context.storefront});
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 12,
   });
@@ -33,7 +59,9 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   let maxPrice = 100;
 
   if (searchParams.has('price')) {
-    const priceParam = JSON.parse(searchParams.get('price')!) as { price: { min: number; max: number } };
+    const priceParam = JSON.parse(searchParams.get('price')!) as {
+      price: {min: number; max: number};
+    };
 
     minPrice = priceParam.price.min;
     maxPrice = priceParam.price.max;
@@ -56,7 +84,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     availableFilters.products.filters,
   );
 
-  const { collection } = await context.storefront.query(COLLECTION_QUERY, {
+  const {collection} = await context.storefront.query(COLLECTION_QUERY, {
     cache: {
       maxAge: 60 * 60 * 24,
     },
@@ -64,7 +92,9 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
       handle: collectionHandle,
       filters: dynamicFilters,
       ...paginationVariables,
-    }
+      country: context.storefront.i18n.country,
+      language: context.storefront.i18n.language,
+    },
   });
 
   invariant(collection, 'Collection not found');
@@ -72,7 +102,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const seo = seoPayload.collection({
     collection,
     url: request.url,
-  })
+  });
 
   // set the max price to the max price of the collection
   maxPrice = collection.products.nodes.reduce((acc, node) => {
@@ -115,6 +145,11 @@ function Collection() {
   const [currentSearchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
   const defaultParams = new URLSearchParams(currentSearchParams);
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
   const filtersData = data.availableFilters.filter(
     (filter: any) => filter.param !== 'Price',
   );
@@ -125,7 +160,6 @@ function Collection() {
     ? new URLSearchParams(navigation.location.search)
     : defaultParams;
 
-
   const toggleFiltersMenu = () => {
     setShowMobileFilters((prev) => !prev);
   };
@@ -134,9 +168,9 @@ function Collection() {
   }
 
   if (searchParams.has('price') === true) {
-    const priceParam = searchParams.get('price')
+    const priceParam = searchParams.get('price');
     invariant(priceParam, 'Price param is required');
-    const price = JSON.parse(priceParam) as { price: { min: number; max: number } };
+    const price = JSON.parse(priceParam) as {price: {min: number; max: number}};
     maxPrice = price.price.max;
     minPrice = price.price.min;
   }
@@ -154,11 +188,44 @@ function Collection() {
               className="collectionHero__Section__Image flex w-full h-full overflow-hidden md:flex-row justify-start items-end relative"
             >
               {data.collection.image != null && (
-                <LazyImage
-                  alt={data.collection.title}
-                  className="w-full h-full object-cover"
-                  src={resizeImage(data.collection.image?.url, 1440)}
-                />
+                <div className="flex md:flex-row justify-start items-end relative">
+                  <LazyImage
+                    alt={data.collection.title}
+                    className="w-full h-full object-cover"
+                    src={resizeImage(data.collection.image?.url, 1440)}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      zIndex: 9999,
+                    }}
+                    className={`heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 ${
+                      isArabic ? 'arAlignItems' : 'enAlignItems'
+                    }`}
+                  >
+                    <h1
+                      style={{
+                        color: Colors.textSecondary,
+                      }}
+                      className={`header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase ${
+                        isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                      }`}
+                    >
+                      {data.collection.title}
+                    </h1>
+                    <div
+                      style={{
+                        color: Colors.textSecondary,
+                        width: '80%',
+                      }}
+                      className={`subHeader text-base md:text-lg max-w-xs items-start ${
+                        isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                      }`}
+                    >
+                      {data.collection.description}
+                    </div>
+                  </div>
+                </div>
               )}
               <div className="heroHeader absolute w-full flex flex-col gap-0 md:gap-4 z-10 justify-end md:justify-center container mb-8 mb:mb-0">
                 {data.collection.title != null && (
@@ -188,7 +255,11 @@ function Collection() {
             </div>
           </div>
         )}
-        <div className="filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+        <div
+          className={`filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 ${
+            isArabic ? 'flex-row-reverse' : 'flex-row'
+          }`}
+        >
           {filtersData.map((filter: any) => (
             <Dropdown
               key={filter.param}
@@ -201,12 +272,24 @@ function Collection() {
             />
           ))}
           <div className="sliderContainer w-1/4 flex flex-col gap-2 justify-center">
-            <h4 className="sliderTitle uppercase text-2xl text-bold">Price</h4>
+            {isArabic ? (
+              <h4 className="sliderTitle uppercase text-2xl text-bold text-end">
+                Price
+              </h4>
+            ) : (
+              <h4 className="sliderTitle uppercase text-2xl text-bold text-end">
+                السعر
+              </h4>
+            )}
             <div className="flex justify-between">
               <span className="text-sm">Min: ${minPrice}</span>
               <span className="text-sm">Max: ${maxPrice}</span>
             </div>
-            <PriceSlider min={minPrice} max={maxPrice} className="min-w-[250px]" />
+            <PriceSlider
+              min={minPrice}
+              max={maxPrice}
+              className="min-w-[250px]"
+            />
           </div>
         </div>
         <ProductsGrid collection={data.collection} />
@@ -238,16 +321,17 @@ function Collection() {
 
 export default Collection;
 
-
-const COLLECTION_QUERY = `#graphql
-  query GetCollection(
+export const COLLECTION_QUERY = `#graphql
+  query GetCollection (
     $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
     $filters: [ProductFilter!] 
     $first: Int
     $last: Int
     $startCursor: String
     $endCursor: String
-  ) {
+  ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       ...Collection
       id

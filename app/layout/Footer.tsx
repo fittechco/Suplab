@@ -1,14 +1,15 @@
-import { Link } from '@remix-run/react';
-import { Colors } from '../ft-lib/shared';
+import {Link} from '@remix-run/react';
+import {Colors} from '../ft-lib/shared';
 import type {
   ShopLayoutQuery,
   HeaderQuery,
   FooterQuery,
 } from 'storefrontapi.generated';
-import { Image } from '@shopify/hydrogen';
+import {Image} from '@shopify/hydrogen';
 import FTicons from '../ft-lib/FTicon';
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import LazyImage from '../ft-lib/LazyImage';
+import {useRootLoaderData} from '../root';
 
 type Props = {
   layout: {
@@ -21,6 +22,10 @@ type Props = {
 const Footer = (props: Props) => {
   const [openMenu, setOpenMenu] = useState(-1);
   const [isMobile, setIsMobile] = useState(false);
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   useEffect(() => {
     // Detect the window width and set the isMobile state
@@ -54,7 +59,11 @@ const Footer = (props: Props) => {
       }}
       className="footer h-fit max-md:p-5 md:h-72"
     >
-      <div className="container h-full w-full flex flex-col md:flex-row gap-14 md:gap-20 mt-7 md:items-start items-center text-ellipsis tracking-wider justify-between">
+      <div
+        className={`container h-full w-full flex gap-14 md:gap-20 mt-7 md:items-start items-center text-ellipsis tracking-wider justify-between flex-col ${
+          isArabic ? 'md:flex-row-reverse' : 'md:flex-row'
+        }`}
+      >
         <div className="shop-name flex flex-col md:items-start items-center gap-3">
           <Link
             to={'/'}
@@ -74,8 +83,15 @@ const Footer = (props: Props) => {
               />
             )}
           </Link>
-          <div className="shop-name__text flex gap-2 ml-2">
-            <Link to={`https://www.instagram.com/suplab_nutrition`} target='_blank'>
+          <div
+            className={`shop-name__text flex w-full gap-2 ${
+              isArabic ? 'arFlexDirection' : 'enFlexDirection ml-2'
+            }`}
+          >
+            <Link
+              to={`https://www.instagram.com/suplab_nutrition`}
+              target="_blank"
+            >
               <FTicons
                 fill={Colors.secondary}
                 style={{
@@ -86,7 +102,10 @@ const Footer = (props: Props) => {
                 icon="instagram"
               />
             </Link>
-            <Link to={`https://www.tiktok.com/@suplabnutrition`} target='_blank'>
+            <Link
+              to={`https://www.tiktok.com/@suplabnutrition`}
+              target="_blank"
+            >
               <FTicons
                 fill="none"
                 style={{
@@ -106,7 +125,10 @@ const Footer = (props: Props) => {
                 <div key={menu.title} className="menu flex flex-col gap-2">
                   <div
                     onClick={() => toggleOpen(index)}
-                    className="title font-bold flex justify-between w-full">
+                    className={`title font-bold flex justify-between w-full ${
+                      isArabic ? 'arFlexDirection' : 'enFlexDirection'
+                    }`}
+                  >
                     <p className="uppercase">{menu.title}</p>
                     <button
                       onClick={() => toggleOpen(index)}
@@ -123,11 +145,19 @@ const Footer = (props: Props) => {
                     </button>
                   </div>
                   {openMenu === index && (
-                    <div className="flex flex-col gap-2">
+                    <div
+                      className={`flex flex-col gap-2 ${
+                        isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                      }`}
+                    >
                       {menu.items.map((item, itemIndex) => {
                         const itemRoute = new URL(item.url || '').pathname;
                         return (
-                          <Link className='links' key={itemRoute + itemIndex} to={itemRoute}>
+                          <Link
+                            className="links"
+                            key={itemRoute + itemIndex}
+                            to={itemRoute}
+                          >
                             <p>{item.title}</p>
                           </Link>
                         );
@@ -144,8 +174,18 @@ const Footer = (props: Props) => {
             {props.layout.footer.menu?.items.map((menu, index) => {
               return (
                 <div key={menu.title} className="menu flex flex-col gap-2">
-                  <div className="title font-bold">{menu.title}</div>
-                  <div className="links flex flex-col gap-2">
+                  <div
+                    className={`title font-bold ${
+                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                    }`}
+                  >
+                    {menu.title}
+                  </div>
+                  <div
+                    className={`links flex flex-col gap-2 ${
+                      isArabic ? 'arAlignItems' : 'enAlignItems'
+                    }`}
+                  >
                     {menu.items.map((item, index) => {
                       const itemRoute = new URL(item.url || '').pathname;
                       return (
@@ -162,21 +202,39 @@ const Footer = (props: Props) => {
         )}
       </div>
       <div className="text-center pb-10">
-        <p
-          style={{
-            color: Colors.secondaryDark,
-            fontFamily: 'Roboto',
-            fontSize: '14px',
-            fontStyle: 'normal',
-            fontWeight: '400',
-            lineHeight: 'normal',
-            marginBottom: '8px',
-          }}
-        >
-          © {new Date().getFullYear()} | Suplab Supplements Store Lebanon | All Rights Reserved
-        </p>
+        {isArabic ? (
+          <p
+            style={{
+              color: Colors.secondaryDark,
+              fontFamily: 'Roboto',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: 'normal',
+              marginBottom: '8px',
+            }}
+          >
+            © {new Date().getFullYear()} | جميع الحقوق محفوظة | سوبلاب متجر
+            المكملات الغذائية
+          </p>
+        ) : (
+          <p
+            style={{
+              color: Colors.secondaryDark,
+              fontFamily: 'Roboto',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: 'normal',
+              marginBottom: '8px',
+            }}
+          >
+            © {new Date().getFullYear()} | All Rights Reserved | Suplab
+            Supplements Store Lebanon
+          </p>
+        )}
         <Link
-          to={"https://almoe.co/"}
+          to={'https://almoe.co/'}
           target="_blank"
           style={{
             color: Colors.secondaryDark,

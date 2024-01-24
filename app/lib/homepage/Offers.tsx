@@ -1,23 +1,28 @@
-import type { App } from '../../api/type';
+import type {App} from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
-import { Colors } from 'app/ft-lib/shared';
-import type { ProductQuery } from '~/storefrontapi.generated';
-import { Link } from 'react-router-dom';
-import { UseShopStore } from '~/app/root';
+import {Colors} from 'app/ft-lib/shared';
+import type {ProductQuery} from '~/storefrontapi.generated';
+import {Link} from 'react-router-dom';
+import {UseShopStore, useRootLoaderData} from '~/app/root';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
-import FTSwiper, { type FTSwiperOptions } from '~/app/ft-lib/Swiper';
-import { SwiperOptions } from 'swiper/types/swiper-options';
+import FTSwiper, {type FTSwiperOptions} from '~/app/ft-lib/Swiper';
+import {SwiperOptions} from 'swiper/types/swiper-options';
+import {useParams} from '@remix-run/react';
 
 type Props = {
-  section: App.HomePageTemplate.OffersSection,
-  swiperOptions: FTSwiperOptions,
-}
+  section: App.HomePageTemplate.OffersSection;
+  swiperOptions: FTSwiperOptions;
+};
 
 const Offers = (props: Props) => {
-  const { section, swiperOptions } = props;
-  const fields = arrayToObject({ array: section.fields });
+  const {section, swiperOptions} = props;
+  const fields = arrayToObject({array: section.fields});
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   if (fields.offers_collection == null) {
     return null;
@@ -32,7 +37,11 @@ const Offers = (props: Props) => {
       }}
       className="offersSection w-full !container mx-auto"
     >
-      <div className="flex items-center justify-between mb-10">
+      <div
+        className={`flex items-center justify-between mb-10 ${
+          isArabic ? 'arFlexDirection' : 'enFlexDirection'
+        }`}
+      >
         {fields.title != null && fields.offers != null && (
           <p className="section-heading ft-text-main md:text-3xl text-2xl">
             {fields.title.value}
@@ -44,7 +53,7 @@ const Offers = (props: Props) => {
               backgroundColor: Colors.primary,
               color: Colors.textSecondary,
             }}
-            to={`/collections/offers`}
+            to={`collections/offers`}
             className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
           >
             {fields.button_text.value}
@@ -56,7 +65,6 @@ const Offers = (props: Props) => {
           navigation
           options={{
             ...swiperOptions,
-
           }}
         >
           {fields?.offers_collection?.reference.products?.nodes?.map(
@@ -64,7 +72,11 @@ const Offers = (props: Props) => {
               return (
                 <Link
                   className="swiper-slide cursor-pointer"
-                  key={product?.id} to={`/products/${product?.handle}`}
+                  key={product?.id}
+                  to={`products/${product?.handle}`}
+                  onClick={() => {
+                    UseShopStore.setState({});
+                  }}
                 >
                   {product?.images != null && (
                     <LazyImage

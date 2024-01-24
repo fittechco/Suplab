@@ -1,6 +1,10 @@
-
-import { Script, Seo, ShopifySalesChannel, useNonce } from '@shopify/hydrogen';
-import { defer, type SerializeFrom, type LinksFunction, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import {Script, Seo, ShopifySalesChannel, useNonce} from '@shopify/hydrogen';
+import {
+  defer,
+  type SerializeFrom,
+  type LinksFunction,
+  type LoaderFunctionArgs,
+} from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -16,27 +20,28 @@ import {
   useNavigation,
   useNavigate,
 } from '@remix-run/react';
-import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
+import type {CustomerAccessToken} from '@shopify/hydrogen/storefront-api-types';
 import appStyles from './styles/app.css';
 import tailwindCss from './styles/tailwind.css';
 import Layout from './layout/Layout';
-import type { App } from './api/type';
-import { create } from 'zustand';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { useEffect } from 'react';
+import type {App} from './api/type';
+import {create} from 'zustand';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {useEffect} from 'react';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/pagination';
-import { CartProvider } from './components/CartProvider';
+import {CartProvider} from './components/CartProvider';
 import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
 import CTAButton from './components/CTAButton';
-import { seoPayload } from './ft-lib/seo.server';
-import { UseAnalytics } from './ft-lib/hooks/useAnalytics';
-import { type HydrogenSession } from './lib/session.server';
-import * as gtag from "~/app/ft-lib/google-utils";
+import {seoPayload} from './ft-lib/seo.server';
+import {UseAnalytics} from './ft-lib/hooks/useAnalytics';
+import {type HydrogenSession} from './lib/session.server';
+import * as gtag from '~/app/ft-lib/google-utils';
 import Hotjar from '@hotjar/browser';
-import { ExternalScripts } from './ft-lib/ExternalScripts';
+import {ExternalScripts} from './ft-lib/ExternalScripts';
+import {getLocaleFromRequest} from './ft-lib/utils';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -60,8 +65,8 @@ const siteId = 3733122;
 const hotjarVersion = 6;
 export const links: LinksFunction = () => {
   return [
-    { rel: 'stylesheet', href: tailwindCss },
-    { rel: 'stylesheet', href: appStyles },
+    {rel: 'stylesheet', href: tailwindCss},
+    {rel: 'stylesheet', href: appStyles},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -88,19 +93,20 @@ export const links: LinksFunction = () => {
       href: 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css',
     },
   ];
-}
+};
 export const useRootLoaderData = () => {
   const [root] = useMatches();
   return root?.data as SerializeFrom<typeof loader>;
 };
 
-export async function loader({ context, request }: LoaderFunctionArgs) {
-  const { storefront, session } = context;
+export async function loader({context, request}: LoaderFunctionArgs) {
+  const {storefront, session} = context;
   const customerAccessToken = await session.get('customerAccessToken');
   const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;
+  const locale = storefront.i18n;
 
   // validate the customer access token is valid
-  const { isLoggedIn, headers } = await validateCustomerAccessToken(
+  const {isLoggedIn, headers} = await validateCustomerAccessToken(
     customerAccessToken,
     session,
   );
@@ -124,8 +130,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const seo = seoPayload.root({
     shop: layout.shop,
     url: request.url,
-  })
-
+  });
 
   return defer(
     {
@@ -134,15 +139,17 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
       footer: await footerPromise,
       header: await headerPromise,
       gaTrackingId: context.env.GA_TRACKING_ID,
-      selectedLocale: storefront.i18n,
+      // selectedLocale: storefront.i18n,
+      selectedLocale: getLocaleFromRequest(request),
       analytics: {
         shopId: layout.shop.id,
         shopifySalesChannel: ShopifySalesChannel.hydrogen,
       },
       isLoggedIn,
       publicStoreDomain,
+      locale,
     },
-    { headers },
+    {headers},
   );
 }
 
@@ -157,6 +164,7 @@ export const UseShopStore = create<
   header: null as any,
   showCart: false,
   routesLoader: true,
+  locale: null as any,
 }));
 
 export const queryClient = new QueryClient();
@@ -165,7 +173,8 @@ export default function App() {
   const nonce = useNonce();
   const navigation = useNavigation();
   const data = useLoaderData<typeof loader>();
-  const gTrackId = "G-BXXRW595RC"
+  const gTrackId = 'G-BXXRW595RC';
+  const locale = data.selectedLocale;
 
   UseAnalytics(true);
 
@@ -180,21 +189,26 @@ export default function App() {
   // checking if the app navigation is not idle
   useEffect(() => {
     if (navigation.state === 'loading') {
-      if (navigation.location.search != "") {
-        return
+      if (navigation.location.search != '') {
+        return;
       }
-      UseShopStore.setState({ routesLoader: true });
+      UseShopStore.setState({routesLoader: true});
     } else {
-      UseShopStore.setState({ routesLoader: false });
+      UseShopStore.setState({routesLoader: false});
     }
   }, [navigation]);
 
   useEffect(() => {
     gtag.pageview(location.pathname, gTrackId);
+
+    // gtag.pageview(location.pathname, 'G-BXXRW595RC');
+    // Hotjar.init(siteId, hotjarVersion, {
+    //   nonce: 'rAnDoM',
+    // });
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="EN">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -216,16 +230,21 @@ export default function App() {
                   a.appendChild(r);
               })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
                 `,
-              }} />
-            <script id='g-tag-manajer' nonce={nonce} /></>
+              }}
+            />
+            <script id="g-tag-manajer" nonce={nonce} />
+          </>
         )}
       </head>
 
       <QueryClientProvider client={queryClient}>
         <body>
-          {process.env.NODE_ENV == "development" ? null : (
+          {process.env.NODE_ENV == 'development' ? null : (
             <>
-              <Script async src={`https://www.googletagmanager.com/gtag/js?id=${gTrackId}`} />
+              <Script
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${gTrackId}`}
+              />
               <Script
                 nonce={nonce}
                 dangerouslySetInnerHTML={{
@@ -235,7 +254,9 @@ export default function App() {
                   gtag('js', new Date());
 
                   gtag('config', 'G-BXXRW595RC');
-                `}} />
+                `,
+                }}
+              />
             </>
           )}
           <CartProvider>
@@ -245,6 +266,7 @@ export default function App() {
                 header: data.header,
                 footer: data.footer,
               }}
+              // key={`${locale.language}-${locale.country}`}
             >
               <Outlet />
             </Layout>
@@ -274,12 +296,13 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
   const navigate = useNavigate();
-  console.log(error, "errorMessage");
-  // the return type from the loader and its being wrapped in Awaited in order to remove the promise typee
-  const data = root.data as Awaited<ReturnType<typeof loader>>["data"];
+
+  console.log(error, 'errorMessage');
+  // the return type from the loader and its being wrapped in Awaited in order to remove the promise type
+  const data = root.data as Awaited<ReturnType<typeof loader>>['data'];
 
   return (
-    <html lang="en">
+    <html lang="EN">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -292,8 +315,10 @@ export function ErrorBoundary() {
           layout={}
         > */}
         <div className="route-error w-full h-screen">
-          <div className='flex flex-col justify-center items-center h-full w-full'>
-            <h1 className='ft-text-main'>{`${errorStatus} ${errorStatus === 404 ? "Page not found" : errorMessage}`}</h1>
+          <div className="flex flex-col justify-center items-center h-full w-full">
+            <h1 className="ft-text-main">{`${errorStatus} ${
+              errorStatus === 404 ? 'Page not found' : errorMessage
+            }`}</h1>
 
             <CTAButton
               onClick={() => {
@@ -304,7 +329,6 @@ export function ErrorBoundary() {
               Continue Shopping
             </CTAButton>
           </div>
-
         </div>
         {/* </Layout> */}
         <ScrollRestoration nonce={nonce} />
@@ -335,7 +359,7 @@ async function validateCustomerAccessToken(
   let isLoggedIn = false;
   const headers = new Headers();
   if (!customerAccessToken?.accessToken || !customerAccessToken?.expiresAt) {
-    return { isLoggedIn, headers };
+    return {isLoggedIn, headers};
   }
   const expiresAt = new Date(customerAccessToken.expiresAt);
   const dateNow = new Date();
@@ -347,7 +371,7 @@ async function validateCustomerAccessToken(
     isLoggedIn = true;
   }
 
-  return { isLoggedIn, headers };
+  return {isLoggedIn, headers};
 }
 
 const MENU_FRAGMENT = `#graphql
@@ -378,7 +402,10 @@ const MENU_FRAGMENT = `#graphql
 ` as const;
 
 const HEADER_QUERY = `#graphql
- query Header {
+ query Header (
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(language: $language, country: $country) {
   menu(handle: "main-menu") {
     title
     id

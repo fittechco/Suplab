@@ -1,11 +1,12 @@
-import { Link } from '@remix-run/react';
-import { useRef } from 'react';
-import { Colors } from '../../ft-lib/shared';
-import type { App } from '../../api/type';
+import {Link} from '@remix-run/react';
+import {useRef} from 'react';
+import {Colors} from '../../ft-lib/shared';
+import type {App} from '../../api/type';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
 import arrayToObject from '~/app/ft-lib/ArrayToObject';
-import type { GetCollectionQuery } from '~/storefrontapi.generated';
+import type {GetCollectionQuery} from '~/storefrontapi.generated';
+import {useRootLoaderData} from '~/app/root';
 
 export default function SubMenuPopup(props: {
   items: App.Shopify.Item[];
@@ -14,8 +15,14 @@ export default function SubMenuPopup(props: {
   offers: App.HomePageTemplate.OffersSection | null;
   bestSellers: GetCollectionQuery | null;
 }) {
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  console.log('locale from header', locale);
+
+  const ar = locale.language.toLowerCase() === 'ar' ? 'ar' : '';
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const offerFields = arrayToObject({ array: props.offers?.fields || [] });
+  const offerFields = arrayToObject({array: props.offers?.fields || []});
   const offersImage = offerFields.offers_collection?.reference.image?.url;
   return (
     <div
@@ -44,7 +51,8 @@ export default function SubMenuPopup(props: {
                   fontSize: '15px',
                 }}
                 className="nav-menu__sub_item flex ft-text-main"
-                to={subPathname}>
+                to={`${subPathname}`}
+              >
                 {subItem.title}
               </Link>
               <div className="nav-submenus-container flex flex-col space-y-2">
@@ -71,9 +79,9 @@ export default function SubMenuPopup(props: {
         })}
       </div>
       <div className="header-featured-collections flex flex-col items-end space-y-4 w-1/2">
-        {offersImage != null &&
+        {offersImage != null && (
           <Link
-            to={"/collections/offers"}
+            to={`${ar}/collections/offers`}
             style={{
               width: 370,
               height: 180,
@@ -89,8 +97,11 @@ export default function SubMenuPopup(props: {
                 objectFit: 'cover',
               }}
               src={resizeImage(offersImage, 400)}
-              alt={offerFields.offers_collection?.reference.title || 'Supplements Offers'}
-               />
+              alt={
+                offerFields.offers_collection?.reference.title ||
+                'Supplements Offers'
+              }
+            />
             <div
               style={{
                 position: 'absolute',
@@ -110,11 +121,11 @@ export default function SubMenuPopup(props: {
               Offers
             </div>
           </Link>
-        }
+        )}
 
-        {props.bestSellers?.collection?.image &&
+        {props.bestSellers?.collection?.image && (
           <Link
-            to={`/collections/${props.bestSellers?.collection?.handle}`}
+            to={`${ar}/collections/${props.bestSellers?.collection?.handle}`}
             className="featured-collectio-1 relative card-shadow block"
           >
             <LazyImage
@@ -146,7 +157,7 @@ export default function SubMenuPopup(props: {
               Best Sellers
             </div>
           </Link>
-        }
+        )}
       </div>
     </div>
   );

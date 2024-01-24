@@ -10,12 +10,36 @@ body {
   height: 100%;
 }
 
+.enAlignItems {
+  align-items: flex-start;
+}
+
+.arAlignItems {
+  align-items: flex-end;
+}
+
+.enTextAlignItems {
+  text-align: left;
+}
+
+.arTextAlignItems {
+  text-align: right;
+}
+
+.enFlexDirection {
+  flex-direction: row;
+}
+
+.arFlexDirection {
+  flex-direction: row-reverse;
+}
+
 .mobile-nav-item {
   transition: all 0.7s ease;
 }
 
 .section-heading {
-  color: #4A4A49
+  color: #4a4a49;
 }
 
 .product-form form {
@@ -151,11 +175,15 @@ input:focus {
 
 .offersSection__slide {
   border-radius: 24px;
-  background: var(--background-linear,
-      linear-gradient(90deg,
-        rgba(54, 54, 49, 0.6) 0%,
-        rgba(74, 74, 73, 0.5) 48.39%,
-        rgba(74, 74, 73, 0.4) 96.26%));
+  background: var(
+    --background-linear,
+    linear-gradient(
+      90deg,
+      rgba(54, 54, 49, 0.6) 0%,
+      rgba(74, 74, 73, 0.5) 48.39%,
+      rgba(74, 74, 73, 0.4) 96.26%
+    )
+  );
   box-shadow: 0px 4.61905px 6.92857px 0px rgba(0, 0, 0, 0.16);
   backdrop-filter: blur(1.290789008140564px);
 }
@@ -178,10 +206,12 @@ input:focus {
 }
 
 .fade-border {
-  border-color: linear-gradient(90deg,
-      rgba(74, 74, 73, 0.20211834733893552) 0%,
-      rgba(74, 74, 73, 1) 50%,
-      rgba(0, 0, 0, 0.16010154061624648) 100%);
+  border-color: linear-gradient(
+    90deg,
+    rgba(74, 74, 73, 0.20211834733893552) 0%,
+    rgba(74, 74, 73, 1) 50%,
+    rgba(0, 0, 0, 0.16010154061624648) 100%
+  );
 }
 
 /* Featured Collections Section */
@@ -210,10 +240,12 @@ input:focus {
 .fadeBorder {
   height: 1px;
   width: 100%;
-  background: linear-gradient(to left,
-      transparent 0%,
-      #4a4a49 50%,
-      transparent 100%);
+  background: linear-gradient(
+    to left,
+    transparent 0%,
+    #4a4a49 50%,
+    transparent 100%
+  );
   margin: 10px 0;
 }
 
@@ -238,10 +270,12 @@ input:focus {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(to left,
-      transparent 0%,
-      #4a4a49 50%,
-      transparent 100%);
+  background: linear-gradient(
+    to left,
+    transparent 0%,
+    #4a4a49 50%,
+    transparent 100%
+  );
 }
 
 .featuredCollectionsButtonsContainer::before {
@@ -259,10 +293,12 @@ input:focus {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(to left,
-      transparent 0%,
-      #4a4a49 50%,
-      transparent 100%);
+  background: linear-gradient(
+    to left,
+    transparent 0%,
+    #4a4a49 50%,
+    transparent 100%
+  );
 }
 
 .faded-borders::before {
@@ -276,10 +312,12 @@ input:focus {
 .footerDivider {
   height: 1px;
   width: 100%;
-  background: linear-gradient(to left,
-      transparent 0%,
-      #4a4a49 50%,
-      transparent 100%);
+  background: linear-gradient(
+    to left,
+    transparent 0%,
+    #4a4a49 50%,
+    transparent 100%
+  );
   margin: 10px 0;
 }
 
@@ -506,11 +544,15 @@ a {
 
   .benefit_content {
     border-radius: 12px;
-    background: var(--background-linear,
-        linear-gradient(90deg,
-          rgba(54, 54, 49, 0.6) 0%,
-          rgba(74, 74, 73, 0.5) 48.39%,
-          rgba(74, 74, 73, 0.4) 96.26%));
+    background: var(
+      --background-linear,
+      linear-gradient(
+        90deg,
+        rgba(54, 54, 49, 0.6) 0%,
+        rgba(74, 74, 73, 0.5) 48.39%,
+        rgba(74, 74, 73, 0.4) 96.26%
+      )
+    );
     box-shadow: 0px 4.61905px 6.92857px 0px rgba(0, 0, 0, 0.16);
     backdrop-filter: blur(1.290789008140564px);
   }
