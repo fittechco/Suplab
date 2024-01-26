@@ -1,12 +1,12 @@
-import {useEffect, useRef, useState} from 'react';
-import type {ProductQuery} from 'storefrontapi.generated';
+import { useEffect, useRef, useState } from 'react';
+import type { ProductQuery } from 'storefrontapi.generated';
 import ProductCard from './ProductCard';
 import Swiper from 'swiper';
 import 'swiper/css/scrollbar';
-import {Scrollbar, Mousewheel, FreeMode} from 'swiper/modules';
+import { Scrollbar, Mousewheel, FreeMode } from 'swiper/modules';
 import _ from 'lodash';
 import ProductSwiperSkeleton from '../lib/skeleton/ProductSwiperSkeleton';
-import {useRootLoaderData} from '../root';
+import { useRootLoaderData } from '../root';
 type Props = {
   products: ProductQuery['product'][] | null;
   title?: string;
@@ -14,10 +14,8 @@ type Props = {
 
 export default function ProductsSwiper(props: Props) {
   const swiperContainer = useRef<HTMLDivElement | null>(null);
-
   const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+  const alignRight = rootData.locale.language === 'AR' ? true : false;
 
   useEffect(() => {
     if (swiperContainer.current == null) {
@@ -26,6 +24,7 @@ export default function ProductsSwiper(props: Props) {
     const swiper = new Swiper(swiperContainer.current, {
       slidesPerView: 2,
       spaceBetween: 20,
+      initialSlide: alignRight ? props.products?.length : 0,
       modules: [Scrollbar, Mousewheel, FreeMode],
       mousewheel: {
         releaseOnEdges: true,
@@ -45,7 +44,7 @@ export default function ProductsSwiper(props: Props) {
         swiper.destroy();
       }
     };
-  }, [props.products]);
+  }, [alignRight, props.products]);
 
   if (props.products == null) {
     return <ProductSwiperSkeleton title={props.title} />;
@@ -55,19 +54,23 @@ export default function ProductsSwiper(props: Props) {
     <div className="space-y-4 w-full overflow-hidden">
       {props.title && (
         <div
-          className={`flex ${isArabic ? 'arFlexDirection' : 'enFlexDirection'}`}
+          className={`flex ${alignRight ? 'arFlexDirection' : 'enFlexDirection'}`}
         >
           <h3
-            className={`ft-text-main text-2xl container ${
-              isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-            }`}
+            className={`ft-text-main text-2xl container ${alignRight ? 'arTextAlignItems' : 'enTextAlignItems'
+              }`}
           >
             {props.title}
           </h3>
         </div>
       )}
       <div ref={swiperContainer} className="swiper-container container">
-        <div className="swiper-wrapper">
+        <div
+          style={{
+            flexDirection: alignRight ? 'row-reverse' : 'row',
+            justifyContent: alignRight ? 'flex-end' : 'flex-start',
+          }}
+          className={`swiper-wrapper ${alignRight ? "flex-row-reverse justify-end" : "flex-row justify-start"}`}>
           {props.products.map((product, index) => {
             return (
               <div

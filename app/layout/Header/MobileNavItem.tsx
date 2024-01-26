@@ -116,8 +116,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
           >
             {props.menu.title}
           </Link>
-        )
-        }
+        )}
         {hasSubItems === true && (
           <FTicons
             style={{

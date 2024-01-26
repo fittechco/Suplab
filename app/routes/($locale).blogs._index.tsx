@@ -4,23 +4,23 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
-import {AnalyticsPageType, flattenConnection, Image} from '@shopify/hydrogen';
-import {getImageLoadingPriority, PAGINATION_SIZE} from '../ft-lib/const';
-import {seoPayload} from '../ft-lib/seo.server';
-import {routeHeaders} from '../ft-lib/cache';
+import { useLoaderData } from '@remix-run/react';
+import { AnalyticsPageType, flattenConnection, Image } from '@shopify/hydrogen';
+import { getImageLoadingPriority, PAGINATION_SIZE } from '../ft-lib/const';
+import { seoPayload } from '../ft-lib/seo.server';
+import { routeHeaders } from '../ft-lib/cache';
 // import type {ArticleFragment} from 'storefrontapi.generated';
-import {PageHeader, Section} from '../components/Text';
-import {Grid} from '../components/Grid';
-import {RemixLink} from '../components/RemixLink';
+import { PageHeader, Section } from '../components/Text';
+import { Grid } from '../components/Grid';
+import { RemixLink } from '../components/RemixLink';
 import Link from '../components/Link';
-import type {Article, Blog} from '@shopify/hydrogen/storefront-api-types';
-import type {FTSwiperOptions} from '../ft-lib/Swiper';
+import type { Article, Blog } from '@shopify/hydrogen/storefront-api-types';
+import type { FTSwiperOptions } from '../ft-lib/Swiper';
 import FTSwiper from '../ft-lib/Swiper';
-import {Colors} from '../ft-lib/shared';
-import {Text} from '../ft-lib/Text';
+import { Colors } from '../ft-lib/shared';
+import { Text } from '../ft-lib/Text';
 import ArticleCard from '../components/ArticleCard';
-import {useRootLoaderData} from '../root';
+import { useRootLoaderData } from '../root';
 
 const BLOG_HANDLES = [
   'general',
@@ -31,7 +31,7 @@ const BLOG_HANDLES = [
 
 export const headers = routeHeaders;
 
-export async function action({request}: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   // Read form data
   const formData = await request.formData();
   const language = formData.get('language');
@@ -48,9 +48,9 @@ export async function action({request}: ActionFunctionArgs) {
 
 export const loader = async ({
   request,
-  context: {storefront},
+  context: { storefront },
 }: LoaderFunctionArgs) => {
-  const {language, country} = storefront.i18n;
+  const { language, country } = storefront.i18n;
 
   const blogs = await Promise.all(
     BLOG_HANDLES.map((handle) => {
@@ -67,13 +67,13 @@ export const loader = async ({
   );
 
   const articlesByType = blogs.map((blogData) => {
-    const {blog} = blogData;
+    const { blog } = blogData;
     if (blog == null) {
-      throw new Response('Not found', {status: 404});
+      throw new Response('Not found', { status: 404 });
     }
     const articles = flattenConnection(blog.articles).map(
       (article: Article) => {
-        const {publishedAt} = article;
+        const { publishedAt } = article;
         return {
           ...article,
           publishedAt: new Intl.DateTimeFormat(`${language}`, {
@@ -88,21 +88,21 @@ export const loader = async ({
     return {
       type: blog.handle,
       articles,
-      seo: seoPayload.blog({blog, url: request.url}),
+      seo: seoPayload.blog({ blog, url: request.url }),
       analytics: {
         pageType: AnalyticsPageType.blog,
       },
     };
   });
 
-  return json({articlesByType});
+  return json({ articlesByType });
 };
 
 export default function Blogs() {
-  const {articlesByType} = useLoaderData<typeof loader>();
+  const { articlesByType } = useLoaderData<typeof loader>();
 
   const rootData = useRootLoaderData();
-  const {locale} = rootData;
+  const { locale } = rootData;
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   const swiperOptions: FTSwiperOptions = {
@@ -128,9 +128,8 @@ export default function Blogs() {
       {blogsWithData.map((blogData, i) => (
         <div key={blogData.type} className="w-full px-5 py-4">
           <div
-            className={`flex justify-between mb-6 ${
-              isArabic ? 'arFlexDirection' : 'enFlexDirection'
-            }`}
+            className={`flex justify-between mb-6 ${isArabic ? 'arFlexDirection' : 'enFlexDirection'
+              }`}
           >
             <Text
               type="h2"
@@ -175,7 +174,7 @@ export default function Blogs() {
 }
 
 const BLOGS_QUERY = `#graphql
-query Blog(
+query BlogIndex(
   $language: LanguageCode
   $blogHandle: String!
   $pageBy: Int!

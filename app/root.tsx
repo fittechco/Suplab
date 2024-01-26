@@ -1,9 +1,11 @@
-import {Script, Seo, ShopifySalesChannel, useNonce} from '@shopify/hydrogen';
+import { Script, Seo, ShopifySalesChannel, useNonce } from '@shopify/hydrogen';
 import {
   defer,
   type SerializeFrom,
   type LinksFunction,
   type LoaderFunctionArgs,
+  redirect,
+  redirectDocument,
 } from '@shopify/remix-oxygen';
 import {
   Links,
@@ -20,28 +22,31 @@ import {
   useNavigation,
   useNavigate,
 } from '@remix-run/react';
-import type {CustomerAccessToken} from '@shopify/hydrogen/storefront-api-types';
+import type { CustomerAccessToken, LanguageCode } from '@shopify/hydrogen/storefront-api-types';
 import appStyles from './styles/app.css';
 import tailwindCss from './styles/tailwind.css';
 import Layout from './layout/Layout';
-import type {App} from './api/type';
-import {create} from 'zustand';
-import {QueryClient, QueryClientProvider} from 'react-query';
-import {useEffect} from 'react';
+import type { App } from './api/type';
+import { create } from 'zustand';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/pagination';
-import {CartProvider} from './components/CartProvider';
+import { CartProvider } from './components/CartProvider';
 import CartDrawer from './components/CartDrawer';
 import RoutesLoader from './components/RoutesLoader';
 import CTAButton from './components/CTAButton';
-import {seoPayload} from './ft-lib/seo.server';
-import {UseAnalytics} from './ft-lib/hooks/useAnalytics';
-import {type HydrogenSession} from './lib/session.server';
+import { seoPayload } from './ft-lib/seo.server';
+import { UseAnalytics } from './ft-lib/hooks/useAnalytics';
+import { type HydrogenSession } from './lib/session.server';
 import * as gtag from '~/app/ft-lib/google-utils';
 import Hotjar from '@hotjar/browser';
-import {ExternalScripts} from './ft-lib/ExternalScripts';
-import {getLocaleFromRequest} from './ft-lib/utils';
+import { ExternalScripts } from './ft-lib/ExternalScripts';
+import { LanguageSelectorPopup } from './layout/LanguageSelectorPopup';
+import { getCookie, getCookieFromHeader } from './ft-lib/cookie-utils';
+import { DEFAULT_LOCALE, getLocaleFromRequest } from './ft-lib/utils';
+import { countries } from './ft-lib/data/countries';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -65,8 +70,8 @@ const siteId = 3733122;
 const hotjarVersion = 6;
 export const links: LinksFunction = () => {
   return [
-    {rel: 'stylesheet', href: tailwindCss},
-    {rel: 'stylesheet', href: appStyles},
+    { rel: 'stylesheet', href: tailwindCss },
+    { rel: 'stylesheet', href: appStyles },
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -94,19 +99,22 @@ export const links: LinksFunction = () => {
     },
   ];
 };
+
 export const useRootLoaderData = () => {
   const [root] = useMatches();
   return root?.data as SerializeFrom<typeof loader>;
 };
 
-export async function loader({context, request}: LoaderFunctionArgs) {
-  const {storefront, session} = context;
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const { storefront, session } = context;
   const customerAccessToken = await session.get('customerAccessToken');
   const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;
   const locale = storefront.i18n;
+  const cookie = request.headers.get('cookie');
+  console.log(cookie, "cookie");
 
   // validate the customer access token is valid
-  const {isLoggedIn, headers} = await validateCustomerAccessToken(
+  const { isLoggedIn, headers } = await validateCustomerAccessToken(
     customerAccessToken,
     session,
   );
@@ -132,6 +140,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     url: request.url,
   });
 
+  console.log("hello from root");
+
   return defer(
     {
       shop: layout,
@@ -139,8 +149,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       footer: await footerPromise,
       header: await headerPromise,
       gaTrackingId: context.env.GA_TRACKING_ID,
-      // selectedLocale: storefront.i18n,
-      selectedLocale: getLocaleFromRequest(request),
+      selectedLocale: storefront.i18n,
+      // selectedLocale: getLocaleFromRequest(request),
       analytics: {
         shopId: layout.shop.id,
         shopifySalesChannel: ShopifySalesChannel.hydrogen,
@@ -149,7 +159,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       publicStoreDomain,
       locale,
     },
-    {headers},
+    { headers },
   );
 }
 
@@ -174,7 +184,7 @@ export default function App() {
   const navigation = useNavigation();
   const data = useLoaderData<typeof loader>();
   const gTrackId = 'G-BXXRW595RC';
-  const locale = data.selectedLocale;
+  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
 
   UseAnalytics(true);
 
@@ -192,23 +202,30 @@ export default function App() {
       if (navigation.location.search != '') {
         return;
       }
-      UseShopStore.setState({routesLoader: true});
+      UseShopStore.setState({ routesLoader: true });
     } else {
-      UseShopStore.setState({routesLoader: false});
+      UseShopStore.setState({ routesLoader: false });
     }
   }, [navigation]);
 
   useEffect(() => {
-    gtag.pageview(location.pathname, gTrackId);
-
-    // gtag.pageview(location.pathname, 'G-BXXRW595RC');
-    // Hotjar.init(siteId, hotjarVersion, {
-    //   nonce: 'rAnDoM',
-    // });
+    const savedLanguage = getCookie('preferredLanguage');
+    if (savedLanguage == null) {
+      setTimeout(() => {
+        setShowLanguageSelector(true);
+      }, 1000);
+    }
   }, []);
 
+  useEffect(() => {
+    gtag.pageview(location.pathname, gTrackId);
+  }, []);
+  const locale = data.selectedLocale ?? DEFAULT_LOCALE;
+
+  console.log(data.selectedLocale, "data.selectedLocale");
+
   return (
-    <html lang="EN">
+    <html lang={locale.language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -266,9 +283,10 @@ export default function App() {
                 header: data.header,
                 footer: data.footer,
               }}
-              // key={`${locale.language}-${locale.country}`}
+            // key={`${locale.language}-${locale.country}`}
             >
               <Outlet />
+              {showLanguageSelector && <LanguageSelectorPopup setshowLanguageSelectorShow={setShowLanguageSelector} />}
             </Layout>
             <CartDrawer />
             <RoutesLoader />
@@ -299,7 +317,7 @@ export function ErrorBoundary() {
 
   console.log(error, 'errorMessage');
   // the return type from the loader and its being wrapped in Awaited in order to remove the promise type
-  const data = root.data as Awaited<ReturnType<typeof loader>>['data'];
+  // const data = root.data as Awaited<ReturnType<typeof loader>>['data'];  
 
   return (
     <html lang="EN">
@@ -316,9 +334,8 @@ export function ErrorBoundary() {
         > */}
         <div className="route-error w-full h-screen">
           <div className="flex flex-col justify-center items-center h-full w-full">
-            <h1 className="ft-text-main">{`${errorStatus} ${
-              errorStatus === 404 ? 'Page not found' : errorMessage
-            }`}</h1>
+            <h1 className="ft-text-main">{`${errorStatus} ${errorStatus === 404 ? 'Page not found' : errorMessage
+              }`}</h1>
 
             <CTAButton
               onClick={() => {
@@ -359,7 +376,7 @@ async function validateCustomerAccessToken(
   let isLoggedIn = false;
   const headers = new Headers();
   if (!customerAccessToken?.accessToken || !customerAccessToken?.expiresAt) {
-    return {isLoggedIn, headers};
+    return { isLoggedIn, headers };
   }
   const expiresAt = new Date(customerAccessToken.expiresAt);
   const dateNow = new Date();
@@ -371,7 +388,7 @@ async function validateCustomerAccessToken(
     isLoggedIn = true;
   }
 
-  return {isLoggedIn, headers};
+  return { isLoggedIn, headers };
 }
 
 const MENU_FRAGMENT = `#graphql

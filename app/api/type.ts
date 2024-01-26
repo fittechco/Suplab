@@ -1,26 +1,26 @@
-import type {MenuItem} from '@shopify/hydrogen/storefront-api-types';
-import {type} from 'os';
+import type { MenuItem } from '@shopify/hydrogen/storefront-api-types';
+import { type } from 'os';
 import type {
   FooterQuery,
   HeaderQuery,
   ProductQuery,
   ShopLayoutQuery,
 } from 'storefrontapi.generated';
-import type {Except} from 'type-fest';
+import type { Except } from 'type-fest';
 
 export namespace App {
   export namespace HomePageTemplate {
     export type Template = {
       fields: Array<
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'sections';
-            references: {
-              nodes: Sections;
-            };
-          }>
+          key: 'sections';
+          references: {
+            nodes: Sections;
+          };
+        }>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
       >;
     };
 
@@ -38,173 +38,180 @@ export namespace App {
 
     export type PromotionsSection = {
       type: 'promotion_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'promotions';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'promotion';
-                fields: Array<
-                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                      key: 'title';
-                    }>
-                  | Shopify.MetaobectsDef.FileReference<{
-                      key: 'desktop_image' | 'mobile_image';
-                      reference: {
-                        image: {
-                          url: string;
-                        };
-                      };
-                    }>
-                >;
-              }>;
-            };
-          }>
+          key: 'promotions';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'promotion';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title';
+                }>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'desktop_image' | 'mobile_image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
     export type HeroSection = {
       type: 'hero_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Multi_Line_Text_Field<'sub_headline'>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'headline' | 'button_text';
-          }>
+          key: 'headline' | 'button_text';
+        }>
         | Shopify.MetaobectsDef.FileReference<{
-            key: 'desktop_image' | 'mobile_image';
-            reference: {
-              image: {
-                url: string;
-              };
+          key: 'desktop_image' | 'mobile_image';
+          reference: {
+            image: {
+              url: string;
             };
-          }>
+          };
+        }>
       >;
     };
 
     export type BenefitsSection = {
+      handle: string;
       type: 'benefits_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'benefits';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'benefit';
-                fields: Array<
-                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                      key: 'title';
-                    }>
-                  | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
-                  | Shopify.MetaobectsDef.FileReference<{
-                      key: 'image';
-                      reference: {
-                        image: {
-                          url: string;
-                        };
-                      };
-                    }>
-                >;
-              }>;
-            };
-          }>
+          key: 'benefits';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'benefit';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title';
+                }>
+                | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
     export type SectionCollectionProducts = {
       type: 'section_collection_products';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key:
-              | 'title'
-              | 'shop_button_text'
-              | 'collection_one_button_text'
-              | 'collection_two_button_text';
-          }>
+          key:
+          | 'title'
+          | 'shop_button_text'
+          | 'collection_one_button_text'
+          | 'collection_two_button_text';
+        }>
         | Shopify.MetaobectsDef.Metaobject_Reference<{
-            key: 'collection_one' | 'collection_two';
-            reference: Shopify.Storefront.Collection;
-          }>
+          key: 'collection_one' | 'collection_two';
+          reference: Shopify.Storefront.Collection;
+        }>
       >;
     };
 
     export type TestimonialsSection = {
       type: 'testimonials_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'testimonials';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'testimonial';
-                fields: Array<
-                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                      key: 'name';
-                    }>
-                  | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
-                  | Shopify.MetaobectsDef.FileReference<{
-                      key: 'before_image' | 'after_image';
-                      reference: {
-                        image: {
-                          url: string;
-                        };
-                      };
-                    }>
-                >;
-              }>;
-            };
-          }>
+          key: 'testimonials';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'testimonial';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'name';
+                }>
+                | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'before_image' | 'after_image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
     export type ShopTheGoalSection = {
       type: 'shop_the_goal_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'button_text';
-          }>
+          key: 'button_text';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'shop_the_goal_list';
-            references: {
-              nodes: Array<ShopTheGoal>;
-            };
-          }>
+          key: 'shop_the_goal_list';
+          references: {
+            nodes: Array<ShopTheGoal>;
+          };
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'shop_the_goal_collections';
-            references: {
-              nodes: Array<Except<Shopify.Storefront.Collection, 'products'>>;
-            };
-          }>
+          key: 'shop_the_goal_collections';
+          references: {
+            nodes: Array<Except<Shopify.Storefront.Collection, 'products'>>;
+          };
+        }>
       >;
     };
 
     // with goal_title and button_text and goal_image
     export type ShopTheGoal = {
       type: 'shop_the_goal';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'goal_title' | 'button_text' | 'url_handle';
-          }>
+          key: 'goal_title' | 'button_text' | 'url_handle';
+        }>
         | Shopify.MetaobectsDef.FileReference<{
-            key: 'goal_image';
-            reference: {
-              image: {
-                url: string;
-              };
+          key: 'goal_image';
+          reference: {
+            image: {
+              url: string;
             };
-          }>
+          };
+        }>
       >;
     };
 
@@ -226,114 +233,118 @@ export namespace App {
 
     export type OffersSection = {
       type: 'offers_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'button_text';
-          }>
+          key: 'button_text';
+        }>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.Metaobject_Reference<{
-            key: 'offers_collection';
-            reference: Shopify.Storefront.Collection;
-          }>
+          key: 'offers_collection';
+          reference: Shopify.Storefront.Collection;
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'offers';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'offer';
-                fields: Array<
-                  Shopify.MetaobectsDef.FileReference<{
-                    key: 'image';
-                    reference: {
-                      image: {
-                        url: string;
-                      };
+          key: 'offers';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'offer';
+              fields: Array<
+                Shopify.MetaobectsDef.FileReference<{
+                  key: 'image';
+                  reference: {
+                    image: {
+                      url: string;
                     };
-                  }>
-                >;
-              }>;
-            };
-          }>
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
     export type ServicesSection = {
       type: 'services_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'services';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'service';
-                fields: Array<
-                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                      key: 'title' | 'button_text' | 'button_url';
-                    }>
-                  | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
-                  | Shopify.MetaobectsDef.FileReference<{
-                      key: 'image';
-                      reference: {
-                        image: {
-                          url: string;
-                        };
-                      };
-                    }>
-                >;
-              }>;
-            };
-          }>
+          key: 'services';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'service';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title' | 'button_text' | 'button_url';
+                }>
+                | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
     export type ContactSection = {
       type: 'contact_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key:
-              | 'email'
-              | 'phone'
-              | 'location_button_text'
-              | 'contact_button_text'
-              | 'location_url'
-              | 'contact_url';
-          }>
+          key:
+          | 'email'
+          | 'phone'
+          | 'location_button_text'
+          | 'contact_button_text'
+          | 'location_url'
+          | 'contact_url';
+        }>
         | Shopify.MetaobectsDef.FileReference<{
-            key: 'image';
-            reference: {
-              image: {
-                url: string;
-              };
+          key: 'image';
+          reference: {
+            image: {
+              url: string;
             };
-          }>
+          };
+        }>
       >;
     };
 
     export type FaqSection = {
       type: 'faq_section';
+      handle: string;
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'faqs';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'faq';
-                fields: Array<
-                  Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                    key: 'question' | 'answer';
-                  }>
-                >;
-              }>;
-            };
-          }>
+          key: 'faqs';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'faq';
+              fields: Array<
+                Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'question' | 'answer';
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
@@ -354,14 +365,14 @@ export namespace App {
     export type Template = {
       fields: Array<
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'sections';
-            references: {
-              nodes: Sections;
-            };
-          }>
+          key: 'sections';
+          references: {
+            nodes: Sections;
+          };
+        }>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
       >;
     };
 
@@ -377,16 +388,16 @@ export namespace App {
       fields: Array<
         | Shopify.MetaobectsDef.Multi_Line_Text_Field<'sub_headline'>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'headline';
-          }>
+          key: 'headline';
+        }>
         | Shopify.MetaobectsDef.FileReference<{
-            key: 'desktop_image' | 'mobile_image';
-            reference: {
-              image: {
-                url: string;
-              };
+          key: 'desktop_image' | 'mobile_image';
+          reference: {
+            image: {
+              url: string;
             };
-          }>
+          };
+        }>
       >;
     };
 
@@ -394,31 +405,31 @@ export namespace App {
       type: 'features_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'features';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'feature';
-                fields: Array<
-                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                      key: 'title';
-                    }>
-                  | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
-                  | Shopify.MetaobectsDef.FileReference<{
-                      key: 'image';
-                      reference: {
-                        image: {
-                          url: string;
-                        };
-                      };
-                    }>
-                >;
-              }>;
-            };
-          }>
+          key: 'features';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'feature';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title';
+                }>
+                | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
@@ -426,38 +437,38 @@ export namespace App {
       type: 'services_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'button_text';
-          }>
+          key: 'button_text';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'services';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'service';
-                fields: Array<
-                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                      key: 'title' | 'button_text' | 'button_url';
-                    }>
-                  | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                      key: 'image_position';
-                      value: 'left' | 'center' | 'right';
-                    }>
-                  | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
-                  | Shopify.MetaobectsDef.FileReference<{
-                      key: 'image';
-                      reference: {
-                        image: {
-                          url: string;
-                        };
-                      };
-                    }>
-                >;
-              }>;
-            };
-          }>
+          key: 'services';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'service';
+              fields: Array<
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'title' | 'button_text' | 'button_url';
+                }>
+                | Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'image_position';
+                  value: 'left' | 'center' | 'right';
+                }>
+                | Shopify.MetaobectsDef.Multi_Line_Text_Field<'description'>
+                | Shopify.MetaobectsDef.FileReference<{
+                  key: 'image';
+                  reference: {
+                    image: {
+                      url: string;
+                    };
+                  };
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 
@@ -465,22 +476,22 @@ export namespace App {
       type: 'contact_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key:
-              | 'email'
-              | 'phone'
-              | 'location_button_text'
-              | 'contact_button_text'
-              | 'location_url'
-              | 'contact_url';
-          }>
+          key:
+          | 'email'
+          | 'phone'
+          | 'location_button_text'
+          | 'contact_button_text'
+          | 'location_url'
+          | 'contact_url';
+        }>
         | Shopify.MetaobectsDef.FileReference<{
-            key: 'image';
-            reference: {
-              image: {
-                url: string;
-              };
+          key: 'image';
+          reference: {
+            image: {
+              url: string;
             };
-          }>
+          };
+        }>
       >;
     };
 
@@ -488,22 +499,22 @@ export namespace App {
       type: 'faq_section';
       fields: Array<
         | Shopify.MetaobectsDef.Single_Line_Text_Field<{
-            key: 'title';
-          }>
+          key: 'title';
+        }>
         | Shopify.MetaobectsDef.List_Metaobject_Reference<{
-            key: 'faqs';
-            references: {
-              nodes: Array<{
-                id: string;
-                type: 'faq';
-                fields: Array<
-                  Shopify.MetaobectsDef.Single_Line_Text_Field<{
-                    key: 'question' | 'answer';
-                  }>
-                >;
-              }>;
-            };
-          }>
+          key: 'faqs';
+          references: {
+            nodes: Array<{
+              id: string;
+              type: 'faq';
+              fields: Array<
+                Shopify.MetaobectsDef.Single_Line_Text_Field<{
+                  key: 'question' | 'answer';
+                }>
+              >;
+            }>;
+          };
+        }>
       >;
     };
 

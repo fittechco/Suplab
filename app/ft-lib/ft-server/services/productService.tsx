@@ -1,8 +1,8 @@
-import {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import { LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
-import type {ProductFilter} from '@shopify/hydrogen/storefront-api-types';
-import {COLLECTIONFRAGMENT} from './collectionService';
-import {type Storefront, type I18nBase} from '@shopify/hydrogen';
+import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
+import { COLLECTIONFRAGMENT } from './collectionService';
+import { type Storefront, type I18nBase } from '@shopify/hydrogen';
 
 // the following is a fragment of what the product fields are
 export const PRODUCTFRAGMENT = `#graphql
@@ -65,7 +65,7 @@ export const PRODUCTFRAGMENT = `#graphql
 class ProductService {
   storefront: Storefront<I18nBase>;
   // CollectionService should be initialized with a StorefrontApi instance from the loader
-  constructor(props: {storefront: Storefront<I18nBase>}) {
+  constructor(props: { storefront: Storefront<I18nBase> }) {
     this.storefront = props.storefront;
   }
 
@@ -86,7 +86,7 @@ class ProductService {
 
   async getProduct(args: {
     id: string;
-    selectedOptions: {name: string; value: string}[];
+    selectedOptions: { name: string; value: string }[];
   }) {
     const query = `#graphql
       query Product(
@@ -133,6 +133,7 @@ class ProductService {
           }
         }
       }
+      
       ${PRODUCTFRAGMENT}
     `;
     const data = await this.storefront.query(query, {
@@ -145,7 +146,7 @@ class ProductService {
     return data.product;
   }
 
-  async getProductsByCollection(args: {collectionId: string}) {
+  async getProductsByCollection(args: { collectionId: string }) {
     const query = `#graphql
       query ProductByCollection(
         $collectionId: ID! 
@@ -171,7 +172,7 @@ class ProductService {
     return data.collection.products.nodes.map((edge: any) => edge.node);
   }
 
-  async getProductsByTag(args: {tag: string}) {
+  async getProductsByTag(args: { tag: string }) {
     const query = `#graphql
       query ProductsByTag (
         $tag: String! 
@@ -196,7 +197,7 @@ class ProductService {
 
   async getProductByHandle(args: {
     handle: string;
-    selectedOptions: {name: string; value: string}[];
+    selectedOptions: { name: string; value: string }[];
   }) {
     const query = `#graphql
       query ProductByHandle(
@@ -255,7 +256,7 @@ class ProductService {
     return data.productByHandle;
   }
 
-  async getProductMetafields(args: {productId: string}) {
+  async getProductMetafields(args: { productId: string }) {
     const query = `#graphql
       query ProductMetafields(
         $productId: ID! 
@@ -388,7 +389,7 @@ class ProductService {
     return data.collection;
   }
 
-  async getAvailableFilters(args: {handle: string}) {
+  async getAvailableFilters(args: { handle: string }) {
     const query = `#graphql
     query GetAvailableFilters(
       $handle: String! 
@@ -423,7 +424,7 @@ class ProductService {
     return data.collection;
   }
 
-  async getProductRecommendations(args: {productId: string}) {
+  async getProductRecommendations(args: { productId: string }) {
     const query = `#graphql
       query ProductRecommendations(
         $productId: ID! 

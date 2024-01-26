@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './Header/Header';
 import Footer from './Footer';
 import type {
@@ -17,6 +17,7 @@ type Props = {
 };
 
 const Layout = (props: Props) => {
+  const announcementBarHeight = 28;
   return (
     <div
       style={{
@@ -28,7 +29,7 @@ const Layout = (props: Props) => {
       <Header layout={props.layout} />
       <div
         style={{
-          marginTop: 100,
+          marginTop: 100 + announcementBarHeight,
         }}
         className="content"
       >

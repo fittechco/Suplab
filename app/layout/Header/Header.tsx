@@ -1,26 +1,26 @@
-import {Image} from '@shopify/hydrogen';
-import {useCallback, useEffect, useRef, useState} from 'react';
-import type {App} from '../../api/type';
-import {createPortal} from 'react-dom';
+import { Image } from '@shopify/hydrogen';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { App } from '../../api/type';
+import { createPortal } from 'react-dom';
 import MobileNav from '../MobileNav';
 import SubMenuPopup from './SubMenuPopup';
 import FTicons from 'app/ft-lib/FTicon';
-import {Colors} from 'app/ft-lib/shared';
-import type {loader as offersLoader} from '~/app/routes/($locale).offers';
+import { Colors } from 'app/ft-lib/shared';
+import type { loader as offersLoader } from '~/app/routes/($locale).offers';
 import type {
   FooterQuery,
   HeaderQuery,
   ShopLayoutQuery,
 } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
-import {UseShopStore, useRootLoaderData} from '~/app/root';
-import {useCart} from '~/app/components/CartProvider';
-import {Link, useFetcher, useParams} from '@remix-run/react';
+import { UseShopStore, useRootLoaderData } from '~/app/root';
+import { useCart } from '~/app/components/CartProvider';
+import { Link, useFetcher, useParams } from '@remix-run/react';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
-import type {loader as collectionLoader} from '~/app/routes/($locale).collections.$collectionHandle';
-import {CountrySelector} from '~/app/components/CountrySelector';
-import {RemixLink} from '~/app/components/RemixLink';
+import type { loader as collectionLoader } from '~/app/routes/($locale).collections.$collectionHandle';
+import { CountrySelector } from '~/app/components/CountrySelector';
+import { RemixLink } from '~/app/components/RemixLink';
 
 const GetBestSellers = () => {
   const fetcher = useFetcher<typeof collectionLoader>();
@@ -47,13 +47,14 @@ function Header(props: Props) {
   const headerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [showSub, setShowSub] = useState(false);
+  const announcementRef = useRef<HTMLDivElement>(null);
   const [showSearch, setShowSearch] = useState(false);
   const cart = useCart();
   const fetcher = useFetcher<typeof offersLoader>();
   const bestSellersCollection = GetBestSellers();
 
   const rootData = useRootLoaderData();
-  const {locale} = rootData;
+  const { locale } = rootData;
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   const ar = isArabic ? 'ar' : '';
@@ -63,8 +64,6 @@ function Header(props: Props) {
       fetcher.load('/offers');
     }
   }, [fetcher]);
-
-  console.log('layout', props.layout.header.menu?.items);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -89,24 +88,11 @@ function Header(props: Props) {
 
   const handleMouseEnter = useCallback(() => {
     setShowSub(true);
-    if (headerRef.current != null) {
-      headerRef.current.style.height = headerRef.current?.scrollHeight + 'px';
-    }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     setShowSub(false);
-    if (headerRef.current != null) {
-      if (headerRef.current != null) {
-        headerRef.current.style.height = '80px';
-      }
-      headerRef.current.ontransitionend = () => {
-        if (showSub === false) {
-          setSubItems([]);
-        }
-      };
-    }
-  }, [showSub]);
+  }, []);
 
   // creating a mutation observer to detect when the sub header is added and change the height of the header based on it
 
@@ -126,15 +112,26 @@ function Header(props: Props) {
         right: 0,
         zIndex: 100,
       }}
-      className="header-container transition-all ease-in-out duration-300 md:container mx-auto"
+      className="header-container flex flex-col transition-all ease-in-out duration-300 md:container mx-auto"
     >
+      <div
+        ref={announcementRef}
+        style={{
+          background: Colors.primary,
+          color: Colors.offWhite,
+          marginTop: isTop === true ? 0 : `-${(announcementRef.current?.scrollHeight || 0)}px`,
+          transition: 'all 0.3s ease',
+        }}
+        className="announcement-bar text-sm md:text-sm tracking-[0.02rem] font-bold  uppercase w-full flex items-center justify-center py-1">
+        Free Delivery on Orders Over $100
+      </div>
       <div
         ref={headerRef}
         style={{
           borderRadius: '0px 0px 12px 12px',
           transition: 'all 0.3s ease',
-          height: 80,
-          overflow: 'hidden',
+          // height: ,
+          // overflow: 'hidden',
         }}
         className="header-wrapper white-background-blur "
       >
@@ -142,9 +139,8 @@ function Header(props: Props) {
           style={{
             height: 80,
           }}
-          className={`flex items-center max-md:justify-between py-2 px-5 sm:px-6 ${
-            isArabic ? 'arFlexDirection' : 'enFlexDirection'
-          }`}
+          className={`flex items-center max-md:justify-between max-md:py-2 px-5 sm:px-6 ${isArabic ? 'arFlexDirection' : 'enFlexDirection'
+            }`}
         >
           <Link
             to={ar}
@@ -152,9 +148,8 @@ function Header(props: Props) {
               color: Colors.secondary,
               fontWeight: 700,
             }}
-            className={`header__logo flex items-center ${
-              isArabic ? 'arFlexDirection ml-auto' : 'enFlexDirection mr-auto'
-            }`}
+            className={`header__logo flex items-center ${isArabic ? 'arFlexDirection ml-auto' : 'enFlexDirection mr-auto'
+              }`}
           >
             {props.layout.shop?.brand?.logo?.image != null && (
               <LazyImage
@@ -167,13 +162,11 @@ function Header(props: Props) {
             )}
           </Link>
           <div
-            className={`navmenusContainer flex items-center justify-center max-lg:hidden h-full ${
-              isArabic ? 'arFlexDirection' : 'enFlexDirection'
-            }`}
+            className={`navmenusContainer flex items-center justify-center max-lg:hidden h-full ${isArabic ? 'arFlexDirection' : 'enFlexDirection'
+              }`}
           >
             {props.layout.header.menu?.items.map((item) => {
               const pathname = new URL(item.url || '').pathname;
-              console.log('item url', pathname);
               const hasChildren = item.items?.length > 0;
               return (
                 <div
@@ -218,9 +211,8 @@ function Header(props: Props) {
             })}
           </div>
           <div
-            className={`icons flex gap-3 items-center justify-end ${
-              isArabic ? 'arFlexDirection mr-auto' : 'enFlexDirection ml-auto'
-            }`}
+            className={`icons flex gap-3 items-center justify-end ${isArabic ? 'arFlexDirection mr-auto' : 'enFlexDirection ml-auto'
+              }`}
           >
             <CountrySelector />
             <button
@@ -241,7 +233,7 @@ function Header(props: Props) {
             <div className="icons_item cursor-pointer">
               <button
                 onClick={() => {
-                  UseShopStore.setState({showCart: true});
+                  UseShopStore.setState({ showCart: true });
                 }}
                 className="cursor-pointer flex items-center justify-center relative"
               >
@@ -291,26 +283,16 @@ function Header(props: Props) {
             </button>
           </div>
         </div>
-        <div
-          onMouseEnter={() => {
-            if (headerRef.current != null) {
-              handleMouseEnter();
-            }
-          }}
-          onMouseLeave={() => {
-            if (headerRef.current != null) {
-              handleMouseLeave();
-            }
-          }}
-        >
-          <SubMenuPopup
-            bestSellers={bestSellersCollection || null}
-            offers={fetcher.data || null}
-            showSub={showSub}
-            isTop={isTop}
-            items={subItems}
-          />
-        </div>
+
+        <SubMenuPopup
+          setSubItems={setSubItems}
+          bestSellers={bestSellersCollection || null}
+          offers={fetcher.data || null}
+          showSub={showSub}
+          isTop={isTop}
+          items={subItems}
+          setShowSub={setShowSub}
+        />
       </div>
 
       {isOpen &&

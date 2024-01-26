@@ -1,8 +1,8 @@
-import type {Localizations} from '~/app/lib/types';
+import type { Localizations } from '~/app/lib/types';
 
 export const countries: Localizations = {
   default: {
-    pathPrefix: '/',
+    pathPrefix: 'en',
     label: 'English',
     language: 'EN',
     country: 'US',
@@ -10,7 +10,7 @@ export const countries: Localizations = {
     host: 'suplabstore.com',
   },
   '/ar': {
-    pathPrefix: '/ar',
+    pathPrefix: 'ar',
     label: 'العربية',
     language: 'AR',
     country: 'AR',

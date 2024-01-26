@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import {
   useLoaderData,
   useLocation,
@@ -11,56 +11,73 @@ import {
   type ActionFunctionArgs,
   redirect,
 } from '@shopify/remix-oxygen';
-import {PriceSlider} from '~/app/components/ui/PriceSlider';
+import { PriceSlider } from '~/app/components/ui/PriceSlider';
 import Dropdown from '~/app/components/Dropdown';
 import FilterIcon from '~/app/components/FilterIcon';
 import invariant from 'tiny-invariant';
 import MobileFiltersMenu from '../components/MobileFiltersMenu';
-import {createPortal} from 'react-dom';
-import {Colors} from '../ft-lib/shared';
+import { createPortal } from 'react-dom';
+import { Colors } from '../ft-lib/shared';
 import ProductController from '../ft-lib/ft-server/controllers/ProductController';
 import LazyImage from '../ft-lib/LazyImage';
 import resizeImage from '../ft-lib/resizeImages';
-import {seoPayload} from '../ft-lib/seo.server';
-import {AnalyticsPageType, getPaginationVariables} from '@shopify/hydrogen';
-import {COLLECTIONFRAGMENT} from '../ft-lib/ft-server/services/collectionService';
-import {PRODUCTFRAGMENT} from '../ft-lib/ft-server/services/productService';
+import { seoPayload } from '../ft-lib/seo.server';
+import { AnalyticsPageType, getPaginationVariables } from '@shopify/hydrogen';
+import { COLLECTIONFRAGMENT } from '../ft-lib/ft-server/services/collectionService';
+import { PRODUCTFRAGMENT } from '../ft-lib/ft-server/services/productService';
 import ProductsGrid from '../components/ProductsGrid';
-import {routeHeaders} from '../ft-lib/cache';
-import {useRootLoaderData} from '../root';
-
+import { routeHeaders } from '../ft-lib/cache';
+import { useRootLoaderData } from '../root';
+import { handleRouteLocalization } from '../ft-lib/handleLocalization';
 export const headers = routeHeaders;
 
-export async function action({request}: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   // Read form data
   const formData = await request.formData();
   const language = formData.get('language');
+  const newUrl = new URL(request.url);
   // const country = formData.get('country');
   // const search = formData.get('search');
 
   // Redirect to the appropriate locale path with preserved path (note we are in the about route)
   if (language === 'EN') {
-    return redirect('/collections', 302);
+    // check if a prefix exist in the url then remove it
+    if (newUrl.pathname.includes('/ar')) {
+      newUrl.pathname = newUrl.pathname.replace('/ar', '');
+    }
+    return redirect(newUrl.toString(), 302);
   } else if (language === 'AR') {
-    return redirect('/ar/collections', 302);
+    // check if a prefix exist in the url then remove it
+    if (newUrl.pathname.includes('/en')) {
+      newUrl.pathname = newUrl.pathname.replace('/en', '');
+    }
+    newUrl.pathname = `/ar${newUrl.pathname}`;
+    return redirect(newUrl.toString(), 302);
   }
 }
 
-export async function loader({context, params, request}: LoaderFunctionArgs) {
+
+
+export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const collectionHandle = params.collectionHandle;
   invariant(collectionHandle, 'Collection handle is required');
-  const PC = new ProductController({storefront: context.storefront});
+  const PC = new ProductController({ storefront: context.storefront });
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 12,
   });
   const searchParams = new URL(request.url).searchParams;
+
+  handleRouteLocalization({
+    request,
+    locale: context.storefront.i18n,
+  })
 
   let minPrice = 0;
   let maxPrice = 100;
 
   if (searchParams.has('price')) {
     const priceParam = JSON.parse(searchParams.get('price')!) as {
-      price: {min: number; max: number};
+      price: { min: number; max: number };
     };
 
     minPrice = priceParam.price.min;
@@ -84,7 +101,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     availableFilters.products.filters,
   );
 
-  const {collection} = await context.storefront.query(COLLECTION_QUERY, {
+  const { collection } = await context.storefront.query(COLLECTION_QUERY, {
     cache: {
       maxAge: 60 * 60 * 24,
     },
@@ -113,6 +130,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     return Math.min(acc, parseFloat(node.priceRange.minVariantPrice.amount));
   }, maxPrice);
 
+  console.log("hello from collection");
   return json({
     collection,
     availableFilters: availableDynamicFilters,
@@ -147,7 +165,7 @@ function Collection() {
   const defaultParams = new URLSearchParams(currentSearchParams);
 
   const rootData = useRootLoaderData();
-  const {locale} = rootData;
+  const { locale } = rootData;
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   const filtersData = data.availableFilters.filter(
@@ -170,7 +188,7 @@ function Collection() {
   if (searchParams.has('price') === true) {
     const priceParam = searchParams.get('price');
     invariant(priceParam, 'Price param is required');
-    const price = JSON.parse(priceParam) as {price: {min: number; max: number}};
+    const price = JSON.parse(priceParam) as { price: { min: number; max: number } };
     maxPrice = price.price.max;
     minPrice = price.price.min;
   }
@@ -199,17 +217,15 @@ function Collection() {
                       position: 'absolute',
                       zIndex: 9999,
                     }}
-                    className={`heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 ${
-                      isArabic ? 'arAlignItems' : 'enAlignItems'
-                    }`}
+                    className={`heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 ${isArabic ? 'arAlignItems' : 'enAlignItems'
+                      }`}
                   >
                     <h1
                       style={{
                         color: Colors.textSecondary,
                       }}
-                      className={`header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase ${
-                        isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                      }`}
+                      className={`header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase ${isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                        }`}
                     >
                       {data.collection.title}
                     </h1>
@@ -218,9 +234,8 @@ function Collection() {
                         color: Colors.textSecondary,
                         width: '80%',
                       }}
-                      className={`subHeader text-base md:text-lg max-w-xs items-start ${
-                        isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                      }`}
+                      className={`subHeader text-base md:text-lg max-w-xs items-start ${isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+                        }`}
                     >
                       {data.collection.description}
                     </div>
@@ -256,9 +271,8 @@ function Collection() {
           </div>
         )}
         <div
-          className={`filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 ${
-            isArabic ? 'flex-row-reverse' : 'flex-row'
-          }`}
+          className={`filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 ${isArabic ? 'flex-row-reverse' : 'flex-row'
+            }`}
         >
           {filtersData.map((filter: any) => (
             <Dropdown
@@ -294,9 +308,9 @@ function Collection() {
         </div>
         <ProductsGrid collection={data.collection} />
         <div
-          className="mobileFilterMenuTrigger h-[50px] w-[50px] bg-main sticky bottom-3 left-5 z-50 my-3 flex lg:hidden items-center justify-center rounded-full shadow-md cursor-pointer hover:scale-105 transition-all"
+          className="mobileFilterMenuTrigger backdrop-blur-xl h-[50px] w-[50px] bg-main sticky bottom-3 left-5 z-50 my-3 flex lg:hidden items-center justify-center rounded-full shadow-md cursor-pointer hover:scale-105 transition-all"
           style={{
-            backgroundColor: 'rgba(74, 74, 73, 0.60)',
+            backgroundColor: 'rgba(74, 74, 73, 0.70)',
             transitionDuration: '0.2s',
           }}
           onClick={toggleFiltersMenu}

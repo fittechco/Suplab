@@ -1,25 +1,25 @@
-import {useEffect, useState, useRef} from 'react';
-import type {App} from '../../api/type';
+import { useEffect, useState, useRef } from 'react';
+import type { App } from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
 import Swiper from 'swiper';
-import {Navigation} from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
-import {Colors} from '~/app/ft-lib/shared';
-import {Link} from '@remix-run/react';
+import { Colors } from '~/app/ft-lib/shared';
+import { Link } from '@remix-run/react';
 import FTSwiper from '~/app/ft-lib/Swiper';
-import {useRootLoaderData} from '~/app/root';
+import { useRootLoaderData } from '~/app/root';
 
 interface ShopTheGoalSectionProps {
   section: App.HomePageTemplate.ShopTheGoalSection;
 }
 
-const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
-  const fields = arrayToObject({array: section.fields});
+const ShopTheGoal = ({ section }: ShopTheGoalSectionProps) => {
+  const fields = arrayToObject({ array: section.fields });
 
   const rootData = useRootLoaderData();
-  const {locale} = rootData;
+  const { locale } = rootData;
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   if (fields.shop_the_goal_collections == null) {
@@ -37,15 +37,15 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
     >
       {fields.title != null && fields.shop_the_goal_collections != null && (
         <p
-          className={`section-heading ft-text-main md:text-3xl text-2xl mb-10 text-center ${
-            isArabic ? 'md:text-end' : 'md:text-start'
-          }`}
+          className={`section-heading ft-text-main md:text-3xl text-2xl mb-10 text-center ${isArabic ? 'md:text-end' : 'md:text-start'
+            }`}
         >
           {fields.title.value}
         </p>
       )}
       <FTSwiper
         navigation
+        childrenNumber={fields.shop_the_goal_list?.references.nodes.length}
         options={{
           spaceBetween: 10,
           slidesPerView: 1,
@@ -64,7 +64,7 @@ const ShopTheGoal = ({section}: ShopTheGoalSectionProps) => {
         {fields.shop_the_goal_list &&
           fields.shop_the_goal_list.references.nodes.map(
             (shopTheGoal, index) => {
-              const goalFields = arrayToObject({array: shopTheGoal.fields});
+              const goalFields = arrayToObject({ array: shopTheGoal.fields });
               return (
                 <div key={fields.title?.key} className="swiper-slide">
                   <div className="shopTheGoalSection__shopTheGoal flex flex-col justify-center items-center rounded-3xl">

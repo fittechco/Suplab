@@ -1,12 +1,13 @@
-import {useEffect, useRef, useState} from 'react';
-import type {ProductQuery} from 'storefrontapi.generated';
+import { useEffect, useRef, useState } from 'react';
+import type { ProductQuery } from 'storefrontapi.generated';
 import Swiper from 'swiper';
 import 'swiper/css/scrollbar';
-import {Navigation} from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import FTicons from './FTicon';
-import type {SwiperOptions} from 'swiper/types/swiper-options';
+import type { SwiperOptions } from 'swiper/types/swiper-options';
 import invariant from 'tiny-invariant';
-import type {Except} from 'type-fest';
+import type { Except } from 'type-fest';
+import { useRootLoaderData } from '../root';
 
 export type FTSwiperOptions = Except<SwiperOptions, 'breakpoints'> & {
   breakpoints?: {
@@ -19,17 +20,21 @@ type Props = {
   children?: React.ReactNode;
   options?: FTSwiperOptions;
   navigation?: boolean;
+  childrenNumber?: number;
 };
+
 
 export default function FTSwiper(props: Props) {
   const swiperContainer = useRef<
     | (HTMLDivElement & {
-        swiper?: Swiper;
-      })
+      swiper?: Swiper;
+    })
     | null
   >(null);
   const nextElRef = useRef<HTMLDivElement | null>(null);
   const prevElRef = useRef<HTMLDivElement | null>(null);
+  const rootData = useRootLoaderData();
+  const alignRight = rootData.locale.language === 'AR' ? true : false;
 
   useEffect(() => {
     if (swiperContainer.current == null) {
@@ -37,6 +42,7 @@ export default function FTSwiper(props: Props) {
     }
     const swiper = new Swiper(swiperContainer.current, {
       modules: [Navigation],
+      initialSlide: alignRight ? props.childrenNumber : 0,
       on: {
         activeIndexChange(swiper) {
           if (swiper?.slides.length == null) {
@@ -61,7 +67,7 @@ export default function FTSwiper(props: Props) {
         swiper.destroy();
       }
     };
-  }, [props.options]);
+  }, [alignRight, props.childrenNumber, props.options]);
   const [breakPointSLidePerView, setBreakPointSLidePerView] = useState(
     props.options?.slidesPerView,
   );
@@ -80,12 +86,12 @@ export default function FTSwiper(props: Props) {
       if (window.innerWidth > 1024) {
         setBreakPointSLidePerView(
           props.options?.breakpoints?.[1024]?.slidesPerView ||
-            props.options?.slidesPerView,
+          props.options?.slidesPerView,
         );
       } else if (window.innerWidth > 768 && window.innerWidth < 1024) {
         setBreakPointSLidePerView(
           props.options?.breakpoints?.[768]?.slidesPerView ||
-            props.options?.slidesPerView,
+          props.options?.slidesPerView,
         );
       } else {
         setBreakPointSLidePerView(props.options?.slidesPerView);
@@ -102,7 +108,9 @@ export default function FTSwiper(props: Props) {
 
   return (
     <div ref={swiperContainer} className="swiper-container relative">
-      <div className="swiper-wrapper">{props.children}</div>
+      <div className={`swiper-wrapper ${alignRight ? "flex-row-reverse justify-end" : "flex-row justify-start"}`}>
+        {props.children}
+      </div>
       {props.navigation === true && (
         <>
           <div
