@@ -111,7 +111,6 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;
   const locale = storefront.i18n;
   const cookie = request.headers.get('cookie');
-  console.log(cookie, "cookie");
 
   // validate the customer access token is valid
   const { isLoggedIn, headers } = await validateCustomerAccessToken(
@@ -139,8 +138,6 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     shop: layout.shop,
     url: request.url,
   });
-
-  console.log("hello from root");
 
   return defer(
     {
@@ -221,8 +218,6 @@ export default function App() {
     gtag.pageview(location.pathname, gTrackId);
   }, []);
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
-
-  console.log(data.selectedLocale, "data.selectedLocale");
 
   return (
     <html lang={locale.language}>
@@ -315,7 +310,6 @@ export function ErrorBoundary() {
   }
   const navigate = useNavigate();
 
-  console.log(error, 'errorMessage');
   // the return type from the loader and its being wrapped in Awaited in order to remove the promise type
   // const data = root.data as Awaited<ReturnType<typeof loader>>['data'];  
 

@@ -40,7 +40,7 @@ export function LanguageSelectorPopup(props: LanguageSelectorPopupProps) {
 
     const handleLanguageSelectorPopupContainerClick = (language: LanguageCode) => {
         saveLanguagePreferenceCookie(language);
-        localStorage.setItem('preferredL  anguage', language);
+        localStorage.setItem('preferredLanguage', language);
         closeLanguageSelectorPopupContainer();
         navigate(`/${language.toLocaleLowerCase()}`);
     };

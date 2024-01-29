@@ -42,7 +42,6 @@ const FeaturedCollections = ({
   const {locale} = rootData;
 
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-  console.log('collectionProducts', isArabic);
 
   return (
     <div

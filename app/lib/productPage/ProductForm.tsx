@@ -69,10 +69,10 @@ export default function ProductForm(props: Props) {
       )}
       {/* <div className="flex items-center w-full max-md:bottom-9 max-md:sticky"> */}
       {/* ======= */}
-      <ProductOptions
+      {/* <ProductOptions
         selectedVariant={selectedVariant}
         options={product.options}
-      />
+      /> */}
       <div className="flex flex-col items-center w-full max-md:bottom-9 max-md:sticky">
         {/* >>>>>>> Stashed changes */}
         <AddToCartButton
