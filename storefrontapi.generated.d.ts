@@ -175,6 +175,67 @@ export type GetCollectionByHandleQuery = {
   >;
 };
 
+export type AnnouncementBarQueryVariables = StorefrontAPI.Exact<{
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type AnnouncementBarQuery = {
+  metaobject?: StorefrontAPI.Maybe<{
+    fields: Array<
+      Pick<StorefrontAPI.MetaobjectField, 'type' | 'key' | 'value'> & {
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<
+            | {
+                __typename:
+                  | 'Collection'
+                  | 'GenericFile'
+                  | 'MediaImage'
+                  | 'Page'
+                  | 'Product'
+                  | 'ProductVariant'
+                  | 'Video';
+              }
+            | ({__typename: 'Metaobject'} & Pick<
+                StorefrontAPI.Metaobject,
+                'type' | 'handle'
+              > & {
+                  fields: Array<
+                    Pick<
+                      StorefrontAPI.MetaobjectField,
+                      'key' | 'value' | 'type'
+                    > & {
+                      references?: StorefrontAPI.Maybe<{
+                        nodes: Array<
+                          Pick<
+                            StorefrontAPI.Metaobject,
+                            'id' | 'type' | 'handle'
+                          > & {
+                            fields: Array<
+                              Pick<
+                                StorefrontAPI.MetaobjectField,
+                                'key' | 'value' | 'type'
+                              > & {
+                                reference?: StorefrontAPI.Maybe<{
+                                  image?: StorefrontAPI.Maybe<
+                                    Pick<StorefrontAPI.Image, 'url'>
+                                  >;
+                                }>;
+                              }
+                            >;
+                          }
+                        >;
+                      }>;
+                    }
+                  >;
+                })
+          >;
+        }>;
+      }
+    >;
+  }>;
+};
+
 export type ProductFragmentFragment = Pick<
   StorefrontAPI.Product,
   'id' | 'title' | 'vendor' | 'handle' | 'productType' | 'description'
@@ -761,6 +822,29 @@ export type SearchProductsQuery = {
       }
     >;
   };
+};
+
+export type AnnouncementBarMetaobjectFragment = Pick<
+  StorefrontAPI.Metaobject,
+  'type' | 'handle'
+> & {
+  fields: Array<
+    Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
+      references?: StorefrontAPI.Maybe<{
+        nodes: Array<
+          Pick<StorefrontAPI.Metaobject, 'id' | 'type' | 'handle'> & {
+            fields: Array<
+              Pick<StorefrontAPI.MetaobjectField, 'key' | 'value' | 'type'> & {
+                reference?: StorefrontAPI.Maybe<{
+                  image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
+                }>;
+              }
+            >;
+          }
+        >;
+      }>;
+    }
+  >;
 };
 
 export type MobileLayoutQueryVariables = StorefrontAPI.Exact<{
@@ -1638,6 +1722,10 @@ interface GeneratedQueryTypes {
   '#graphql\n        query GetCollectionByHandle (\n          $handle: String! \n          $country: CountryCode\n          $language: LanguageCode\n        ) @inContext(country: $country, language: $language) {\n            collectionByHandle(handle: $handle) {\n                ...Collection\n                products(first: 10) {\n                    nodes {\n                        ...ProductFragment\n                    }\n                }\n            }\n        }\n        #graphql\n    fragment Collection on Collection {\n        id\n        handle\n        title\n        description\n        seo {\n            description\n            title\n        }\n        image {\n            id\n            url\n            width\n            height\n            altText\n        }\n    }\n\n        #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    productType\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n        ': {
     return: GetCollectionByHandleQuery;
     variables: GetCollectionByHandleQueryVariables;
+  };
+  '#graphql\n    query AnnouncementBar($country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {\n        metaobject(\n          handle: {handle: "announcement-bar-section", type: "announcement_bar_section"}\n        ) {\n          fields {\n            type\n            key\n            value\n            references(first: 20) {\n              nodes {\n                ... on Metaobject {\n                  type\n                  handle\n                  fields {\n                    key\n                    value\n                    type\n                    references(first: 20) {\n                      nodes {\n                        ... on Metaobject {\n                          id\n                          type\n                          handle\n                          fields {\n                            key\n                            value\n                            type\n                            reference {\n                              ... on MediaImage {\n                                image {\n                                  url\n                                }\n                              }\n                            }\n                          }\n                        }\n                      }\n                    }\n                  }\n                }\n                __typename\n              }\n            }\n          }\n        }\n      }': {
+    return: AnnouncementBarQuery;
+    variables: AnnouncementBarQueryVariables;
   };
   '#graphql\n      query AllProducts{\n        products(first: 20) {\n            nodes {\n              ...ProductFragment\n            }\n        }\n      }\n      #graphql\n  fragment ProductFragment on Product {\n    id\n    title\n    vendor\n    handle\n    productType\n    description\n    seo {\n      description\n      title\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n      maxVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 10) {\n        nodes {\n          url\n          height\n          width\n          altText\n        }\n    }\n    options {\n      name,\n      values\n    }\n    variants(first: 10) {\n      nodes {\n        quantityAvailable\n        id\n        title\n        availableForSale\n        price {\n          currencyCode\n          amount\n        }\n        compareAtPrice {\n          currencyCode\n          amount\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n    \n    ': {
     return: AllProductsQuery;

@@ -1,26 +1,29 @@
-import { Image } from '@shopify/hydrogen';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { App } from '../../api/type';
-import { createPortal } from 'react-dom';
+import {AnalyticsPageType, Image} from '@shopify/hydrogen';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import type {App} from '../../api/type';
+import {createPortal} from 'react-dom';
 import MobileNav from '../MobileNav';
 import SubMenuPopup from './SubMenuPopup';
 import FTicons from 'app/ft-lib/FTicon';
-import { Colors } from 'app/ft-lib/shared';
-import type { loader as offersLoader } from '~/app/routes/($locale).offers';
+import {Colors} from 'app/ft-lib/shared';
+import type {loader as offersLoader} from '~/app/routes/($locale).offers';
 import type {
   FooterQuery,
   HeaderQuery,
   ShopLayoutQuery,
 } from 'storefrontapi.generated';
 import Search from 'app/components/Search';
-import { UseShopStore, useRootLoaderData } from '~/app/root';
-import { useCart } from '~/app/components/CartProvider';
-import { Link, useFetcher, useParams } from '@remix-run/react';
+import {UseShopStore, useRootLoaderData} from '~/app/root';
+import {useCart} from '~/app/components/CartProvider';
+import {Link, useFetcher, useLoaderData, useParams} from '@remix-run/react';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
-import type { loader as collectionLoader } from '~/app/routes/($locale).collections.$collectionHandle';
-import { CountrySelector } from '~/app/components/CountrySelector';
-import { RemixLink } from '~/app/components/RemixLink';
+import type {loader as collectionLoader} from '~/app/routes/($locale).collections.$collectionHandle';
+import {CountrySelector} from '~/app/components/CountrySelector';
+import {RemixLink} from '~/app/components/RemixLink';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {json} from '@shopify/remix-oxygen';
+import {handleRouteLocalization} from '~/app/ft-lib/handleLocalization';
 
 const GetBestSellers = () => {
   const fetcher = useFetcher<typeof collectionLoader>();
@@ -40,7 +43,45 @@ type Props = {
   };
 };
 
+export async function loader({context, params, request}: LoaderFunctionArgs) {
+  const {language} = context.storefront.i18n;
+
+  if (
+    params.locale &&
+    params.locale.toLowerCase() !== `${language}`.toLowerCase()
+  ) {
+    // If the locale URL param is defined, yet we still are on `EN`
+    // the the locale param must be invalid, send to the 404 page
+    throw new Response(null, {status: 404});
+  }
+
+  handleRouteLocalization({
+    request,
+    locale: context.storefront.i18n,
+  });
+  console.log('entering storefront request');
+  const storefront = await context.storefront.query(AnnouncementBarQuery, {
+    cache: {
+      maxAge: 60 * 60 * 24,
+      staleWhileRevalidate: 60 * 60,
+      // 60 * 60 * 24 is 24 hours in seconds
+      // one hour is 60 * 60
+    },
+  });
+  console.log('storefront requested', storefront);
+
+  const {metaobject} = storefront;
+  console.log('metaobject loaded', metaobject);
+  return metaobject;
+  // return json({
+  //   metaobject,
+  // });
+}
+
 function Header(props: Props) {
+  // const {metaobject}: {metaobject: App.AnnouncementBarSection} =
+  //   useLoaderData();
+  // console.log('loaderrrr', metaobject);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [isTop, setIsTop] = useState(true);
   const [subItems, setSubItems] = useState<App.Shopify.Item[]>([]);
@@ -54,7 +95,7 @@ function Header(props: Props) {
   const bestSellersCollection = GetBestSellers();
 
   const rootData = useRootLoaderData();
-  const { locale } = rootData;
+  const {locale} = rootData;
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   const ar = isArabic ? 'ar' : '';
@@ -119,11 +160,17 @@ function Header(props: Props) {
         style={{
           background: Colors.primary,
           color: Colors.offWhite,
-          marginTop: isTop === true ? 0 : `-${(announcementRef.current?.scrollHeight || 0)}px`,
+          marginTop:
+            isTop === true
+              ? 0
+              : `-${announcementRef.current?.scrollHeight || 0}px`,
           transition: 'all 0.3s ease',
         }}
-        className="announcement-bar text-sm md:text-sm tracking-[0.02rem] font-bold  uppercase w-full flex items-center justify-center py-1">
-        Free Delivery on Orders Over $100
+        className="announcement-bar text-sm md:text-sm tracking-[0.02rem] font-bold  uppercase w-full flex items-center justify-center py-1"
+      >
+        {isArabic
+          ? 'توصيل مجاني للطلبات فوق $ ١٠٠'
+          : 'Free Delivery on Orders Over $100'}
       </div>
       <div
         ref={headerRef}
@@ -139,8 +186,9 @@ function Header(props: Props) {
           style={{
             height: 80,
           }}
-          className={`flex items-center max-md:justify-between max-md:py-2 px-5 sm:px-6 ${isArabic ? 'arFlexDirection' : 'enFlexDirection'
-            }`}
+          className={`flex items-center max-md:justify-between max-md:py-2 px-5 sm:px-6 ${
+            isArabic ? 'arFlexDirection' : 'enFlexDirection'
+          }`}
         >
           <Link
             to={ar}
@@ -148,8 +196,9 @@ function Header(props: Props) {
               color: Colors.secondary,
               fontWeight: 700,
             }}
-            className={`header__logo flex items-center ${isArabic ? 'arFlexDirection ml-auto' : 'enFlexDirection mr-auto'
-              }`}
+            className={`header__logo flex items-center ${
+              isArabic ? 'arFlexDirection ml-auto' : 'enFlexDirection mr-auto'
+            }`}
           >
             {props.layout.shop?.brand?.logo?.image != null && (
               <LazyImage
@@ -162,8 +211,9 @@ function Header(props: Props) {
             )}
           </Link>
           <div
-            className={`navmenusContainer flex items-center justify-center max-lg:hidden h-full ${isArabic ? 'arFlexDirection' : 'enFlexDirection'
-              }`}
+            className={`navmenusContainer flex items-center justify-center max-lg:hidden h-full ${
+              isArabic ? 'arFlexDirection' : 'enFlexDirection'
+            }`}
           >
             {props.layout.header.menu?.items.map((item) => {
               const pathname = new URL(item.url || '').pathname;
@@ -211,8 +261,9 @@ function Header(props: Props) {
             })}
           </div>
           <div
-            className={`icons flex gap-3 items-center justify-end ${isArabic ? 'arFlexDirection mr-auto' : 'enFlexDirection ml-auto'
-              }`}
+            className={`icons flex gap-3 items-center justify-end ${
+              isArabic ? 'arFlexDirection mr-auto' : 'enFlexDirection ml-auto'
+            }`}
           >
             <CountrySelector />
             <button
@@ -233,7 +284,7 @@ function Header(props: Props) {
             <div className="icons_item cursor-pointer">
               <button
                 onClick={() => {
-                  UseShopStore.setState({ showCart: true });
+                  UseShopStore.setState({showCart: true});
                 }}
                 className="cursor-pointer flex items-center justify-center relative"
               >
@@ -310,3 +361,58 @@ function Header(props: Props) {
 }
 
 export default Header;
+
+const ON_ANNOUNCEMENTBAR_METAOBJECT = `#graphql
+fragment AnnouncementBarMetaobject on Metaobject {
+  type
+  handle
+  fields {
+    key
+    value
+    type
+    references(first: 20) {
+      nodes {
+        ... on Metaobject {
+          id
+          type
+          handle
+          fields {
+            key
+            value
+            type
+            reference{
+              ... on MediaImage {
+                image {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
+const AnnouncementBarQuery = `#graphqls
+  query AnnouncementBar ($country: CountryCode, $language: LanguageCode) 
+    @inContext(country: $country, language: $language){
+    metaobject(handle: {handle: "announcement-bar-section", type: "announcement_bar_section"}) {
+      fields {
+        type
+        key
+        value
+        references(first: 20) {
+          nodes {
+            ... on Metaobject {
+            ...AnnouncementBarMetaobject
+            }
+            __typename
+          }
+        }
+      }
+    }
+  }
+${ON_ANNOUNCEMENTBAR_METAOBJECT}
+`;
