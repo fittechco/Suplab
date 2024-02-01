@@ -284,46 +284,6 @@ export function getLocaleFromRequest(request: Request): I18nLocale {
       };
 }
 
-// export function getLocaleFromRequest(request: Request): I18nLocale {
-//   // Get the user request URL
-//   const url = new URL(request.url);
-
-//   // Match the URL host
-//   switch (url.host) {
-//     case 'suplabstore.com':
-//       // This regex matches `/fr/` paths in the request
-//       if (/^\/ar($|\/)/.test(url.pathname)) {
-//         return {
-//           label: 'العربية',
-//           currency: 'USD',
-//           language: 'AR',
-//           country: 'AR',
-//           host: 'suplabstore.com',
-//           pathPrefix: '/ar',
-//         };
-//       } else {
-//         return {
-//           label: 'United States (USD $)',
-//           currency: 'USD',
-//           language: 'EN',
-//           country: 'US',
-//           host: 'suplabstore.com',
-//           pathPrefix: '',
-//         };
-//       }
-//       break;
-//     default:
-//       return {
-//         label: 'United States (USD $)',
-//         currency: 'USD',
-//         language: 'EN',
-//         country: 'US',
-//         host: 'suplabstore.com',
-//         pathPrefix: '',
-//       };
-//   }
-// }
-
 export function usePrefixPathWithLocale(path: string) {
   const rootData = useRootLoaderData();
   const selectedLocale = rootData?.selectedLocale ?? DEFAULT_LOCALE;

@@ -28,7 +28,7 @@ const Hero = ({section}: HeroSectionProps) => {
   }
 
   return (
-    <div
+    <div  
       key={section.type}
       style={{}}
       className="hero-section-container w-full h-[70vh] md:h-[80vh] !container mx-auto transition-all ease-in-out duration-300"

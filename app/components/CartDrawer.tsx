@@ -165,7 +165,6 @@ export default function CartDrawer() {
           borderRadius: '24px 0px 0px 24px',
           border: '0.5px solid #93C147',
           transition: 'all 0.2s ease-in-out',
-          // transform: showCart ? 'translateX(0%)' : 'translateX(100%)',
         }}
         className="cart-slider backdrop-blur max-md:hidden"
       >

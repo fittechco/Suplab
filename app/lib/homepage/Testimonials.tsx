@@ -150,10 +150,4 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
   );
 };
 
-// ${
-// currentSlide === fields.testimonials?.references.nodes.length - 1
-// ? 'hidden'
-// : 'flex'
-// }
-
 export default Testimonials;

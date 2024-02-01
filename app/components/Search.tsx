@@ -1,10 +1,10 @@
-import { useFetcher } from '@remix-run/react';
-import { Colors } from 'app/ft-lib/shared';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { SearchProductsQuery } from 'storefrontapi.generated';
+import {useFetcher} from '@remix-run/react';
+import {Colors} from 'app/ft-lib/shared';
+import {useEffect, useMemo, useRef, useState} from 'react';
+import type {SearchProductsQuery} from 'storefrontapi.generated';
 import _ from 'lodash';
 import ProductCard from './ProductCard';
-import type { loader as searchLoader } from '../routes/($locale).search';
+import type {loader as searchLoader} from '../routes/($locale).search';
 
 type Props = {
   setShowSearch: (show: boolean) => void;
@@ -24,10 +24,13 @@ export default function Search(props: Props) {
   const prevFetcherData = useRef<SearchProductsQuery['products']['nodes']>([]);
   // implementing search with debounce and useMemo in order to avoid unnecessary re-renders and save the reference to the debounced function
   const handleSearchProducts = useMemo(() => {
-    return _.debounce((query: string) => {
-
-      fetcher.load(`/search?q=${query}`)
-    }, 100, { leading: false, trailing: true });
+    return _.debounce(
+      (query: string) => {
+        fetcher.load(`/search?q=${query}`);
+      },
+      100,
+      {leading: false, trailing: true},
+    );
   }, []);
 
   useEffect(() => {
@@ -65,7 +68,7 @@ export default function Search(props: Props) {
   }, [props.showSearch]);
 
   useEffect(() => {
-    if (fetcher.state != "idle") {
+    if (fetcher.state != 'idle') {
       setIsRequesting(true);
     } else {
       setIsRequesting(false);
@@ -74,10 +77,13 @@ export default function Search(props: Props) {
     if (searchQuery === '') {
       setSearchedProducts([]);
       setIsEmpty(false);
-      return
+      return;
     }
-    if (fetcher.data == null || _.isEqual(fetcher.data.nodes, prevFetcherData.current)) {
-      return
+    if (
+      fetcher.data == null ||
+      _.isEqual(fetcher.data.nodes, prevFetcherData.current)
+    ) {
+      return;
     }
     // updating the previous fetcher data value
     prevFetcherData.current = fetcher.data?.nodes || [];
@@ -88,7 +94,7 @@ export default function Search(props: Props) {
       setIsEmpty(false);
       setSearchedProducts(fetcher.data.nodes);
     }
-  }, [fetcher]);
+  }, [fetcher, searchQuery]);
 
   return (
     <div
@@ -142,7 +148,7 @@ export default function Search(props: Props) {
             }}
             onChange={async (e) => {
               setSearchQuery(e.target.value);
-              fetcher.load(`/search?q=${e.target.value}`)
+              fetcher.load(`/search?q=${e.target.value}`);
             }}
             className="font-mainFont w-full placeholder:text-[#696968] h-12 focus:outline-none px-0 py-2 "
             type="text"
@@ -186,7 +192,6 @@ export default function Search(props: Props) {
         )}
         <div
           style={{
-            // height: 500,
             overflowY: 'scroll',
             width: '100%',
           }}

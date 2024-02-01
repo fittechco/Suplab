@@ -9,7 +9,6 @@ import { AnalyticsPageType, flattenConnection, Image } from '@shopify/hydrogen';
 import { getImageLoadingPriority, PAGINATION_SIZE } from '../ft-lib/const';
 import { seoPayload } from '../ft-lib/seo.server';
 import { routeHeaders } from '../ft-lib/cache';
-// import type {ArticleFragment} from 'storefrontapi.generated';
 import { PageHeader, Section } from '../components/Text';
 import { Grid } from '../components/Grid';
 import { RemixLink } from '../components/RemixLink';
@@ -35,8 +34,6 @@ export async function action({ request }: ActionFunctionArgs) {
   // Read form data
   const formData = await request.formData();
   const language = formData.get('language');
-  // const country = formData.get('country');
-  // const search = formData.get('search');
 
   // Redirect to the appropriate locale path with preserved path (note we are in the about route)
   if (language === 'EN') {

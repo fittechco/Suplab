@@ -77,7 +77,6 @@ export default function BottomDrawer(props: Props) {
           borderRadius: "24px 24px 0px 0px",
           border: "0.5px solid #93C147",
           background: "rgba(250, 249, 246, 0.90)",
-          // background: "hsla(45, 29%, 97%, 0.4)",
           transition: "all 0.2s ease-in-out",
           transform: animate ? "translateY(0%)" : "translateY(100%)",
         }}

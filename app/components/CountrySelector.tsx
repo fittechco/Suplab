@@ -1,22 +1,26 @@
 import {Form, useLocation, useNavigate} from '@remix-run/react';
-import {countries} from '../ft-lib/data/countries';
+import type {CountriesKey} from '../ft-lib/data/countries';
+import { countries} from '../ft-lib/data/countries';
 import {useRootLoaderData} from '../root';
 import {saveLanguagePreferenceCookie} from '../ft-lib/cookie-utils';
 import {useEffect, useRef, useState} from 'react';
 import {Colors} from '../ft-lib/shared';
+import { CountrySelectorForm } from './CountrySelectorForm';
+
+
+
 
 export function CountrySelector() {
   const root = useRootLoaderData();
-
   const selectedLocale = root.locale;
   const {pathname, search} = useLocation();
+  const strippedPathname = pathname.startsWith(selectedLocale.pathPrefix)
+    ? pathname.replace(selectedLocale.pathPrefix, '')
+    : pathname;
   const [showSelector, setShowSelector] = useState(false);
   const countrySelectorConatainer = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const strippedPathname = pathname.startsWith(selectedLocale.pathPrefix)
-    ? pathname.replace(selectedLocale.pathPrefix, '')
-    : pathname;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,39 +55,20 @@ export function CountrySelector() {
         >
           {countries &&
             Object.keys(countries).map((countryKey) => {
-              const locale = countries[countryKey];
+              const locale = countries[countryKey as CountriesKey] ;
               const hreflang = `${locale.language}-${locale.country}`;
               const actionPath =
                 locale.language === 'AR' ? '/ar' : selectedLocale.pathPrefix;
               return (
-                <Form
-                  method="post"
-                  action={`${strippedPathname}${search}`}
-                  onSubmit={(e) => {
-                    saveLanguagePreferenceCookie(locale.language);
-                    setShowSelector(false);
-                    // navigate(`${actionPath}${strippedPathname}${search}`);
-                  }}
-                  key={hreflang}
-                >
-                  <input
-                    type="hidden"
-                    name="language"
-                    value={locale.language}
-                  />
-                  <input type="hidden" name="country" value={locale.country} />
-                  <input
-                    type="hidden"
-                    name="path"
-                    value={`${strippedPathname}${search}`} // Use stripped path
-                  />
-                  <button
-                    className="text-center p-2 hover:bg-neutral-200 w-full"
-                    type="submit"
-                  >
-                    {locale.label}
-                  </button>
-                </Form>
+                <CountrySelectorForm
+                countryKey={countryKey as CountriesKey}
+                selectedLocale={selectedLocale}
+                onFormSubmit={(e) => {
+                  saveLanguagePreferenceCookie(locale.language);
+                  setShowSelector(false);
+                }}
+                key={hreflang}
+                />
               );
             })}
         </div>

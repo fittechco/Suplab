@@ -42,8 +42,6 @@ export async function action({request}: ActionFunctionArgs) {
   const formData = await request.formData();
   const language = formData.get('language');
   const newUrl = new URL(request.url);
-  // const country = formData.get('country');
-  // const search = formData.get('search');
 
   // Redirect to the appropriate locale path with preserved path (note we are in the about route)
   if (language === 'EN') {
@@ -82,28 +80,33 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     });
   });
   invariant(productHandle != null, 'productHandle is required');
-  const product = await PC.getProductByHandle({
+  const product = await PC.getProductByHandleLocalized({
     handle: productHandle,
     selectedOptions,
   });
+
+  const noLocaleProduct = await PC.getProductByHandle({
+    handle: productHandle,
+    selectedOptions,
+  });
+
   const recommendedProducts = PC.getProductRecommendations({
     productId: product.id,
   });
   const productMetafields = PC.getProductMetafields({
     productId: product.id,
   });
-  
-  if (!product.selectedVariant) {
+  if (noLocaleProduct.selectedVariant == null) {
     const searchParams = new URLSearchParams(new URL(request.url).search);
-    const firstVariant = product.variants.nodes[0];
+    const firstVariant = noLocaleProduct.variants.nodes[0];
 
     for (const option of firstVariant.selectedOptions) {
       searchParams.set(option.name, option.value);
     }
-    // throw redirect(
-    //   `/products/${product.handle}?${searchParams.toString()}`,
-    //   302, // Make sure to use a 302, because the first variant is subject to change
-    // );
+    throw redirect(
+      `/products/${noLocaleProduct.handle}?${searchParams.toString()}`,
+      302, // Make sure to use a 302, because the first variant is subject to change
+    );
   }
 
   const judgeMeApi = new JudgeMeService();
@@ -113,7 +116,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   const widgetSettings = judgeMeApi.getWidgetSettings();
 
   const selectedVariant =
-    product.selectedVariant ?? product?.variants?.nodes[0];
+    noLocaleProduct.selectedVariant ?? noLocaleProduct?.variants?.nodes[0];
   // we will difer the fetching of the recommendations
   // to the client side
 
@@ -136,6 +139,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     recommendedProducts,
     widgetSettings,
     product,
+    noLocaleProduct,
     reviews,
     selectedVariant,
     productMetafields,
@@ -152,6 +156,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 const ProductPage = () => {
   const {
     product,
+    noLocaleProduct,
     reviews,
     widgetSettings,
     selectedVariant,
@@ -393,6 +398,7 @@ const ProductPage = () => {
             isTop={isTop}
             selectedVariant={selectedVariant}
             product={product}
+            noLocaleProduct={noLocaleProduct}
           />
           <div className="mobile-product-tabs md:hidden">
             <Suspense>

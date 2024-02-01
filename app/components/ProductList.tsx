@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import type { App } from '../api/type';
-// import CartController from 'server/controllers/CartController';
 
 type IProduct = Pick<
   NonNullable<App.Shopify.Storefront.Product>,
@@ -13,12 +12,6 @@ const ProductList = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      // const productData = await ProductController.getAllProducts();
-      //   const cartData: App.Shopify.Storefront.Cart.Cart = await CartController.getCart({
-      //     cartId: 'gid://shopify/Cart/c1-f5ddd640baaa313a9c0b1e85d1e87088'
-      // });
-      // setProducts(productData);
-      // setCart(cartData);
     };
     fetchProducts();
   }, []);

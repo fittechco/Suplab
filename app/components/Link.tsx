@@ -1,4 +1,3 @@
-// import { Link as RemixLink } from '@remix-run/react'
 import type {RemixLinkProps} from '@remix-run/react/dist/components';
 import {UseShopStore} from '../root';
 import {RemixLink} from './RemixLink';

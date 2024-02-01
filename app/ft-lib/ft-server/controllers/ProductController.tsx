@@ -41,6 +41,19 @@ class ProductController {
     return products;
   }
 
+  async getProductByHandleLocalized(args: {
+    handle: string;
+    selectedOptions: {name: string; value: string}[];
+  }) {
+    const {handle} = args;
+    const PS = new ProductService({storefront: this.storefront});
+    const product = await PS.getProductByHandleLocalized({
+      handle,
+      selectedOptions: args.selectedOptions,
+    });
+    return product;
+  }
+
   async getProductByHandle(args: {
     handle: string;
     selectedOptions: {name: string; value: string}[];

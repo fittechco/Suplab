@@ -24,8 +24,6 @@ export async function action({request, params}: ActionFunctionArgs) {
   // Read form data
   const formData = await request.formData();
   const language = formData.get('language');
-  // const country = formData.get('country');
-  // const search = formData.get('search');
   const blogsHandle = params.blogsHandle;
 
   // Redirect to the appropriate locale path with preserved path (note we are in the about route)

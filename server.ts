@@ -95,8 +95,6 @@ export default {
       return response;
     } catch (error) {
       console.error(error);
-      // const errorResponse = () => new Response('An unexpected error occurred', { status: 500 });
-      // return errorResponse();
       return new Response('An unexpected error occurred', {status: 500});
     }
   },
@@ -219,8 +217,6 @@ function getLocaleFromRequest(request: Request): I18nLocale {
   let country: CountryCode = 'US';
 
   if (/^(AR|EN)$/i.test(firstPathPart)) {
-    // Match for AR-EG or EN-US
-    // if (/^(AR|EN)$/i.test(firstPathPart)) { // Match for AR-EG or EN-US
     pathPrefix = '/' + firstPathPart;
     [language, country] = firstPathPart.split('-') as [
       LanguageCode,
@@ -230,37 +226,3 @@ function getLocaleFromRequest(request: Request): I18nLocale {
 
   return {language, country, pathPrefix};
 }
-
-// export function getLocaleFromRequest(request: Request): Locale {
-//   // Get the user request URL
-//   const url = new URL(request.url);
-
-//   // Match the URL host
-//   switch (url.host) {
-//     case 'suplabstore.com':
-//       // This regex matches `/fr/` paths in the request
-//       if (/^\/ar($|\/)/.test(url.pathname)) {
-//         return {
-//           label: 'العربية',
-//           currency: 'USD',
-//           language: 'AR',
-//           country: 'AR',
-//         };
-//       } else {
-//         return {
-//           label: 'United States (USD $)',
-//           currency: 'USD',
-//           language: 'EN',
-//           country: 'US',
-//         };
-//       }
-//       break;
-//     default:
-//       return {
-//         label: 'United States (USD $)',
-//         currency: 'USD',
-//         language: 'EN',
-//         country: 'US',
-//       };
-//   }
-// }

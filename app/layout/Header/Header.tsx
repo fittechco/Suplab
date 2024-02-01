@@ -29,7 +29,7 @@ const GetBestSellers = () => {
   const fetcher = useFetcher<typeof collectionLoader>();
   useEffect(() => {
     if (fetcher.state === 'idle' && !fetcher.data) {
-      fetcher.load('/collections/best-sellers');
+      fetcher.load('/collections/best-sellers?localize=false');
     }
   }, [fetcher]);
   return fetcher.data;
@@ -59,7 +59,6 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     request,
     locale: context.storefront.i18n,
   });
-  console.log('entering storefront request');
   const storefront = await context.storefront.query(AnnouncementBarQuery, {
     cache: {
       maxAge: 60 * 60 * 24,
@@ -68,20 +67,12 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
       // one hour is 60 * 60
     },
   });
-  console.log('storefront requested', storefront);
 
   const {metaobject} = storefront;
-  console.log('metaobject loaded', metaobject);
   return metaobject;
-  // return json({
-  //   metaobject,
-  // });
 }
 
 function Header(props: Props) {
-  // const {metaobject}: {metaobject: App.AnnouncementBarSection} =
-  //   useLoaderData();
-  // console.log('loaderrrr', metaobject);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [isTop, setIsTop] = useState(true);
   const [subItems, setSubItems] = useState<App.Shopify.Item[]>([]);
@@ -177,8 +168,6 @@ function Header(props: Props) {
         style={{
           borderRadius: '0px 0px 12px 12px',
           transition: 'all 0.3s ease',
-          // height: ,
-          // overflow: 'hidden',
         }}
         className="header-wrapper white-background-blur "
       >

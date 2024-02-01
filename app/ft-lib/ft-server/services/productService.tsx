@@ -195,6 +195,69 @@ class ProductService {
     return data.products;
   }
 
+  async getProductByHandleLocalized(args: {
+    handle: string;
+    selectedOptions: {name: string; value: string}[];
+  }) {
+    const query = `#graphql
+      query ProductByHandleLocalized(
+        $handle: String!
+        $selectedOptions: [SelectedOptionInput!]! 
+        $country: CountryCode
+        $language: LanguageCode
+        ) 
+        @inContext(country: $country, language: $language) 
+        {
+        productByHandle(handle: $handle) {
+          ...ProductFragment
+          selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+            id
+            quantityAvailable
+            availableForSale
+            selectedOptions {
+              name
+              value
+            }
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
+              amount
+              currencyCode
+            }
+            sku
+            title
+            unitPrice {
+              amount
+              currencyCode
+            }
+            product {
+              title
+              handle
+            }
+          }
+        }
+      }
+      ${PRODUCTFRAGMENT}
+    `;
+    const data = await this.storefront.query(query, {
+      variables: {
+        handle: args.handle,
+        selectedOptions: args.selectedOptions,
+      },
+    });
+    invariant(data.productByHandle != null, 'Product not found');
+    return data.productByHandle;
+  }
+
   async getProductByHandle(args: {
     handle: string;
     selectedOptions: {name: string; value: string}[];
@@ -203,10 +266,7 @@ class ProductService {
       query ProductByHandle(
         $handle: String!
         $selectedOptions: [SelectedOptionInput!]! 
-        $country: CountryCode
-        $language: LanguageCode
         ) 
-        @inContext(country: $country, language: $language) 
         {
         productByHandle(handle: $handle) {
           ...ProductFragment
