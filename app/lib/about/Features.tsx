@@ -60,7 +60,7 @@ const Features = ({section}: FeaturesHeroSectionProps) => {
                   <div className="w-full h-[195px] md:w-1/2 md:h-full">
                     <img
                       src={imageUrl}
-                      alt="Suplab Store Supplements"
+                      alt="Suplab Supplements Store Lebanon"
                       className="w-full h-full rounded-3xl"
                     />
                   </div>

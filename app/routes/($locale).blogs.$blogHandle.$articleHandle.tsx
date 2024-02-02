@@ -174,7 +174,7 @@ export default function Article() {
             >
               {typedArticleOffer.images != null && (
                 <LazyImage
-                  alt="offer image"
+                  alt={typedArticleOffer.title}
                   className="object-fill rounded-3xl w-full"
                   src={typedArticleOffer.images.nodes[0].url}
                 />

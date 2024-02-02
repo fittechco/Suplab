@@ -50,7 +50,7 @@ const Hero = ({section}: HeroSectionProps) => {
           className={`desktop-image w-full h-full object-cover max-sm:hidden `}
           containerClassName="desktop-image-conatiner max-sm:hidden"
           src={resizeImage(desktopUrl, 1440)}
-          alt="Suplab Store"
+          alt="Suplab Supplement Store Lebanon"
         />
         <LazyImage
           style={{
@@ -59,7 +59,7 @@ const Hero = ({section}: HeroSectionProps) => {
           className="mobile-image w-full h-full object-cover md:hidden "
           containerClassName="mobile-image-conatiner md:hidden"
           src={resizeImage(mobileUrl, 600)}
-          alt="Suplab Store"
+          alt="Suplab Supplement Store Lebanon"
         />
         <div className="layer bg-black opacity-[55%] absolute top-0 left-0 w-full h-full z-20 rounded-3xl" />
         <div

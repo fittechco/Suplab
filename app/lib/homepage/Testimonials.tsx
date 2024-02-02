@@ -82,7 +82,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
                   <div className="lightgray / cover no-repeat flex h-full w-full">
                     {testimonialFields.before_image != null && (
                       <LazyImage
-                        alt="Suplab Store Supplements Testimonial"
+                        alt="Suplab Supplements Store Lebanon Testimonial"
                         style={{
                           width:
                             testimonialFields.after_image != null
@@ -98,7 +98,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
                     )}
                     {testimonialFields.after_image?.value != null && (
                       <LazyImage
-                        alt="Suplab Store Supplements Testimonial"
+                        alt="Suplab Supplements Store Lebanon Testimonial"
                         style={{}}
                         className="w-1/2 h-full object-fill"
                         src={resizeImage(

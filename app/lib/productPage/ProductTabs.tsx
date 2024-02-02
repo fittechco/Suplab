@@ -145,7 +145,7 @@ export default function ProductTabs(props: Props) {
             >
               {image != null && (
                 <LazyImage
-                  alt={product?.description ?? ''}
+                  alt={product?.description ?? 'Product Image'}
                   className="product-tabs-image aspect-square h-96"
                   src={resizeImage(image.url, 600)}
                 />

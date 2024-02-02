@@ -294,7 +294,7 @@ const ProductPage = () => {
                       }}
                     >
                       <LazyImage
-                        alt={`${product.title}`}
+                        alt={product.title}
                         style={{
                           objectFit: 'cover',
                           height: '100%',

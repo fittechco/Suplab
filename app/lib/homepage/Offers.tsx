@@ -80,7 +80,7 @@ const Offers = (props: Props) => {
                 >
                   {product?.images != null && (
                     <LazyImage
-                      alt="product image"
+                      alt={product.title}
                       className="rounded-3xl w-full aspect-[1.2] object-cover"
                       src={resizeImage(product.images.nodes[0].url, 500)}
                     />

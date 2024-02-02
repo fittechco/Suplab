@@ -50,7 +50,7 @@ export default function Contact() {
         >
           {fields.image?.reference.image.url && (
             <LazyImage
-              alt="Suplab Store Supplements Contact"
+              alt="Suplab Supplements Store Lebanon Contact"
               className="object-cover min-h-[420px]"
               src={resizeImage(fields.image?.reference.image.url, 800)}
             />
