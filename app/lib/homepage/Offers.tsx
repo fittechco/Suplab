@@ -52,7 +52,7 @@ const Offers = (props: Props) => {
               backgroundColor: Colors.primary,
               color: Colors.textSecondary,
             }}
-            to={`collections/offers`}
+            to={`collections/product-offers`}
             className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize"
           >
             {fields.button_text.value}

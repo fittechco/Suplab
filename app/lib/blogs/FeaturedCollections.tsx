@@ -111,14 +111,14 @@ const FeaturedCollections = ({
           >
             <button
               style={getButtonStyle('collection_one')}
-              className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-xs uppercase -tracking-tight"
+              className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-sm uppercase -tracking-tight"
               onClick={() => handleButtonClick('collection_one')}
             >
               {collectionProducts[0]?.title}
             </button>
             <button
               style={getButtonStyle('collection_two')}
-              className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-xs uppercase -tracking-tight"
+              className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-sm uppercase -tracking-tight"
               onClick={() => handleButtonClick('collection_two')}
             >
               {collectionProducts[1]?.title}

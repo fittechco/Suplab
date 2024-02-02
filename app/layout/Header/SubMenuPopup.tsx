@@ -107,7 +107,7 @@ export default function SubMenuPopup(props: {
         <div className="header-featured-collections m-5 h-fit flex flex-col items-end space-y-4 w-1/2">
           {offersImage != null && (
             <Link
-              to={`/collections/offers`}
+              to={`/collections/product-offers`}
               style={{
                 width: 370,
                 height: 180,

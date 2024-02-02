@@ -94,7 +94,7 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
             {fields.collection_one_button_text != null && (
               <button
                 style={getButtonStyle('collection_one')}
-                className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-xs uppercase -tracking-tight"
+                className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-sm uppercase -tracking-tight"
                 onClick={() => handleButtonClick('collection_one')}
               >
                 {fields.collection_one_button_text.value}
@@ -103,7 +103,7 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
             {fields.collection_two_button_text != null && (
               <button
                 style={getButtonStyle('collection_two')}
-                className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-xs uppercase -tracking-tight"
+                className="btn my-1 py-1.5 md:px-4 px-3 rounded-full text-main text-center w-fit font-bold md:text-lg text-sm uppercase -tracking-tight"
                 onClick={() => handleButtonClick('collection_two')}
               >
                 {fields.collection_two_button_text.value}

@@ -47,7 +47,7 @@ export default function LineItem(props: { lineItem: CartQueryData["cart"]["lines
                         style={{
                             color: Colors.textThird,
                         }}
-                        className="text-xs"
+                        className="text-sm"
                     >
                         {lineItem.merchandise.title}
                     </h2>
