@@ -233,10 +233,50 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
+        {process.env.NODE_ENV == 'development' ? null : (
+          <>
+            <Script
+              nonce={nonce}
+              dangerouslySetInnerHTML={{
+                __html: `
+                (function(h,o,t,j,a,r){
+                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                  h._hjSettings={hjid:3733122,hjsv:6};
+                  a=o.getElementsByTagName('head')[0];
+                  r=o.createElement('script');r.async=1;
+                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                  a.appendChild(r);
+              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                `,
+              }}
+            />
+            <script id="g-tag-manajer" nonce={nonce} />
+          </>
+        )}
       </head>
 
       <QueryClientProvider client={queryClient}>
         <body>
+          {process.env.NODE_ENV == 'development' ? null : (
+            <>
+              <Script
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${gTrackId}`}
+              />
+              <Script
+                nonce={nonce}
+                dangerouslySetInnerHTML={{
+                  __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+
+                  gtag('config', 'G-BXXRW595RC');
+                `,
+                }}
+              />
+            </>
+          )}
           <CartProvider>
             <Layout
               layout={{
@@ -259,48 +299,6 @@ export default function App() {
             <Scripts nonce={nonce} />
             <LiveReload nonce={nonce} />
           </CartProvider>
-
-          {process.env.NODE_ENV == 'development' ? null : (
-            <>
-              <Script
-                nonce={nonce}
-                dangerouslySetInnerHTML={{
-                  __html: `
-                (function(h,o,t,j,a,r){
-                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                  h._hjSettings={hjid:3733122,hjsv:6};
-                  a=o.getElementsByTagName('head')[0];
-                  r=o.createElement('script');r.async=1;
-                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                  a.appendChild(r);
-              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-                `,
-                }}
-              />
-              <script id="g-tag-manajer" nonce={nonce} />
-            </>
-          )}
-
-          {process.env.NODE_ENV == 'development' ? null : (
-            <>
-              <Script
-                async
-                src={`https://www.googletagmanager.com/gtag/js?id=${gTrackId}`}
-              />
-              <Script
-                nonce={nonce}
-                dangerouslySetInnerHTML={{
-                  __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-
-                  gtag('config', 'G-BXXRW595RC');
-                `,
-                }}
-              />
-            </>
-          )}
         </body>
       </QueryClientProvider>
     </html>
