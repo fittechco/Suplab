@@ -1,5 +1,7 @@
 import {
+  type ActionFunctionArgs,
   json,
+  redirect,
   type LinksFunction,
   type LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
@@ -44,6 +46,29 @@ export const headers = routeHeaders;
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}];
 };
+
+export async function action({request}: ActionFunctionArgs) {
+  // Read form data
+  const formData = await request.formData();
+  const language = formData.get('language');
+  const newUrl = new URL(request.url);
+
+  // Redirect to the appropriate locale path with preserved path (note we are in the about route)
+  if (language === 'EN') {
+    // check if a prefix exist in the url then remove it
+    if (newUrl.pathname.includes('/ar')) {
+      newUrl.pathname = newUrl.pathname.replace('/ar', '');
+    }
+    return redirect(newUrl.toString(), 302);
+  } else if (language === 'AR') {
+    // check if a prefix exist in the url then remove it
+    if (newUrl.pathname.includes('/en')) {
+      newUrl.pathname = newUrl.pathname.replace('/en', '');
+    }
+    newUrl.pathname = `/ar${newUrl.pathname}`;
+    return redirect(newUrl.toString(), 302);
+  }
+}
 
 export async function loader({request, params, context}: LoaderFunctionArgs) {
   const {language, country} = context.storefront.i18n;
@@ -167,7 +192,7 @@ export default function Article() {
         {typedArticleOffer != null && (
           <div className="offers-section md:w-[40%]">
             <Link
-              to={`/products/${offer}`}
+              to={`/products/${offer?.value}`}
               onClick={() => {
                 UseShopStore.setState({});
               }}
@@ -183,13 +208,15 @@ export default function Article() {
           </div>
         )}
       </div>
-      <div className="featured-collections-products">
-        <FeaturedCollections
-          collectionProducts={
-            articleFeaturedCollectionProducts as FeaturedCollectionsProps[]
-          }
-        />
-      </div>
+      {articleFeaturedCollectionProducts && (
+        <div className="featured-collections-products">
+          <FeaturedCollections
+            collectionProducts={
+              articleFeaturedCollectionProducts as FeaturedCollectionsProps[]
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -90,6 +90,7 @@ export const loader = async ({
 
 export default function Blog() {
   const {articles} = useLoaderData<typeof loader>();
+  console.log(articles);
   const BLOG_HANDLE = articles[0].blog.handle;
 
   const rootData = useRootLoaderData();
