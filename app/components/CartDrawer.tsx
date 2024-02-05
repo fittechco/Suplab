@@ -44,7 +44,9 @@ const CartDetails = (props: {animate: boolean; closeCart: () => void}) => {
         <>
           <div className="cart-header flex items-center justify-between px-3 md:px-5">
             <div className="cart-header-title">
-              <h1 className="text-2xl ft-text-main">Your Bag</h1>
+              <h1 className="text-2xl ft-text-main">
+                {isArabic ? 'سلة التسوق الخاصة بك' : 'Your Bag'}
+              </h1>
             </div>
             <button
               onClick={() => {
@@ -77,8 +79,12 @@ const CartDetails = (props: {animate: boolean; closeCart: () => void}) => {
             style={{}}
             className="cart-summary space-y-3 md:space-y-5 px-3 md:px-5"
           >
-            <div className="total-price flex gap-1 font-bold text-xl">
-              <h3 className="">Total:</h3>
+            <div
+              className={`total-price flex gap-1 font-bold text-xl ${
+                isArabic ? 'arFlexDirection' : 'enFlexDirection'
+              }`}
+            >
+              <h3 className="">{isArabic ? ':المجموع' : 'Total:'}</h3>
               <Money data={cart.cost.totalAmount}></Money>
               <div
                 style={{
@@ -87,7 +93,13 @@ const CartDetails = (props: {animate: boolean; closeCart: () => void}) => {
                 className="border-l text-lg font-medium pl-1"
               >
                 {`${cart.lines.nodes.length} ${
-                  cart.lines.nodes.length > 1 ? 'items' : 'item'
+                  cart.lines.nodes.length > 1
+                    ? isArabic
+                      ? 'منتجات'
+                      : 'Items'
+                    : isArabic
+                    ? 'منتج'
+                    : 'Item'
                 }`}
               </div>
             </div>
@@ -101,7 +113,7 @@ const CartDetails = (props: {animate: boolean; closeCart: () => void}) => {
                   }}
                   className="w-full"
                 >
-                  Check Out
+                  {isArabic ? 'الدفع' : 'Checkout'}
                 </CTAButton>
               </Link>
             </div>
@@ -203,6 +215,10 @@ function CartDiscounts({
 }: {
   discountCodes: CartType['discountCodes'];
 }) {
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
   const codes: string[] =
     discountCodes
       ?.filter((discount) => discount.applicable)
@@ -263,7 +279,7 @@ function CartDiscounts({
             className={getInputStyleClasses()}
             type="text"
             name="discountCode"
-            placeholder="Discount code"
+            placeholder={isArabic ? 'رمز الخصم' : 'Discount Code'}
           />
           <button
             style={{
@@ -280,6 +296,8 @@ function CartDiscounts({
               >
                 <div className="lds-dual-ring "></div>
               </div>
+            ) : isArabic ? (
+              'تطبيق الخصم'
             ) : (
               'Apply Discount'
             )}

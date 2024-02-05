@@ -111,6 +111,13 @@ export default function Blog() {
       >
         {BLOG_HANDLE}
       </Text>
+      {articles.length === 0 && (
+        <div className="w-full h-[80vh] flex items-center justify-center">
+          <Text type="h1" style={{color: Colors.secondary}}>
+            {isArabic ? 'المقالات قريبا!' : 'Articles Coming Soon!'}
+          </Text>
+        </div>
+      )}
       <Grid as="ol" layout="blog">
         {articles.map((article, i) => (
           <ArticleCard
