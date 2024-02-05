@@ -1,9 +1,11 @@
-import Link from '../../components/Link';
-import type { App } from 'app/api/type';
+// import Link from '../../components/Link';
+import {Link} from '@remix-run/react';
+import type {App} from 'app/api/type';
 import FTicons from 'app/ft-lib/FTicon';
-import { Colors } from 'app/ft-lib/shared';
-import { useEffect, useRef, useState } from 'react';
-import { HeaderQuery } from 'storefrontapi.generated';
+import {Colors} from 'app/ft-lib/shared';
+import {useEffect, useRef, useState} from 'react';
+import {HeaderQuery} from 'storefrontapi.generated';
+import {RemixLink} from '~/app/components/RemixLink';
 
 type MobileNavItemProps = {
   menu: App.Shopify.Item;
@@ -22,7 +24,6 @@ export default function MobileNavItem(props: MobileNavItemProps) {
     if (hasSubItems === true) {
       setIsShowingSub(!isShowingSub);
     }
-
   };
   const navItemRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,6 +72,9 @@ export default function MobileNavItem(props: MobileNavItemProps) {
     return <div>Loading...</div>;
   }
 
+  const url = new URL(props.menu.url || '').pathname;
+  // console.log(url, 'from mobile nav item');
+
   return (
     <div
       style={{
@@ -81,8 +85,9 @@ export default function MobileNavItem(props: MobileNavItemProps) {
         borderBottom: `1.6px solid ${itemColor}`,
         ...props.style,
       }}
-      className={`navMenu font-mainFont mobile-nav-item ${animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
-        } `}
+      className={`navMenu font-mainFont mobile-nav-item ${
+        animate === true ? 'show-mobile-nav-item' : 'hide-mobile-nav-item'
+      } `}
     >
       <div
         onClick={handleItemClick}
@@ -102,7 +107,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
           </div>
         ) : (
           <Link
-            routeLoader
+            // routeLoader
             onClick={() => props.setIsOpen(false)}
             style={{
               textDecoration: 'none',
@@ -112,7 +117,7 @@ export default function MobileNavItem(props: MobileNavItemProps) {
             }}
             className="navMenu__title text-base  ft-text-main w-full"
             // todo - create a Link component that handles this
-            to={new URL(props.menu.url).pathname}
+            to={url}
           >
             {props.menu.title}
           </Link>
@@ -165,4 +170,3 @@ export default function MobileNavItem(props: MobileNavItemProps) {
     </div>
   );
 }
-

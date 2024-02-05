@@ -229,7 +229,7 @@ function Collection() {
                     >
                       {data.collection.title}
                     </h1>
-                    <div
+                    {/* <div
                       style={{
                         color: Colors.textSecondary,
                         width: '80%',
@@ -239,7 +239,7 @@ function Collection() {
                       }`}
                     >
                       {data.collection.description}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )}

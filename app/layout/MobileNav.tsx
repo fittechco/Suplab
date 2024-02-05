@@ -82,6 +82,8 @@ export default function MobileNav(props: Props) {
           </div>
           <div className="navMenus space-y-6 w-full px-5">
             {header.menu?.items?.map((menu, index) => {
+              const pathname = new URL(menu.url || '').pathname;
+              // console.log(pathname, 'pathname')
               return (
                 <MobileNavItem
                   style={{

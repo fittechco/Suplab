@@ -156,8 +156,7 @@ export default function Article() {
       {image && (
         <Image
           data={image}
-          className="w-full mx-auto mt-1 md:mt-0 rounded-[24px]"
-          sizes="50vw"
+          className="w-full h-[70vh] md:h-[78vh] mx-auto mt-1 md:mt-0 rounded-[24px]"
           loading="eager"
         />
       )}
