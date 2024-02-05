@@ -157,7 +157,7 @@ export default function Article() {
         <Image
           data={image}
           className="w-full md:h-[78vh] mx-auto mt-1 md:mt-0 rounded-[24px]"
-          sizes='50vw'
+          sizes="50vw"
           loading="eager"
         />
       )}
@@ -192,7 +192,7 @@ export default function Article() {
         {typedArticleOffer != null && (
           <div className="offers-section md:w-[40%] mt-[40px]">
             <Link
-              to={`/products/${offer?.value}`}
+              to={`/products/${typedArticleOffer.handle}`}
               onClick={() => {
                 UseShopStore.setState({});
               }}
