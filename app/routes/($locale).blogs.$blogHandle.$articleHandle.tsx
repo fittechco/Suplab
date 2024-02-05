@@ -190,7 +190,7 @@ export default function Article() {
           </div>
         </div>
         {typedArticleOffer != null && (
-          <div className="offers-section md:w-[40%]">
+          <div className="offers-section md:w-[40%] mt-[40px]">
             <Link
               to={`/products/${offer?.value}`}
               onClick={() => {
