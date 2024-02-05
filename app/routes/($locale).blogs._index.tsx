@@ -121,7 +121,7 @@ export default function Blogs() {
   );
 
   return (
-    <div>
+    <div className="container">
       {blogsWithData.length === 0 && (
         <div className="w-full h-[80vh] flex items-center justify-center">
           <Text type="h1" style={{color: Colors.secondary}}>
@@ -130,7 +130,7 @@ export default function Blogs() {
         </div>
       )}
       {blogsWithData.map((blogData, i) => (
-        <div key={blogData.type} className="w-full px-5 py-4">
+        <div key={blogData.type} className="w-full py-4">
           <div
             className={`flex justify-between mb-6 ${
               isArabic ? 'arFlexDirection' : 'enFlexDirection'
