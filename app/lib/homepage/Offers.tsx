@@ -1,15 +1,15 @@
-import type { App } from '../../api/type';
+import type {App} from '../../api/type';
 import arrayToObject from '../../ft-lib/ArrayToObject';
 import 'swiper/swiper-bundle.css';
-import { Colors } from 'app/ft-lib/shared';
-import type { ProductQuery } from '~/storefrontapi.generated';
-import { Link } from 'react-router-dom';
-import { UseShopStore, useRootLoaderData } from '~/app/root';
+import {Colors} from 'app/ft-lib/shared';
+import type {ProductQuery} from '~/storefrontapi.generated';
+import {Link} from 'react-router-dom';
+import {UseShopStore, useRootLoaderData} from '~/app/root';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
-import FTSwiper, { type FTSwiperOptions } from '~/app/ft-lib/Swiper';
-import { SwiperOptions } from 'swiper/types/swiper-options';
-import { useParams } from '@remix-run/react';
+import FTSwiper, {type FTSwiperOptions} from '~/app/ft-lib/Swiper';
+import {SwiperOptions} from 'swiper/types/swiper-options';
+import {useParams} from '@remix-run/react';
 
 type Props = {
   section: App.HomePageTemplate.OffersSection;
@@ -17,12 +17,8 @@ type Props = {
 };
 
 const Offers = (props: Props) => {
-  const { section, swiperOptions } = props;
-  const fields = arrayToObject({ array: section.fields });
-
-  const rootData = useRootLoaderData();
-  const { locale } = rootData;
-  const alignRight = rootData.locale.language === 'AR' ? true : false;
+  const {section, swiperOptions} = props;
+  const fields = arrayToObject({array: section.fields});
 
   if (fields.offers_collection == null) {
     return null;
@@ -37,10 +33,7 @@ const Offers = (props: Props) => {
       }}
       className="offersSection w-full !container mx-auto"
     >
-      <div
-        className={`flex items-center justify-between mb-10 ${alignRight ? 'arFlexDirection' : 'enFlexDirection'
-          }`}
-      >
+      <div className="flex items-center justify-between mb-10">
         {fields.title != null && fields.offers != null && (
           <p className="section-heading ft-text-main md:text-3xl text-2xl">
             {fields.title.value}
@@ -61,7 +54,9 @@ const Offers = (props: Props) => {
       </div>
       <div className="offersSection__offers relative">
         <FTSwiper
-          childrenNumber={fields?.offers_collection?.reference.products?.nodes?.length}
+          childrenNumber={
+            fields?.offers_collection?.reference.products?.nodes?.length
+          }
           navigation
           options={{
             ...swiperOptions,

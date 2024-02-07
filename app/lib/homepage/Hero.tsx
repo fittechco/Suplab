@@ -16,10 +16,6 @@ interface HeroSectionProps {
 const Hero = ({section}: HeroSectionProps) => {
   const fields = arrayToObject({array: section.fields});
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   const mobileUrl = fields.mobile_image?.reference.image.url;
   const desktopUrl = fields.desktop_image?.reference.image.url;
 
@@ -28,7 +24,7 @@ const Hero = ({section}: HeroSectionProps) => {
   }
 
   return (
-    <div  
+    <div
       key={section.type}
       style={{}}
       className="hero-section-container w-full h-[70vh] md:h-[80vh] !container mx-auto transition-all ease-in-out duration-300"
@@ -66,18 +62,14 @@ const Hero = ({section}: HeroSectionProps) => {
           style={{
             position: 'absolute',
           }}
-          className={`heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 ${
-            isArabic ? 'arAlignItems' : 'enAlignItems'
-          }`}
+          className="heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8"
         >
           {fields.headline != null && (
             <h1
               style={{
                 color: Colors.textSecondary,
               }}
-              className={`header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase ${
-                isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-              }`}
+              className="header md:text-4xl lg:text-5xl tracking-[0.02rem] font-bold text-3xl uppercase"
             >
               {fields.headline.value}
             </h1>
@@ -88,9 +80,7 @@ const Hero = ({section}: HeroSectionProps) => {
                 color: Colors.textSecondary,
                 width: '80%',
               }}
-              className={`subHeader text-base md:text-lg max-w-xs items-start ${
-                isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-              }`}
+              className="subHeader text-base md:text-lg max-w-xs items-start"
             >
               {fields.sub_headline.value}
             </div>

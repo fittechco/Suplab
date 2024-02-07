@@ -59,11 +59,7 @@ const Footer = (props: Props) => {
       }}
       className="footer h-fit max-md:p-5 md:h-72"
     >
-      <div
-        className={`container h-full w-full flex gap-14 md:gap-20 mt-7 md:items-start items-center text-ellipsis tracking-wider justify-between flex-col ${
-          isArabic ? 'md:flex-row-reverse' : 'md:flex-row'
-        }`}
-      >
+      <div className="container h-full w-full flex gap-14 md:gap-20 mt-7 md:items-start items-center text-ellipsis tracking-wider justify-between flex-col md:flex-row">
         <div className="shop-name flex flex-col md:items-start items-center gap-3">
           <Link
             to={'/'}
@@ -83,11 +79,7 @@ const Footer = (props: Props) => {
               />
             )}
           </Link>
-          <div
-            className={`shop-name__text flex w-full gap-2 ${
-              isArabic ? 'arFlexDirection' : 'enFlexDirection ml-2'
-            }`}
-          >
+          <div className="shop-name__text flex justify-center items-center w-full gap-2">
             <Link
               to={`https://www.instagram.com/suplab_nutrition`}
               target="_blank"
@@ -125,9 +117,7 @@ const Footer = (props: Props) => {
                 <div key={menu.title} className="menu flex flex-col gap-2">
                   <div
                     onClick={() => toggleOpen(index)}
-                    className={`title font-bold flex justify-between w-full ${
-                      isArabic ? 'arFlexDirection' : 'enFlexDirection'
-                    }`}
+                    className="title font-bold flex justify-between w-full"
                   >
                     <p className="uppercase">{menu.title}</p>
                     <button
@@ -145,11 +135,7 @@ const Footer = (props: Props) => {
                     </button>
                   </div>
                   {openMenu === index && (
-                    <div
-                      className={`flex flex-col gap-2 ${
-                        isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                      }`}
-                    >
+                    <div className="flex flex-col gap-2">
                       {menu.items.map((item, itemIndex) => {
                         const itemRoute = new URL(item.url || '').pathname;
                         return (
@@ -174,18 +160,8 @@ const Footer = (props: Props) => {
             {props.layout.footer.menu?.items.map((menu, index) => {
               return (
                 <div key={menu.title} className="menu flex flex-col gap-2">
-                  <div
-                    className={`title font-bold ${
-                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                    }`}
-                  >
-                    {menu.title}
-                  </div>
-                  <div
-                    className={`links flex flex-col gap-2 ${
-                      isArabic ? 'arAlignItems' : 'enAlignItems'
-                    }`}
-                  >
+                  <div className="title font-bold">{menu.title}</div>
+                  <div className="links flex flex-col gap-2">
                     {menu.items.map((item, index) => {
                       const itemRoute = new URL(item.url || '').pathname;
                       return (

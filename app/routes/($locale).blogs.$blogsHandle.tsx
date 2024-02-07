@@ -99,9 +99,10 @@ export default function Blog() {
 
   return (
     <div
-      className={`!container mb-4 flex flex-col ${
-        isArabic ? 'arAlignItems' : 'enAlignItems'
-      }`}
+      className="!container mb-4 flex flex-col"
+      // className={`!container mb-4 flex flex-col ${
+      //   isArabic ? 'arAlignItems' : 'enAlignItems'
+      // }`}
     >
       <Text
         type="h2"

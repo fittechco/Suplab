@@ -1,31 +1,31 @@
-import { cn } from '~/app/lib/tailwindUtils';
+import {cn} from '~/app/lib/tailwindUtils';
 import BottomDrawer from './BottomDrawer';
 import MobileFilterOption from './MobileFilterOption';
-import { PriceSlider } from './ui/PriceSlider';
-import { useNavigation, useSearchParams } from '@remix-run/react';
-import { Fragment } from 'react';
+import {PriceSlider} from './ui/PriceSlider';
+import {useNavigation, useSearchParams} from '@remix-run/react';
+import {Fragment} from 'react';
+import {useRootLoaderData} from '../root';
 
-type filters = { param: string; options: { label: string; value: string }[] }[];
+type filters = {param: string; options: {label: string; value: string}[]}[];
 
 type Props = {
   show: boolean;
   setShow: (show: boolean) => void;
-  filters: filters
+  filters: filters;
   minPrice: number;
   maxPrice: number;
 };
 
-const SearchedParams = (props: {
-  filters: filters
-}) => {
+const SearchedParams = (props: {filters: filters}) => {
   const [searchParams] = useSearchParams();
-  const { filters } = props;
-  const searchedParamsWithoutMinMax = Array.from(searchParams.entries())
-    .filter(([key]) => key !== 'min' && key !== 'max' && key)
+  const {filters} = props;
+  const searchedParamsWithoutMinMax = Array.from(searchParams.entries()).filter(
+    ([key]) => key !== 'min' && key !== 'max' && key,
+  );
 
   return (
     <>
-      <div className='filter-header flex flex-col w-full gap-4'>
+      <div className="filter-header flex flex-col w-full gap-4">
         <div
           className="selectedFiltersContainer grid grid-cols-3 gap-5 mt-6 sticky top-0"
           style={{
@@ -41,7 +41,9 @@ const SearchedParams = (props: {
             }
             const labels = filters.map((filter) => {
               if (filter.param === key) {
-                const option = filter.options.find((option) => option.value === value);
+                const option = filter.options.find(
+                  (option) => option.value === value,
+                );
                 return option?.label;
               }
               return null;
@@ -58,29 +60,38 @@ const SearchedParams = (props: {
                 hasX={true}
               />
             );
-          }
-          )}
+          })}
         </div>
       </div>
       <HorizontalRule />
     </>
-  )
+  );
 };
 
 export default function MobileFiltersMenu(props: Props) {
   const [currentSearchParams] = useSearchParams();
   const filters = props.filters;
   const navigation = useNavigation();
-  const searchParams = navigation.location ? new URLSearchParams(navigation.location.search) : currentSearchParams;
+  const searchParams = navigation.location
+    ? new URLSearchParams(navigation.location.search)
+    : currentSearchParams;
+
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
+  const headerTitle = isArabic ? 'فلتر' : 'Filters';
+
   return (
     <BottomDrawer
       closeIcon
-      headerTitle='Filters'
-      show={props.show} setShow={props.setShow}>
+      headerTitle={headerTitle}
+      show={props.show}
+      setShow={props.setShow}
+    >
       <div className="filtersContainer h-full w-full px-[5%] flex flex-col gap-4 uppercase">
         <SearchedParams filters={filters} />
-        <div className='filters flex flex-col gap-4 pb-4 overflow-y-auto h-full'>
-
+        <div className="filters flex flex-col gap-4 pb-4 overflow-y-auto h-full">
           <div className="filtersGroup flex flex-col gap-3">
             <h4 className="filtersTitle text-[#4A4A49] text-bold text-lg">
               Price
@@ -130,7 +141,7 @@ export default function MobileFiltersMenu(props: Props) {
   );
 }
 
-const HorizontalRule = ({ classNames }: { classNames?: string }) => (
+const HorizontalRule = ({classNames}: {classNames?: string}) => (
   <div
     className={cn('horizontalRule w-full h-[1px] p-[1px]', classNames)}
     style={{

@@ -1,12 +1,12 @@
-import { Link } from '@remix-run/react';
-import { useCallback, useEffect, useRef } from 'react';
-import { Colors } from '../../ft-lib/shared';
-import type { App } from '../../api/type';
+import {Link} from '@remix-run/react';
+import {useCallback, useEffect, useRef} from 'react';
+import {Colors} from '../../ft-lib/shared';
+import type {App} from '../../api/type';
 import LazyImage from '~/app/ft-lib/LazyImage';
 import resizeImage from '~/app/ft-lib/resizeImages';
 import arrayToObject from '~/app/ft-lib/ArrayToObject';
-import type { GetCollectionQuery } from '~/storefrontapi.generated';
-import { useRootLoaderData } from '~/app/root';
+import type {GetCollectionQuery} from '~/storefrontapi.generated';
+import {useRootLoaderData} from '~/app/root';
 
 export default function SubMenuPopup(props: {
   items: App.Shopify.Item[];
@@ -18,14 +18,16 @@ export default function SubMenuPopup(props: {
   setShowSub: (showSub: boolean) => void;
 }) {
   const rootData = useRootLoaderData();
-  const { locale } = rootData;
-  const { showSub, setShowSub } = props;
+  const {locale} = rootData;
+  const {showSub, setShowSub} = props;
   const ar = locale.language.toLowerCase() === 'ar' ? 'ar' : '';
-  const { setSubItems } = props;
+  const {setSubItems} = props;
   const containerRef = useRef<HTMLDivElement>(null);
-  const offerFields = arrayToObject({ array: props.offers?.fields || [] });
+  const offerFields = arrayToObject({array: props.offers?.fields || []});
   const offersImage = offerFields.offers_collection?.reference.image?.url;
   const firstRender = useRef(true);
+
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   const handleMouseEnter = useCallback(() => {
     if (containerRef.current != null) {
@@ -57,7 +59,6 @@ export default function SubMenuPopup(props: {
           width: '100%',
           height: showSub ? containerRef.current?.scrollHeight : '0px',
           transition: 'all 0.3s ease-in-out',
-
         }}
         className="nav-menu__sub flex justify-between overflow-hidden origin-center ease-in-out gap-5 z-10 "
       >
@@ -84,7 +85,8 @@ export default function SubMenuPopup(props: {
                 <div className="nav-submenus-container flex flex-col space-y-2">
                   {subItem.items?.map((subSubItem) => {
                     // todo - fix this
-                    const subSubPathname = new URL(subSubItem.url || '').pathname;
+                    const subSubPathname = new URL(subSubItem.url || '')
+                      .pathname;
                     return (
                       <Link
                         key={subSubItem.title}
@@ -144,7 +146,7 @@ export default function SubMenuPopup(props: {
                 }}
                 className="flex justify-start items-end bg-black/40 ft-text-main"
               >
-                Offers
+                {isArabic ? 'عروض' : 'Offers'}
               </div>
             </Link>
           )}
@@ -162,7 +164,10 @@ export default function SubMenuPopup(props: {
                   overflow: 'hidden',
                   objectFit: 'cover',
                 }}
-                src={resizeImage(props.bestSellers?.collection?.image?.url, 400)}
+                src={resizeImage(
+                  props.bestSellers?.collection?.image?.url,
+                  400,
+                )}
                 alt={props.bestSellers?.collection?.title}
               />
               <div
@@ -180,7 +185,7 @@ export default function SubMenuPopup(props: {
                 }}
                 className="flex justify-start items-end ft-text-main bg-black/40"
               >
-                Best Sellers
+                ${isArabic ? 'الأكثر مبيعا' : 'Best Sellers'}
               </div>
             </Link>
           )}

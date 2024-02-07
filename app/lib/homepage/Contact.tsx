@@ -58,9 +58,7 @@ const Contact = ({section}: ContactSectionProps) => {
                   style={{
                     color: Colors.textSecondary,
                   }}
-                  className={`flex mb-6 items-end ${
-                    isArabic ? 'arFlexDirection' : 'enFlexDirection'
-                  }`}
+                  className="flex mb-6 items-end"
                 >
                   <p
                     style={{
@@ -70,11 +68,9 @@ const Contact = ({section}: ContactSectionProps) => {
                       lineHeight: 'normal',
                       textTransform: 'uppercase',
                     }}
-                    className={`md:text-3xl text-xl ${
-                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                    }`}
+                    className="md:text-3xl text-xl"
                   >
-                    {isArabic ? ':البريد الإلكتروني' : 'Email:'}
+                    {isArabic ? 'البريد الإلكتروني:' : 'Email:'}
                   </p>
                   <p
                     style={{
@@ -94,9 +90,7 @@ const Contact = ({section}: ContactSectionProps) => {
                   style={{
                     color: Colors.textSecondary,
                   }}
-                  className={`flex mb-6 items-end ${
-                    isArabic ? 'arFlexDirection' : 'enFlexDirection'
-                  }`}
+                  className="flex mb-6 items-end"
                 >
                   <p
                     style={{
@@ -107,11 +101,9 @@ const Contact = ({section}: ContactSectionProps) => {
                       letterSpacing: '0.68px',
                       textTransform: 'uppercase',
                     }}
-                    className={`md:text-3xl text-xl ${
-                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                    }`}
+                    className="md:text-3xl text-xl"
                   >
-                    {isArabic ? ':رقم الهاتف' : 'Phone:'}
+                    {isArabic ? 'رقم الهاتف:' : 'Phone:'}
                   </p>
                   <p
                     style={{

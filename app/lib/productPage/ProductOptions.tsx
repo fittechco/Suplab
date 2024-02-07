@@ -34,10 +34,6 @@ export default function ProductOptions(props: Props) {
   const navigation = useNavigation();
   const fetcher = useFetcher<ProductPageLoader>();
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   const paramsWithDefaults = (() => {
     const defaultParams = new URLSearchParams(currentSearchParams);
 
@@ -60,25 +56,19 @@ export default function ProductOptions(props: Props) {
 
   return (
     <div
-      className={`options flex flex-col gap-5 ${
-        isArabic ? 'arAlignItems' : 'enAlignItems'
-      }`}
+      className="options flex flex-col gap-5"
     >
       {options.map((option, index) => {
         let currentOptionVal = searchParams.get(option.name);
         return (
           <div key={option.name} className="option  flex flex-col">
             <h1
-              className={`text-xl font-bold uppercase ${
-                isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-              }`}
+              className="text-xl font-bold uppercase"
             >
               {option.name}
             </h1>
             <div
-              className={`values flex gap-3 flex-wrap mt-2 ${
-                isArabic ? 'arFlexDirection' : 'enFlexDirection'
-              }`}
+              className="values flex gap-3 flex-wrap mt-2"
             >
               {option.values.map((value, index) => {
                 const linkParams = new URLSearchParams(search);

@@ -14,10 +14,6 @@ export default function ArticleCard({
   article: Article;
   loading?: HTMLImageElement['loading'];
 }) {
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   return (
     <div>
       <RemixLink to={`/blogs/${blogHandle}/${article.handle}`}>
@@ -38,17 +34,11 @@ export default function ArticleCard({
           style={{
             color: Colors.secondary,
           }}
-          className={`mt-4 mb-4 ${
-            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-          }`}
+          className="mt-4 mb-4"
         >
           {article.title}
         </Text>
-        <div
-          className={`flex justify-between ${
-            isArabic ? 'arFlexDirection' : 'enFlexDirection'
-          }`}
-        >
+        <div className="flex justify-between">
           <Text
             type="h7"
             style={{

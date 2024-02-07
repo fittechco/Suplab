@@ -11,10 +11,6 @@ interface FeaturesHeroSectionProps {
 const Features = ({section}: FeaturesHeroSectionProps) => {
   const fields = arrayToObject({array: section.fields});
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   return (
     <div
       key={section.type}
@@ -36,14 +32,8 @@ const Features = ({section}: FeaturesHeroSectionProps) => {
 
           const imageUrl = featureFields.image?.reference?.image?.url;
 
-          // const paddingStyle =
-          //   window.innerWidth < 768 ? { paddingLeft: '0px' } :
-          //     isEven
-          //       ? { paddingLeft: '40px' }
-          //       : { paddingRight: '40px' };
           const paddingStyle = `pl-0 ${isEven ? 'md:pl-10' : 'md:pr-10'}`;
 
-          // const flexDirection = window.innerWidth < 768 ? 'column' : isEven ? 'row' : 'row-reverse';
           const flexDirection = `flex-col ${
             isEven ? 'md:flex-row' : 'md:flex-row-reverse'
           }`;
@@ -71,20 +61,12 @@ const Features = ({section}: FeaturesHeroSectionProps) => {
                 >
                   <div className="feature_content w-full md:w-1/2 p-2 md:p-4">
                     {featureFields.title && (
-                      <p
-                        className={`feature_title_text ${
-                          isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                        }`}
-                      >
+                      <p className="feature_title_text">
                         {featureFields.title?.value}
                       </p>
                     )}
                     {featureFields.description && (
-                      <p
-                        className={`feature_description_text ${
-                          isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                        }`}
-                      >
+                      <p className="feature_description_text">
                         {featureFields.description?.value}
                       </p>
                     )}

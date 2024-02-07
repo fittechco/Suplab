@@ -52,11 +52,7 @@ const FeaturedCollections = ({
       }}
     >
       <div className="featuredCollectionsSection__buttons mb-10">
-        <div
-          className={`flex justify-between items-center ${
-            isArabic ? 'arFlexDirection' : 'enFlexDirection'
-          }`}
-        >
+        <div className="flex justify-between items-center">
           {isArabic ? (
             <p className="section-heading ft-text-main md:text-3xl text-2xl w-fit uppercase">
               مجموعات مميزة
@@ -100,9 +96,7 @@ const FeaturedCollections = ({
             </Link>
           )}
         </div>
-        <div
-          className={`flex ${isArabic ? 'arFlexDirection' : 'enFlexDirection'}`}
-        >
+        <div className="flex">
           <div
             style={{
               width: 'fit-content',

@@ -131,11 +131,7 @@ export default function Blogs() {
       )}
       {blogsWithData.map((blogData, i) => (
         <div key={blogData.type} className="w-full py-4">
-          <div
-            className={`flex justify-between mb-6 ${
-              isArabic ? 'arFlexDirection' : 'enFlexDirection'
-            }`}
-          >
+          <div className="flex justify-between mb-6">
             <Text
               type="h2"
               style={{

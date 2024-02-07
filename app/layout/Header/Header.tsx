@@ -175,9 +175,7 @@ function Header(props: Props) {
           style={{
             height: 80,
           }}
-          className={`flex items-center max-md:justify-between max-md:py-2 px-5 sm:px-6 ${
-            isArabic ? 'arFlexDirection' : 'enFlexDirection'
-          }`}
+          className="flex items-center max-md:justify-between max-md:py-2 px-5 sm:px-6"
         >
           <Link
             to={ar}
@@ -186,7 +184,7 @@ function Header(props: Props) {
               fontWeight: 700,
             }}
             className={`header__logo flex items-center ${
-              isArabic ? 'arFlexDirection ml-auto' : 'enFlexDirection mr-auto'
+              isArabic ? 'ml-auto' : 'mr-auto'
             }`}
           >
             {props.layout.shop?.brand?.logo?.image != null && (
@@ -199,11 +197,7 @@ function Header(props: Props) {
               />
             )}
           </Link>
-          <div
-            className={`navmenusContainer flex items-center justify-center max-lg:hidden h-full ${
-              isArabic ? 'arFlexDirection' : 'enFlexDirection'
-            }`}
-          >
+          <div className="navmenusContainer flex items-center justify-center max-lg:hidden h-full">
             {props.layout.header.menu?.items.map((item) => {
               const pathname = new URL(item.url || '').pathname;
               const hasChildren = item.items?.length > 0;
@@ -251,7 +245,7 @@ function Header(props: Props) {
           </div>
           <div
             className={`icons flex gap-3 items-center justify-end ${
-              isArabic ? 'arFlexDirection mr-auto' : 'enFlexDirection ml-auto'
+              isArabic ? 'mr-auto' : 'ml-auto'
             }`}
           >
             <CountrySelector />

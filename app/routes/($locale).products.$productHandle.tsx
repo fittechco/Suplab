@@ -259,18 +259,12 @@ const ProductPage = () => {
   }
   return (
     <div className="Product-container space-y-5 w-full mx-auto">
-      <div
-        className={`Product-wrapper w-full md:flex md:gap-5 md:container mx-auto ${
-          isArabic ? 'md:flex-row-reverse' : 'flex-row'
-        }`}
-      >
+      <div className="Product-wrapper w-full md:flex md:gap-5 md:container mx-auto">
         <div
           style={{
             zIndex: 1,
           }}
-          className={`product-image-container h-[63vh] md:h-[80vh] md:max-w-3xl w-full transition-all ease-in-out duration-300 md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0 ${
-            isArabic ? 'md:flex-row-reverse' : 'flex-row'
-          }`}
+          className="product-image-container h-[63vh] md:h-[80vh] md:max-w-3xl w-full transition-all ease-in-out duration-300 md:w-[60%] justify-center md:flex max-md:sticky max-md:top-0"
         >
           <div
             ref={thumbsSwiperRef}

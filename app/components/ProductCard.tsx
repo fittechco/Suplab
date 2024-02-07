@@ -22,12 +22,6 @@ export default function ProductCard(props: Props) {
   const {product} = props;
   let isDiscounted = false;
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
-  const ar = locale.language.toLowerCase() === 'ar' ? locale : '';
-
   if (product == null) {
     return <ProductSkeleton />;
   }
@@ -95,17 +89,11 @@ export default function ProductCard(props: Props) {
             color: Colors.secondaryDark,
             fontWeight: 400,
           }}
-          className={`text-base font-bold uppercase ${
-            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-          }`}
+          className="text-base font-bold uppercase"
         >
           {product.title}
         </h3>
-        <div
-          className={`money flex gap-3 ${
-            isArabic ? 'arFlexDirection' : 'enFlexDirection'
-          }`}
-        >
+        <div className="money flex gap-3">
           <Money
             style={{
               color: Colors.secondary,

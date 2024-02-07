@@ -45,7 +45,7 @@ export const Button = forwardRef(
 
     return (
       <Component
-        // @todo: not supported until react-router makes it into Remix.
+        // todo: not supported until react-router makes it into Remix.
         // preventScrollReset={true}
         className={styles}
         {...props}

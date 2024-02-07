@@ -18,10 +18,6 @@ interface TestimonialsSectionProps {
 const Testimonials = ({section}: TestimonialsSectionProps) => {
   const fields = arrayToObject({array: section.fields});
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   return (
     <div
       key={section.type}
@@ -32,11 +28,7 @@ const Testimonials = ({section}: TestimonialsSectionProps) => {
       className="testimonialsSection w-full !container mx-auto"
     >
       {fields.title != null && fields.testimonials != null && (
-        <p
-          className={`section-heading ft-text-main md:text-3xl text-2xl mb-10 ${
-            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-          }`}
-        >
+        <p className="section-heading ft-text-main md:text-3xl text-2xl mb-10">
           {fields.title.value}
         </p>
       )}

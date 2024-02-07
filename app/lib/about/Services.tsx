@@ -14,10 +14,6 @@ interface ServicesSectionProps {
 const Services = ({section}: ServicesSectionProps) => {
   const fields = arrayToObject({array: section.fields});
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   return (
     <div
       key={section.type}
@@ -27,11 +23,7 @@ const Services = ({section}: ServicesSectionProps) => {
       className="servicesSection w-full !container mx-auto"
     >
       {fields.title != null && (
-        <p
-          className={`ft-text-main md:text-3xl text-2xl mb-7 ${
-            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-          }`}
-        >
+        <p className="ft-text-main md:text-3xl text-2xl mb-7">
           {fields.title.value}
         </p>
       )}
@@ -61,10 +53,8 @@ const Services = ({section}: ServicesSectionProps) => {
                 />
               )}
               <div
-                className={`absolute bg-black/40 w-full h-full flex flex-col rounded-3xl
-               gap-3 justify-end z-20 md:justify-end container pb-8 mb:pb-0 ${
-                 isArabic ? 'arAlignItems' : 'enAlignItems'
-               }`}
+                className="absolute bg-black/40 w-full h-full flex flex-col rounded-3xl
+               gap-3 justify-end z-20 md:justify-end container pb-8 mb:pb-0"
               >
                 {serviceFields.title != null && (
                   <div
@@ -74,9 +64,7 @@ const Services = ({section}: ServicesSectionProps) => {
                       fontSize: '34px',
                       letterSpacing: '0.02em',
                     }}
-                    className={`header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase ${
-                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                    }`}
+                    className="header md:text-3xl lg:text-5xl tracking-wide font-bold text-2xl uppercase"
                   >
                     {serviceFields.title.value}
                   </div>
@@ -87,9 +75,7 @@ const Services = ({section}: ServicesSectionProps) => {
                       color: Colors.textSecondary,
                       width: '100%',
                     }}
-                    className={`subHeader text-base md:text-lg ${
-                      isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-                    }`}
+                    className="subHeader text-base md:text-lg"
                   >
                     {serviceFields.description.value}
                   </div>

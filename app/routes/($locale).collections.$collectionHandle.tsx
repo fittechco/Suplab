@@ -213,11 +213,9 @@ function Collection() {
                   <div
                     style={{
                       position: 'absolute',
-                      zIndex: 9999,
+                      zIndex: 20,
                     }}
-                    className={`heroHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8 ${
-                      isArabic ? 'arAlignItems' : 'enAlignItems'
-                    }`}
+                    className="collectionHeader w-full flex flex-col gap-3 md:gap-4 z-20 justify-end md:justify-center container mb-8"
                   >
                     <h1
                       style={{
@@ -271,11 +269,7 @@ function Collection() {
             </div>
           </div>
         )}
-        <div
-          className={`filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 ${
-            isArabic ? 'flex-row-reverse' : 'flex-row'
-          }`}
-        >
+        <div className="filtersContainer hidden lg:flex py-3 my-9 gap-10 items-center overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
           {filtersData.map((filter: any) => (
             <Dropdown
               key={filter.param}

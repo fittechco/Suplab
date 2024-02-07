@@ -17,10 +17,6 @@ function Accordion(props: Props) {
   const [showAcordion, setShowAcordion] = useState(false);
   const accordionRef = useRef<HTMLParagraphElement | null>(null);
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   return (
     <div
       style={{
@@ -33,15 +29,9 @@ function Accordion(props: Props) {
         onClick={() => {
           setShowAcordion(!showAcordion);
         }}
-        className={`flex justify-between items-center py-1 cursor-pointer ${
-          isArabic ? 'arFlexDirection' : 'enFlexDirection'
-        }`}
+        className="flex justify-between items-center py-1 cursor-pointer"
       >
-        <h1
-          className={`text-lg md:text-xl font-bold capitalize ${
-            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-          }`}
-        >
+        <h1 className="text-lg md:text-xl font-bold capitalize">
           {props.title}
         </h1>
         <FTicons
@@ -73,9 +63,7 @@ function Accordion(props: Props) {
             style={{
               color: Colors.text,
             }}
-            className={`text-sm md:text-base font-secondaryFont font-medium whitespace-pre-line ${
-              isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-            }`}
+            className="text-sm md:text-base font-secondaryFont font-medium whitespace-pre-line"
           >
             {props.details}
           </p>

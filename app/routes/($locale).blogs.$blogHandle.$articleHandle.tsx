@@ -132,10 +132,6 @@ export default function Article() {
   const {blogTitle, article, formattedDate, offer, featuredCollectionProducts} =
     useLoaderData<typeof loader>();
 
-  const rootData = useRootLoaderData();
-  const {locale} = rootData;
-  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
-
   const articleOffer = offer?.reference;
 
   const typedArticleOffer = articleOffer as {
@@ -161,11 +157,7 @@ export default function Article() {
           loading="eager"
         />
       )}
-      <div
-        className={`w-full md:flex md:justify-between md:items-start mt-6 ${
-          isArabic ? 'flex-row-reverse' : 'flex-row'
-        }`}
-      >
+      <div className="w-full md:flex md:justify-between md:items-start mt-6">
         <div className="md:w-[55%]">
           <Text
             type="h2"

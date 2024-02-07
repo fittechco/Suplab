@@ -31,11 +31,7 @@ export default function ProductForm(props: Props) {
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   return (
-    <div
-      className={`product-form flex flex-col gap-5 w-full ${
-        isArabic ? 'arAlignItems' : 'enAlignItems'
-      }`}
-    >
+    <div className="product-form flex flex-col gap-5 w-full">
       <span
         style={{
           backgroundColor: Colors.secondaryLight,
@@ -47,26 +43,15 @@ export default function ProductForm(props: Props) {
       </span>
       <div>
         <div className="product-title">
-          <h1
-            className={`text-2xl md:text-4xl font-bold ${
-              isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-            }`}
-          >
-            {product.title}
-          </h1>
+          <h1 className="text-2xl md:text-4xl font-bold">{product.title}</h1>
         </div>
-        <div
-          className={`product-price ${
-            isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
-          }`}
-        >
+        <div className="product-price">
           <Money
             data={product.priceRange.minVariantPrice}
             className="text-xl md:text-2xl font-bold"
           />
         </div>
       </div>
-      {/* <<<<<<< Updated upstream */}
 
       {isOffer === false && (
         <ProductOptions
@@ -75,14 +60,8 @@ export default function ProductForm(props: Props) {
           noLocaleOptions={noLocaleProduct.options}
         />
       )}
-      {/* <div className="flex items-center w-full max-md:bottom-9 max-md:sticky"> */}
-      {/* ======= */}
-      {/* <ProductOptions
-        selectedVariant={selectedVariant}
-        options={product.options}
-      /> */}
+
       <div className="flex flex-col items-center w-full max-md:bottom-9 max-md:sticky">
-        {/* >>>>>>> Stashed changes */}
         <AddToCartButton
           analytics={{
             products: [productAnalytics],

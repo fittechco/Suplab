@@ -80,9 +80,7 @@ export default function Collections() {
                 zIndex: 99,
                 borderRadius: '12px',
               }}
-              className={`collection-card__content space-y-3 absolute top-0 left-0 w-full h-full flex flex-col justify-end bg-black/40 p-3 ${
-                isArabic ? 'arAlignItems' : 'enAlignItems'
-              }`}
+              className="collection-card__content space-y-3 absolute top-0 left-0 w-full h-full flex flex-col justify-end bg-black/40 p-3"
             >
               {collection.title && (
                 <h2
@@ -95,7 +93,7 @@ export default function Collections() {
                 </h2>
               )}
               <CTAButton
-                className="text-base md:text-xl"
+                className="text-base md:text-xl !w-fit"
                 onClick={() => {
                   navigate(`${ar}/collections/${collection.handle}`);
                 }}

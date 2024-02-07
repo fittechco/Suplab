@@ -79,12 +79,8 @@ const CartDetails = (props: {animate: boolean; closeCart: () => void}) => {
             style={{}}
             className="cart-summary space-y-3 md:space-y-5 px-3 md:px-5"
           >
-            <div
-              className={`total-price flex gap-1 font-bold text-xl ${
-                isArabic ? 'arFlexDirection' : 'enFlexDirection'
-              }`}
-            >
-              <h3 className="">{isArabic ? ':المجموع' : 'Total:'}</h3>
+            <div className="total-price flex gap-1 font-bold text-xl">
+              <h3 className="">{isArabic ? 'المجموع:' : 'Total:'}</h3>
               <Money data={cart.cost.totalAmount}></Money>
               <div
                 style={{
@@ -130,6 +126,10 @@ export default function CartDrawer() {
     UseShopStore.setState({showCart: false});
   }, []);
 
+  const rootData = useRootLoaderData();
+  const {locale} = rootData;
+  const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
+
   return (
     <div
       style={{
@@ -174,11 +174,12 @@ export default function CartDrawer() {
           zIndex: 20,
           height: '90%',
           background: 'rgba(250, 249, 246, 0.90)',
-          borderRadius: '24px 0px 0px 24px',
           border: '0.5px solid #93C147',
           transition: 'all 0.2s ease-in-out',
         }}
-        className="cart-slider backdrop-blur max-md:hidden"
+        className={`cart-slider backdrop-blur max-md:hidden ${
+          isArabic ? 'rounded-r-3xl' : 'rounded-l-3xl'
+        }`}
       >
         <CartDetails
           animate={showCart}

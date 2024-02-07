@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { LoaderFunctionArgs, json } from '@shopify/remix-oxygen';
-import type { App } from '../../api/type';
-import { useLoaderData, useParams } from '@remix-run/react';
+import React, {useState} from 'react';
+import {LoaderFunctionArgs, json} from '@shopify/remix-oxygen';
+import type {App} from '../../api/type';
+import {useLoaderData, useParams} from '@remix-run/react';
 import arrayToObject from 'app/ft-lib/ArrayToObject';
-import { Colors } from 'app/ft-lib/shared';
+import {Colors} from 'app/ft-lib/shared';
 import ProductCard from 'app/components/ProductCard';
 import ProductsSwiper from 'app/components/ProductsSwiper';
 import Link from '~/app/components/Link';
-import { useRootLoaderData } from '~/app/root';
+import {useRootLoaderData} from '~/app/root';
 
 interface FeaturedCollectionsSectionProps {
   section: App.HomePageTemplate.SectionCollectionProducts;
@@ -15,8 +15,8 @@ interface FeaturedCollectionsSectionProps {
 
 type ActiveCollectionsName = 'collection_one' | 'collection_two';
 
-const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
-  const fields = arrayToObject({ array: section.fields });
+const FeaturedCollections = ({section}: FeaturedCollectionsSectionProps) => {
+  const fields = arrayToObject({array: section.fields});
 
   const collectionOneProducts =
     fields.collection_one?.reference.products.nodes || [];
@@ -38,7 +38,7 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
   });
 
   const rootData = useRootLoaderData();
-  const { locale } = rootData;
+  const {locale} = rootData;
   const isArabic = locale.language.toLowerCase() === 'ar' ? true : false;
 
   if (fields.collection_one == null && fields.collection_two == null) {
@@ -55,10 +55,7 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
       className="featuredCollectionsSection w-full mx-auto"
     >
       <div className="featuredCollectionsSection__buttons container mb-10">
-        <div
-          className={`flex justify-between items-center ${isArabic ? 'arFlexDirection' : 'enFlexDirection'
-            }`}
-        >
+        <div className="flex justify-between items-center">
           {fields.title != null && (
             <p className="section-heading ft-text-main md:text-3xl text-2xl w-fit">
               {fields.title.value}
@@ -70,24 +67,22 @@ const FeaturedCollections = ({ section }: FeaturedCollectionsSectionProps) => {
                 backgroundColor: Colors.primary,
                 color: Colors.textSecondary,
               }}
-              to={`/collections/${activeButton === 'collection_one'
+              to={`/collections/${
+                activeButton === 'collection_one'
                   ? fields.collection_one?.reference.handle
                   : activeButton === 'collection_two' &&
-                  fields.collection_two?.reference.handle
-                }`}
+                    fields.collection_two?.reference.handle
+              }`}
               className="ft-text-main btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize shrink-0"
             >
               {fields.shop_button_text.value}
             </Link>
           )}
         </div>
-        <div
-          className={`flex ${isArabic ? 'arFlexDirection' : 'enFlexDirection'}`}
-        >
+        <div className="flex">
           <div
             style={{
               width: 'fit-content',
-              flexDirection: isArabic ? 'row-reverse' : 'row',
             }}
             className="flex items-center gap-5 w-full featuredCollectionsButtonsContainer"
           >
