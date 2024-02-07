@@ -33,7 +33,7 @@ export default function FTSwiper(props: Props) {
   const nextElRef = useRef<HTMLDivElement | null>(null);
   const prevElRef = useRef<HTMLDivElement | null>(null);
   const rootData = useRootLoaderData();
-  // const alignRight = rootData.locale.language === 'AR' ? true : false;
+  const isArabic = rootData.locale.language === 'AR' ? true : false;
 
   useEffect(() => {
     if (swiperContainer.current == null) {
@@ -41,7 +41,6 @@ export default function FTSwiper(props: Props) {
     }
     const swiper = new Swiper(swiperContainer.current, {
       modules: [Navigation],
-      // initialSlide: alignRight ? props.childrenNumber : 0,
       on: {
         activeIndexChange(swiper) {
           if (swiper?.slides.length == null) {
@@ -108,18 +107,7 @@ export default function FTSwiper(props: Props) {
 
   return (
     <div ref={swiperContainer} className="swiper-container relative">
-      <div
-        // style={{
-        //   flexDirection: alignRight ? 'row-reverse' : 'row',
-        //   justifyContent: alignRight ? 'flex-end' : 'flex-start',
-        // }}
-        className="swiper-wrapper"
-        // className={`swiper-wrapper ${
-        //   alignRight ? 'flex-row-reverse justify-end' : 'flex-row justify-start'
-        // }`}
-      >
-        {props.children}
-      </div>
+      <div className="swiper-wrapper">{props.children}</div>
       {props.navigation === true && (
         <>
           <div
@@ -129,9 +117,15 @@ export default function FTSwiper(props: Props) {
             }}
             ref={prevElRef}
             onClick={() => swiperContainer.current?.swiper?.slidePrev()}
-            className={`swiper-button absolute left-0 top-1/2 transform -translate-y-1/2 md:hidden z-10`}
+            className={`swiper-button absolute ${
+              isArabic ? 'right-0' : 'left-0'
+            } top-1/2 transform -translate-y-1/2 md:hidden z-10`}
           >
-            <FTicons icon="chev-left" className="w-8 h-8" />
+            {isArabic ? (
+              <FTicons icon="chev-right" className="w-8 h-8" />
+            ) : (
+              <FTicons icon="chev-left" className="w-8 h-8" />
+            )}
           </div>
           <div
             ref={nextElRef}
@@ -139,9 +133,15 @@ export default function FTSwiper(props: Props) {
               display: swiperSlides <= slidesPerView ? 'none' : 'block',
             }}
             onClick={() => swiperContainer.current?.swiper?.slideNext()}
-            className={`swiper-button absolute right-0 top-1/2 transform -translate-y-1/2 md:hidden z-10 `}
+            className={`swiper-button absolute ${
+              isArabic ? 'left-0' : 'right-0'
+            } top-1/2 transform -translate-y-1/2 md:hidden z-10 `}
           >
-            <FTicons icon="chev-right" className="w-8 h-8" />
+            {isArabic ? (
+              <FTicons icon="chev-left" className="w-8 h-8" />
+            ) : (
+              <FTicons icon="chev-right" className="w-8 h-8" />
+            )}
           </div>
         </>
       )}
