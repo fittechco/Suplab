@@ -19,9 +19,6 @@ export function CountrySelectorForm(props: SelectorForm) {
     ? pathname.replace(selectedLocale.pathPrefix, '')
     : pathname;
 
-  console.log('onFormSubmit', onFormSubmit);
-  console.log('selectedLocale', selectedLocale);
-
   return (
     <Form
       method="post"
