@@ -2,56 +2,40 @@
 #! oxygen_storefront_id: 1000005860
 
 name: Storefront 1000005860
-on: [push]
-
+on:
+- push
 permissions:
   contents: read
   deployments: write
-
 jobs:
   deploy:
     name: Deploy to Oxygen
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Setup node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        check-latest: true
+    - name: Cache node modules
+      id: cache-yarn
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: "~/.yarn"
+        key: "${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}"
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - name: Install dependencies
+      run: yarn install --ignore-engines
+    - name: Build and Publish to Oxygen
+      id: deploy
+      run: npx shopify hydrogen deploy --build-command "yarn build"
+      env:
+        SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: "${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000005860 }}"
 
-      - name: Setup node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-          check-latest: true
-
-      - name: Cache node modules
-        id: cache-yarn
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.yarn
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: Install dependencies
-        run: yarn install --ignore-engines
-
-      - name: Build and Publish to Oxygen
-        id: deploy
-        uses: shopify/oxygenctl-action@v4
-        with:
-          oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000005860 }}
-          build_command: "yarn build"
-
-      # Create GitHub Deployment
-      - name: Create GitHub Deployment
-        uses: shopify/github-deployment-action@v1
-        if: always()
-        with:
-          token: ${{ github.token }}
-          environment: 'preview'
-          preview_url: ${{ steps.deploy.outputs.url }}
-          description: ${{ github.event.head_commit.message }}
-        
