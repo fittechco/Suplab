@@ -123,10 +123,6 @@ export default function Article() {
 
   const articleFeaturedCollectionProducts =
     featuredCollectionProducts?.references?.nodes;
-  console.log(
-    'articleFeaturedCollectionProducts',
-    articleFeaturedCollectionProducts,
-  );
 
   const {title, image, contentHtml, author} = article;
 

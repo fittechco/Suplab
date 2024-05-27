@@ -1,5 +1,6 @@
 import type { I18nLocale } from "~/server";
 import { getCookieFromHeader } from "./cookie-utils";
+import type { CountriesKey} from "./data/countries";
 import { countries } from "./data/countries";
 import { redirect } from "@shopify/remix-oxygen";
 
@@ -9,52 +10,50 @@ export function handleRouteLocalization(args: {
 }) {
     const { request, locale } = args;
     const cookie = request.headers.get('cookie');
-    console.log(cookie, "cookie");
     const preferredLanguage = getCookieFromHeader({
         cookieName: 'preferredLanguage',
         headerCookie: cookie,
     });
-    console.log(preferredLanguage, "preferredLanguage");
+    const searchParams = new URL(request.url).searchParams;
 
-    console.log(locale.language, "locale.language");
+  // if the current route is not collection dont localize the route
+  if(searchParams.has('localize') == true) {
+    return;
+  }
+
     if (preferredLanguage != null && preferredLanguage == locale.language) {
         const newUrl = new URL(`${request.url}`);
         // if the url contains a country code, replace it with the new one
-        const countriesPrefixes = Object.keys(countries).map((key) => countries[key].pathPrefix);
+        const countriesPrefixes = Object.keys(countries).map((key) => countries[key as CountriesKey].pathPrefix);
         const urlCountryPrefix = countriesPrefixes.find((prefix) => {
-            console.log(prefix, "prefix");
-            return newUrl.pathname.includes(prefix.toLocaleLowerCase())
+            return newUrl.pathname.includes(`/${prefix.toLocaleLowerCase()}`)
         });
         if (urlCountryPrefix != null) {
-            console.log("urlCountryPrefix", urlCountryPrefix);
             newUrl.pathname = newUrl.pathname.replace(`/${urlCountryPrefix.toLowerCase()}`, `/${preferredLanguage.toLowerCase()}`);
         }
         else {
-            newUrl.pathname = `${newUrl.pathname}`;
+            newUrl.pathname =  `/${preferredLanguage.toLocaleLowerCase()}${newUrl.pathname}`;
         }
-        // console.log(newUrl, "newUrl");
         return redirect(newUrl.toString(), 302);
     }
 
-    if (preferredLanguage != null && preferredLanguage != locale.language) {
+    if (preferredLanguage != null && preferredLanguage !== locale.language) {
         // add /preferredLanguage to the url
         // redirect to the new url
         // redirectDocument(`${request.url}${preferredLanguage.toLocaleLowerCase()}`);
         const newUrl = new URL(`${request.url}`);
         // if the url contains a country code, replace it with the new one
-        const countriesPrefixes = Object.keys(countries).map((key) => countries[key].pathPrefix);
+        const countriesPrefixes = Object.keys(countries).map((key) => countries[key as CountriesKey].pathPrefix);
         const urlCountryPrefix = countriesPrefixes.find((prefix) => {
-            console.log(prefix, "prefix");
             return newUrl.pathname.includes(prefix.toLocaleLowerCase())
         });
+
         if (urlCountryPrefix != null) {
-            console.log("urlCountryPrefix", urlCountryPrefix);
             newUrl.pathname = newUrl.pathname.replace(`/${urlCountryPrefix.toLowerCase()}`, `/${preferredLanguage.toLowerCase()}`);
         }
         else {
             newUrl.pathname = `/${preferredLanguage.toLocaleLowerCase()}${newUrl.pathname}`;
         }
-        console.log(newUrl.toString(), "newUrl");
-        return redirect(newUrl.toString(), 302);
+        throw redirect(newUrl.toString(), 302);
     }
 }

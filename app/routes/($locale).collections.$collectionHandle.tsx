@@ -36,8 +36,6 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const language = formData.get('language');
   const newUrl = new URL(request.url);
-  // const country = formData.get('country');
-  // const search = formData.get('search');
 
   // Redirect to the appropriate locale path with preserved path (note we are in the about route)
   if (language === 'EN') {
@@ -67,10 +65,13 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   });
   const searchParams = new URL(request.url).searchParams;
 
+  // if the current route is not collection dont localize the route
+  if(searchParams.has('localize') == false) {
   handleRouteLocalization({
     request,
     locale: context.storefront.i18n,
   })
+}
 
   let minPrice = 0;
   let maxPrice = 100;
@@ -86,7 +87,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
   const dynamicFilters: any = [];
   searchParams.forEach((value, param) => {
-    if (param === 'cursor' || param === 'direction') {
+    if (param === 'cursor' || param === 'direction' || param === "localize") {
       return;
     }
     const parsedValue = JSON.parse(value) as string;
@@ -130,7 +131,6 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     return Math.min(acc, parseFloat(node.priceRange.minVariantPrice.amount));
   }, maxPrice);
 
-  console.log("hello from collection");
   return json({
     collection,
     availableFilters: availableDynamicFilters,

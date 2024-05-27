@@ -38,7 +38,6 @@ function LazyImage(props: Props) {
     const style = {
         ...props.style,
         overflow: 'hidden',
-        // border: `1px solid ${Colors.bg}`,
     }
     return (
         <div className={`${props.containerClassName} h-full w-full flex items-center justify-center`}>

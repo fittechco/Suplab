@@ -3,6 +3,8 @@ import { Colors } from '../ft-lib/shared';
 import { saveLanguagePreferenceCookie } from '../ft-lib/cookie-utils';
 import type { LanguageCode } from '@shopify/hydrogen/storefront-api-types';
 import { useNavigate } from '@remix-run/react';
+import { CountrySelectorForm } from '../components/CountrySelectorForm';
+import { countries } from '../ft-lib/data/countries';
 
 type LanguageSelectorPopupProps = {
     // show: boolean;
@@ -40,10 +42,12 @@ export function LanguageSelectorPopup(props: LanguageSelectorPopupProps) {
 
     const handleLanguageSelectorPopupContainerClick = (language: LanguageCode) => {
         saveLanguagePreferenceCookie(language);
-        localStorage.setItem('preferredL  anguage', language);
+        localStorage.setItem('preferredLanguage', language);
         closeLanguageSelectorPopupContainer();
         navigate(`/${language.toLocaleLowerCase()}`);
     };
+    const englishLocale = countries.default;
+    const arabicLocale = countries['/ar'];
 
     return (
         <div
@@ -71,24 +75,35 @@ export function LanguageSelectorPopup(props: LanguageSelectorPopupProps) {
                         Pick a language
                     </div>
                     <div className="flex flex-row w-full gap-5 items-center justify-center">
-                        <button
+                        <div
                             style={{
                                 backgroundColor: Colors.primary,
                                 color: Colors.textSecondary,
                             }}
-                            onClick={() => handleLanguageSelectorPopupContainerClick("EN")}
+                            // onClick={() => handleLanguageSelectorPopupContainerClick("EN")}
                             className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize">
-                            English
-                        </button>
-                        <button
+                            <CountrySelectorForm
+                            countryKey={"default"}
+                            onFormSubmit={(e) => {
+                                setShow(false);
+                            }}
+                            selectedLocale={englishLocale}
+                            />
+                        </div>
+                        <div
                             style={{
                                 border: `1px solid ${Colors.primary}`,
                                 color: Colors.primary
                             }}
-                            onClick={() => handleLanguageSelectorPopupContainerClick("AR")}
                             className="btn px-4 py-2 rounded-full text-main text-center w-fit font-bold text-xl capitalize">
-                            Arabic
-                        </button>
+                                <CountrySelectorForm
+                            countryKey={"/ar"}
+                            onFormSubmit={(e) => {
+                                setShow(false);
+                            }}
+                            selectedLocale={arabicLocale}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

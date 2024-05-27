@@ -12,7 +12,6 @@ import {RemixLink} from './RemixLink';
 
 type Props = {
   product: ProductQuery['product'];
-  // product: App.CollectionPageTemplate.ProductCard;
   style?: React.CSSProperties;
 };
 
@@ -55,7 +54,6 @@ export default function ProductCard(props: Props) {
         ...props.style,
       }}
       key={product.id}
-      // className="search-result-item flex flex-col gap-2"
       className="search-result-item flex flex-col gap-2 h-[300px]"
     >
       <div
@@ -73,7 +71,6 @@ export default function ProductCard(props: Props) {
             height: '100%',
             width: 'auto',
             margin: 'auto',
-            // aspectRatio: "1/1",
             borderRadius: '24px',
           }}
           className=""
@@ -124,10 +121,6 @@ export default function ProductCard(props: Props) {
               }}
               className={`font-mainFont font-bold text-base line-through opacity-50 `}
               data={product.variants.nodes[0].compareAtPrice}
-              // data={{
-              //   amount: '100',
-              //   currencyCode: 'USD',
-              // }}
               withoutTrailingZeros
             />
           )}

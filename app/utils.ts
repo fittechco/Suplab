@@ -42,21 +42,6 @@ export function missingClass(string?: string, prefix?: string) {
   return string.match(regex) === null;
 }
 
-// export function formatText(input?: string | React.ReactNode) {
-//   if (!input) {
-//     return;
-//   }
-
-//   if (typeof input !== 'string') {
-//     return input;
-//   }
-
-//   return typographicBase(input, {locale: 'en-us'}).replace(
-//     /\s([^\s<]+)\s*$/g,
-//     '\u00A0$1',
-//   );
-// }
-
 export function getExcerpt(text: string) {
   const regex = /<p.*>(.*?)<\/p>/;
   const match = regex.exec(text);
@@ -303,46 +288,6 @@ export function getLocaleFromRequest(request: Request): I18nLocale {
         pathPrefix: '',
       };
 }
-
-// export function getLocaleFromRequest(request: Request): I18nLocale {
-//   // Get the user request URL
-//   const url = new URL(request.url);
-
-//   // Match the URL host
-//   switch (url.host) {
-//     case 'suplabstore.com':
-//       // This regex matches `/fr/` paths in the request
-//       if (/^\/ar($|\/)/.test(url.pathname)) {
-//         return {
-//           label: 'العربية',
-//           currency: 'USD',
-//           language: 'AR',
-//           country: 'AR',
-//           host: 'suplabstore.com',
-//           pathPrefix: '/ar',
-//         };
-//       } else {
-//         return {
-//           label: 'United States (USD $)',
-//           currency: 'USD',
-//           language: 'EN',
-//           country: 'US',
-//           host: 'suplabstore.com',
-//           pathPrefix: '',
-//         };
-//       }
-//       break;
-//     default:
-//       return {
-//         label: 'United States (USD $)',
-//         currency: 'USD',
-//         language: 'EN',
-//         country: 'US',
-//         host: 'suplabstore.com',
-//         pathPrefix: '',
-//       };
-//   }
-// }
 
 export function usePrefixPathWithLocale(path: string) {
   const rootData = useRootLoaderData();

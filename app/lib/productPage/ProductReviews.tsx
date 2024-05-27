@@ -1,15 +1,15 @@
-import { Suspense } from 'react'
-import { Await } from '@remix-run/react'
-import { Review } from 'schema-dts'
-import { ReviewWidget } from '~/app/ft-lib/apps/JudgeMe'
-import { ProductQuery } from '~/storefrontapi.generated'
+import {Suspense} from 'react';
+import {Await} from '@remix-run/react';
+import {Review} from 'schema-dts';
+import type {ReviewWidget} from '~/app/ft-lib/apps/JudgeMe';
+import type {ProductQuery} from '~/storefrontapi.generated';
 
 export default function ProductReviews(props: {
-  product: ProductQuery['product']
-  reviewWidget: Promise<ReviewWidget>
-  widgetSettings: Promise<string>
+  product: ProductQuery['product'];
+  reviewWidget: Promise<ReviewWidget>;
+  widgetSettings: Promise<string>;
 }) {
-  const externalId = props.product?.id.split('/').pop() || ''
+  const externalId = props.product?.id.split('/').pop() || '';
   // const useReviews = useQuery('reviews', async () => {
   //   const judgeMeApi = new JudgeMeService()
   //   const reviews = await judgeMeApi.getProductReviews(externalId)
@@ -29,7 +29,7 @@ export default function ProductReviews(props: {
                   __html: reviewWidget.widget,
                 }}
               />
-            )
+            );
           }}
         </Await>
         <Await resolve={props.widgetSettings}>
@@ -41,10 +41,10 @@ export default function ProductReviews(props: {
                   __html: `${widgetSettings}`,
                 }}
               />
-            )
+            );
           }}
         </Await>
       </Suspense>
     </div>
-  )
+  );
 }

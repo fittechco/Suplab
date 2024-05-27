@@ -1,6 +1,8 @@
 import type { Localizations } from '~/app/lib/types';
 
-export const countries: Localizations = {
+export type CountriesKey = keyof typeof countries;
+
+export const countries = {
   default: {
     pathPrefix: 'en',
     label: 'English',
@@ -239,5 +241,5 @@ export const countries: Localizations = {
   //   country: 'XK',
   //   currency: 'EUR',
   // },
-};
-2;
+} satisfies Localizations 
+

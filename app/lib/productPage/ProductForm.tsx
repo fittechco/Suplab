@@ -10,6 +10,7 @@ import {useRootLoaderData} from '~/app/root';
 type Props = {
   selectedVariant: NonNullable<ProductQuery['product']>['variants']['nodes'][0];
   product: NonNullable<ProductQuery['product']>;
+  noLocaleProduct: NonNullable<ProductQuery['product']>;
   isTop?: boolean;
   analytics: {
     products: ShopifyAnalyticsProduct[];
@@ -18,7 +19,7 @@ type Props = {
 };
 
 export default function ProductForm(props: Props) {
-  const {product, selectedVariant, analytics} = props;
+  const {product, selectedVariant, analytics, noLocaleProduct} = props;
   const productAnalytics: ShopifyAnalyticsProduct = {
     ...analytics.products[0],
     quantity: 1,
@@ -46,7 +47,13 @@ export default function ProductForm(props: Props) {
       </span>
       <div>
         <div className="product-title">
-          <h1 className="text-2xl md:text-4xl font-bold">{product.title}</h1>
+          <h1
+            className={`text-2xl md:text-4xl font-bold ${
+              isArabic ? 'arTextAlignItems' : 'enTextAlignItems'
+            }`}
+          >
+            {product.title}
+          </h1>
         </div>
         <div
           className={`product-price ${
@@ -65,14 +72,15 @@ export default function ProductForm(props: Props) {
         <ProductOptions
           selectedVariant={selectedVariant}
           options={product.options}
+          noLocaleOptions={noLocaleProduct.options}
         />
       )}
       {/* <div className="flex items-center w-full max-md:bottom-9 max-md:sticky"> */}
       {/* ======= */}
-      <ProductOptions
+      {/* <ProductOptions
         selectedVariant={selectedVariant}
         options={product.options}
-      />
+      /> */}
       <div className="flex flex-col items-center w-full max-md:bottom-9 max-md:sticky">
         {/* >>>>>>> Stashed changes */}
         <AddToCartButton
