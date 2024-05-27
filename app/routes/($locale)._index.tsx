@@ -130,11 +130,12 @@ function HomePage() {
         } else if (section.type === 'faq_section') {
           return <FAQ section={section} key={section.type} />;
         } else {
-          return (
-            <div key={''}>
-              <h1>Section type not found</h1>
-            </div>
-          );
+          return null
+          // return (
+          //   <div key={''}>
+          //     <h1>Section type not found</h1>
+          //   </div>
+          // );
         }
       })}
     </div>
