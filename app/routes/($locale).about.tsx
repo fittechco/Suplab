@@ -1,18 +1,18 @@
-import {useEffect, useState} from 'react';
-import {useLoaderData} from '@remix-run/react';
+import { useEffect, useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
 import {
   type LoaderFunctionArgs,
   type ActionFunctionArgs,
   json,
   redirect,
 } from '@shopify/remix-oxygen';
-import type {App} from '../api/type';
+import type { App } from '../api/type';
 import AboutUsHero from '../lib/about/AboutUsHero';
 import Features from '../lib/about/Features';
 import Services from '../lib/about/Services';
 import Contact from '../lib/homepage/Contact';
 import FAQ from '../lib/homepage/FAQ';
-import {routeHeaders} from '../ft-lib/cache';
+import { routeHeaders } from '../ft-lib/cache';
 
 export type Shop = {
   name: string;
@@ -20,7 +20,7 @@ export type Shop = {
 
 export const headers = routeHeaders;
 
-export async function action({request}: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const language = formData.get('language');
 
@@ -31,18 +31,18 @@ export async function action({request}: ActionFunctionArgs) {
   }
 }
 
-export async function loader({context, params}: LoaderFunctionArgs) {
+export async function loader({ context, params }: LoaderFunctionArgs) {
   const storefront = await context.storefront.query(ABOUTQUERY);
-  const {language} = context.storefront.i18n;
+  const { language } = context.storefront.i18n;
 
-  const {metaobject} = storefront;
+  const { metaobject } = storefront;
   return json({
     metaobject,
   });
 }
 
 function AboutPage() {
-  const {metaobject}: {metaobject: App.AboutPageTemplate.Template} =
+  const { metaobject }: { metaobject: App.AboutPageTemplate.Template } =
     useLoaderData();
   const fieldSection = metaobject.fields.find(
     (field) => field.key === 'sections',
@@ -64,11 +64,7 @@ function AboutPage() {
         } else if (section.type === 'faq_section') {
           return <FAQ section={section} key={section.type} />;
         } else {
-          return (
-            <div key={''}>
-              <h1>Section type not found</h1>
-            </div>
-          );
+          return null
         }
       })}
     </div>
